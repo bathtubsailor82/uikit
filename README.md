@@ -3,6 +3,8 @@
 Design system réutilisable pour projets web classiques (HTML/CSS/JS).
 Inspiré du style Apple/macOS moderne avec support **Dark Mode** intégré.
 
+**🔗 GitHub:** https://github.com/bathtubsailor82/uikit
+
 ## ✨ Caractéristiques
 
 - **13+ composants** prêts à l'emploi
@@ -14,21 +16,56 @@ Inspiré du style Apple/macOS moderne avec support **Dark Mode** intégré.
 
 ## 📦 Installation
 
-### Option 1 : Fichier compilé (recommandé)
+### Option 1 : Git Submodule (recommandé)
 
-```html
-<link rel="stylesheet" href="path/to/uikit/dist/uikit.css">
-<script src="path/to/uikit/js/dark-mode.js"></script>
+Intégrez l'UIKit comme submodule Git dans vos projets :
+
+```bash
+cd /path/to/votre/projet
+git submodule add https://github.com/bathtubsailor82/uikit.git
+git commit -m "Ajout UIKit submodule"
 ```
 
-### Option 2 : Import personnalisé
+Puis dans votre HTML :
+
+```html
+<link rel="stylesheet" href="uikit/dist/uikit.css">
+<script src="uikit/js/dark-mode.js"></script>
+```
+
+**Mise à jour du submodule :**
+```bash
+cd uikit
+git pull origin main
+cd ..
+git add uikit
+git commit -m "Update UIKit"
+```
+
+### Option 2 : CDN (jsDelivr)
+
+Utilisez directement depuis le CDN :
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bathtubsailor82/uikit@main/dist/uikit.css">
+<script src="https://cdn.jsdelivr.net/gh/bathtubsailor82/uikit@main/js/dark-mode.js"></script>
+```
+
+### Option 3 : Clone simple
+
+```bash
+cd /path/to/votre/projet
+git clone https://github.com/bathtubsailor82/uikit.git
+```
+
+### Option 4 : Import personnalisé
 
 Importez uniquement les composants dont vous avez besoin :
 
 ```html
-<link rel="stylesheet" href="path/to/uikit/css/tokens.css">
-<link rel="stylesheet" href="path/to/uikit/css/reset.css">
-<link rel="stylesheet" href="path/to/uikit/css/components/buttons.css">
+<link rel="stylesheet" href="uikit/css/tokens.css">
+<link rel="stylesheet" href="uikit/css/reset.css">
+<link rel="stylesheet" href="uikit/css/components/buttons.css">
 ```
 
 ## 📁 Structure
