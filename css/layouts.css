@@ -1,0 +1,309 @@
+/**
+ * UIKit Layouts
+ * Structures CSS réutilisables pour layouts classiques
+ */
+
+/* === HELPERS POUR DÉMOS === */
+
+.layout-demo-area {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-white);
+    padding: var(--spacing-6);
+    border-radius: var(--border-radius-md);
+}
+
+.layout-demo-header { background: #5a90c7; }
+.layout-demo-nav { background: #7db46c; }
+.layout-demo-sidebar { background: #cc8800; min-height: 200px; }
+.layout-demo-main { background: #6ba1d8; min-height: 300px; }
+.layout-demo-aside { background: #ffa500; min-height: 200px; }
+.layout-demo-footer { background: #666; }
+.layout-demo-content { background: #8db46c; min-height: 150px; }
+
+/* === 1. LAYOUT: 3 COLONNES === */
+
+.layout-3col {
+    display: grid;
+    grid-template-columns: 280px 400px 1fr;
+    gap: var(--spacing-4);
+    min-height: 100vh;
+}
+
+.layout-3col.equal {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 1024px) {
+    .layout-3col {
+        grid-template-columns: 240px 1fr;
+    }
+    .layout-3col > *:nth-child(2) {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .layout-3col {
+        grid-template-columns: 1fr;
+    }
+    .layout-3col > *:first-child {
+        display: none;
+    }
+}
+
+/* === 2. LAYOUT: SIDEBAR LEFT === */
+
+.layout-sidebar-left {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: var(--spacing-4);
+    min-height: 100vh;
+}
+
+.layout-sidebar-left.narrow {
+    grid-template-columns: 200px 1fr;
+}
+
+.layout-sidebar-left.wide {
+    grid-template-columns: 320px 1fr;
+}
+
+@media (max-width: 768px) {
+    .layout-sidebar-left {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* === 3. LAYOUT: SIDEBAR RIGHT === */
+
+.layout-sidebar-right {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--spacing-4);
+    min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+    .layout-sidebar-right {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* === 4. LAYOUT: HOLY GRAIL === */
+
+.layout-holy-grail {
+    display: grid;
+    grid-template-areas:
+        "header header header"
+        "nav main aside"
+        "footer footer footer";
+    grid-template-columns: 200px 1fr 200px;
+    grid-template-rows: auto 1fr auto;
+    gap: var(--spacing-4);
+    min-height: 100vh;
+}
+
+.layout-holy-grail-header { grid-area: header; }
+.layout-holy-grail-nav { grid-area: nav; }
+.layout-holy-grail-main { grid-area: main; }
+.layout-holy-grail-aside { grid-area: aside; }
+.layout-holy-grail-footer { grid-area: footer; }
+
+@media (max-width: 768px) {
+    .layout-holy-grail {
+        grid-template-areas:
+            "header"
+            "nav"
+            "main"
+            "aside"
+            "footer";
+        grid-template-columns: 1fr;
+    }
+}
+
+/* === 5. LAYOUT: SPLIT SCREEN === */
+
+.layout-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-4);
+    min-height: 100vh;
+}
+
+.layout-split.split-30-70 {
+    grid-template-columns: 30% 70%;
+}
+
+.layout-split.split-70-30 {
+    grid-template-columns: 70% 30%;
+}
+
+@media (max-width: 768px) {
+    .layout-split {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* === 6. LAYOUT: HEADER + CONTENT === */
+
+.layout-header-content {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: var(--spacing-4);
+    min-height: 100vh;
+}
+
+.layout-header-content-sticky .layout-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* === 7. LAYOUT: HEADER + NAV + CONTENT === */
+
+.layout-app {
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "nav main";
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: auto 1fr;
+    gap: var(--spacing-4);
+    min-height: 100vh;
+}
+
+.layout-app-header { grid-area: header; }
+.layout-app-nav { grid-area: nav; }
+.layout-app-main { grid-area: main; }
+
+@media (max-width: 768px) {
+    .layout-app {
+        grid-template-areas:
+            "header"
+            "main";
+        grid-template-columns: 1fr;
+    }
+    .layout-app-nav {
+        display: none;
+    }
+}
+
+/* === 8. LAYOUT: MASONRY / AUTO GRID === */
+
+.layout-masonry {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-4);
+    padding: var(--spacing-6);
+}
+
+.layout-masonry.dense {
+    grid-auto-flow: dense;
+}
+
+/* === 9. LAYOUT: CENTERED CONTENT === */
+
+.layout-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--spacing-8);
+}
+
+.layout-centered-content {
+    width: 100%;
+    max-width: 600px;
+}
+
+/* === 10. LAYOUT: FULL SECTIONS === */
+
+.layout-sections section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-12);
+}
+
+.layout-sections section:nth-child(odd) {
+    background: var(--color-bg-secondary);
+}
+
+.layout-sections section:nth-child(even) {
+    background: var(--color-bg-primary);
+}
+
+/* === 11. LAYOUT: DASHBOARD GRID === */
+
+.layout-dashboard {
+    display: grid;
+    grid-template-areas:
+        "header header header"
+        "sidebar stats stats"
+        "sidebar content aside";
+    grid-template-columns: 240px 1fr 320px;
+    grid-template-rows: auto auto 1fr;
+    gap: var(--spacing-4);
+    min-height: 100vh;
+    padding: var(--spacing-4);
+}
+
+.layout-dashboard-header { grid-area: header; }
+.layout-dashboard-sidebar { grid-area: sidebar; }
+.layout-dashboard-stats { grid-area: stats; }
+.layout-dashboard-content { grid-area: content; }
+.layout-dashboard-aside { grid-area: aside; }
+
+@media (max-width: 1200px) {
+    .layout-dashboard {
+        grid-template-areas:
+            "header header"
+            "sidebar stats"
+            "sidebar content";
+        grid-template-columns: 200px 1fr;
+    }
+    .layout-dashboard-aside {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .layout-dashboard {
+        grid-template-areas:
+            "header"
+            "stats"
+            "content";
+        grid-template-columns: 1fr;
+    }
+    .layout-dashboard-sidebar {
+        display: none;
+    }
+}
+
+/* === HELPERS ZONES === */
+
+.layout-header {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+}
+
+.layout-sidebar {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+}
+
+.layout-main {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+}
+
+.layout-footer {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+}

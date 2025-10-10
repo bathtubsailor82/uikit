@@ -5,10 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIKit - Documentation</title>
     <link rel="stylesheet" href="../dist/uikit.css">
+    <script src="../js/dark-mode.js"></script>
     <style>
         body {
             padding: 0;
             margin: 0;
+            padding-top: 50px; /* Espace pour le header fixe */
+            transition: background var(--transition-base), color var(--transition-base);
+        }
+
+        /* Header fixe */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
         }
 
         .demo-section {
@@ -58,17 +70,63 @@
             padding: var(--spacing-6);
             border-radius: var(--border-radius-md);
         }
+
+        .nav-toc {
+            position: sticky;
+            top: 50px; /* Juste sous le header */
+            background: var(--color-bg-primary);
+            border-bottom: 1px solid var(--color-border-light);
+            padding: var(--spacing-4) var(--spacing-10);
+            z-index: 50;
+            overflow-x: auto;
+        }
+
+        .nav-toc a {
+            display: inline-block;
+            padding: var(--spacing-2) var(--spacing-4);
+            margin-right: var(--spacing-2);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            border-radius: var(--border-radius-md);
+            font-size: var(--font-size-base);
+            transition: all var(--transition-base);
+        }
+
+        .nav-toc a:hover {
+            background: var(--color-bg-hover);
+            color: var(--color-text-primary);
+        }
     </style>
 </head>
 <body>
     <!-- Header -->
     <div class="header">
         <h1>UIKit Documentation</h1>
-        <div class="status">Version 1.0.0</div>
+        <button class="btn" data-theme-toggle style="background: rgba(255,255,255,0.1); border: none; color: white;">
+            <span data-theme-icon>🌙</span>
+        </button>
     </div>
 
+    <!-- Table of contents -->
+    <nav class="nav-toc">
+        <a href="#buttons">Buttons</a>
+        <a href="#badges">Badges</a>
+        <a href="#cards">Cards</a>
+        <a href="#progress">Progress</a>
+        <a href="#tabs">Tabs</a>
+        <a href="#forms">Forms</a>
+        <a href="#tables">Tables</a>
+        <a href="#alerts">Alerts</a>
+        <a href="#loading">Loading</a>
+        <a href="#modals">Modals</a>
+        <a href="#logs">Logs</a>
+        <a href="#layout">Layout</a>
+        <a href="#colors">Colors</a>
+        <a href="#dark-mode">Dark Mode</a>
+    </nav>
+
     <!-- Buttons -->
-    <div class="demo-section">
+    <div class="demo-section" id="buttons">
         <h2>Buttons</h2>
 
         <h3>Variants</h3>
@@ -97,10 +155,16 @@
 
         <h3>Block</h3>
         <button class="btn btn-primary btn-block">Block Button</button>
+
+        <h3>Loading State</h3>
+        <div class="demo-row">
+            <button class="btn btn-primary loading">Loading</button>
+            <button class="btn loading">Loading</button>
+        </div>
     </div>
 
     <!-- Badges -->
-    <div class="demo-section">
+    <div class="demo-section" id="badges">
         <h2>Badges</h2>
 
         <h3>Basic Badges</h3>
@@ -130,7 +194,7 @@
     </div>
 
     <!-- Cards -->
-    <div class="demo-section">
+    <div class="demo-section" id="cards">
         <h2>Cards</h2>
 
         <h3>Basic Card</h3>
@@ -206,7 +270,7 @@
     </div>
 
     <!-- Progress Bars -->
-    <div class="demo-section">
+    <div class="demo-section" id="progress">
         <h2>Progress Bars</h2>
 
         <h3>Basic Progress</h3>
@@ -262,7 +326,7 @@
     </div>
 
     <!-- Tabs -->
-    <div class="demo-section">
+    <div class="demo-section" id="tabs">
         <h2>Tabs</h2>
 
         <div style="max-width: 600px;">
@@ -293,8 +357,348 @@
         </div>
     </div>
 
+    <!-- Forms -->
+    <div class="demo-section" id="forms">
+        <h2>Forms</h2>
+
+        <div style="max-width: 500px;">
+            <h3>Text Inputs</h3>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" placeholder="you@example.com">
+                <span class="form-help">We'll never share your email.</span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label required">Password</label>
+                <input type="password" class="form-input" placeholder="••••••••">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Disabled</label>
+                <input type="text" class="form-input" value="Can't edit this" disabled>
+            </div>
+
+            <h3>Validation States</h3>
+            <div class="form-group success">
+                <label class="form-label">Success</label>
+                <input type="text" class="form-input" value="Looks good!">
+                <span class="form-success">Great! This is valid.</span>
+            </div>
+
+            <div class="form-group error">
+                <label class="form-label">Error</label>
+                <input type="text" class="form-input" value="Invalid input">
+                <span class="form-error">Please enter a valid value.</span>
+            </div>
+
+            <h3>Textarea</h3>
+            <div class="form-group">
+                <label class="form-label">Message</label>
+                <textarea class="form-textarea" placeholder="Your message..."></textarea>
+            </div>
+
+            <h3>Select</h3>
+            <div class="form-group">
+                <label class="form-label">Choose an option</label>
+                <select class="form-select">
+                    <option>Option 1</option>
+                    <option>Option 2</option>
+                    <option>Option 3</option>
+                </select>
+            </div>
+
+            <h3>Checkboxes & Radio</h3>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="check1">
+                <label class="form-check-label" for="check1">I agree to the terms</label>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="check2" checked>
+                <label class="form-check-label" for="check2">Remember me</label>
+            </div>
+
+            <div style="margin-top: var(--spacing-6);">
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="radio" id="radio1" checked>
+                    <label class="form-check-label" for="radio1">Option A</label>
+                </div>
+
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="radio" id="radio2">
+                    <label class="form-check-label" for="radio2">Option B</label>
+                </div>
+            </div>
+
+            <h3>Switch Toggle</h3>
+            <div class="form-switch">
+                <input type="checkbox" class="form-switch-input" id="switch1">
+                <label class="form-switch-label" for="switch1">Enable notifications</label>
+            </div>
+
+            <div class="form-switch">
+                <input type="checkbox" class="form-switch-input" id="switch2" checked>
+                <label class="form-switch-label" for="switch2">Dark mode</label>
+            </div>
+
+            <h3>Search Input</h3>
+            <div class="form-search">
+                <input type="text" class="form-input" placeholder="Search...">
+            </div>
+
+            <h3>Input Group</h3>
+            <div class="input-group">
+                <span class="input-group-prepend">https://</span>
+                <input type="text" class="form-input" placeholder="example.com">
+            </div>
+
+            <div class="input-group" style="margin-top: var(--spacing-4);">
+                <input type="text" class="form-input" placeholder="Amount">
+                <span class="input-group-append">€</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tables -->
+    <div class="demo-section" id="tables">
+        <h2>Tables</h2>
+
+        <h3>Basic Table</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>John Doe</td>
+                    <td>john@example.com</td>
+                    <td><span class="badge badge-success">Active</span></td>
+                    <td class="text-right">
+                        <button class="btn btn-sm">Edit</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Jane Smith</td>
+                    <td>jane@example.com</td>
+                    <td><span class="badge badge-warning">Pending</span></td>
+                    <td class="text-right">
+                        <button class="btn btn-sm">Edit</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Mike Johnson</td>
+                    <td>mike@example.com</td>
+                    <td><span class="badge badge-success">Active</span></td>
+                    <td class="text-right">
+                        <button class="btn btn-sm">Edit</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Striped Table</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>Product A</td><td>$19.99</td></tr>
+                <tr><td>2</td><td>Product B</td><td>$29.99</td></tr>
+                <tr><td>3</td><td>Product C</td><td>$39.99</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-block">
+&lt;table class="table table-striped"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Name&lt;/th&gt;
+            &lt;th&gt;Status&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;John&lt;/td&gt;
+            &lt;td&gt;Active&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+        </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="demo-section" id="alerts">
+        <h2>Alerts</h2>
+
+        <h3>Basic Alerts</h3>
+        <div class="alert alert-info">
+            <div class="alert-icon">ℹ️</div>
+            <div class="alert-content">
+                <div class="alert-title">Info Alert</div>
+                <div class="alert-message">This is an informational message to help you understand something.</div>
+            </div>
+        </div>
+
+        <div class="alert alert-success">
+            <div class="alert-icon">✓</div>
+            <div class="alert-content">
+                <div class="alert-title">Success!</div>
+                <div class="alert-message">Your changes have been saved successfully.</div>
+            </div>
+        </div>
+
+        <div class="alert alert-warning">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-content">
+                <div class="alert-title">Warning</div>
+                <div class="alert-message">Please review this warning before continuing.</div>
+            </div>
+        </div>
+
+        <div class="alert alert-danger">
+            <div class="alert-icon">✗</div>
+            <div class="alert-content">
+                <div class="alert-title">Error</div>
+                <div class="alert-message">An error occurred. Please try again.</div>
+            </div>
+        </div>
+
+        <h3>Dismissible Alert</h3>
+        <div class="alert alert-info alert-dismissible">
+            <div class="alert-icon">💡</div>
+            <div class="alert-content">
+                <div class="alert-message">This alert can be dismissed by clicking the × button.</div>
+            </div>
+            <button class="alert-close" onclick="this.parentElement.remove()">✕</button>
+        </div>
+
+        <div class="code-block">
+&lt;div class="alert alert-success"&gt;
+    &lt;div class="alert-icon"&gt;✓&lt;/div&gt;
+    &lt;div class="alert-content"&gt;
+        &lt;div class="alert-title"&gt;Success!&lt;/div&gt;
+        &lt;div class="alert-message"&gt;Operation completed.&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="demo-section" id="loading">
+        <h2>Loading States</h2>
+
+        <h3>Spinners</h3>
+        <div class="demo-row">
+            <div class="text-center">
+                <div class="spinner spinner-sm"></div>
+                <div class="text-sm text-secondary mt-2">Small</div>
+            </div>
+            <div class="text-center">
+                <div class="spinner"></div>
+                <div class="text-sm text-secondary mt-2">Default</div>
+            </div>
+            <div class="text-center">
+                <div class="spinner spinner-lg"></div>
+                <div class="text-sm text-secondary mt-2">Large</div>
+            </div>
+            <div class="text-center">
+                <div class="spinner spinner-xl"></div>
+                <div class="text-sm text-secondary mt-2">XLarge</div>
+            </div>
+        </div>
+
+        <h3>Dots & Pulse</h3>
+        <div class="demo-row">
+            <div class="text-center">
+                <div class="spinner-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="text-sm text-secondary mt-2">Dots</div>
+            </div>
+            <div class="text-center">
+                <div class="spinner-pulse"></div>
+                <div class="text-sm text-secondary mt-2">Pulse</div>
+            </div>
+        </div>
+
+        <h3>Skeleton Loaders</h3>
+        <div class="skeleton-card" style="max-width: 500px;">
+            <div class="skeleton-title"></div>
+            <div class="skeleton-text"></div>
+            <div class="skeleton-text"></div>
+            <div class="skeleton-text"></div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="spinner"&gt;&lt;/div&gt;
+&lt;div class="spinner-dots"&gt;
+    &lt;span&gt;&lt;/span&gt;
+    &lt;span&gt;&lt;/span&gt;
+    &lt;span&gt;&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div class="skeleton-card"&gt;
+    &lt;div class="skeleton-title"&gt;&lt;/div&gt;
+    &lt;div class="skeleton-text"&gt;&lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="demo-section" id="modals">
+        <h2>Modals & Overlays</h2>
+
+        <h3>Modal Dialog</h3>
+        <button class="btn btn-primary" onclick="showModal()">Open Modal</button>
+
+        <div class="code-block">
+&lt;div class="modal-backdrop show"&gt;
+    &lt;div class="modal"&gt;
+        &lt;div class="modal-header"&gt;
+            &lt;h3 class="modal-title"&gt;Title&lt;/h3&gt;
+            &lt;button class="modal-close"&gt;✕&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class="modal-body"&gt;Content&lt;/div&gt;
+        &lt;div class="modal-footer"&gt;
+            &lt;button class="btn"&gt;Cancel&lt;/button&gt;
+            &lt;button class="btn btn-primary"&gt;OK&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+
+        <h3>Dropdown Menu</h3>
+        <div class="dropdown" id="demo-dropdown">
+            <button class="btn" onclick="toggleDropdown()">Open Menu ▾</button>
+            <div class="dropdown-menu">
+                <button class="dropdown-item">Action 1</button>
+                <button class="dropdown-item">Action 2</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item">Delete</button>
+            </div>
+        </div>
+
+        <h3>Tooltip</h3>
+        <div class="tooltip">
+            <button class="btn">Hover me</button>
+            <span class="tooltip-text">I'm a tooltip!</span>
+        </div>
+    </div>
+
     <!-- Logs -->
-    <div class="demo-section">
+    <div class="demo-section" id="logs">
         <h2>Logs</h2>
 
         <div class="logs-legend">
@@ -339,7 +743,7 @@
     </div>
 
     <!-- Layout Utilities -->
-    <div class="demo-section">
+    <div class="demo-section" id="layout">
         <h2>Layout Utilities</h2>
 
         <h3>Grid</h3>
@@ -372,7 +776,7 @@
     </div>
 
     <!-- Colors -->
-    <div class="demo-section">
+    <div class="demo-section" id="colors">
         <h2>Colors</h2>
 
         <div class="grid grid-4 gap-4">
@@ -399,60 +803,138 @@
         </div>
     </div>
 
-    <!-- Notifications Demo -->
-    <div class="demo-section">
-        <h2>Notifications</h2>
+    <!-- Dark Mode -->
+    <div class="demo-section" id="dark-mode">
+        <h2>🌓 Dark Mode</h2>
 
-        <div class="demo-row">
-            <button class="btn" onclick="showNotification('success')">Success</button>
-            <button class="btn" onclick="showNotification('error')">Error</button>
-            <button class="btn" onclick="showNotification('info')">Info</button>
-            <button class="btn" onclick="showNotification('warning')">Warning</button>
+        <div class="alert alert-info mb-6">
+            <div class="alert-icon">💡</div>
+            <div class="alert-content">
+                <div class="alert-title">Dark Mode activé !</div>
+                <div class="alert-message">
+                    Le dark mode s'active automatiquement selon vos préférences système, ou manuellement avec le bouton dans le header. Le choix est persisté dans localStorage.
+                </div>
+            </div>
         </div>
 
+        <h3>Contrôles</h3>
+        <div class="demo-row mb-6">
+            <button class="btn btn-primary" onclick="UIKitTheme.set('light')">☀️ Light</button>
+            <button class="btn btn-primary" onclick="UIKitTheme.set('dark')">🌙 Dark</button>
+            <button class="btn" onclick="UIKitTheme.toggle()">🔄 Toggle</button>
+        </div>
+
+        <h3>Installation</h3>
         <div class="code-block">
-&lt;div class="notification success show"&gt;Success message&lt;/div&gt;
+&lt;!-- 1. Inclure le CSS --&gt;
+&lt;link rel="stylesheet" href="dist/uikit.css"&gt;
+
+&lt;!-- 2. Inclure le script dark mode --&gt;
+&lt;script src="js/dark-mode.js"&gt;&lt;/script&gt;
+
+&lt;!-- 3. Ajouter un toggle (optionnel) --&gt;
+&lt;button data-theme-toggle&gt;
+    &lt;span data-theme-icon&gt;🌙&lt;/span&gt;
+&lt;/button&gt;
         </div>
+
+        <h3>API JavaScript</h3>
+        <div class="code-block">
+// Définir le thème
+UIKitTheme.set('dark');    // ou 'light'
+
+// Basculer le thème
+UIKitTheme.toggle();
+
+// Récupérer le thème actuel
+const current = UIKitTheme.get();
+
+// Écouter les changements
+window.addEventListener('themechange', (e) => {
+    console.log('Theme:', e.detail.theme);
+});
+        </div>
+
+        <h3>Fonctionnement</h3>
+        <ul style="line-height: 1.8; color: var(--color-text-secondary);">
+            <li><strong>Auto</strong> : Suit les préférences système (prefers-color-scheme)</li>
+            <li><strong>Persistance</strong> : Le choix est sauvegardé dans localStorage</li>
+            <li><strong>Pas de flash</strong> : Le script s'initialise avant le rendu de la page</li>
+            <li><strong>Personnalisable</strong> : Modifie les variables dans tokens.css</li>
+        </ul>
     </div>
 
     <script>
         // Tabs functionality
         function switchTab(tabId) {
-            // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
 
-            // Remove active from all buttons
             document.querySelectorAll('.tab-button').forEach(btn => {
                 btn.classList.remove('active');
             });
 
-            // Show selected tab
             document.getElementById(tabId).classList.add('active');
             event.target.classList.add('active');
         }
 
-        // Notification demo
-        function showNotification(type) {
-            const messages = {
-                success: 'Operation completed successfully!',
-                error: 'An error occurred!',
-                info: 'Here is some information',
-                warning: 'Please be careful!'
-            };
+        // Modal demo
+        function showModal() {
+            const backdrop = document.createElement('div');
+            backdrop.className = 'modal-backdrop';
+            backdrop.innerHTML = `
+                <div class="modal">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Example Modal</h3>
+                        <button class="modal-close" onclick="closeModal()">✕</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>This is a demo modal dialog. You can put any content here.</p>
+                        <p>Click outside or press the × button to close.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" onclick="closeModal()">Cancel</button>
+                        <button class="btn btn-primary" onclick="closeModal()">Confirm</button>
+                    </div>
+                </div>
+            `;
+            backdrop.id = 'demo-modal';
+            document.body.appendChild(backdrop);
 
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = messages[type];
-            document.body.appendChild(notification);
+            setTimeout(() => backdrop.classList.add('show'), 10);
 
-            setTimeout(() => notification.classList.add('show'), 100);
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => document.body.removeChild(notification), 300);
-            }, 3000);
+            backdrop.addEventListener('click', (e) => {
+                if (e.target === backdrop) closeModal();
+            });
         }
+
+        function closeModal() {
+            const modal = document.getElementById('demo-modal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => modal.remove(), 300);
+            }
+        }
+
+        // Dropdown demo
+        function toggleDropdown() {
+            const dropdown = document.getElementById('demo-dropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('demo-dropdown');
+            if (dropdown && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Theme change logger
+        window.addEventListener('themechange', (e) => {
+            console.log('Theme changed to:', e.detail.theme);
+        });
     </script>
 </body>
 </html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Layouts - UIKit</title>
+    <link rel="stylesheet" href="../dist/uikit.css">
+    <script src="../js/dark-mode.js"></script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            padding-top: 50px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .layout-showcase {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-10);
+        }
+
+        .layout-section {
+            margin-bottom: var(--spacing-12);
+            padding-bottom: var(--spacing-12);
+            border-bottom: 1px solid var(--color-border-medium);
+        }
+
+        .layout-section:last-child {
+            border-bottom: none;
+        }
+
+        .layout-title {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--spacing-3);
+            color: var(--color-text-primary);
+        }
+
+        .layout-description {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-8);
+            line-height: var(--line-height-relaxed);
+        }
+
+        .layout-preview {
+            border: 2px solid var(--color-border-medium);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-4);
+            background: var(--color-bg-secondary);
+            margin-bottom: var(--spacing-6);
+            overflow: hidden;
+        }
+
+        .layout-preview-small {
+            height: 300px;
+        }
+
+        .layout-preview-medium {
+            height: 400px;
+        }
+
+        .layout-preview-large {
+            height: 500px;
+        }
+
+        .code-block {
+            background: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border-medium);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-6);
+            font-family: var(--font-family-mono);
+            font-size: var(--font-size-base);
+            overflow-x: auto;
+        }
+
+        /* Réduction pour preview */
+        .layout-preview .layout-demo-area {
+            font-size: var(--font-size-sm);
+            min-height: 40px;
+            padding: var(--spacing-3);
+        }
+
+        .layout-preview .layout-demo-sidebar,
+        .layout-preview .layout-demo-aside {
+            min-height: 100px;
+        }
+
+        .layout-preview .layout-demo-main,
+        .layout-preview .layout-demo-content {
+            min-height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>CSS Layouts Showcase</h1>
+        <button class="btn" data-theme-toggle style="background: rgba(255,255,255,0.1); border: none; color: white;">
+            <span data-theme-icon>🌙</span>
+        </button>
+    </div>
+
+    <div class="layout-showcase">
+        <!-- Intro -->
+        <div class="alert alert-info mb-6">
+            <div class="alert-icon">📐</div>
+            <div class="alert-content">
+                <div class="alert-title">Layouts CSS purs</div>
+                <div class="alert-message">
+                    Ces layouts sont des structures CSS réutilisables utilisant Grid et Flexbox.
+                    Copie les classes CSS et adapte-les à tes besoins !
+                </div>
+            </div>
+        </div>
+
+        <!-- Layout 1: 3 Colonnes -->
+        <div class="layout-section">
+            <h2 class="layout-title">1. Layout 3 Colonnes</h2>
+            <p class="layout-description">
+                <strong>Cas d'usage :</strong> Dashboard, admin panels, applications avec liste + détails + activité.
+                <br><strong>Responsive :</strong> 3 colonnes → 2 colonnes (tablette) → 1 colonne (mobile).
+            </p>
+
+            <div class="layout-preview layout-preview-medium">
+                <div class="layout-3col">
+                    <div class="layout-demo-area layout-demo-sidebar">Sidebar<br>(280px)</div>
+                    <div class="layout-demo-area layout-demo-content">Details<br>(400px)</div>
+                    <div class="layout-demo-area layout-demo-main">Main<br>(flex)</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="layout-3col"&gt;
+    &lt;div&gt;Column 1&lt;/div&gt;
+    &lt;div&gt;Column 2&lt;/div&gt;
+    &lt;div&gt;Column 3&lt;/div&gt;
+&lt;/div&gt;
+
+/* CSS */
+.layout-3col {
+    display: grid;
+    grid-template-columns: 280px 400px 1fr;
+    gap: var(--spacing-4);
+}
+
+/* Variante : colonnes égales */
+&lt;div class="layout-3col equal"&gt;...&lt;/div&gt;
+            </div>
+        </div>
+
+        <!-- Layout 2: Sidebar Left -->
+        <div class="layout-section">
+            <h2 class="layout-title">2. Sidebar Left</h2>
+            <p class="layout-description">
+                <strong>Cas d'usage :</strong> Applications web, admin panels, documentation.
+                <br><strong>Responsive :</strong> Sidebar masquée sur mobile.
+            </p>
+
+            <div class="layout-preview layout-preview-medium">
+                <div class="layout-sidebar-left">
+                    <div class="layout-demo-area layout-demo-sidebar">Navigation<br>(260px)</div>
+                    <div class="layout-demo-area layout-demo-main">Content<br>(flex)</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="layout-sidebar-left"&gt;
+    &lt;aside&gt;Sidebar&lt;/aside&gt;
+    &lt;main&gt;Content&lt;/main&gt;
+&lt;/div&gt;
+
+/* Variantes */
+.layout-sidebar-left.narrow  /* 200px */
+.layout-sidebar-left.wide    /* 320px */
+            </div>
+        </div>
+
+        <!-- Layout 3: Holy Grail -->
+        <div class="layout-section">
+            <h2 class="layout-title">3. Holy Grail Layout</h2>
+            <p class="layout-description">
+                <strong>Cas d'usage :</strong> Sites web classiques, blogs, portails.
+                <br><strong>Responsive :</strong> Empilage vertical sur mobile.
+            </p>
+
+            <div class="layout-preview layout-preview-large">
+                <div class="layout-holy-grail">
+                    <div class="layout-demo-area layout-demo-header layout-holy-grail-header">Header</div>
+                    <div class="layout-demo-area layout-demo-nav layout-holy-grail-nav">Nav<br>(200px)</div>
+                    <div class="layout-demo-area layout-demo-main layout-holy-grail-main">Main Content</div>
+                    <div class="layout-demo-area layout-demo-aside layout-holy-grail-aside">Aside<br>(200px)</div>
+                    <div class="layout-demo-area layout-demo-footer layout-holy-grail-footer">Footer</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="layout-holy-grail"&gt;
+    &lt;header class="layout-holy-grail-header"&gt;...&lt;/header&gt;
+    &lt;nav class="layout-holy-grail-nav"&gt;...&lt;/nav&gt;
+    &lt;main class="layout-holy-grail-main"&gt;...&lt;/main&gt;
+    &lt;aside class="layout-holy-grail-aside"&gt;...&lt;/aside&gt;
+    &lt;footer class="layout-holy-grail-footer"&gt;...&lt;/footer&gt;
+&lt;/div&gt;
+            </div>
+        </div>
+
+        <!-- Layout 4: Split Screen -->
+        <div class="layout-section">
+            <h2 class="layout-title">4. Split Screen</h2>
+            <p class="layout-description">
+                <strong>Cas d'usage :</strong> Landing pages, comparaisons, avant/après.
+                <br><strong>Responsive :</strong> Empilage vertical sur mobile.
+            </p>
+
+            <div class="layout-preview layout-preview-medium">
+                <div class="layout-split">
+                    <div class="layout-demo-area layout-demo-main">Left Side<br>(50%)</div>
+                    <div class="layout-demo-area layout-demo-content">Right Side<br>(50%)</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="layout-split"&gt;
+    &lt;div&gt;Left&lt;/div&gt;
+    &lt;div&gt;Right&lt;/div&gt;
+&lt;/div&gt;
+
+/* Variantes */
+.layout-split.split-30-70  /* 30% / 70% */
+.layout-split.split-70-30  /* 70% / 30% */
+            </div>
+        </div>
+
+        <!-- Layout 5: Header + Content -->
+        <div class="layout-section">
+            <h2 class="layout-title">5. Header + Content</h2>
+            <p class="layout-description">
+                <strong>Cas d'usage :</strong> Applications simples, pages de contenu.
+                <br><strong>Option :</strong> Header sticky disponible.
+            </p>
+
+            <div class="layout-preview layout-preview-small">
+                <div class="layout-header-content">
+                    <div class="layout-demo-area layout-demo-header">Header</div>
+                    <div class="layout-demo-area layout-demo-main">Content Area</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="layout-header-content"&gt;
+    &lt;header&gt;...&lt;/header&gt;
+    &lt;main&gt;...&lt;/main&gt;
+&lt;/div&gt;
+
+/* Variante sticky */
+&lt;div class="layout-header-content layout-header-content-sticky"&gt;
+    &lt;header class="layout-header"&gt;...&lt;/header&gt;
+    &lt;main&gt;...&lt;/main&gt;
+&lt;/div&gt;
+            </div>
+        </div>
+
+        <!-- Layout 6: App Layout -->
+        <div class="layout-section">
+            <h2 class="layout-title">6. App Layout (Header + Nav + Main)</h2>
+            <p class="layout-description">
+                <strong>Cas d'usage :</strong> Applications web modernes, SaaS.
+                <br><strong>Responsive :</strong> Nav masquée sur mobile.
+            </p>
+
+            <div class="layout-preview layout-preview-medium">
+                <div class="layout-app">
+                    <div class="layout-demo-area layout-demo-header layout-app-header">Header</div>
+                    <div class="layout-demo-area layout-demo-nav layout-app-nav">Nav<br>(240px)</div>
+                    <div class="layout-demo-area layout-demo-main layout-app-main">Main Content</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="layout-app"&gt;
+    &lt;header class="layout-app-header"&gt;...&lt;/header&gt;
+    &lt;nav class="layout-app-nav"&gt;...&lt;/nav&gt;
+    &lt;main class="layout-app-main"&gt;...&lt;/main&gt;
+&lt;/div&gt;
+            </div>
+        </div>
+
+        <!-- Layout 7: Masonry / Auto Grid -->
+        <div class="layout-section">
+            <h2 class="layout-title">7. Masonry / Auto Grid</h2>
+            <p class="layout-description">
+                <strong>Cas d'usage :</strong> Galeries, portfolios, cartes de contenu.
+                <br><strong>Responsive :</strong> Adaptation automatique selon largeur disponible.
+            </p>
+
+            <div class="layout-preview layout-preview-medium">
+                <div class="layout-masonry">
+                    <div class="layout-demo-area layout-demo-main">Item 1</div>
+                    <div class="layout-demo-area layout-demo-content">Item 2</div>
+                    <div class="layout-demo-area layout-demo-sidebar">Item 3</div>
+                    <div class="layout-demo-area layout-demo-aside">Item 4</div>
+                    <div class="layout-demo-area layout-demo-main">Item 5</div>
+                    <div class="layout-demo-area layout-demo-content">Item 6</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="layout-masonry"&gt;
+    &lt;div&gt;Item 1&lt;/div&gt;
+    &lt;div&gt;Item 2&lt;/div&gt;
+    &lt;div&gt;Item 3&lt;/div&gt;
+    ...
+&lt;/div&gt;
+
+/* Variante dense */
+&lt;div class="layout-masonry dense"&gt;...&lt;/div&gt;
+            </div>
+        </div>
+
+        <!-- Layout 8: Dashboard Grid -->
+        <div class="layout-section">
+            <h2 class="layout-title">8. Dashboard Grid</h2>
+            <p class="layout-description">
+                <strong>Cas d'usage :</strong> Dashboards complexes, analytics, monitoring.
+                <br><strong>Responsive :</strong> Réorganisation automatique selon écran.
+            </p>
+
+            <div class="layout-preview layout-preview-large">
+                <div class="layout-dashboard">
+                    <div class="layout-demo-area layout-demo-header layout-dashboard-header">Header</div>
+                    <div class="layout-demo-area layout-demo-sidebar layout-dashboard-sidebar">Sidebar</div>
+                    <div class="layout-demo-area layout-demo-nav layout-dashboard-stats">Stats / KPIs</div>
+                    <div class="layout-demo-area layout-demo-main layout-dashboard-content">Main Content</div>
+                    <div class="layout-demo-area layout-demo-aside layout-dashboard-aside">Activity</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="layout-dashboard"&gt;
+    &lt;header class="layout-dashboard-header"&gt;...&lt;/header&gt;
+    &lt;aside class="layout-dashboard-sidebar"&gt;...&lt;/aside&gt;
+    &lt;section class="layout-dashboard-stats"&gt;...&lt;/section&gt;
+    &lt;main class="layout-dashboard-content"&gt;...&lt;/main&gt;
+    &lt;aside class="layout-dashboard-aside"&gt;...&lt;/aside&gt;
+&lt;/div&gt;
+            </div>
+        </div>
+
+        <!-- Layout 9: Centered Content -->
+        <div class="layout-section">
+            <h2 class="layout-title">9. Centered Content</h2>
+            <p class="layout-description">
+                <strong>Cas d'usage :</strong> Pages de login, erreurs, confirmations, formulaires.
+            </p>
+
+            <div class="layout-preview layout-preview-medium">
+                <div class="layout-centered">
+                    <div class="layout-centered-content layout-demo-area layout-demo-main">
+                        Centered Content<br>(max-width: 600px)
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="layout-centered"&gt;
+    &lt;div class="layout-centered-content"&gt;
+        &lt;h1&gt;Login&lt;/h1&gt;
+        &lt;form&gt;...&lt;/form&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="alert alert-success">
+            <div class="alert-icon">✓</div>
+            <div class="alert-content">
+                <div class="alert-title">Tous les layouts sont responsive !</div>
+                <div class="alert-message">
+                    Redimensionne ta fenêtre pour voir les adaptations.
+                    Le CSS est dans <code>css/layouts.css</code> et déjà inclus dans <code>dist/uikit.css</code>.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,183 @@
+/**
+ * UIKit Alerts
+ * Messages inline (différent des notifications toast)
+ */
+
+.alert {
+    padding: var(--spacing-6);
+    border-radius: var(--border-radius-md);
+    border: var(--border-width) solid;
+    margin-bottom: var(--spacing-6);
+    font-size: var(--font-size-md);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+}
+
+.alert-icon {
+    font-size: var(--font-size-xl);
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-title {
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-2);
+    font-size: var(--font-size-md);
+}
+
+.alert-message {
+    line-height: var(--line-height-relaxed);
+}
+
+/* Dismissible */
+.alert-dismissible {
+    position: relative;
+    padding-right: var(--spacing-10);
+}
+
+.alert-close {
+    position: absolute;
+    top: var(--spacing-4);
+    right: var(--spacing-4);
+    background: transparent;
+    border: none;
+    font-size: var(--font-size-xl);
+    color: inherit;
+    opacity: 0.5;
+    cursor: pointer;
+    padding: var(--spacing-2);
+    line-height: 1;
+}
+
+.alert-close:hover {
+    opacity: 1;
+}
+
+/* === VARIANTS === */
+
+.alert-info {
+    background: var(--color-info-light);
+    border-color: var(--color-info);
+    color: #4a90d9;
+}
+
+.alert-success {
+    background: var(--color-success-light);
+    border-color: var(--color-success);
+    color: #5a9d4a;
+}
+
+.alert-warning {
+    background: var(--color-warning-light);
+    border-color: var(--color-warning);
+    color: #f0a020;
+}
+
+.alert-danger {
+    background: var(--color-danger-light);
+    border-color: var(--color-danger);
+    color: #ff6b6b;
+}
+
+/* Dark mode: brighter text colors for better readability */
+[data-theme="dark"] .alert-info {
+    color: #6ba6e8;
+}
+
+[data-theme="dark"] .alert-success {
+    color: #7db46c;
+}
+
+[data-theme="dark"] .alert-warning {
+    color: #f0b040;
+}
+
+[data-theme="dark"] .alert-danger {
+    color: #ff8080;
+}
+
+/* Auto dark mode */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .alert-info {
+        color: #6ba6e8;
+    }
+
+    :root:not([data-theme="light"]) .alert-success {
+        color: #7db46c;
+    }
+
+    :root:not([data-theme="light"]) .alert-warning {
+        color: #f0b040;
+    }
+
+    :root:not([data-theme="light"]) .alert-danger {
+        color: #ff8080;
+    }
+}
+
+/* Solid variants */
+.alert-solid {
+    color: var(--color-text-white);
+    border: none;
+}
+
+.alert-solid.alert-info {
+    background: var(--color-info);
+}
+
+.alert-solid.alert-success {
+    background: var(--color-success);
+}
+
+.alert-solid.alert-warning {
+    background: var(--color-warning);
+}
+
+.alert-solid.alert-danger {
+    background: var(--color-danger);
+}
+
+/* === COMPACT ALERT === */
+
+.alert-sm {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--font-size-base);
+}
+
+.alert-sm .alert-icon {
+    font-size: var(--font-size-md);
+}
+
+.alert-sm .alert-title {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-1);
+}
+
+/* === BANNER ALERT === */
+
+.alert-banner {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 0;
+    text-align: center;
+    justify-content: center;
+}
+
+/* === ALERT WITH ACTIONS === */
+
+.alert-actions {
+    display: flex;
+    gap: var(--spacing-3);
+    margin-top: var(--spacing-4);
+}
+
+.alert-actions .btn {
+    font-size: var(--font-size-base);
+    padding: var(--spacing-2) var(--spacing-4);
+}

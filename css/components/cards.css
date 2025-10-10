@@ -10,11 +10,11 @@
 }
 
 .card-header {
-    background: var(--color-bg-tertiary);
+    background: var(--color-bg-secondary);
     border-bottom: var(--border-width) solid var(--color-border-medium);
     padding: var(--spacing-6);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-text-secondary);
+    color: var(--color-text-primary);
 }
 
 .card-body {
@@ -25,6 +25,7 @@
     background: var(--color-bg-tertiary);
     border-top: var(--border-width) solid var(--color-border-light);
     padding: var(--spacing-6);
+    color: var(--color-text-secondary);
 }
 
 /* Stat Card */

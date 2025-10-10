@@ -8,6 +8,7 @@
 @import url('../css/tokens.css');
 @import url('../css/reset.css');
 @import url('../css/layout.css');
+@import url('../css/layouts.css');
 
 /* === COMPONENTS === */
 @import url('../css/components/buttons.css');
@@ -18,3 +19,8 @@
 @import url('../css/components/logs.css');
 @import url('../css/components/header.css');
 @import url('../css/components/notifications.css');
+@import url('../css/components/forms.css');
+@import url('../css/components/tables.css');
+@import url('../css/components/alerts.css');
+@import url('../css/components/loading.css');
+@import url('../css/components/modals.css');

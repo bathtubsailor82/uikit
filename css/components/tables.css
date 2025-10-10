@@ -1,0 +1,250 @@
+/**
+ * UIKit Tables
+ */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-md);
+    background: var(--color-bg-primary);
+}
+
+.table thead {
+    background: var(--color-bg-tertiary);
+    border-bottom: var(--border-width-thick) solid var(--color-border-medium);
+}
+
+.table th {
+    padding: var(--spacing-4) var(--spacing-6);
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table td {
+    padding: var(--spacing-4) var(--spacing-6);
+    border-bottom: var(--border-width) solid var(--color-border-light);
+    color: var(--color-text-primary);
+}
+
+.table tbody tr:hover {
+    background: var(--color-bg-hover);
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Alignment */
+.table th.text-center,
+.table td.text-center {
+    text-align: center;
+}
+
+.table th.text-right,
+.table td.text-right {
+    text-align: right;
+}
+
+/* === TABLE VARIANTS === */
+
+/* Bordered */
+.table-bordered {
+    border: var(--border-width) solid var(--color-border-medium);
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: var(--border-width) solid var(--color-border-light);
+}
+
+/* Striped */
+.table-striped tbody tr:nth-child(odd) {
+    background: var(--color-bg-tertiary);
+}
+
+.table-striped tbody tr:hover {
+    background: var(--color-bg-hover);
+}
+
+/* Compact */
+.table-sm th,
+.table-sm td {
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-base);
+}
+
+/* Spacious */
+.table-lg th,
+.table-lg td {
+    padding: var(--spacing-6) var(--spacing-8);
+}
+
+/* === SORTABLE HEADERS === */
+
+.table th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-right: var(--spacing-8);
+}
+
+.table th.sortable:hover {
+    background: var(--color-bg-hover);
+}
+
+.table th.sortable::after {
+    content: '⇅';
+    position: absolute;
+    right: var(--spacing-4);
+    opacity: 0.3;
+    font-size: var(--font-size-sm);
+}
+
+.table th.sortable.asc::after {
+    content: '↑';
+    opacity: 1;
+    color: var(--color-primary);
+}
+
+.table th.sortable.desc::after {
+    content: '↓';
+    opacity: 1;
+    color: var(--color-primary);
+}
+
+/* === STATUS CELLS === */
+
+.table td.status-success {
+    color: var(--color-success-dark);
+    font-weight: var(--font-weight-medium);
+}
+
+.table td.status-warning {
+    color: var(--color-warning);
+    font-weight: var(--font-weight-medium);
+}
+
+.table td.status-danger {
+    color: var(--color-danger);
+    font-weight: var(--font-weight-medium);
+}
+
+/* === ACTIONS COLUMN === */
+
+.table-actions {
+    display: flex;
+    gap: var(--spacing-2);
+    align-items: center;
+}
+
+.table-actions .btn {
+    padding: var(--spacing-1) var(--spacing-3);
+    font-size: var(--font-size-sm);
+}
+
+/* === RESPONSIVE TABLE === */
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive .table {
+    min-width: 600px;
+}
+
+/* Mobile: Stack cards */
+@media (max-width: 768px) {
+    .table-mobile-cards {
+        display: block;
+    }
+
+    .table-mobile-cards thead {
+        display: none;
+    }
+
+    .table-mobile-cards tbody {
+        display: block;
+    }
+
+    .table-mobile-cards tr {
+        display: block;
+        margin-bottom: var(--spacing-6);
+        background: var(--color-bg-primary);
+        border: var(--border-width) solid var(--color-border-light);
+        border-radius: var(--border-radius-md);
+        padding: var(--spacing-4);
+    }
+
+    .table-mobile-cards td {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--spacing-2) 0;
+        border-bottom: var(--border-width) solid var(--color-border-light);
+    }
+
+    .table-mobile-cards td:last-child {
+        border-bottom: none;
+    }
+
+    .table-mobile-cards td::before {
+        content: attr(data-label);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* === SELECTABLE ROWS === */
+
+.table tbody tr.selectable {
+    cursor: pointer;
+}
+
+.table tbody tr.selected {
+    background: var(--color-primary-light);
+}
+
+.table tbody tr.selectable:hover {
+    background: var(--color-bg-active);
+}
+
+.table tbody tr.selectable.selected:hover {
+    background: var(--color-primary-light);
+}
+
+/* === TABLE FOOTER === */
+
+.table tfoot {
+    background: var(--color-bg-tertiary);
+    border-top: var(--border-width-thick) solid var(--color-border-medium);
+    font-weight: var(--font-weight-semibold);
+}
+
+.table tfoot td {
+    border-bottom: none;
+}
+
+/* === EMPTY STATE === */
+
+.table-empty {
+    text-align: center;
+    padding: var(--spacing-12) var(--spacing-6);
+    color: var(--color-text-tertiary);
+}
+
+.table-empty-icon {
+    font-size: 48px;
+    margin-bottom: var(--spacing-4);
+    opacity: 0.3;
+}
+
+.table-empty-text {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+}

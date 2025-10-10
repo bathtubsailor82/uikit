@@ -1,32 +1,37 @@
 /**
  * UIKit Design Tokens
  * Variables CSS globales pour une cohérence visuelle
+ * Support Light & Dark mode
  */
 
 :root {
     /* === COULEURS === */
 
-    /* Couleurs principales */
+    /* Couleurs principales (fixes) */
     --color-primary: #5a90c7;
     --color-primary-hover: #4a80b7;
-    --color-primary-light: #e8f4f8;
 
-    /* Couleurs état */
+    /* Couleurs état (fixes) */
     --color-success: #7db46c;
-    --color-success-light: #e8f4e8;
     --color-success-dark: #4a7c59;
-
     --color-warning: #cc8800;
+    --color-danger: #d84444;
+    --color-info: #2c7fb8;
+    --color-info-dark: #2c5aa0;
+
+    /* Couleurs status (fixes) */
+    --color-online: #30a030;
+    --color-offline: #d70015;
+
+    /* === LIGHT MODE (default) === */
+
+    --color-primary-light: #e8f4f8;
+    --color-success-light: #e8f4e8;
     --color-warning-light: #fff4e6;
     --color-warning-bg: #fff8dc;
-
-    --color-danger: #d84444;
     --color-danger-light: #fde8e8;
     --color-danger-bg: #ffe4e1;
-
-    --color-info: #2c7fb8;
     --color-info-light: #f0f8ff;
-    --color-info-dark: #2c5aa0;
 
     /* Couleurs de fond */
     --color-bg-primary: #ffffff;
@@ -50,10 +55,74 @@
     /* Couleurs sombres */
     --color-dark: #1d1d1f;
     --color-dark-hover: #2d2d2f;
+}
 
-    /* Couleurs status */
-    --color-online: #30a030;
-    --color-offline: #d70015;
+/* === DARK MODE === */
+[data-theme="dark"] {
+    --color-primary-light: #1a3a4f;
+    --color-success-light: #1f3329;
+    --color-warning-light: #3d2f00;
+    --color-warning-bg: #4d3c00;
+    --color-danger-light: #3d1f1f;
+    --color-danger-bg: #4d2525;
+    --color-info-light: #1a2f4f;
+
+    /* Couleurs de fond inversées */
+    --color-bg-primary: #1d1d1f;
+    --color-bg-secondary: #2d2d2f;
+    --color-bg-tertiary: #3d3d3f;
+    --color-bg-hover: #4d4d4f;
+    --color-bg-active: #5d5d5f;
+
+    /* Couleurs de texte inversées */
+    --color-text-primary: #f5f5f7;
+    --color-text-secondary: #a1a1a6;
+    --color-text-tertiary: #86868b;
+    --color-text-disabled: #6e6e73;
+    --color-text-white: #ffffff;
+
+    /* Couleurs de bordure inversées */
+    --color-border-light: #3d3d3f;
+    --color-border-medium: #4d4d4f;
+    --color-border-dark: #5d5d5f;
+
+    /* Couleurs sombres en mode dark */
+    --color-dark: #0d0d0f;
+    --color-dark-hover: #1d1d1f;
+}
+
+/* Auto dark mode (suit les préférences système) */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --color-primary-light: #1a3a4f;
+        --color-success-light: #1f3329;
+        --color-warning-light: #3d2f00;
+        --color-warning-bg: #4d3c00;
+        --color-danger-light: #3d1f1f;
+        --color-danger-bg: #4d2525;
+        --color-info-light: #1a2f4f;
+
+        --color-bg-primary: #1d1d1f;
+        --color-bg-secondary: #2d2d2f;
+        --color-bg-tertiary: #3d3d3f;
+        --color-bg-hover: #4d4d4f;
+        --color-bg-active: #5d5d5f;
+
+        --color-text-primary: #f5f5f7;
+        --color-text-secondary: #a1a1a6;
+        --color-text-tertiary: #86868b;
+        --color-text-disabled: #6e6e73;
+
+        --color-border-light: #3d3d3f;
+        --color-border-medium: #4d4d4f;
+        --color-border-dark: #5d5d5f;
+
+        --color-dark: #0d0d0f;
+        --color-dark-hover: #1d1d1f;
+    }
+}
+
+:root {
 
     /* === TYPOGRAPHIE === */
 
