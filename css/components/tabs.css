@@ -1,0 +1,41 @@
+/**
+ * UIKit Tabs
+ */
+
+.tabs-nav {
+    background: var(--color-bg-tertiary);
+    border-bottom: var(--border-width) solid var(--color-border-medium);
+    display: flex;
+}
+
+.tab-button {
+    flex: 1;
+    padding: var(--spacing-6);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: none;
+    border-bottom: var(--border-width-thick) solid transparent;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-size: var(--font-size-lg);
+}
+
+.tab-button:hover {
+    background: var(--color-bg-active);
+    color: var(--color-text-primary);
+}
+
+.tab-button.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    background: var(--color-bg-primary);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}

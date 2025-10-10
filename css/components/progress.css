@@ -1,0 +1,97 @@
+/**
+ * UIKit Progress Bars
+ */
+
+.progress-bar {
+    width: 100%;
+    height: 14px;
+    background: var(--color-border-light);
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    margin: var(--spacing-3) 0;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(to bottom, #6ba1d8, var(--color-primary));
+    border-radius: var(--border-radius-sm);
+    transition: width var(--transition-slow);
+}
+
+.progress-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+/* Variants */
+
+.progress-fill.success {
+    background: linear-gradient(to bottom, #8dc47c, var(--color-success));
+}
+
+.progress-fill.warning {
+    background: linear-gradient(to bottom, #e69900, var(--color-warning));
+}
+
+.progress-fill.danger {
+    background: linear-gradient(to bottom, #e65454, var(--color-danger));
+}
+
+/* Storage bar (plus petite) */
+
+.storage-item {
+    margin-bottom: var(--spacing-4);
+}
+
+.storage-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-2);
+}
+
+.storage-name {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.storage-usage {
+    color: var(--color-text-secondary);
+    font-family: var(--font-family-mono);
+}
+
+.storage-bar {
+    height: 6px;
+    background: var(--color-border-light);
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+}
+
+.storage-fill {
+    height: 100%;
+    border-radius: var(--border-radius-sm);
+    transition: width var(--transition-slow);
+}
+
+.storage-fill.ok {
+    background: var(--color-success);
+}
+
+.storage-fill.warn {
+    background: #ffa500;
+}
+
+.storage-fill.critical {
+    background: var(--color-danger);
+}

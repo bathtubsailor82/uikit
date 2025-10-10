@@ -1,0 +1,17 @@
+{
+  "name": "uikit",
+  "version": "1.0.0",
+  "description": "Design system réutilisable style Apple/macOS",
+  "main": "dist/uikit.css",
+  "scripts": {
+    "dev": "open docs/index.html"
+  },
+  "keywords": [
+    "css",
+    "design-system",
+    "uikit",
+    "components"
+  ],
+  "author": "",
+  "license": "MIT"
+}

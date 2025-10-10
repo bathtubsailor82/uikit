@@ -1,0 +1,83 @@
+/**
+ * UIKit Logs
+ */
+
+.logs-container {
+    padding: var(--spacing-4) var(--spacing-6);
+    overflow-y: auto;
+    background: var(--color-bg-tertiary);
+    border: var(--border-width) solid var(--color-border-medium);
+    border-radius: var(--border-radius-lg);
+}
+
+.log-entry {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-2);
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--border-radius-sm);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.log-entry.info {
+    background: var(--color-info-light);
+    color: var(--color-info-dark);
+}
+
+.log-entry.warn {
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.log-entry.error {
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+}
+
+.log-timestamp {
+    color: var(--color-text-secondary);
+    margin-right: var(--spacing-4);
+}
+
+.log-component {
+    color: var(--color-text-tertiary);
+    margin-right: var(--spacing-3);
+}
+
+/* Logs legend */
+
+.logs-legend {
+    display: flex;
+    gap: var(--spacing-6);
+    padding: var(--spacing-3) var(--spacing-6);
+    background: var(--color-bg-hover);
+    border-bottom: var(--border-width) solid var(--color-border-medium);
+    font-size: var(--font-size-base);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: var(--border-radius-sm);
+    border: var(--border-width) solid rgba(0, 0, 0, 0.1);
+}
+
+.legend-color.info {
+    background: var(--color-info-light);
+}
+
+.legend-color.warn {
+    background: var(--color-warning-bg);
+}
+
+.legend-color.error {
+    background: var(--color-danger-bg);
+}

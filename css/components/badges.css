@@ -1,0 +1,85 @@
+/**
+ * UIKit Badges
+ */
+
+.badge {
+    display: inline-block;
+    padding: var(--spacing-1) var(--spacing-2);
+    background: var(--color-bg-hover);
+    color: var(--color-text-secondary);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+/* Variants */
+
+.badge-primary {
+    background: var(--color-primary-light);
+    color: var(--color-info);
+}
+
+.badge-success {
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
+}
+
+.badge-active {
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
+}
+
+.badge-warning {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+.badge-paused {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+.badge-danger {
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+}
+
+.badge-error {
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+}
+
+.badge-idle {
+    background: var(--color-bg-active);
+    color: var(--color-text-secondary);
+}
+
+/* Status badge (plus grand) */
+
+.status-badge {
+    display: inline-block;
+    padding: var(--spacing-1) var(--spacing-3);
+    background: var(--color-primary-light);
+    color: var(--color-info);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+}
+
+.status-badge.active {
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
+}
+
+.status-badge.paused {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+.status-badge.error {
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+}

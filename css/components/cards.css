@@ -1,0 +1,147 @@
+/**
+ * UIKit Cards
+ */
+
+.card {
+    background: var(--color-bg-primary);
+    border: var(--border-width) solid var(--color-border-light);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-6);
+}
+
+.card-header {
+    background: var(--color-bg-tertiary);
+    border-bottom: var(--border-width) solid var(--color-border-medium);
+    padding: var(--spacing-6);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+}
+
+.card-body {
+    padding: var(--spacing-6);
+}
+
+.card-footer {
+    background: var(--color-bg-tertiary);
+    border-top: var(--border-width) solid var(--color-border-light);
+    padding: var(--spacing-6);
+}
+
+/* Stat Card */
+
+.stat-card {
+    background: var(--color-bg-primary);
+    padding: var(--spacing-4);
+    border-radius: var(--border-radius-md);
+    border: var(--border-width) solid var(--color-border-light);
+}
+
+.stat-value {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-tight);
+}
+
+.stat-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    margin-top: var(--spacing-1);
+}
+
+.stat-detail {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    margin-top: var(--spacing-1);
+}
+
+/* Clickable stat card */
+
+.stat-card-button {
+    cursor: pointer;
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+.stat-card-button:hover {
+    background: var(--color-info-light);
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-hover);
+}
+
+.stat-card-button:active {
+    transform: translateY(0);
+    background: var(--color-primary-light);
+}
+
+/* Section */
+
+.section {
+    border-bottom: var(--border-width) solid var(--color-border-light);
+}
+
+.section:last-child {
+    border-bottom: none;
+}
+
+.section-header {
+    background: var(--color-bg-hover);
+    padding: var(--spacing-3) var(--spacing-6);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.section-content {
+    padding: var(--spacing-4) var(--spacing-6);
+}
+
+/* Info rows */
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-1) 0;
+    font-size: var(--font-size-md);
+}
+
+.info-label {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+}
+
+.info-value {
+    color: var(--color-text-primary);
+    font-family: var(--font-family-mono);
+}
+
+/* Config grid */
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-4);
+    margin-top: var(--spacing-2);
+}
+
+.config-item {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-2) var(--spacing-4);
+    background: var(--color-bg-tertiary);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-base);
+}
+
+.config-label {
+    color: var(--color-text-secondary);
+}
+
+.config-value {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}

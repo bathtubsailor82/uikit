@@ -1,0 +1,29 @@
+/**
+ * UIKit Reset
+ * Reset CSS minimaliste inspiré du dashboard
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-base);
+    color: var(--color-text-primary);
+    background: var(--color-bg-secondary);
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+input,
+select,
+textarea {
+    font-family: inherit;
+}

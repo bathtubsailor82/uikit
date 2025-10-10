@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIKit - Documentation</title>
+    <link rel="stylesheet" href="../dist/uikit.css">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        .demo-section {
+            padding: var(--spacing-10);
+            border-bottom: 1px solid var(--color-border-medium);
+        }
+
+        .demo-section h2 {
+            font-size: var(--font-size-2xl);
+            margin-bottom: var(--spacing-6);
+            color: var(--color-text-primary);
+        }
+
+        .demo-section h3 {
+            font-size: var(--font-size-lg);
+            margin: var(--spacing-8) 0 var(--spacing-4) 0;
+            color: var(--color-text-secondary);
+        }
+
+        .demo-row {
+            display: flex;
+            gap: var(--spacing-4);
+            margin-bottom: var(--spacing-6);
+            flex-wrap: wrap;
+        }
+
+        .demo-grid {
+            display: grid;
+            gap: var(--spacing-4);
+            margin-bottom: var(--spacing-6);
+        }
+
+        .code-block {
+            background: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border-medium);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-6);
+            font-family: var(--font-family-mono);
+            font-size: var(--font-size-base);
+            overflow-x: auto;
+            margin: var(--spacing-4) 0;
+        }
+
+        .demo-box {
+            background: var(--color-bg-primary);
+            border: 1px solid var(--color-border-light);
+            padding: var(--spacing-6);
+            border-radius: var(--border-radius-md);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>UIKit Documentation</h1>
+        <div class="status">Version 1.0.0</div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="demo-section">
+        <h2>Buttons</h2>
+
+        <h3>Variants</h3>
+        <div class="demo-row">
+            <button class="btn">Default</button>
+            <button class="btn btn-primary">Primary</button>
+            <button class="btn btn-success">Success</button>
+            <button class="btn btn-danger">Danger</button>
+            <button class="btn" disabled>Disabled</button>
+        </div>
+
+        <div class="code-block">
+&lt;button class="btn"&gt;Default&lt;/button&gt;
+&lt;button class="btn btn-primary"&gt;Primary&lt;/button&gt;
+&lt;button class="btn btn-success"&gt;Success&lt;/button&gt;
+&lt;button class="btn btn-danger"&gt;Danger&lt;/button&gt;
+&lt;button class="btn" disabled&gt;Disabled&lt;/button&gt;
+        </div>
+
+        <h3>Sizes</h3>
+        <div class="demo-row">
+            <button class="btn btn-sm">Small</button>
+            <button class="btn">Normal</button>
+            <button class="btn btn-lg">Large</button>
+        </div>
+
+        <h3>Block</h3>
+        <button class="btn btn-primary btn-block">Block Button</button>
+    </div>
+
+    <!-- Badges -->
+    <div class="demo-section">
+        <h2>Badges</h2>
+
+        <h3>Basic Badges</h3>
+        <div class="demo-row">
+            <span class="badge">Default</span>
+            <span class="badge badge-primary">Primary</span>
+            <span class="badge badge-success">Success</span>
+            <span class="badge badge-warning">Warning</span>
+            <span class="badge badge-danger">Danger</span>
+            <span class="badge badge-active">Active</span>
+            <span class="badge badge-idle">Idle</span>
+        </div>
+
+        <div class="code-block">
+&lt;span class="badge"&gt;Default&lt;/span&gt;
+&lt;span class="badge badge-primary"&gt;Primary&lt;/span&gt;
+&lt;span class="badge badge-success"&gt;Success&lt;/span&gt;
+        </div>
+
+        <h3>Status Badges (plus grands)</h3>
+        <div class="demo-row">
+            <span class="status-badge">Running</span>
+            <span class="status-badge active">Active</span>
+            <span class="status-badge paused">Paused</span>
+            <span class="status-badge error">Error</span>
+        </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="demo-section">
+        <h2>Cards</h2>
+
+        <h3>Basic Card</h3>
+        <div class="card" style="max-width: 400px;">
+            <div class="card-header">Card Header</div>
+            <div class="card-body">
+                <p>This is the card content. You can put any content here.</p>
+            </div>
+            <div class="card-footer">Card Footer</div>
+        </div>
+
+        <h3>Stat Cards</h3>
+        <div class="demo-grid grid-4">
+            <div class="stat-card">
+                <div class="stat-value">42</div>
+                <div class="stat-label">Active Jobs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">1,234</div>
+                <div class="stat-label">Total Items</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">95%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">128 MB</div>
+                <div class="stat-label">Memory</div>
+                <div class="stat-detail">Heap: 64 MB</div>
+            </div>
+        </div>
+
+        <h3>Section Card</h3>
+        <div class="demo-box" style="max-width: 600px;">
+            <div class="section">
+                <div class="section-header">Information</div>
+                <div class="section-content">
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span class="info-value">Example Value</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value">Active</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Date:</span>
+                        <span class="info-value">2025-10-10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Config Grid</h3>
+        <div class="config-grid" style="max-width: 600px;">
+            <div class="config-item">
+                <span class="config-label">Codec:</span>
+                <span class="config-value">AAC</span>
+            </div>
+            <div class="config-item">
+                <span class="config-label">Bitrate:</span>
+                <span class="config-value">256k</span>
+            </div>
+            <div class="config-item">
+                <span class="config-label">Channels:</span>
+                <span class="config-value">2</span>
+            </div>
+            <div class="config-item">
+                <span class="config-label">Sample Rate:</span>
+                <span class="config-value">48kHz</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Bars -->
+    <div class="demo-section">
+        <h2>Progress Bars</h2>
+
+        <h3>Basic Progress</h3>
+        <div style="max-width: 600px;">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 45%"></div>
+                <div class="progress-text">45% Complete</div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill success" style="width: 75%"></div>
+                <div class="progress-text">75% Complete</div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill warning" style="width: 60%"></div>
+                <div class="progress-text">60% Complete</div>
+            </div>
+        </div>
+
+        <h3>Storage Bars</h3>
+        <div style="max-width: 600px;">
+            <div class="storage-item">
+                <div class="storage-header">
+                    <span class="storage-name">Source Drive</span>
+                    <span class="storage-usage">256 GB / 512 GB</span>
+                </div>
+                <div class="storage-bar">
+                    <div class="storage-fill ok" style="width: 50%"></div>
+                </div>
+            </div>
+
+            <div class="storage-item">
+                <div class="storage-header">
+                    <span class="storage-name">Archive Drive</span>
+                    <span class="storage-usage">600 GB / 1 TB</span>
+                </div>
+                <div class="storage-bar">
+                    <div class="storage-fill warn" style="width: 60%"></div>
+                </div>
+            </div>
+
+            <div class="storage-item">
+                <div class="storage-header">
+                    <span class="storage-name">Backup Drive</span>
+                    <span class="storage-usage">850 GB / 1 TB</span>
+                </div>
+                <div class="storage-bar">
+                    <div class="storage-fill critical" style="width: 85%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="demo-section">
+        <h2>Tabs</h2>
+
+        <div style="max-width: 600px;">
+            <div class="tabs-nav">
+                <button class="tab-button active" onclick="switchTab('tab1')">Tab 1</button>
+                <button class="tab-button" onclick="switchTab('tab2')">Tab 2</button>
+                <button class="tab-button" onclick="switchTab('tab3')">Tab 3</button>
+            </div>
+
+            <div id="tab1" class="tab-content active">
+                <div class="p-6">Content of Tab 1</div>
+            </div>
+            <div id="tab2" class="tab-content">
+                <div class="p-6">Content of Tab 2</div>
+            </div>
+            <div id="tab3" class="tab-content">
+                <div class="p-6">Content of Tab 3</div>
+            </div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="tabs-nav"&gt;
+    &lt;button class="tab-button active"&gt;Tab 1&lt;/button&gt;
+    &lt;button class="tab-button"&gt;Tab 2&lt;/button&gt;
+&lt;/div&gt;
+&lt;div class="tab-content active"&gt;...&lt;/div&gt;
+&lt;div class="tab-content"&gt;...&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Logs -->
+    <div class="demo-section">
+        <h2>Logs</h2>
+
+        <div class="logs-legend">
+            <span class="legend-item">
+                <span class="legend-color info"></span> Info
+            </span>
+            <span class="legend-item">
+                <span class="legend-color warn"></span> Warning
+            </span>
+            <span class="legend-item">
+                <span class="legend-color error"></span> Error
+            </span>
+        </div>
+
+        <div class="logs-container" style="max-width: 800px; height: 200px;">
+            <div class="log-entry info">
+                <span class="log-timestamp">14:23:45</span>
+                <span class="log-component">[system]</span>
+                Application started successfully
+            </div>
+            <div class="log-entry info">
+                <span class="log-timestamp">14:23:46</span>
+                <span class="log-component">[job-1]</span>
+                Processing 156 files
+            </div>
+            <div class="log-entry warn">
+                <span class="log-timestamp">14:23:47</span>
+                <span class="log-component">[job-1]</span>
+                High memory usage detected
+            </div>
+            <div class="log-entry error">
+                <span class="log-timestamp">14:23:48</span>
+                <span class="log-component">[job-2]</span>
+                Failed to process file: access denied
+            </div>
+            <div class="log-entry info">
+                <span class="log-timestamp">14:23:49</span>
+                <span class="log-component">[system]</span>
+                Backup completed successfully
+            </div>
+        </div>
+    </div>
+
+    <!-- Layout Utilities -->
+    <div class="demo-section">
+        <h2>Layout Utilities</h2>
+
+        <h3>Grid</h3>
+        <div class="grid grid-3 gap-4" style="max-width: 600px;">
+            <div class="demo-box">Grid 1</div>
+            <div class="demo-box">Grid 2</div>
+            <div class="demo-box">Grid 3</div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="grid grid-3 gap-4"&gt;
+    &lt;div&gt;Grid 1&lt;/div&gt;
+    &lt;div&gt;Grid 2&lt;/div&gt;
+    &lt;div&gt;Grid 3&lt;/div&gt;
+&lt;/div&gt;
+        </div>
+
+        <h3>Flexbox</h3>
+        <div class="flex-between p-4 demo-box" style="max-width: 600px;">
+            <span>Left</span>
+            <span>Right</span>
+        </div>
+
+        <div class="code-block">
+&lt;div class="flex-between"&gt;
+    &lt;span&gt;Left&lt;/span&gt;
+    &lt;span&gt;Right&lt;/span&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Colors -->
+    <div class="demo-section">
+        <h2>Colors</h2>
+
+        <div class="grid grid-4 gap-4">
+            <div class="stat-card">
+                <div style="width: 100%; height: 40px; background: var(--color-primary); border-radius: var(--border-radius-md);"></div>
+                <div class="stat-label">Primary</div>
+                <div class="stat-detail">#5a90c7</div>
+            </div>
+            <div class="stat-card">
+                <div style="width: 100%; height: 40px; background: var(--color-success); border-radius: var(--border-radius-md);"></div>
+                <div class="stat-label">Success</div>
+                <div class="stat-detail">#7db46c</div>
+            </div>
+            <div class="stat-card">
+                <div style="width: 100%; height: 40px; background: var(--color-warning); border-radius: var(--border-radius-md);"></div>
+                <div class="stat-label">Warning</div>
+                <div class="stat-detail">#cc8800</div>
+            </div>
+            <div class="stat-card">
+                <div style="width: 100%; height: 40px; background: var(--color-danger); border-radius: var(--border-radius-md);"></div>
+                <div class="stat-label">Danger</div>
+                <div class="stat-detail">#d84444</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Demo -->
+    <div class="demo-section">
+        <h2>Notifications</h2>
+
+        <div class="demo-row">
+            <button class="btn" onclick="showNotification('success')">Success</button>
+            <button class="btn" onclick="showNotification('error')">Error</button>
+            <button class="btn" onclick="showNotification('info')">Info</button>
+            <button class="btn" onclick="showNotification('warning')">Warning</button>
+        </div>
+
+        <div class="code-block">
+&lt;div class="notification success show"&gt;Success message&lt;/div&gt;
+        </div>
+    </div>
+
+    <script>
+        // Tabs functionality
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Notification demo
+        function showNotification(type) {
+            const messages = {
+                success: 'Operation completed successfully!',
+                error: 'An error occurred!',
+                info: 'Here is some information',
+                warning: 'Please be careful!'
+            };
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = messages[type];
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

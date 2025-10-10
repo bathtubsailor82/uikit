@@ -1,0 +1,25 @@
+/**
+ * UIKit Header
+ */
+
+.header {
+    background: var(--color-dark);
+    color: var(--color-text-white);
+    padding: var(--spacing-6) var(--spacing-10);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+}
+
+.header h1 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-white);
+}
+
+.header .status {
+    font-size: var(--font-size-md);
+    opacity: 0.9;
+}
