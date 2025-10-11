@@ -1,0 +1,193 @@
+/**
+ * UIKit List Items
+ * Composant pour listes d'items multi-lignes
+ */
+
+/* Container */
+.list-container {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg-primary);
+    border: var(--border-width) solid var(--color-border-light);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+}
+
+/* List Item */
+.list-item {
+    padding: var(--spacing-4) var(--spacing-6);
+    border-bottom: var(--border-width) solid var(--color-border-light);
+    transition: background var(--transition-base);
+    cursor: default;
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+/* Hover state (optionnel, pour items cliquables) */
+.list-item.clickable {
+    cursor: pointer;
+}
+
+.list-item.clickable:hover {
+    background: var(--color-bg-hover);
+}
+
+.list-item.clickable:active {
+    background: var(--color-bg-secondary);
+}
+
+/* Selected state */
+.list-item.selected {
+    background: var(--color-primary-light);
+    border-left: 3px solid var(--color-primary);
+    padding-left: calc(var(--spacing-6) - 3px);
+}
+
+/* Header (titre + badges) */
+.list-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-2);
+}
+
+.list-item-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin: 0;
+    line-height: var(--line-height-tight);
+    flex: 1;
+}
+
+.list-item-badges {
+    display: flex;
+    gap: var(--spacing-2);
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Meta info (date, heure, durée) */
+.list-item-meta {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-1);
+    font-family: var(--font-family-mono);
+}
+
+/* Account/Email */
+.list-item-account {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+}
+
+/* Détails supplémentaires (optionnel) */
+.list-item-details {
+    margin-top: var(--spacing-2);
+    padding-top: var(--spacing-2);
+    border-top: var(--border-width) solid var(--color-border-light);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+/* Actions (boutons en bas à droite) */
+.list-item-actions {
+    display: flex;
+    gap: var(--spacing-2);
+    margin-top: var(--spacing-3);
+    justify-content: flex-end;
+}
+
+/* Variante compacte */
+.list-item.compact {
+    padding: var(--spacing-3) var(--spacing-4);
+}
+
+.list-item.compact .list-item-title {
+    font-size: var(--font-size-base);
+}
+
+.list-item.compact .list-item-meta,
+.list-item.compact .list-item-account {
+    font-size: var(--font-size-xs);
+}
+
+/* Variante avec icône */
+.list-item-with-icon {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--spacing-4);
+    align-items: start;
+}
+
+.list-item-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-md);
+    background: var(--color-bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xl);
+    flex-shrink: 0;
+}
+
+.list-item-content {
+    min-width: 0; /* Pour permettre le text-overflow */
+}
+
+/* États visuels */
+.list-item.error {
+    border-left: 3px solid var(--color-danger);
+    padding-left: calc(var(--spacing-6) - 3px);
+    background: var(--color-danger-light);
+}
+
+.list-item.warning {
+    border-left: 3px solid var(--color-warning);
+    padding-left: calc(var(--spacing-6) - 3px);
+    background: var(--color-warning-light);
+}
+
+.list-item.success {
+    border-left: 3px solid var(--color-success);
+    padding-left: calc(var(--spacing-6) - 3px);
+    background: var(--color-success-light);
+}
+
+/* Empty state */
+.list-empty {
+    padding: var(--spacing-10) var(--spacing-6);
+    text-align: center;
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+}
+
+.list-empty-icon {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-2);
+    opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .list-item-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .list-item-badges {
+        margin-top: var(--spacing-2);
+    }
+
+    .list-item-actions {
+        justify-content: stretch;
+    }
+
+    .list-item-actions .btn {
+        flex: 1;
+    }
+}

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Items - UIKit</title>
+    <link rel="stylesheet" href="../dist/uikit.css">
+    <script src="../js/dark-mode.js"></script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            padding-top: 50px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-10);
+        }
+
+        .demo-section {
+            margin-bottom: var(--spacing-12);
+            padding-bottom: var(--spacing-12);
+            border-bottom: 1px solid var(--color-border-medium);
+        }
+
+        .demo-section:last-child {
+            border-bottom: none;
+        }
+
+        .demo-title {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--spacing-3);
+            color: var(--color-text-primary);
+        }
+
+        .demo-description {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-6);
+            line-height: var(--line-height-relaxed);
+        }
+
+        .code-block {
+            background: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border-medium);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-6);
+            font-family: var(--font-family-mono);
+            font-size: var(--font-size-sm);
+            overflow-x: auto;
+            margin-top: var(--spacing-6);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-6);
+        }
+
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>List Items Component</h1>
+        <button class="btn" data-theme-toggle style="background: rgba(255,255,255,0.1); border: none; color: white;">
+            <span data-theme-icon>🌙</span>
+        </button>
+    </div>
+
+    <div class="demo-container">
+        <!-- Intro -->
+        <div class="alert alert-info mb-6">
+            <div class="alert-icon">📋</div>
+            <div class="alert-content">
+                <div class="alert-title">Composant List Items</div>
+                <div class="alert-message">
+                    Un composant flexible pour afficher des listes d'items avec plusieurs lignes d'information.
+                    Idéal pour des listes de meetings, tâches, notifications, etc.
+                </div>
+            </div>
+        </div>
+
+        <!-- Exemple de base -->
+        <div class="demo-section">
+            <h2 class="demo-title">1. Liste de base</h2>
+            <p class="demo-description">
+                Une liste simple avec titre, métadonnées et badges. Parfait pour afficher des meetings ou événements.
+            </p>
+
+            <div class="list-container" style="max-width: 600px;">
+                <div class="list-item">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">100th GRECO Plenary</h4>
+                        <div class="list-item-badges">
+                            <span class="badge badge-primary">116</span>
+                            <span class="badge badge-danger">REC</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">05/06/2025 - 8:48 - 08:17:45</div>
+                    <div class="list-item-account">ITEM G03 - coemmedia+g03@gmail.com</div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">Weekly Team Meeting</h4>
+                        <div class="list-item-badges">
+                            <span class="badge badge-primary">8</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">06/06/2025 - 10:00 - 01:00:00</div>
+                    <div class="list-item-account">TEAM - team@company.com</div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">Client Presentation</h4>
+                        <div class="list-item-badges">
+                            <span class="badge badge-primary">12</span>
+                            <span class="badge badge-success">LIVE</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">06/06/2025 - 14:30 - 02:15:30</div>
+                    <div class="list-item-account">SALES - sales@company.com</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="list-container"&gt;
+    &lt;div class="list-item"&gt;
+        &lt;div class="list-item-header"&gt;
+            &lt;h4 class="list-item-title"&gt;100th GRECO Plenary&lt;/h4&gt;
+            &lt;div class="list-item-badges"&gt;
+                &lt;span class="badge badge-primary"&gt;116&lt;/span&gt;
+                &lt;span class="badge badge-danger"&gt;REC&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="list-item-meta"&gt;05/06/2025 - 8:48 - 08:17:45&lt;/div&gt;
+        &lt;div class="list-item-account"&gt;ITEM G03 - coemmedia+g03@gmail.com&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </div>
+        </div>
+
+        <!-- Items cliquables -->
+        <div class="demo-section">
+            <h2 class="demo-title">2. Items cliquables</h2>
+            <p class="demo-description">
+                Ajoute la classe <code>clickable</code> pour rendre les items interactifs avec effet hover.
+            </p>
+
+            <div class="list-container" style="max-width: 600px;">
+                <div class="list-item clickable" onclick="alert('Item clicked!')">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">Meeting cliquable</h4>
+                        <div class="list-item-badges">
+                            <span class="badge badge-primary">5</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">07/06/2025 - 9:00 - 01:00:00</div>
+                    <div class="list-item-account">Cliquez pour voir les détails</div>
+                </div>
+
+                <div class="list-item clickable selected">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">Meeting sélectionné</h4>
+                        <div class="list-item-badges">
+                            <span class="badge badge-success">ACTIVE</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">07/06/2025 - 11:00 - 00:45:00</div>
+                    <div class="list-item-account">Item actuellement sélectionné</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="list-item clickable"&gt;
+    &lt;!-- Contenu --&gt;
+&lt;/div&gt;
+
+&lt;div class="list-item clickable selected"&gt;
+    &lt;!-- Item sélectionné --&gt;
+&lt;/div&gt;
+            </div>
+        </div>
+
+        <!-- États visuels -->
+        <div class="demo-section">
+            <h2 class="demo-title">3. États visuels</h2>
+            <p class="demo-description">
+                Utilise les classes <code>error</code>, <code>warning</code> ou <code>success</code> pour indiquer des états.
+            </p>
+
+            <div class="list-container" style="max-width: 600px;">
+                <div class="list-item success">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">Meeting terminé avec succès</h4>
+                        <div class="list-item-badges">
+                            <span class="badge badge-success">COMPLETED</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">05/06/2025 - 9:00 - 01:00:00</div>
+                    <div class="list-item-account">Tous les objectifs atteints</div>
+                </div>
+
+                <div class="list-item warning">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">Meeting à vérifier</h4>
+                        <div class="list-item-badges">
+                            <span class="badge badge-warning">PENDING</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">05/06/2025 - 14:00 - 00:30:00</div>
+                    <div class="list-item-account">Nécessite une action</div>
+                </div>
+
+                <div class="list-item error">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">Meeting annulé</h4>
+                        <div class="list-item-badges">
+                            <span class="badge badge-danger">CANCELLED</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">05/06/2025 - 16:00 - 00:45:00</div>
+                    <div class="list-item-account">Raison : conflit d'horaire</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Items avec actions -->
+        <div class="demo-section">
+            <h2 class="demo-title">4. Items avec actions</h2>
+            <p class="demo-description">
+                Ajoute des boutons d'action avec <code>list-item-actions</code>.
+            </p>
+
+            <div class="list-container" style="max-width: 600px;">
+                <div class="list-item">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">Strategy Planning Session</h4>
+                        <div class="list-item-badges">
+                            <span class="badge badge-primary">15</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">08/06/2025 - 10:00 - 02:00:00</div>
+                    <div class="list-item-account">EXEC - executives@company.com</div>
+                    <div class="list-item-actions">
+                        <button class="btn btn-sm">Modifier</button>
+                        <button class="btn btn-sm btn-danger">Annuler</button>
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">Product Demo</h4>
+                        <div class="list-item-badges">
+                            <span class="badge badge-success">CONFIRMED</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">08/06/2025 - 15:00 - 01:00:00</div>
+                    <div class="list-item-account">SALES - demo@company.com</div>
+                    <div class="list-item-actions">
+                        <button class="btn btn-sm btn-primary">Rejoindre</button>
+                        <button class="btn btn-sm">Détails</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="list-item"&gt;
+    &lt;div class="list-item-header"&gt;...&lt;/div&gt;
+    &lt;div class="list-item-meta"&gt;...&lt;/div&gt;
+    &lt;div class="list-item-account"&gt;...&lt;/div&gt;
+    &lt;div class="list-item-actions"&gt;
+        &lt;button class="btn btn-sm"&gt;Modifier&lt;/button&gt;
+        &lt;button class="btn btn-sm btn-danger"&gt;Annuler&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </div>
+        </div>
+
+        <!-- Items avec icônes -->
+        <div class="demo-section">
+            <h2 class="demo-title">5. Items avec icônes</h2>
+            <p class="demo-description">
+                Utilise <code>list-item-with-icon</code> pour ajouter une icône ou avatar.
+            </p>
+
+            <div class="list-container" style="max-width: 600px;">
+                <div class="list-item">
+                    <div class="list-item-with-icon">
+                        <div class="list-item-icon">📹</div>
+                        <div class="list-item-content">
+                            <div class="list-item-header">
+                                <h4 class="list-item-title">Video Conference</h4>
+                                <div class="list-item-badges">
+                                    <span class="badge badge-danger">LIVE</span>
+                                </div>
+                            </div>
+                            <div class="list-item-meta">05/06/2025 - 14:00 - 01:30:00</div>
+                            <div class="list-item-account">VIDEO - video@company.com</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-item-with-icon">
+                        <div class="list-item-icon">📞</div>
+                        <div class="list-item-content">
+                            <div class="list-item-header">
+                                <h4 class="list-item-title">Phone Call</h4>
+                                <div class="list-item-badges">
+                                    <span class="badge badge-primary">2</span>
+                                </div>
+                            </div>
+                            <div class="list-item-meta">05/06/2025 - 16:00 - 00:15:00</div>
+                            <div class="list-item-account">SUPPORT - support@company.com</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-item-with-icon">
+                        <div class="list-item-icon">✉️</div>
+                        <div class="list-item-content">
+                            <div class="list-item-header">
+                                <h4 class="list-item-title">Email Discussion</h4>
+                                <div class="list-item-badges">
+                                    <span class="badge badge-warning">PENDING</span>
+                                </div>
+                            </div>
+                            <div class="list-item-meta">05/06/2025 - 17:00 - 00:30:00</div>
+                            <div class="list-item-account">MAIL - mail@company.com</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Version compacte -->
+        <div class="demo-section">
+            <h2 class="demo-title">6. Version compacte</h2>
+            <p class="demo-description">
+                Ajoute la classe <code>compact</code> pour une version plus condensée.
+            </p>
+
+            <div class="list-container" style="max-width: 600px;">
+                <div class="list-item compact">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">Quick Sync</h4>
+                        <div class="list-item-badges">
+                            <span class="badge badge-primary">3</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">09/06/2025 - 9:00 - 00:15:00</div>
+                    <div class="list-item-account">TEAM - team@company.com</div>
+                </div>
+
+                <div class="list-item compact">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">Daily Standup</h4>
+                        <div class="list-item-badges">
+                            <span class="badge badge-success">ACTIVE</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">09/06/2025 - 9:15 - 00:15:00</div>
+                    <div class="list-item-account">DEV - dev@company.com</div>
+                </div>
+
+                <div class="list-item compact">
+                    <div class="list-item-header">
+                        <h4 class="list-item-title">Coffee Break</h4>
+                        <div class="list-item-badges">
+                            <span class="badge">OPTIONAL</span>
+                        </div>
+                    </div>
+                    <div class="list-item-meta">09/06/2025 - 10:30 - 00:15:00</div>
+                    <div class="list-item-account">ALL - everyone@company.com</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- État vide -->
+        <div class="demo-section">
+            <h2 class="demo-title">7. État vide</h2>
+            <p class="demo-description">
+                Affiche un message quand la liste est vide avec <code>list-empty</code>.
+            </p>
+
+            <div class="list-container" style="max-width: 600px;">
+                <div class="list-empty">
+                    <div class="list-empty-icon">📭</div>
+                    <div>Aucun meeting programmé</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+&lt;div class="list-container"&gt;
+    &lt;div class="list-empty"&gt;
+        &lt;div class="list-empty-icon"&gt;📭&lt;/div&gt;
+        &lt;div&gt;Aucun meeting programmé&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </div>
+        </div>
+
+        <!-- Classes utiles -->
+        <div class="alert alert-success">
+            <div class="alert-icon">✓</div>
+            <div class="alert-content">
+                <div class="alert-title">Composant flexible et personnalisable</div>
+                <div class="alert-message">
+                    Combine les différentes options pour créer exactement l'interface dont tu as besoin.
+                    Le composant est responsive et s'adapte automatiquement aux petits écrans.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
