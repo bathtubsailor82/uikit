@@ -13,16 +13,21 @@
     cursor: pointer;
     transition: all var(--transition-base);
     text-align: center;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
     line-height: 1;
+    position: relative;
+    white-space: nowrap;
 }
 
-.btn:hover:not(:disabled) {
+.btn:hover:not(:disabled):not(.loading) {
     background: var(--color-bg-hover);
     border-color: var(--color-primary);
 }
 
-.btn:active:not(:disabled) {
+.btn:active:not(:disabled):not(.loading) {
     transform: translateY(1px);
 }
 
@@ -82,5 +87,187 @@
 
 .btn-block {
     width: 100%;
-    display: block;
+    display: flex;
+}
+
+/* === ICON SUPPORT === */
+
+.btn-icon {
+    font-size: var(--font-size-lg);
+    line-height: 1;
+}
+
+/* Icon prefix/suffix */
+.btn .icon-prefix {
+    margin-right: calc(var(--spacing-2) * -1);
+}
+
+.btn .icon-suffix {
+    margin-left: calc(var(--spacing-2) * -1);
+}
+
+/* Icon-only button (square) */
+.btn-icon-only {
+    padding: var(--spacing-3);
+    aspect-ratio: 1;
+}
+
+.btn-icon-only.btn-sm {
+    padding: var(--spacing-2);
+}
+
+.btn-icon-only.btn-lg {
+    padding: var(--spacing-4);
+}
+
+/* === LOADING STATE === */
+
+.btn.loading {
+    cursor: wait;
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+}
+
+.btn.loading::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    top: 50%;
+    left: 50%;
+    margin-left: -6px;
+    margin-top: -6px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: btn-spinner 0.6s linear infinite;
+    color: var(--color-text-primary);
+}
+
+.btn-primary.loading::after,
+.btn-success.loading::after,
+.btn-danger.loading::after {
+    color: var(--color-text-white);
+}
+
+.btn.loading.btn-sm::after {
+    width: 10px;
+    height: 10px;
+    margin-left: -5px;
+    margin-top: -5px;
+}
+
+.btn.loading.btn-lg::after {
+    width: 16px;
+    height: 16px;
+    margin-left: -8px;
+    margin-top: -8px;
+    border-width: 3px;
+}
+
+@keyframes btn-spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* === BUTTON GROUPS === */
+
+.btn-group {
+    display: inline-flex;
+    gap: 0;
+}
+
+.btn-group .btn {
+    border-radius: 0;
+    margin-left: calc(var(--border-width) * -1);
+}
+
+.btn-group .btn:first-child {
+    border-top-left-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--border-radius-md);
+    margin-left: 0;
+}
+
+.btn-group .btn:last-child {
+    border-top-right-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
+}
+
+.btn-group .btn:hover,
+.btn-group .btn:focus {
+    z-index: 1;
+}
+
+/* Button group vertical */
+.btn-group-vertical {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.btn-group-vertical .btn {
+    border-radius: 0;
+    margin-top: calc(var(--border-width) * -1);
+    width: 100%;
+}
+
+.btn-group-vertical .btn:first-child {
+    border-top-left-radius: var(--border-radius-md);
+    border-top-right-radius: var(--border-radius-md);
+    margin-top: 0;
+}
+
+.btn-group-vertical .btn:last-child {
+    border-bottom-left-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
+}
+
+.btn-group-vertical .btn:hover,
+.btn-group-vertical .btn:focus {
+    z-index: 1;
+}
+
+/* === BUTTON VARIANTS ADDITIONNELS === */
+
+/* Secondary button (outline) */
+.btn-secondary {
+    background: transparent;
+    border-color: var(--color-border-dark);
+    color: var(--color-text-primary);
+}
+
+.btn-secondary:hover:not(:disabled):not(.loading) {
+    background: var(--color-bg-hover);
+    border-color: var(--color-primary);
+}
+
+/* Ghost button (minimal) */
+.btn-ghost {
+    background: transparent;
+    border-color: transparent;
+    color: var(--color-text-primary);
+}
+
+.btn-ghost:hover:not(:disabled):not(.loading) {
+    background: var(--color-bg-hover);
+}
+
+/* Link button */
+.btn-link {
+    background: transparent;
+    border: none;
+    color: var(--color-primary);
+    padding: var(--spacing-2) var(--spacing-3);
+    text-decoration: none;
+}
+
+.btn-link:hover:not(:disabled):not(.loading) {
+    text-decoration: underline;
+    background: transparent;
+}
+
+.btn-link:active:not(:disabled):not(.loading) {
+    transform: none;
 }

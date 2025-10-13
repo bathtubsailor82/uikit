@@ -1,0 +1,293 @@
+/**
+ * UIKit Accessibility
+ * Focus states, keyboard navigation, screen reader utilities
+ * WCAG 2.1 AA compliant
+ */
+
+/* ============================================
+   FOCUS STATES GLOBAUX
+   ============================================ */
+
+/**
+ * Focus visible moderne
+ * Affiche le focus uniquement lors de la navigation clavier
+ * Masque le focus lors du clic souris
+ */
+
+/* Reset du focus par défaut */
+*:focus {
+    outline: none;
+}
+
+/* Focus visible uniquement au clavier */
+*:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    transition: outline-offset var(--transition-fast);
+}
+
+/* ============================================
+   FOCUS PAR TYPE DE COMPOSANT
+   ============================================ */
+
+/* Buttons */
+.btn:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+.btn-danger:focus-visible {
+    outline-color: var(--focus-ring-danger);
+}
+
+.btn-success:focus-visible {
+    outline-color: var(--focus-ring-success);
+}
+
+/* Links */
+a:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--border-radius-sm);
+}
+
+/* Form controls */
+.form-input:focus-visible,
+.form-select:focus-visible,
+.form-textarea:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-primary);
+    outline-offset: 0;
+    border-color: var(--color-primary);
+}
+
+.form-input:focus-visible:invalid,
+.form-textarea:focus-visible:invalid {
+    outline-color: var(--focus-ring-danger);
+    border-color: var(--color-danger);
+}
+
+/* Checkbox & Radio */
+.form-check-input:focus-visible,
+.form-radio-input:focus-visible,
+.form-switch-input:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-primary);
+    outline-offset: var(--focus-ring-offset);
+}
+
+/* Tabs */
+.tabs [role="tab"]:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-primary);
+    outline-offset: calc(var(--focus-ring-offset) * -1);
+    z-index: 1;
+}
+
+/* Modal close buttons */
+.modal-close:focus-visible,
+.alert-close:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-primary);
+    outline-offset: 1px;
+}
+
+/* Cards cliquables */
+.card[tabindex]:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-primary);
+    outline-offset: var(--focus-ring-offset);
+}
+
+/* Accordion */
+.accordion-header:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-primary);
+    outline-offset: calc(var(--focus-ring-offset) * -1);
+}
+
+/* ============================================
+   SKIP LINKS
+   ============================================ */
+
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--color-primary);
+    color: var(--color-text-white);
+    padding: var(--spacing-3) var(--spacing-4);
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    z-index: var(--z-modal);
+    font-weight: var(--font-weight-medium);
+}
+
+.skip-link:focus {
+    top: var(--spacing-4);
+    left: var(--spacing-4);
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-text-white);
+}
+
+/* ============================================
+   SCREEN READER UTILITIES
+   ============================================ */
+
+/**
+ * Visually hidden but accessible to screen readers
+ * Utile pour labels, descriptions, etc.
+ */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/**
+ * Focusable screen reader content
+ * Devient visible au focus clavier
+ */
+.sr-only-focusable:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+}
+
+/**
+ * Cache aux screen readers
+ * Pour contenu purement décoratif
+ */
+[aria-hidden="true"] {
+    pointer-events: none;
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+/**
+ * Respecte les préférences utilisateur
+ * pour réduire les animations
+ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ============================================
+   HIGH CONTRAST MODE
+   ============================================ */
+
+/**
+ * Support Windows High Contrast Mode
+ */
+@media (prefers-contrast: high) {
+    .btn,
+    .form-input,
+    .form-select,
+    .card {
+        border-width: var(--border-width-thick);
+    }
+
+    *:focus-visible {
+        outline-width: 3px;
+    }
+}
+
+/* ============================================
+   TOUCH TARGETS
+   ============================================ */
+
+/**
+ * Garantit des zones de touch minimum (44x44px)
+ * pour les appareils tactiles
+ */
+@media (pointer: coarse) {
+    .btn,
+    .form-check-input,
+    .form-radio-input,
+    .form-switch-input,
+    a,
+    button {
+        min-height: var(--touch-target-min);
+        min-width: var(--touch-target-min);
+    }
+
+    /* Exception pour boutons small */
+    .btn-sm {
+        min-height: 36px;
+        min-width: auto;
+        padding: var(--spacing-2) var(--spacing-4);
+    }
+}
+
+/* ============================================
+   KEYBOARD NAVIGATION HELPERS
+   ============================================ */
+
+/**
+ * Indicateur de navigation clavier active
+ * Ajoute une classe au body lors de la navigation clavier
+ */
+body.keyboard-nav *:focus {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+/* ============================================
+   ARIA LIVE REGIONS
+   ============================================ */
+
+/**
+ * Styles pour les régions live
+ * (toasts, notifications, status messages)
+ */
+[role="status"],
+[role="alert"],
+[aria-live] {
+    /* Assurez-vous que ces éléments sont visibles
+       mais pas intrusifs visuellement si purement informatifs */
+}
+
+/* ============================================
+   DISABLED STATES
+   ============================================ */
+
+/**
+ * États désactivés accessibles
+ * Utilisez aria-disabled au lieu de disabled
+ * pour garder la focusabilité si nécessaire
+ */
+[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Les éléments disabled natifs */
+:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ============================================
+   FOCUS TRAP INDICATOR
+   ============================================ */
+
+/**
+ * Indicateur visuel pour focus trap actif
+ * (modals, dropdowns, etc.)
+ */
+.focus-trap-active {
+    /* Ajoutez des styles si besoin pour indiquer
+       qu'un focus trap est actif */
+}

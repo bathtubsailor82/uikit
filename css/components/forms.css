@@ -307,3 +307,317 @@
     flex: 1;
     min-width: 200px;
 }
+
+/* === CUSTOM RADIO BUTTONS === */
+
+.form-radio {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-3);
+    position: relative;
+}
+
+.form-radio-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.form-radio-custom {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    border: var(--border-width-thick) solid var(--color-border-dark);
+    border-radius: 50%;
+    margin-right: var(--spacing-3);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    background: var(--color-bg-primary);
+}
+
+.form-radio-input:checked + .form-radio-custom {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+}
+
+.form-radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-text-white);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform var(--transition-fast);
+}
+
+.form-radio-input:checked + .form-radio-custom::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.form-radio-input:disabled + .form-radio-custom {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.form-radio-label {
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+    cursor: pointer;
+}
+
+.form-radio-input:disabled ~ .form-radio-label {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* === CUSTOM CHECKBOX === */
+
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-3);
+    position: relative;
+}
+
+.form-checkbox-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.form-checkbox-custom {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    border: var(--border-width-thick) solid var(--color-border-dark);
+    border-radius: var(--border-radius-sm);
+    margin-right: var(--spacing-3);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    background: var(--color-bg-primary);
+}
+
+.form-checkbox-input:checked + .form-checkbox-custom {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+}
+
+.form-checkbox-custom::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--color-text-white);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform var(--transition-fast);
+}
+
+.form-checkbox-input:checked + .form-checkbox-custom::after {
+    transform: rotate(45deg) scale(1);
+}
+
+.form-checkbox-input:indeterminate + .form-checkbox-custom {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+}
+
+.form-checkbox-input:indeterminate + .form-checkbox-custom::after {
+    top: 7px;
+    left: 3px;
+    width: 10px;
+    height: 2px;
+    border: none;
+    background: var(--color-text-white);
+    transform: rotate(0) scale(1);
+    border-radius: 1px;
+}
+
+.form-checkbox-input:disabled + .form-checkbox-custom {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.form-checkbox-label {
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+    cursor: pointer;
+}
+
+.form-checkbox-input:disabled ~ .form-checkbox-label {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* === TEXTAREA ENHANCEMENTS === */
+
+/* Character counter */
+.form-textarea-wrapper {
+    position: relative;
+}
+
+.form-textarea-counter {
+    position: absolute;
+    bottom: var(--spacing-2);
+    right: var(--spacing-3);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    pointer-events: none;
+    background: var(--color-bg-primary);
+    padding: 0 var(--spacing-1);
+}
+
+.form-textarea-wrapper.has-counter .form-textarea {
+    padding-bottom: var(--spacing-8);
+}
+
+/* Auto-grow textarea */
+.form-textarea-auto {
+    resize: none;
+    overflow: hidden;
+    min-height: 80px;
+}
+
+/* === INPUT WITH ICON === */
+
+.form-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.form-input-wrapper .form-input {
+    width: 100%;
+}
+
+.form-input-icon-left {
+    padding-left: var(--spacing-10);
+}
+
+.form-input-icon-right {
+    padding-right: var(--spacing-10);
+}
+
+.form-input-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-tertiary);
+    pointer-events: none;
+    font-size: var(--font-size-lg);
+}
+
+.form-input-icon.left {
+    left: var(--spacing-3);
+}
+
+.form-input-icon.right {
+    right: var(--spacing-3);
+}
+
+/* Input icon clickable (ex: clear button) */
+.form-input-icon.clickable {
+    pointer-events: auto;
+    cursor: pointer;
+    transition: color var(--transition-base);
+}
+
+.form-input-icon.clickable:hover {
+    color: var(--color-text-primary);
+}
+
+/* === SEARCH INPUT ENHANCED === */
+
+.form-search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.form-search-input {
+    padding-left: var(--spacing-10);
+    padding-right: var(--spacing-10);
+}
+
+.form-search-icon {
+    position: absolute;
+    left: var(--spacing-3);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-tertiary);
+    pointer-events: none;
+}
+
+.form-search-clear {
+    position: absolute;
+    right: var(--spacing-3);
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    padding: var(--spacing-1);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-lg);
+    line-height: 1;
+    transition: all var(--transition-base);
+}
+
+.form-search-clear:hover {
+    color: var(--color-text-primary);
+    background: var(--color-bg-hover);
+}
+
+/* === FIELDSET === */
+
+.form-fieldset {
+    border: var(--border-width) solid var(--color-border-light);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-6);
+    margin-bottom: var(--spacing-6);
+}
+
+.form-legend {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    padding: 0 var(--spacing-2);
+    margin-bottom: var(--spacing-4);
+}
+
+/* === FORM LAYOUTS === */
+
+/* Two column form */
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+}
+
+.form-row .form-group {
+    margin-bottom: 0;
+}
+
+/* Compact form */
+.form-compact .form-group {
+    margin-bottom: var(--spacing-4);
+}
+
+.form-compact .form-label {
+    margin-bottom: var(--spacing-1);
+}
+
+/* === INPUT STATES WITH ICONS === */
+
+.form-group.has-icon-left .form-input {
+    padding-left: var(--spacing-10);
+}
+
+.form-group.has-icon-right .form-input {
+    padding-right: var(--spacing-10);
+}
