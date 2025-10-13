@@ -1,0 +1,190 @@
+/**
+ * UIKit Accordion
+ * Composant collapsible pour sections de contenu
+ */
+
+/* === BASE ACCORDION === */
+
+.accordion {
+    border: var(--border-width) solid var(--color-border-light);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+}
+
+.accordion-item {
+    border-bottom: var(--border-width) solid var(--color-border-light);
+}
+
+.accordion-item:last-child {
+    border-bottom: none;
+}
+
+/* === ACCORDION HEADER === */
+
+.accordion-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-4) var(--spacing-6);
+    background: var(--color-bg-primary);
+    border: none;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    user-select: none;
+}
+
+.accordion-header:hover {
+    background: var(--color-bg-hover);
+}
+
+.accordion-header[aria-expanded="true"] {
+    background: var(--color-bg-hover);
+    color: var(--color-primary);
+}
+
+/* === ACCORDION ICON === */
+
+.accordion-icon {
+    flex-shrink: 0;
+    margin-left: var(--spacing-4);
+    font-size: var(--font-size-base);
+    transition: transform var(--transition-base);
+    color: var(--color-text-tertiary);
+}
+
+.accordion-header[aria-expanded="true"] .accordion-icon {
+    transform: rotate(180deg);
+    color: var(--color-primary);
+}
+
+/* === ACCORDION CONTENT === */
+
+.accordion-content {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height var(--transition-slow),
+                opacity var(--transition-base),
+                padding var(--transition-base);
+    padding: 0 var(--spacing-6);
+}
+
+.accordion-content[aria-hidden="false"] {
+    max-height: 2000px; /* Large enough for most content */
+    opacity: 1;
+    padding: var(--spacing-4) var(--spacing-6) var(--spacing-6);
+}
+
+.accordion-content p:first-child {
+    margin-top: 0;
+}
+
+.accordion-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* === ACCORDION VARIANTS === */
+
+/* Flush (sans bordures externes) */
+.accordion-flush {
+    border: none;
+    border-radius: 0;
+}
+
+.accordion-flush .accordion-header {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.accordion-flush .accordion-content {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.accordion-flush .accordion-content[aria-hidden="false"] {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Compact */
+.accordion-compact .accordion-header {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--font-size-base);
+}
+
+.accordion-compact .accordion-content[aria-hidden="false"] {
+    padding: var(--spacing-3) var(--spacing-4) var(--spacing-4);
+}
+
+/* Large */
+.accordion-lg .accordion-header {
+    padding: var(--spacing-6) var(--spacing-8);
+    font-size: var(--font-size-lg);
+}
+
+.accordion-lg .accordion-content[aria-hidden="false"] {
+    padding: var(--spacing-6) var(--spacing-8) var(--spacing-8);
+}
+
+/* === ACCORDION ALWAYS OPEN === */
+
+/**
+ * Par défaut, l'accordion ferme les autres items
+ * Utilisez .accordion-always-open pour permettre
+ * plusieurs items ouverts simultanément
+ */
+.accordion-always-open .accordion-item {
+    /* Pas de comportement spécial en CSS,
+       géré par JavaScript */
+}
+
+/* === NESTED ACCORDION === */
+
+.accordion-content .accordion {
+    margin-top: var(--spacing-4);
+}
+
+/* === ACCORDION WITH BADGE === */
+
+.accordion-header-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.accordion-header-content .badge {
+    margin-left: auto;
+    margin-right: var(--spacing-2);
+}
+
+/* === ACCORDION DISABLED === */
+
+.accordion-header:disabled,
+.accordion-header[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.accordion-header:disabled:hover,
+.accordion-header[aria-disabled="true"]:hover {
+    background: var(--color-bg-primary);
+}
+
+/* === ANIMATION UTILITIES === */
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .accordion-content {
+        transition: none;
+    }
+
+    .accordion-icon {
+        transition: none;
+    }
+}

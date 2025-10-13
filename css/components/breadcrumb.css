@@ -1,0 +1,231 @@
+/**
+ * UIKit Breadcrumb
+ * Fil d'Ariane pour la navigation hiérarchique
+ */
+
+/* === BASE BREADCRUMB === */
+
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: var(--spacing-3) 0;
+    list-style: none;
+    margin: 0;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-md);
+    color: var(--color-text-secondary);
+}
+
+.breadcrumb-item a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-base);
+}
+
+.breadcrumb-item a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+/* Current page (non cliquable) */
+.breadcrumb-item[aria-current="page"] {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+}
+
+/* === BREADCRUMB SEPARATOR === */
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "/";
+    padding: 0 var(--spacing-3);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+}
+
+/* Séparateur chevron */
+.breadcrumb-chevron .breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    font-size: var(--font-size-lg);
+}
+
+/* Séparateur arrow */
+.breadcrumb-arrow .breadcrumb-item + .breadcrumb-item::before {
+    content: "→";
+}
+
+/* Séparateur dot */
+.breadcrumb-dot .breadcrumb-item + .breadcrumb-item::before {
+    content: "•";
+}
+
+/* === BREADCRUMB VARIANTS === */
+
+/* Compact */
+.breadcrumb-compact {
+    padding: var(--spacing-2) 0;
+}
+
+.breadcrumb-compact .breadcrumb-item {
+    font-size: var(--font-size-base);
+}
+
+.breadcrumb-compact .breadcrumb-item + .breadcrumb-item::before {
+    padding: 0 var(--spacing-2);
+}
+
+/* Large */
+.breadcrumb-lg .breadcrumb-item {
+    font-size: var(--font-size-lg);
+}
+
+.breadcrumb-lg .breadcrumb-item + .breadcrumb-item::before {
+    padding: 0 var(--spacing-4);
+}
+
+/* === BREADCRUMB WITH BACKGROUND === */
+
+.breadcrumb-bg {
+    background: var(--color-bg-secondary);
+    padding: var(--spacing-3) var(--spacing-6);
+    border-radius: var(--border-radius-md);
+}
+
+/* === BREADCRUMB WITH ICONS === */
+
+.breadcrumb-item .icon {
+    margin-right: var(--spacing-2);
+    font-size: var(--font-size-base);
+}
+
+.breadcrumb-item .icon-home {
+    font-size: var(--font-size-lg);
+}
+
+/* === BREADCRUMB TRUNCATION === */
+
+/* Ellipsis pour items longs */
+.breadcrumb-item.truncate {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.breadcrumb-item.truncate a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* === BREADCRUMB COLLAPSED === */
+
+/**
+ * Pour mobile : afficher seulement premier et dernier
+ * Les items du milieu sont masqués dans un dropdown
+ */
+.breadcrumb-collapsed .breadcrumb-item {
+    display: none;
+}
+
+.breadcrumb-collapsed .breadcrumb-item:first-child,
+.breadcrumb-collapsed .breadcrumb-item:last-child,
+.breadcrumb-collapsed .breadcrumb-item.breadcrumb-ellipsis {
+    display: flex;
+}
+
+.breadcrumb-ellipsis button {
+    background: transparent;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: var(--spacing-1);
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-base);
+}
+
+.breadcrumb-ellipsis button:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-primary);
+}
+
+/* === BREADCRUMB STYLES === */
+
+/* Style outlined */
+.breadcrumb-outlined {
+    border: var(--border-width) solid var(--color-border-light);
+    padding: var(--spacing-3) var(--spacing-6);
+    border-radius: var(--border-radius-md);
+}
+
+/* Style pills */
+.breadcrumb-pills .breadcrumb-item a {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-base);
+}
+
+.breadcrumb-pills .breadcrumb-item a:hover {
+    background: var(--color-bg-hover);
+    text-decoration: none;
+}
+
+.breadcrumb-pills .breadcrumb-item[aria-current="page"] {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--border-radius-md);
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 768px) {
+    /* Sur mobile, truncate les items automatiquement */
+    .breadcrumb-item {
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .breadcrumb-item a {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Ou automatiquement collapse sur mobile */
+    .breadcrumb-auto-collapse .breadcrumb-item {
+        display: none;
+    }
+
+    .breadcrumb-auto-collapse .breadcrumb-item:first-child,
+    .breadcrumb-auto-collapse .breadcrumb-item:last-child {
+        display: flex;
+    }
+
+    /* Réduire le padding des séparateurs */
+    .breadcrumb-item + .breadcrumb-item::before {
+        padding: 0 var(--spacing-2);
+    }
+}
+
+/* === ACCESSIBILITY === */
+
+/* Focus states pour navigation clavier */
+.breadcrumb-item a:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--border-radius-sm);
+}
+
+/* === BREADCRUMB NAVIGATION WRAPPER === */
+
+nav[aria-label="Breadcrumb"] {
+    margin-bottom: var(--spacing-6);
+}

@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Composants - UIKit</title>
+    <link rel="stylesheet" href="../dist/uikit.css">
+    <script src="../js/dark-mode.js"></script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            padding-top: 50px; /* Espace pour le header fixe */
+            transition: background var(--transition-base), color var(--transition-base);
+        }
+
+        /* Header fixe */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            padding: var(--spacing-2) var(--spacing-3);
+            border-radius: var(--border-radius-md);
+            background: rgba(255,255,255,0.1);
+            transition: all var(--transition-base);
+            font-size: var(--font-size-lg);
+        }
+
+        .back-link:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .demo-section {
+            padding: var(--spacing-10);
+            border-bottom: 1px solid var(--color-border-medium);
+        }
+
+        .demo-section h2 {
+            font-size: var(--font-size-2xl);
+            margin-bottom: var(--spacing-6);
+            color: var(--color-text-primary);
+        }
+
+        .demo-section h3 {
+            font-size: var(--font-size-lg);
+            margin: var(--spacing-8) 0 var(--spacing-4) 0;
+            color: var(--color-text-secondary);
+        }
+
+        .demo-row {
+            display: flex;
+            gap: var(--spacing-4);
+            margin-bottom: var(--spacing-6);
+            flex-wrap: wrap;
+        }
+
+        .demo-grid {
+            display: grid;
+            gap: var(--spacing-4);
+            margin-bottom: var(--spacing-6);
+        }
+
+        .code-block {
+            background: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border-medium);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-6);
+            font-family: var(--font-family-mono);
+            font-size: var(--font-size-base);
+            overflow-x: auto;
+            margin: var(--spacing-4) 0;
+        }
+
+        .demo-box {
+            background: var(--color-bg-primary);
+            border: 1px solid var(--color-border-light);
+            padding: var(--spacing-6);
+            border-radius: var(--border-radius-md);
+        }
+
+        .nav-toc {
+            position: sticky;
+            top: 50px; /* Juste sous le header */
+            background: var(--color-bg-primary);
+            border-bottom: 1px solid var(--color-border-light);
+            padding: var(--spacing-4) var(--spacing-10);
+            z-index: 50;
+            overflow-x: auto;
+        }
+
+        .nav-toc a {
+            display: inline-block;
+            padding: var(--spacing-2) var(--spacing-4);
+            margin-right: var(--spacing-2);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            border-radius: var(--border-radius-md);
+            font-size: var(--font-size-base);
+            transition: all var(--transition-base);
+        }
+
+        .nav-toc a:hover {
+            background: var(--color-bg-hover);
+            color: var(--color-text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <a href="index.html" class="back-link">←</a>
+        <h1 style="flex: 1;">Composants</h1>
+        <button class="btn" data-theme-toggle style="background: rgba(255,255,255,0.1); border: none; color: white;">
+            <span data-theme-icon>🌙</span>
+        </button>
+    </div>
+
+    <!-- Table of contents -->
+    <nav class="nav-toc">
+        <a href="#buttons">Buttons</a>
+        <a href="#badges">Badges</a>
+        <a href="#cards">Cards</a>
+        <a href="#progress">Progress</a>
+        <a href="#tabs">Tabs</a>
+        <a href="#forms">Forms</a>
+        <a href="#tables">Tables</a>
+        <a href="#alerts">Alerts</a>
+        <a href="#loading">Loading</a>
+        <a href="#modals">Modals</a>
+        <a href="#logs">Logs</a>
+        <a href="#accordion">Accordion</a>
+        <a href="#avatar">Avatar</a>
+        <a href="#breadcrumb">Breadcrumb</a>
+        <a href="#pagination">Pagination</a>
+        <a href="#layout">Layout</a>
+        <a href="#colors">Colors</a>
+        <a href="#dark-mode">Dark Mode</a>
+    </nav>
+
+    <!-- Buttons -->
+    <div class="demo-section" id="buttons">
+        <h2>Buttons</h2>
+
+        <h3>Variants</h3>
+        <div class="demo-row">
+            <button class="btn">Default</button>
+            <button class="btn btn-primary">Primary</button>
+            <button class="btn btn-success">Success</button>
+            <button class="btn btn-danger">Danger</button>
+            <button class="btn" disabled>Disabled</button>
+        </div>
+
+        <div class="code-block">
+&lt;button class="btn"&gt;Default&lt;/button&gt;
+&lt;button class="btn btn-primary"&gt;Primary&lt;/button&gt;
+&lt;button class="btn btn-success"&gt;Success&lt;/button&gt;
+&lt;button class="btn btn-danger"&gt;Danger&lt;/button&gt;
+&lt;button class="btn" disabled&gt;Disabled&lt;/button&gt;
+        </div>
+
+        <h3>Sizes</h3>
+        <div class="demo-row">
+            <button class="btn btn-sm">Small</button>
+            <button class="btn">Normal</button>
+            <button class="btn btn-lg">Large</button>
+        </div>
+
+        <h3>Block</h3>
+        <button class="btn btn-primary btn-block">Block Button</button>
+
+        <h3>Loading State</h3>
+        <div class="demo-row">
+            <button class="btn btn-primary loading">Loading</button>
+            <button class="btn loading">Loading</button>
+        </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="demo-section" id="badges">
+        <h2>Badges</h2>
+
+        <h3>Basic Badges</h3>
+        <div class="demo-row">
+            <span class="badge">Default</span>
+            <span class="badge badge-primary">Primary</span>
+            <span class="badge badge-success">Success</span>
+            <span class="badge badge-warning">Warning</span>
+            <span class="badge badge-danger">Danger</span>
+            <span class="badge badge-active">Active</span>
+            <span class="badge badge-idle">Idle</span>
+        </div>
+
+        <div class="code-block">
+&lt;span class="badge"&gt;Default&lt;/span&gt;
+&lt;span class="badge badge-primary"&gt;Primary&lt;/span&gt;
+&lt;span class="badge badge-success"&gt;Success&lt;/span&gt;
+        </div>
+
+        <h3>Status Badges (plus grands)</h3>
+        <div class="demo-row">
+            <span class="status-badge">Running</span>
+            <span class="status-badge active">Active</span>
+            <span class="status-badge paused">Paused</span>
+            <span class="status-badge error">Error</span>
+        </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="demo-section" id="cards">
+        <h2>Cards</h2>
+
+        <h3>Basic Card</h3>
+        <div class="card" style="max-width: 400px;">
+            <div class="card-header">Card Header</div>
+            <div class="card-body">
+                <p>This is the card content. You can put any content here.</p>
+            </div>
+            <div class="card-footer">Card Footer</div>
+        </div>
+
+        <h3>Stat Cards</h3>
+        <div class="demo-grid grid-4">
+            <div class="stat-card">
+                <div class="stat-value">42</div>
+                <div class="stat-label">Active Jobs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">1,234</div>
+                <div class="stat-label">Total Items</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">95%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">128 MB</div>
+                <div class="stat-label">Memory</div>
+                <div class="stat-detail">Heap: 64 MB</div>
+            </div>
+        </div>
+
+        <h3>Section Card</h3>
+        <div class="demo-box" style="max-width: 600px;">
+            <div class="section">
+                <div class="section-header">Information</div>
+                <div class="section-content">
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span class="info-value">Example Value</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value">Active</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Date:</span>
+                        <span class="info-value">2025-10-10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Config Grid</h3>
+        <div class="config-grid" style="max-width: 600px;">
+            <div class="config-item">
+                <span class="config-label">Codec:</span>
+                <span class="config-value">AAC</span>
+            </div>
+            <div class="config-item">
+                <span class="config-label">Bitrate:</span>
+                <span class="config-value">256k</span>
+            </div>
+            <div class="config-item">
+                <span class="config-label">Channels:</span>
+                <span class="config-value">2</span>
+            </div>
+            <div class="config-item">
+                <span class="config-label">Sample Rate:</span>
+                <span class="config-value">48kHz</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Bars -->
+    <div class="demo-section" id="progress">
+        <h2>Progress Bars</h2>
+
+        <h3>Basic Progress</h3>
+        <div style="max-width: 600px;">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 45%"></div>
+                <div class="progress-text">45% Complete</div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill success" style="width: 75%"></div>
+                <div class="progress-text">75% Complete</div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill warning" style="width: 60%"></div>
+                <div class="progress-text">60% Complete</div>
+            </div>
+        </div>
+
+        <h3>Storage Bars</h3>
+        <div style="max-width: 600px;">
+            <div class="storage-item">
+                <div class="storage-header">
+                    <span class="storage-name">Source Drive</span>
+                    <span class="storage-usage">256 GB / 512 GB</span>
+                </div>
+                <div class="storage-bar">
+                    <div class="storage-fill ok" style="width: 50%"></div>
+                </div>
+            </div>
+
+            <div class="storage-item">
+                <div class="storage-header">
+                    <span class="storage-name">Archive Drive</span>
+                    <span class="storage-usage">600 GB / 1 TB</span>
+                </div>
+                <div class="storage-bar">
+                    <div class="storage-fill warn" style="width: 60%"></div>
+                </div>
+            </div>
+
+            <div class="storage-item">
+                <div class="storage-header">
+                    <span class="storage-name">Backup Drive</span>
+                    <span class="storage-usage">850 GB / 1 TB</span>
+                </div>
+                <div class="storage-bar">
+                    <div class="storage-fill critical" style="width: 85%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="demo-section" id="tabs">
+        <h2>Tabs</h2>
+
+        <div style="max-width: 600px;">
+            <div class="tabs-nav">
+                <button class="tab-button active" onclick="switchTab('tab1')">Tab 1</button>
+                <button class="tab-button" onclick="switchTab('tab2')">Tab 2</button>
+                <button class="tab-button" onclick="switchTab('tab3')">Tab 3</button>
+            </div>
+
+            <div id="tab1" class="tab-content active">
+                <div class="p-6">Content of Tab 1</div>
+            </div>
+            <div id="tab2" class="tab-content">
+                <div class="p-6">Content of Tab 2</div>
+            </div>
+            <div id="tab3" class="tab-content">
+                <div class="p-6">Content of Tab 3</div>
+            </div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="tabs-nav"&gt;
+    &lt;button class="tab-button active"&gt;Tab 1&lt;/button&gt;
+    &lt;button class="tab-button"&gt;Tab 2&lt;/button&gt;
+&lt;/div&gt;
+&lt;div class="tab-content active"&gt;...&lt;/div&gt;
+&lt;div class="tab-content"&gt;...&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Forms -->
+    <div class="demo-section" id="forms">
+        <h2>Forms</h2>
+
+        <div style="max-width: 500px;">
+            <h3>Text Inputs</h3>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" placeholder="you@example.com">
+                <span class="form-help">We'll never share your email.</span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label required">Password</label>
+                <input type="password" class="form-input" placeholder="••••••••">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Disabled</label>
+                <input type="text" class="form-input" value="Can't edit this" disabled>
+            </div>
+
+            <h3>Validation States</h3>
+            <div class="form-group success">
+                <label class="form-label">Success</label>
+                <input type="text" class="form-input" value="Looks good!">
+                <span class="form-success">Great! This is valid.</span>
+            </div>
+
+            <div class="form-group error">
+                <label class="form-label">Error</label>
+                <input type="text" class="form-input" value="Invalid input">
+                <span class="form-error">Please enter a valid value.</span>
+            </div>
+
+            <h3>Textarea</h3>
+            <div class="form-group">
+                <label class="form-label">Message</label>
+                <textarea class="form-textarea" placeholder="Your message..."></textarea>
+            </div>
+
+            <h3>Select</h3>
+            <div class="form-group">
+                <label class="form-label">Choose an option</label>
+                <select class="form-select">
+                    <option>Option 1</option>
+                    <option>Option 2</option>
+                    <option>Option 3</option>
+                </select>
+            </div>
+
+            <h3>Checkboxes & Radio</h3>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="check1">
+                <label class="form-check-label" for="check1">I agree to the terms</label>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="check2" checked>
+                <label class="form-check-label" for="check2">Remember me</label>
+            </div>
+
+            <div style="margin-top: var(--spacing-6);">
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="radio" id="radio1" checked>
+                    <label class="form-check-label" for="radio1">Option A</label>
+                </div>
+
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="radio" id="radio2">
+                    <label class="form-check-label" for="radio2">Option B</label>
+                </div>
+            </div>
+
+            <h3>Switch Toggle</h3>
+            <div class="form-switch">
+                <input type="checkbox" class="form-switch-input" id="switch1">
+                <label class="form-switch-label" for="switch1">Enable notifications</label>
+            </div>
+
+            <div class="form-switch">
+                <input type="checkbox" class="form-switch-input" id="switch2" checked>
+                <label class="form-switch-label" for="switch2">Dark mode</label>
+            </div>
+
+            <h3>Search Input</h3>
+            <div class="form-search">
+                <input type="text" class="form-input" placeholder="Search...">
+            </div>
+
+            <h3>Input Group</h3>
+            <div class="input-group">
+                <span class="input-group-prepend">https://</span>
+                <input type="text" class="form-input" placeholder="example.com">
+            </div>
+
+            <div class="input-group" style="margin-top: var(--spacing-4);">
+                <input type="text" class="form-input" placeholder="Amount">
+                <span class="input-group-append">€</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tables -->
+    <div class="demo-section" id="tables">
+        <h2>Tables</h2>
+
+        <h3>Basic Table</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>John Doe</td>
+                    <td>john@example.com</td>
+                    <td><span class="badge badge-success">Active</span></td>
+                    <td class="text-right">
+                        <button class="btn btn-sm">Edit</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Jane Smith</td>
+                    <td>jane@example.com</td>
+                    <td><span class="badge badge-warning">Pending</span></td>
+                    <td class="text-right">
+                        <button class="btn btn-sm">Edit</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Mike Johnson</td>
+                    <td>mike@example.com</td>
+                    <td><span class="badge badge-success">Active</span></td>
+                    <td class="text-right">
+                        <button class="btn btn-sm">Edit</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Striped Table</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>Product A</td><td>$19.99</td></tr>
+                <tr><td>2</td><td>Product B</td><td>$29.99</td></tr>
+                <tr><td>3</td><td>Product C</td><td>$39.99</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-block">
+&lt;table class="table table-striped"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Name&lt;/th&gt;
+            &lt;th&gt;Status&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;John&lt;/td&gt;
+            &lt;td&gt;Active&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+        </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="demo-section" id="alerts">
+        <h2>Alerts</h2>
+
+        <h3>Basic Alerts</h3>
+        <div class="alert alert-info">
+            <div class="alert-icon">ℹ️</div>
+            <div class="alert-content">
+                <div class="alert-title">Info Alert</div>
+                <div class="alert-message">This is an informational message to help you understand something.</div>
+            </div>
+        </div>
+
+        <div class="alert alert-success">
+            <div class="alert-icon">✓</div>
+            <div class="alert-content">
+                <div class="alert-title">Success!</div>
+                <div class="alert-message">Your changes have been saved successfully.</div>
+            </div>
+        </div>
+
+        <div class="alert alert-warning">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-content">
+                <div class="alert-title">Warning</div>
+                <div class="alert-message">Please review this warning before continuing.</div>
+            </div>
+        </div>
+
+        <div class="alert alert-danger">
+            <div class="alert-icon">✗</div>
+            <div class="alert-content">
+                <div class="alert-title">Error</div>
+                <div class="alert-message">An error occurred. Please try again.</div>
+            </div>
+        </div>
+
+        <h3>Dismissible Alert</h3>
+        <div class="alert alert-info alert-dismissible">
+            <div class="alert-icon">💡</div>
+            <div class="alert-content">
+                <div class="alert-message">This alert can be dismissed by clicking the × button.</div>
+            </div>
+            <button class="alert-close" onclick="this.parentElement.remove()">✕</button>
+        </div>
+
+        <div class="code-block">
+&lt;div class="alert alert-success"&gt;
+    &lt;div class="alert-icon"&gt;✓&lt;/div&gt;
+    &lt;div class="alert-content"&gt;
+        &lt;div class="alert-title"&gt;Success!&lt;/div&gt;
+        &lt;div class="alert-message"&gt;Operation completed.&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="demo-section" id="loading">
+        <h2>Loading States</h2>
+
+        <h3>Spinners</h3>
+        <div class="demo-row">
+            <div class="text-center">
+                <div class="spinner spinner-sm"></div>
+                <div class="text-sm text-secondary mt-2">Small</div>
+            </div>
+            <div class="text-center">
+                <div class="spinner"></div>
+                <div class="text-sm text-secondary mt-2">Default</div>
+            </div>
+            <div class="text-center">
+                <div class="spinner spinner-lg"></div>
+                <div class="text-sm text-secondary mt-2">Large</div>
+            </div>
+            <div class="text-center">
+                <div class="spinner spinner-xl"></div>
+                <div class="text-sm text-secondary mt-2">XLarge</div>
+            </div>
+        </div>
+
+        <h3>Dots & Pulse</h3>
+        <div class="demo-row">
+            <div class="text-center">
+                <div class="spinner-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="text-sm text-secondary mt-2">Dots</div>
+            </div>
+            <div class="text-center">
+                <div class="spinner-pulse"></div>
+                <div class="text-sm text-secondary mt-2">Pulse</div>
+            </div>
+        </div>
+
+        <h3>Skeleton Loaders</h3>
+        <div class="skeleton-card" style="max-width: 500px;">
+            <div class="skeleton-title"></div>
+            <div class="skeleton-text"></div>
+            <div class="skeleton-text"></div>
+            <div class="skeleton-text"></div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="spinner"&gt;&lt;/div&gt;
+&lt;div class="spinner-dots"&gt;
+    &lt;span&gt;&lt;/span&gt;
+    &lt;span&gt;&lt;/span&gt;
+    &lt;span&gt;&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div class="skeleton-card"&gt;
+    &lt;div class="skeleton-title"&gt;&lt;/div&gt;
+    &lt;div class="skeleton-text"&gt;&lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="demo-section" id="modals">
+        <h2>Modals & Overlays</h2>
+
+        <h3>Modal Dialog</h3>
+        <button class="btn btn-primary" onclick="showModal()">Open Modal</button>
+
+        <div class="code-block">
+&lt;div class="modal-backdrop show"&gt;
+    &lt;div class="modal"&gt;
+        &lt;div class="modal-header"&gt;
+            &lt;h3 class="modal-title"&gt;Title&lt;/h3&gt;
+            &lt;button class="modal-close"&gt;✕&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class="modal-body"&gt;Content&lt;/div&gt;
+        &lt;div class="modal-footer"&gt;
+            &lt;button class="btn"&gt;Cancel&lt;/button&gt;
+            &lt;button class="btn btn-primary"&gt;OK&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+
+        <h3>Dropdown Menu</h3>
+        <div class="dropdown" id="demo-dropdown">
+            <button class="btn" onclick="toggleDropdown()">Open Menu ▾</button>
+            <div class="dropdown-menu">
+                <button class="dropdown-item">Action 1</button>
+                <button class="dropdown-item">Action 2</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item">Delete</button>
+            </div>
+        </div>
+
+        <h3>Tooltip</h3>
+        <div class="tooltip">
+            <button class="btn">Hover me</button>
+            <span class="tooltip-text">I'm a tooltip!</span>
+        </div>
+    </div>
+
+    <!-- Logs -->
+    <div class="demo-section" id="logs">
+        <h2>Logs</h2>
+
+        <div class="logs-legend">
+            <span class="legend-item">
+                <span class="legend-color info"></span> Info
+            </span>
+            <span class="legend-item">
+                <span class="legend-color warn"></span> Warning
+            </span>
+            <span class="legend-item">
+                <span class="legend-color error"></span> Error
+            </span>
+        </div>
+
+        <div class="logs-container" style="max-width: 800px; height: 200px;">
+            <div class="log-entry info">
+                <span class="log-timestamp">14:23:45</span>
+                <span class="log-component">[system]</span>
+                Application started successfully
+            </div>
+            <div class="log-entry info">
+                <span class="log-timestamp">14:23:46</span>
+                <span class="log-component">[job-1]</span>
+                Processing 156 files
+            </div>
+            <div class="log-entry warn">
+                <span class="log-timestamp">14:23:47</span>
+                <span class="log-component">[job-1]</span>
+                High memory usage detected
+            </div>
+            <div class="log-entry error">
+                <span class="log-timestamp">14:23:48</span>
+                <span class="log-component">[job-2]</span>
+                Failed to process file: access denied
+            </div>
+            <div class="log-entry info">
+                <span class="log-timestamp">14:23:49</span>
+                <span class="log-component">[system]</span>
+                Backup completed successfully
+            </div>
+        </div>
+    </div>
+
+    <!-- Layout Utilities -->
+    <div class="demo-section" id="layout">
+        <h2>Layout Utilities</h2>
+
+        <h3>Grid</h3>
+        <div class="grid grid-3 gap-4" style="max-width: 600px;">
+            <div class="demo-box">Grid 1</div>
+            <div class="demo-box">Grid 2</div>
+            <div class="demo-box">Grid 3</div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="grid grid-3 gap-4"&gt;
+    &lt;div&gt;Grid 1&lt;/div&gt;
+    &lt;div&gt;Grid 2&lt;/div&gt;
+    &lt;div&gt;Grid 3&lt;/div&gt;
+&lt;/div&gt;
+        </div>
+
+        <h3>Flexbox</h3>
+        <div class="flex-between p-4 demo-box" style="max-width: 600px;">
+            <span>Left</span>
+            <span>Right</span>
+        </div>
+
+        <div class="code-block">
+&lt;div class="flex-between"&gt;
+    &lt;span&gt;Left&lt;/span&gt;
+    &lt;span&gt;Right&lt;/span&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Colors -->
+    <div class="demo-section" id="colors">
+        <h2>Colors</h2>
+
+        <div class="grid grid-4 gap-4">
+            <div class="stat-card">
+                <div style="width: 100%; height: 40px; background: var(--color-primary); border-radius: var(--border-radius-md);"></div>
+                <div class="stat-label">Primary</div>
+                <div class="stat-detail">#5a90c7</div>
+            </div>
+            <div class="stat-card">
+                <div style="width: 100%; height: 40px; background: var(--color-success); border-radius: var(--border-radius-md);"></div>
+                <div class="stat-label">Success</div>
+                <div class="stat-detail">#7db46c</div>
+            </div>
+            <div class="stat-card">
+                <div style="width: 100%; height: 40px; background: var(--color-warning); border-radius: var(--border-radius-md);"></div>
+                <div class="stat-label">Warning</div>
+                <div class="stat-detail">#cc8800</div>
+            </div>
+            <div class="stat-card">
+                <div style="width: 100%; height: 40px; background: var(--color-danger); border-radius: var(--border-radius-md);"></div>
+                <div class="stat-label">Danger</div>
+                <div class="stat-detail">#d84444</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accordion -->
+    <div class="demo-section" id="accordion">
+        <h2>📂 Accordion</h2>
+
+        <h3>Basic Accordion</h3>
+        <div class="demo-box">
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false" aria-controls="panel-1">
+                        What is UIKit?
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div id="panel-1" class="accordion-content" aria-hidden="true">
+                        <p>UIKit is a modern design system for building consistent web interfaces with HTML and CSS.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false" aria-controls="panel-2">
+                        How to use it?
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div id="panel-2" class="accordion-content" aria-hidden="true">
+                        <p>Simply include the CSS file and use the predefined classes in your HTML markup.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false" aria-controls="panel-3">
+                        Is it accessible?
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div id="panel-3" class="accordion-content" aria-hidden="true">
+                        <p>Yes! UIKit follows WCAG 2.1 AA guidelines with proper ARIA attributes and keyboard navigation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Accordion Variants</h3>
+        <div class="demo-grid" style="grid-template-columns: 1fr 1fr;">
+            <div>
+                <h4 style="margin-bottom: var(--spacing-3); color: var(--color-text-secondary);">Compact</h4>
+                <div class="accordion accordion-compact">
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            Compact item
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content" aria-hidden="true">
+                            <p>Smaller padding for compact layouts.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: var(--spacing-3); color: var(--color-text-secondary);">Flush</h4>
+                <div class="accordion accordion-flush">
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            Flush item
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content" aria-hidden="true">
+                            <p>No borders, clean style.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Avatar -->
+    <div class="demo-section" id="avatar">
+        <h2>👤 Avatar</h2>
+
+        <h3>Avatar Sizes</h3>
+        <div class="demo-row" style="align-items: center;">
+            <div class="avatar avatar-xs avatar-primary">
+                <span class="avatar-initials">XS</span>
+            </div>
+            <div class="avatar avatar-sm avatar-success">
+                <span class="avatar-initials">SM</span>
+            </div>
+            <div class="avatar avatar-md avatar-warning">
+                <span class="avatar-initials">MD</span>
+            </div>
+            <div class="avatar avatar-lg avatar-danger">
+                <span class="avatar-initials">LG</span>
+            </div>
+            <div class="avatar avatar-xl avatar-info">
+                <span class="avatar-initials">XL</span>
+            </div>
+        </div>
+
+        <h3>Avatar with Status</h3>
+        <div class="demo-row" style="align-items: center;">
+            <div class="avatar avatar-primary">
+                <span class="avatar-initials">JD</span>
+                <span class="avatar-status online"></span>
+            </div>
+            <div class="avatar avatar-success">
+                <span class="avatar-initials">AB</span>
+                <span class="avatar-status offline"></span>
+            </div>
+            <div class="avatar avatar-warning">
+                <span class="avatar-initials">CD</span>
+                <span class="avatar-status away"></span>
+            </div>
+            <div class="avatar avatar-danger">
+                <span class="avatar-initials">EF</span>
+                <span class="avatar-status busy"></span>
+            </div>
+        </div>
+
+        <h3>Avatar Shapes</h3>
+        <div class="demo-row" style="align-items: center;">
+            <div class="avatar avatar-primary">
+                <span class="avatar-initials">RO</span>
+            </div>
+            <div class="avatar avatar-rounded avatar-success">
+                <span class="avatar-initials">RD</span>
+            </div>
+            <div class="avatar avatar-square avatar-warning">
+                <span class="avatar-initials">SQ</span>
+            </div>
+        </div>
+
+        <h3>Avatar Group</h3>
+        <div class="demo-box">
+            <div class="avatar-group">
+                <div class="avatar avatar-primary">
+                    <span class="avatar-initials">A</span>
+                </div>
+                <div class="avatar avatar-success">
+                    <span class="avatar-initials">B</span>
+                </div>
+                <div class="avatar avatar-warning">
+                    <span class="avatar-initials">C</span>
+                </div>
+                <div class="avatar avatar-danger">
+                    <span class="avatar-initials">D</span>
+                </div>
+                <div class="avatar-group-count">+5</div>
+            </div>
+        </div>
+
+        <h3>Avatar with Label</h3>
+        <div class="demo-box">
+            <div class="avatar-wrapper">
+                <div class="avatar avatar-primary">
+                    <span class="avatar-initials">JD</span>
+                    <span class="avatar-status online"></span>
+                </div>
+                <div class="avatar-label">
+                    <div class="avatar-name">John Doe</div>
+                    <div class="avatar-description">Software Engineer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="demo-section" id="breadcrumb">
+        <h2>🍞 Breadcrumb</h2>
+
+        <h3>Basic Breadcrumb</h3>
+        <div class="demo-box">
+            <nav aria-label="Breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Products</a></li>
+                    <li class="breadcrumb-item"><a href="#">Category</a></li>
+                    <li class="breadcrumb-item" aria-current="page">Item Detail</li>
+                </ol>
+            </nav>
+        </div>
+
+        <h3>Breadcrumb Separators</h3>
+        <div class="demo-grid">
+            <div class="demo-box">
+                <h4 style="margin-bottom: var(--spacing-3); color: var(--color-text-secondary);">Default (Slash)</h4>
+                <nav aria-label="Breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Library</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Data</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="demo-box">
+                <h4 style="margin-bottom: var(--spacing-3); color: var(--color-text-secondary);">Chevron</h4>
+                <nav aria-label="Breadcrumb">
+                    <ol class="breadcrumb breadcrumb-chevron">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Library</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Data</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="demo-box">
+                <h4 style="margin-bottom: var(--spacing-3); color: var(--color-text-secondary);">Arrow</h4>
+                <nav aria-label="Breadcrumb">
+                    <ol class="breadcrumb breadcrumb-arrow">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Library</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Data</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="demo-box">
+                <h4 style="margin-bottom: var(--spacing-3); color: var(--color-text-secondary);">Dot</h4>
+                <nav aria-label="Breadcrumb">
+                    <ol class="breadcrumb breadcrumb-dot">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Library</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Data</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <h3>Breadcrumb Styles</h3>
+        <div class="demo-grid">
+            <div>
+                <h4 style="margin-bottom: var(--spacing-3); color: var(--color-text-secondary);">With Background</h4>
+                <nav aria-label="Breadcrumb">
+                    <ol class="breadcrumb breadcrumb-bg">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Library</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Data</li>
+                    </ol>
+                </nav>
+            </div>
+            <div>
+                <h4 style="margin-bottom: var(--spacing-3); color: var(--color-text-secondary);">Pills Style</h4>
+                <nav aria-label="Breadcrumb">
+                    <ol class="breadcrumb breadcrumb-pills">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Library</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Data</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="demo-section" id="pagination">
+        <h2>📄 Pagination</h2>
+
+        <h3>Basic Pagination</h3>
+        <div class="demo-box">
+            <nav aria-label="Pagination">
+                <ul class="pagination">
+                    <li class="pagination-item pagination-prev">
+                        <a href="#" class="pagination-link">‹ Previous</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">1</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link active">2</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">3</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">4</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">5</a>
+                    </li>
+                    <li class="pagination-item pagination-next">
+                        <a href="#" class="pagination-link">Next ›</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <h3>Pagination with Ellipsis</h3>
+        <div class="demo-box">
+            <nav aria-label="Pagination">
+                <ul class="pagination">
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">‹</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">1</a>
+                    </li>
+                    <li class="pagination-item">
+                        <span class="pagination-ellipsis">...</span>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">5</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link active">6</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">7</a>
+                    </li>
+                    <li class="pagination-item">
+                        <span class="pagination-ellipsis">...</span>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">20</a>
+                    </li>
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link">›</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <h3>Pagination Sizes</h3>
+        <div class="demo-grid">
+            <div class="demo-box">
+                <h4 style="margin-bottom: var(--spacing-3); color: var(--color-text-secondary);">Small</h4>
+                <nav aria-label="Pagination">
+                    <ul class="pagination pagination-sm">
+                        <li class="pagination-item"><a href="#" class="pagination-link">‹</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link">1</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link active">2</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link">3</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link">›</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="demo-box">
+                <h4 style="margin-bottom: var(--spacing-3); color: var(--color-text-secondary);">Large</h4>
+                <nav aria-label="Pagination">
+                    <ul class="pagination pagination-lg">
+                        <li class="pagination-item"><a href="#" class="pagination-link">‹</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link">1</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link active">2</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link">3</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link">›</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <h3>Pagination Variants</h3>
+        <div class="demo-grid">
+            <div class="demo-box">
+                <h4 style="margin-bottom: var(--spacing-3); color: var(--color-text-secondary);">Rounded</h4>
+                <nav aria-label="Pagination">
+                    <ul class="pagination pagination-rounded">
+                        <li class="pagination-item"><a href="#" class="pagination-link">1</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link active">2</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link">3</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="demo-box">
+                <h4 style="margin-bottom: var(--spacing-3); color: var(--color-text-secondary);">Pills</h4>
+                <nav aria-label="Pagination">
+                    <ul class="pagination pagination-pills">
+                        <li class="pagination-item"><a href="#" class="pagination-link">1</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link active">2</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link">3</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <h3>Pagination with Info</h3>
+        <div class="demo-box">
+            <div class="pagination-wrapper">
+                <div class="pagination-info">
+                    Showing 11-20 of 200 items
+                </div>
+                <nav aria-label="Pagination">
+                    <ul class="pagination">
+                        <li class="pagination-item"><a href="#" class="pagination-link">‹</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link">1</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link active">2</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link">3</a></li>
+                        <li class="pagination-item"><a href="#" class="pagination-link">›</a></li>
+                    </ul>
+                </nav>
+                <div class="pagination-per-page">
+                    <span class="pagination-per-page-label">Per page:</span>
+                    <select class="pagination-per-page-select">
+                        <option>10</option>
+                        <option selected>20</option>
+                        <option>50</option>
+                        <option>100</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dark Mode -->
+    <div class="demo-section" id="dark-mode">
+        <h2>🌓 Dark Mode</h2>
+
+        <div class="alert alert-info mb-6">
+            <div class="alert-icon">💡</div>
+            <div class="alert-content">
+                <div class="alert-title">Dark Mode activé !</div>
+                <div class="alert-message">
+                    Le dark mode s'active automatiquement selon vos préférences système, ou manuellement avec le bouton dans le header. Le choix est persisté dans localStorage.
+                </div>
+            </div>
+        </div>
+
+        <h3>Contrôles</h3>
+        <div class="demo-row mb-6">
+            <button class="btn btn-primary" onclick="UIKitTheme.set('light')">☀️ Light</button>
+            <button class="btn btn-primary" onclick="UIKitTheme.set('dark')">🌙 Dark</button>
+            <button class="btn" onclick="UIKitTheme.toggle()">🔄 Toggle</button>
+        </div>
+
+        <h3>Installation</h3>
+        <div class="code-block">
+&lt;!-- 1. Inclure le CSS --&gt;
+&lt;link rel="stylesheet" href="dist/uikit.css"&gt;
+
+&lt;!-- 2. Inclure le script dark mode --&gt;
+&lt;script src="js/dark-mode.js"&gt;&lt;/script&gt;
+
+&lt;!-- 3. Ajouter un toggle (optionnel) --&gt;
+&lt;button data-theme-toggle&gt;
+    &lt;span data-theme-icon&gt;🌙&lt;/span&gt;
+&lt;/button&gt;
+        </div>
+
+        <h3>API JavaScript</h3>
+        <div class="code-block">
+// Définir le thème
+UIKitTheme.set('dark');    // ou 'light'
+
+// Basculer le thème
+UIKitTheme.toggle();
+
+// Récupérer le thème actuel
+const current = UIKitTheme.get();
+
+// Écouter les changements
+window.addEventListener('themechange', (e) => {
+    console.log('Theme:', e.detail.theme);
+});
+        </div>
+
+        <h3>Fonctionnement</h3>
+        <ul style="line-height: 1.8; color: var(--color-text-secondary);">
+            <li><strong>Auto</strong> : Suit les préférences système (prefers-color-scheme)</li>
+            <li><strong>Persistance</strong> : Le choix est sauvegardé dans localStorage</li>
+            <li><strong>Pas de flash</strong> : Le script s'initialise avant le rendu de la page</li>
+            <li><strong>Personnalisable</strong> : Modifie les variables dans tokens.css</li>
+        </ul>
+    </div>
+
+    <script>
+        // Tabs functionality
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Modal demo
+        function showModal() {
+            const backdrop = document.createElement('div');
+            backdrop.className = 'modal-backdrop';
+            backdrop.innerHTML = `
+                <div class="modal">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Example Modal</h3>
+                        <button class="modal-close" onclick="closeModal()">✕</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>This is a demo modal dialog. You can put any content here.</p>
+                        <p>Click outside or press the × button to close.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" onclick="closeModal()">Cancel</button>
+                        <button class="btn btn-primary" onclick="closeModal()">Confirm</button>
+                    </div>
+                </div>
+            `;
+            backdrop.id = 'demo-modal';
+            document.body.appendChild(backdrop);
+
+            setTimeout(() => backdrop.classList.add('show'), 10);
+
+            backdrop.addEventListener('click', (e) => {
+                if (e.target === backdrop) closeModal();
+            });
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('demo-modal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => modal.remove(), 300);
+            }
+        }
+
+        // Dropdown demo
+        function toggleDropdown() {
+            const dropdown = document.getElementById('demo-dropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('demo-dropdown');
+            if (dropdown && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Theme change logger
+        window.addEventListener('themechange', (e) => {
+            console.log('Theme changed to:', e.detail.theme);
+        });
+    </script>
+</body>
+</html>

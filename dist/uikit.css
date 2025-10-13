@@ -1036,6 +1036,196 @@ body.keyboard-nav *:focus {
     border: 1px solid var(--color-border-light);
 }
 /**
+ * UIKit Accordion
+ * Composant collapsible pour sections de contenu
+ */
+
+/* === BASE ACCORDION === */
+
+.accordion {
+    border: var(--border-width) solid var(--color-border-light);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+}
+
+.accordion-item {
+    border-bottom: var(--border-width) solid var(--color-border-light);
+}
+
+.accordion-item:last-child {
+    border-bottom: none;
+}
+
+/* === ACCORDION HEADER === */
+
+.accordion-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-4) var(--spacing-6);
+    background: var(--color-bg-primary);
+    border: none;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    user-select: none;
+}
+
+.accordion-header:hover {
+    background: var(--color-bg-hover);
+}
+
+.accordion-header[aria-expanded="true"] {
+    background: var(--color-bg-hover);
+    color: var(--color-primary);
+}
+
+/* === ACCORDION ICON === */
+
+.accordion-icon {
+    flex-shrink: 0;
+    margin-left: var(--spacing-4);
+    font-size: var(--font-size-base);
+    transition: transform var(--transition-base);
+    color: var(--color-text-tertiary);
+}
+
+.accordion-header[aria-expanded="true"] .accordion-icon {
+    transform: rotate(180deg);
+    color: var(--color-primary);
+}
+
+/* === ACCORDION CONTENT === */
+
+.accordion-content {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height var(--transition-slow),
+                opacity var(--transition-base),
+                padding var(--transition-base);
+    padding: 0 var(--spacing-6);
+}
+
+.accordion-content[aria-hidden="false"] {
+    max-height: 2000px; /* Large enough for most content */
+    opacity: 1;
+    padding: var(--spacing-4) var(--spacing-6) var(--spacing-6);
+}
+
+.accordion-content p:first-child {
+    margin-top: 0;
+}
+
+.accordion-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* === ACCORDION VARIANTS === */
+
+/* Flush (sans bordures externes) */
+.accordion-flush {
+    border: none;
+    border-radius: 0;
+}
+
+.accordion-flush .accordion-header {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.accordion-flush .accordion-content {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.accordion-flush .accordion-content[aria-hidden="false"] {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Compact */
+.accordion-compact .accordion-header {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--font-size-base);
+}
+
+.accordion-compact .accordion-content[aria-hidden="false"] {
+    padding: var(--spacing-3) var(--spacing-4) var(--spacing-4);
+}
+
+/* Large */
+.accordion-lg .accordion-header {
+    padding: var(--spacing-6) var(--spacing-8);
+    font-size: var(--font-size-lg);
+}
+
+.accordion-lg .accordion-content[aria-hidden="false"] {
+    padding: var(--spacing-6) var(--spacing-8) var(--spacing-8);
+}
+
+/* === ACCORDION ALWAYS OPEN === */
+
+/**
+ * Par défaut, l'accordion ferme les autres items
+ * Utilisez .accordion-always-open pour permettre
+ * plusieurs items ouverts simultanément
+ */
+.accordion-always-open .accordion-item {
+    /* Pas de comportement spécial en CSS,
+       géré par JavaScript */
+}
+
+/* === NESTED ACCORDION === */
+
+.accordion-content .accordion {
+    margin-top: var(--spacing-4);
+}
+
+/* === ACCORDION WITH BADGE === */
+
+.accordion-header-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.accordion-header-content .badge {
+    margin-left: auto;
+    margin-right: var(--spacing-2);
+}
+
+/* === ACCORDION DISABLED === */
+
+.accordion-header:disabled,
+.accordion-header[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.accordion-header:disabled:hover,
+.accordion-header[aria-disabled="true"]:hover {
+    background: var(--color-bg-primary);
+}
+
+/* === ANIMATION UTILITIES === */
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .accordion-content {
+        transition: none;
+    }
+
+    .accordion-icon {
+        transition: none;
+    }
+}
+/**
  * UIKit Alerts
  * Messages inline (différent des notifications toast)
  */
@@ -1219,6 +1409,331 @@ body.keyboard-nav *:focus {
     padding: var(--spacing-2) var(--spacing-4);
 }
 /**
+ * UIKit Avatar
+ * Composant pour afficher des photos de profil utilisateur
+ * avec fallbacks (initiales, icône, placeholder)
+ */
+
+/* === BASE AVATAR === */
+
+.avatar {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+/* === AVATAR IMAGE === */
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* === AVATAR INITIALS === */
+
+.avatar-initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* === AVATAR SIZES === */
+
+.avatar-xs {
+    width: 24px;
+    height: 24px;
+    font-size: var(--font-size-xs);
+}
+
+.avatar-sm {
+    width: 32px;
+    height: 32px;
+    font-size: var(--font-size-sm);
+}
+
+.avatar-md {
+    width: 40px;
+    height: 40px;
+    font-size: var(--font-size-base);
+}
+
+.avatar-lg {
+    width: 56px;
+    height: 56px;
+    font-size: var(--font-size-lg);
+}
+
+.avatar-xl {
+    width: 80px;
+    height: 80px;
+    font-size: var(--font-size-xl);
+}
+
+.avatar-2xl {
+    width: 112px;
+    height: 112px;
+    font-size: var(--font-size-2xl);
+}
+
+/* === AVATAR SHAPES === */
+
+.avatar-rounded {
+    border-radius: var(--border-radius-md);
+}
+
+.avatar-square {
+    border-radius: 0;
+}
+
+/* === AVATAR STATUS INDICATOR === */
+
+.avatar-status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 25%;
+    height: 25%;
+    min-width: 8px;
+    min-height: 8px;
+    border-radius: 50%;
+    border: 2px solid var(--color-bg-primary);
+    background: var(--color-border-medium);
+}
+
+.avatar-status.online {
+    background: var(--color-online);
+}
+
+.avatar-status.offline {
+    background: var(--color-offline);
+}
+
+.avatar-status.away {
+    background: var(--color-warning);
+}
+
+.avatar-status.busy {
+    background: var(--color-danger);
+}
+
+/* === AVATAR GROUP === */
+
+.avatar-group {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    padding-left: 8px;
+}
+
+.avatar-group .avatar {
+    margin-left: -8px;
+    border: 2px solid var(--color-bg-primary);
+    transition: all var(--transition-base);
+}
+
+.avatar-group .avatar:hover {
+    z-index: 1;
+    transform: translateY(-2px);
+}
+
+/* Avatar group compact (plus serré) */
+.avatar-group-compact .avatar {
+    margin-left: -12px;
+}
+
+/* Avatar group avec compte */
+.avatar-group-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-left: -8px;
+    border-radius: 50%;
+    background: var(--color-bg-active);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    border: 2px solid var(--color-bg-primary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.avatar-group-count:hover {
+    background: var(--color-primary);
+    color: var(--color-text-white);
+    z-index: 1;
+    transform: translateY(-2px);
+}
+
+/* === AVATAR COLORS === */
+
+.avatar-primary {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+.avatar-success {
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
+}
+
+.avatar-warning {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+.avatar-danger {
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+}
+
+.avatar-info {
+    background: var(--color-info-light);
+    color: var(--color-info);
+}
+
+/* === AVATAR WITH BORDER === */
+
+.avatar-bordered {
+    border: 2px solid var(--color-border-medium);
+}
+
+.avatar-bordered-primary {
+    border: 2px solid var(--color-primary);
+}
+
+.avatar-bordered-success {
+    border: 2px solid var(--color-success);
+}
+
+.avatar-bordered-danger {
+    border: 2px solid var(--color-danger);
+}
+
+/* === AVATAR PLACEHOLDER === */
+
+.avatar-placeholder {
+    background: var(--color-bg-hover);
+    color: var(--color-text-tertiary);
+}
+
+.avatar-placeholder svg,
+.avatar-placeholder .icon {
+    width: 60%;
+    height: 60%;
+}
+
+/* === CLICKABLE AVATAR === */
+
+.avatar[role="button"],
+.avatar.clickable {
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.avatar[role="button"]:hover,
+.avatar.clickable:hover {
+    opacity: 0.8;
+    transform: translateY(-2px);
+}
+
+/* === AVATAR AVEC LABEL === */
+
+.avatar-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.avatar-label {
+    display: flex;
+    flex-direction: column;
+}
+
+.avatar-name {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-tight);
+}
+
+.avatar-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-tight);
+    margin-top: 2px;
+}
+
+/* === AVATAR BADGE === */
+
+.avatar-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-danger);
+    color: var(--color-text-white);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    border-radius: 9px;
+    border: 2px solid var(--color-bg-primary);
+}
+
+/* === AVATAR LOADING === */
+
+.avatar-loading {
+    animation: avatar-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes avatar-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 768px) {
+    .avatar-group .avatar {
+        margin-left: -12px;
+    }
+
+    .avatar-xl {
+        width: 64px;
+        height: 64px;
+        font-size: var(--font-size-lg);
+    }
+
+    .avatar-2xl {
+        width: 80px;
+        height: 80px;
+        font-size: var(--font-size-xl);
+    }
+}
+/**
  * UIKit Badges
  */
 
@@ -1302,6 +1817,237 @@ body.keyboard-nav *:focus {
 .status-badge.error {
     background: var(--color-danger-light);
     color: var(--color-danger);
+}
+/**
+ * UIKit Breadcrumb
+ * Fil d'Ariane pour la navigation hiérarchique
+ */
+
+/* === BASE BREADCRUMB === */
+
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: var(--spacing-3) 0;
+    list-style: none;
+    margin: 0;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-md);
+    color: var(--color-text-secondary);
+}
+
+.breadcrumb-item a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-base);
+}
+
+.breadcrumb-item a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+/* Current page (non cliquable) */
+.breadcrumb-item[aria-current="page"] {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+}
+
+/* === BREADCRUMB SEPARATOR === */
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "/";
+    padding: 0 var(--spacing-3);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+}
+
+/* Séparateur chevron */
+.breadcrumb-chevron .breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    font-size: var(--font-size-lg);
+}
+
+/* Séparateur arrow */
+.breadcrumb-arrow .breadcrumb-item + .breadcrumb-item::before {
+    content: "→";
+}
+
+/* Séparateur dot */
+.breadcrumb-dot .breadcrumb-item + .breadcrumb-item::before {
+    content: "•";
+}
+
+/* === BREADCRUMB VARIANTS === */
+
+/* Compact */
+.breadcrumb-compact {
+    padding: var(--spacing-2) 0;
+}
+
+.breadcrumb-compact .breadcrumb-item {
+    font-size: var(--font-size-base);
+}
+
+.breadcrumb-compact .breadcrumb-item + .breadcrumb-item::before {
+    padding: 0 var(--spacing-2);
+}
+
+/* Large */
+.breadcrumb-lg .breadcrumb-item {
+    font-size: var(--font-size-lg);
+}
+
+.breadcrumb-lg .breadcrumb-item + .breadcrumb-item::before {
+    padding: 0 var(--spacing-4);
+}
+
+/* === BREADCRUMB WITH BACKGROUND === */
+
+.breadcrumb-bg {
+    background: var(--color-bg-secondary);
+    padding: var(--spacing-3) var(--spacing-6);
+    border-radius: var(--border-radius-md);
+}
+
+/* === BREADCRUMB WITH ICONS === */
+
+.breadcrumb-item .icon {
+    margin-right: var(--spacing-2);
+    font-size: var(--font-size-base);
+}
+
+.breadcrumb-item .icon-home {
+    font-size: var(--font-size-lg);
+}
+
+/* === BREADCRUMB TRUNCATION === */
+
+/* Ellipsis pour items longs */
+.breadcrumb-item.truncate {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.breadcrumb-item.truncate a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* === BREADCRUMB COLLAPSED === */
+
+/**
+ * Pour mobile : afficher seulement premier et dernier
+ * Les items du milieu sont masqués dans un dropdown
+ */
+.breadcrumb-collapsed .breadcrumb-item {
+    display: none;
+}
+
+.breadcrumb-collapsed .breadcrumb-item:first-child,
+.breadcrumb-collapsed .breadcrumb-item:last-child,
+.breadcrumb-collapsed .breadcrumb-item.breadcrumb-ellipsis {
+    display: flex;
+}
+
+.breadcrumb-ellipsis button {
+    background: transparent;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: var(--spacing-1);
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-base);
+}
+
+.breadcrumb-ellipsis button:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-primary);
+}
+
+/* === BREADCRUMB STYLES === */
+
+/* Style outlined */
+.breadcrumb-outlined {
+    border: var(--border-width) solid var(--color-border-light);
+    padding: var(--spacing-3) var(--spacing-6);
+    border-radius: var(--border-radius-md);
+}
+
+/* Style pills */
+.breadcrumb-pills .breadcrumb-item a {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-base);
+}
+
+.breadcrumb-pills .breadcrumb-item a:hover {
+    background: var(--color-bg-hover);
+    text-decoration: none;
+}
+
+.breadcrumb-pills .breadcrumb-item[aria-current="page"] {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--border-radius-md);
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 768px) {
+    /* Sur mobile, truncate les items automatiquement */
+    .breadcrumb-item {
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .breadcrumb-item a {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Ou automatiquement collapse sur mobile */
+    .breadcrumb-auto-collapse .breadcrumb-item {
+        display: none;
+    }
+
+    .breadcrumb-auto-collapse .breadcrumb-item:first-child,
+    .breadcrumb-auto-collapse .breadcrumb-item:last-child {
+        display: flex;
+    }
+
+    /* Réduire le padding des séparateurs */
+    .breadcrumb-item + .breadcrumb-item::before {
+        padding: 0 var(--spacing-2);
+    }
+}
+
+/* === ACCESSIBILITY === */
+
+/* Focus states pour navigation clavier */
+.breadcrumb-item a:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--border-radius-sm);
+}
+
+/* === BREADCRUMB NAVIGATION WRAPPER === */
+
+nav[aria-label="Breadcrumb"] {
+    margin-bottom: var(--spacing-6);
 }
 /**
  * UIKit Buttons
@@ -3473,6 +4219,367 @@ body.keyboard-nav *:focus {
 
 .notification.warning {
     background: var(--color-warning);
+}
+/**
+ * UIKit Pagination
+ * Navigation de pages pour listes et tables
+ */
+
+/* === BASE PAGINATION === */
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination-item {
+    display: flex;
+}
+
+.pagination-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 var(--spacing-3);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    background: var(--color-bg-primary);
+    border: var(--border-width) solid var(--color-border-medium);
+    border-radius: var(--border-radius-md);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    user-select: none;
+}
+
+.pagination-link:hover:not(.disabled):not(.active) {
+    background: var(--color-bg-hover);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* === PAGINATION STATES === */
+
+/* Active page */
+.pagination-link.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-white);
+    cursor: default;
+}
+
+/* Disabled */
+.pagination-link.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* === PAGINATION SIZES === */
+
+.pagination-sm .pagination-link {
+    min-width: 28px;
+    height: 28px;
+    padding: 0 var(--spacing-2);
+    font-size: var(--font-size-sm);
+}
+
+.pagination-lg .pagination-link {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 var(--spacing-4);
+    font-size: var(--font-size-md);
+}
+
+/* === PAGINATION VARIANTS === */
+
+/* Rounded (fully rounded) */
+.pagination-rounded .pagination-link {
+    border-radius: var(--border-radius-full);
+}
+
+/* Pills */
+.pagination-pills {
+    gap: var(--spacing-1);
+}
+
+.pagination-pills .pagination-link {
+    border: none;
+    background: transparent;
+}
+
+.pagination-pills .pagination-link:hover:not(.disabled):not(.active) {
+    background: var(--color-bg-hover);
+}
+
+.pagination-pills .pagination-link.active {
+    background: var(--color-primary);
+}
+
+/* Flat (sans bordures) */
+.pagination-flat .pagination-link {
+    border: none;
+}
+
+.pagination-flat .pagination-link:hover:not(.disabled):not(.active) {
+    background: var(--color-bg-hover);
+}
+
+/* === PAGINATION ELLIPSIS === */
+
+.pagination-ellipsis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 var(--spacing-2);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-base);
+    user-select: none;
+}
+
+/* === PAGINATION PREV/NEXT === */
+
+.pagination-prev,
+.pagination-next {
+    font-weight: var(--font-weight-medium);
+}
+
+.pagination-prev .pagination-link,
+.pagination-next .pagination-link {
+    padding: 0 var(--spacing-4);
+}
+
+/* === PAGINATION WITH ICONS === */
+
+.pagination-link .icon {
+    font-size: var(--font-size-base);
+}
+
+.pagination-link .icon-only {
+    padding: 0;
+}
+
+/* === PAGINATION ALIGNMENT === */
+
+.pagination-center {
+    justify-content: center;
+}
+
+.pagination-end {
+    justify-content: flex-end;
+}
+
+/* === PAGINATION INFO === */
+
+.pagination-info {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-right: var(--spacing-4);
+}
+
+/* === PAGINATION WRAPPER === */
+
+.pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-6);
+    padding: var(--spacing-4) 0;
+    flex-wrap: wrap;
+}
+
+.pagination-wrapper .pagination {
+    flex: 1;
+    justify-content: center;
+}
+
+.pagination-wrapper .pagination-info {
+    margin-right: 0;
+}
+
+/* === PAGINATION JUMP TO PAGE === */
+
+.pagination-jump {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-sm);
+}
+
+.pagination-jump-label {
+    color: var(--color-text-secondary);
+}
+
+.pagination-jump-input {
+    width: 60px;
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-sm);
+    border: var(--border-width) solid var(--color-border-medium);
+    border-radius: var(--border-radius-md);
+    text-align: center;
+}
+
+.pagination-jump-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+/* === PAGINATION PER PAGE SELECTOR === */
+
+.pagination-per-page {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    font-size: var(--font-size-sm);
+}
+
+.pagination-per-page-label {
+    color: var(--color-text-secondary);
+}
+
+.pagination-per-page-select {
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-sm);
+    border: var(--border-width) solid var(--color-border-medium);
+    border-radius: var(--border-radius-md);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.pagination-per-page-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.pagination-per-page-select:hover {
+    border-color: var(--color-primary);
+}
+
+/* === PAGINATION SIMPLE === */
+
+/* Version minimaliste avec seulement Prev/Next */
+.pagination-simple {
+    justify-content: space-between;
+}
+
+.pagination-simple .pagination-item:not(.pagination-prev):not(.pagination-next) {
+    display: none;
+}
+
+/* === COMPACT PAGINATION === */
+
+.pagination-compact {
+    gap: 1px;
+}
+
+.pagination-compact .pagination-link {
+    border-radius: 0;
+    margin-left: calc(var(--border-width) * -1);
+}
+
+.pagination-compact .pagination-link:first-child {
+    border-top-left-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--border-radius-md);
+    margin-left: 0;
+}
+
+.pagination-compact .pagination-link:last-child {
+    border-top-right-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
+}
+
+.pagination-compact .pagination-link:hover,
+.pagination-compact .pagination-link.active {
+    z-index: 1;
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 768px) {
+    /* Sur mobile, afficher version simple */
+    .pagination-responsive .pagination-item:not(.pagination-prev):not(.pagination-next):not(.active) {
+        display: none;
+    }
+
+    .pagination-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pagination-wrapper .pagination {
+        justify-content: center;
+    }
+
+    .pagination-wrapper .pagination-info,
+    .pagination-wrapper .pagination-per-page {
+        justify-content: center;
+    }
+
+    /* Réduire taille sur mobile */
+    .pagination-link {
+        min-width: 28px;
+        height: 28px;
+        padding: 0 var(--spacing-2);
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* === ACCESSIBILITY === */
+
+/* Focus states */
+.pagination-link:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    z-index: 2;
+}
+
+/* ARIA */
+nav[aria-label="Pagination"] {
+    margin: var(--spacing-6) 0;
+}
+
+/* === PAGINATION LOADING === */
+
+.pagination-loading .pagination-link {
+    opacity: 0.5;
+    cursor: wait;
+    pointer-events: none;
+}
+
+.pagination-loading .pagination-link.active {
+    position: relative;
+}
+
+.pagination-loading .pagination-link.active::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: pagination-spinner 0.6s linear infinite;
+}
+
+@keyframes pagination-spinner {
+    to {
+        transform: rotate(360deg);
+    }
 }
 /**
  * UIKit Progress Bars
