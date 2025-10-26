@@ -376,4 +376,4 @@ open layouts/index.html
 
 ---
 
-**Inspiré par** : UltimateArchiver3 Dashboard • Apple Design Language • Pico CSS
+**Inspiré par** : Pico CSS
