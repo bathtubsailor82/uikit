@@ -1,0 +1,59 @@
+/* ================================================
+   Stats Component - Terminal-style status display
+   ================================================ */
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: 2px 0;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+}
+
+.stat-icon {
+    width: 14px;
+    flex-shrink: 0;
+    text-align: center;
+    color: var(--color-text-secondary);
+}
+
+.stat-icon.status-running {
+    color: var(--color-success);
+}
+
+.stat-icon.status-stopped {
+    color: var(--color-text-tertiary);
+}
+
+.stat-label {
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    transition: opacity 0.2s ease, width 0.2s ease;
+}
+
+.stat-value {
+    color: var(--color-text);
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+.stat-value.status-running {
+    color: var(--color-success);
+}
+
+.stat-value.status-stopped {
+    color: var(--color-text-tertiary);
+}
+
+/* Collapsed state - hide labels */
+.sidebar-collapsed .stat-label {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+.sidebar-collapsed .stat-value {
+    margin-left: 0;
+}
