@@ -429,25 +429,15 @@ class VUMeter {
     const { orientation } = this.config
     const isVertical = orientation === 'vertical'
 
-    // Peak bar - gradient fixe, seule la hauteur change
+    // Peak bar - use CSS custom property for clip-path on ::before pseudo-element
     const peakPercent = this.dbToPercent(this.values.peak)
-    const peakFill = this.peakBarEl.querySelector('.vu-meter__fill')
 
     if (isVertical) {
-      peakFill.style.height = `${peakPercent}%`
-      // Gradient fixe par rapport au conteneur
-      if (peakPercent > 0) {
-        peakFill.style.background = this.getGradient()
-        peakFill.style.backgroundSize = `100% ${(100 / peakPercent) * 100}%`
-        peakFill.style.backgroundPosition = 'bottom'
-      }
+      // Set CSS custom property for clip-path (inset from top)
+      this.peakBarEl.style.setProperty('--peak-clip', `${100 - peakPercent}%`)
     } else {
-      peakFill.style.width = `${peakPercent}%`
-      if (peakPercent > 0) {
-        peakFill.style.background = this.getGradientHorizontal()
-        peakFill.style.backgroundSize = `${(100 / peakPercent) * 100}% 100%`
-        peakFill.style.backgroundPosition = 'left'
-      }
+      // Horizontal: inset from right
+      this.peakBarEl.style.setProperty('--peak-clip', `${100 - peakPercent}%`)
     }
 
     // RMS bar (separate thin bar)

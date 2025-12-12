@@ -160,6 +160,24 @@
   );
 }
 
+/* Active fill gradient overlay - revealed by clip-path from JS */
+.vu-meter--vertical .vu-meter__bar--peak::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+    var(--meter-peak) 0%,
+    var(--meter-peak) 72.9%,
+    var(--meter-warning) 72.9%,
+    var(--meter-warning) 83.3%,
+    var(--meter-danger) 83.3%,
+    var(--meter-danger) 100%
+  );
+  /* clip-path: inset(top right bottom left) - clip from top */
+  clip-path: inset(var(--peak-clip, 100%) 0 0 0);
+  transition: clip-path 100ms ease-out;
+}
+
 /* RMS bar - thin with background zones */
 .vu-meter--vertical .vu-meter__bar--rms {
   flex: 1;
@@ -207,13 +225,8 @@
 }
 
 .vu-meter--vertical .vu-meter__bar--peak .vu-meter__fill {
-  background: linear-gradient(to top,
-    var(--meter-peak) 0%,
-    var(--meter-peak) 70%,
-    var(--meter-warning) 70%,
-    var(--meter-warning) 85%,
-    var(--meter-danger) 85%,
-    var(--meter-danger) 100%);
+  /* Hidden - using ::before pseudo-element with clip-path instead */
+  display: none;
 }
 
 /* RMS bar fill - solid dark green */
@@ -332,6 +345,24 @@
   );
 }
 
+/* Active fill gradient overlay - revealed by clip-path from JS */
+.vu-meter--horizontal .vu-meter__bar--peak::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right,
+    var(--meter-peak) 0%,
+    var(--meter-peak) 72.9%,
+    var(--meter-warning) 72.9%,
+    var(--meter-warning) 83.3%,
+    var(--meter-danger) 83.3%,
+    var(--meter-danger) 100%
+  );
+  /* clip-path: inset(top right bottom left) - clip from right */
+  clip-path: inset(0 var(--peak-clip, 100%) 0 0);
+  transition: clip-path 100ms ease-out;
+}
+
 /* RMS bar - thin with background zones */
 .vu-meter--horizontal .vu-meter__bar--rms {
   flex: 1;
@@ -375,13 +406,8 @@
 }
 
 .vu-meter--horizontal .vu-meter__bar--peak .vu-meter__fill {
-  background: linear-gradient(to right,
-    var(--meter-peak) 0%,
-    var(--meter-peak) 70%,
-    var(--meter-warning) 70%,
-    var(--meter-warning) 90%,
-    var(--meter-danger) 90%,
-    var(--meter-danger) 100%);
+  /* Hidden - using ::before pseudo-element with clip-path instead */
+  display: none;
 }
 
 /* RMS bar fill horizontal - solid dark green */
