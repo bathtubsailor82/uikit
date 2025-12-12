@@ -47,15 +47,15 @@ const METER_PRESETS = {
     height: 300
   },
 
-  // Horizontal compact (pour listes de pistes)
+  // Horizontal compact (pour listes de pistes) - comme minimal mais horizontal
   compact: {
     orientation: 'horizontal',
     showScale: false,
-    showNumeric: true,
+    showNumeric: false,
     showRMS: true,
     showHold: false,
     width: 120,
-    height: 16
+    height: 12
   }
 }
 
