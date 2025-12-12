@@ -1,0 +1,477 @@
+/**
+ * VUMeter Component Styles
+ * Supports: vertical, horizontal orientations
+ */
+
+/* ============================================================================
+   CSS Variables (overridable)
+   ============================================================================ */
+
+:root {
+  --meter-bg: #1a1a1a;
+  --meter-peak: #22c55e;
+  --meter-rms: #166534;
+  --meter-lufs: #3b82f6;
+  --meter-hold: #ffffff;
+  --meter-warning: #eab308;
+  --meter-danger: #ef4444;
+  --meter-scale: #666666;
+  --meter-text: #cccccc;
+  --meter-clip: #ff0000;
+}
+
+/* ============================================================================
+   Base Container
+   ============================================================================ */
+
+.vu-meter {
+  display: inline-flex;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Monaco', monospace;
+  font-size: 10px;
+  background: var(--meter-bg);
+  border-radius: 4px;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.vu-meter__wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+/* Add padding when meter has scale or numeric display */
+.vu-meter--with-scale .vu-meter__wrapper,
+.vu-meter:has(.vu-meter__numeric) .vu-meter__wrapper {
+  padding: 4px;
+}
+
+/* ============================================================================
+   Vertical Orientation
+   ============================================================================ */
+
+.vu-meter--vertical .vu-meter__area {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  gap: 0;
+  position: relative;
+}
+
+.vu-meter--vertical .vu-meter__scale {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.vu-meter--vertical .vu-meter__tick {
+  position: absolute;
+  right: 0;
+  width: 20px;
+  height: 0;
+}
+
+/* Major ticks - longer line with label */
+.vu-meter--vertical .vu-meter__tick--major::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 5px;
+  top: 0;
+  border-top: 1px solid var(--meter-scale);
+}
+
+/* Minor ticks - shorter line, no label */
+.vu-meter--vertical .vu-meter__tick--minor::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 3px;
+  top: 0;
+  border-top: 1px solid var(--meter-scale);
+  opacity: 0.6;
+}
+
+.vu-meter--vertical .vu-meter__tick-label {
+  position: absolute;
+  left: 7px;
+  top: -4px;
+  color: var(--meter-scale);
+  font-size: 8px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+/* Hide labels when meter is too short */
+.vu-meter--compact-scale .vu-meter__tick-label {
+  display: none;
+}
+
+/* In compact mode, make ticks shorter since no labels */
+.vu-meter--compact-scale .vu-meter__tick--major::before {
+  width: 3px;
+}
+
+.vu-meter--compact-scale .vu-meter__tick--minor::before {
+  width: 2px;
+}
+
+.vu-meter--vertical .vu-meter__bars {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 1px;
+  flex: 1;
+  height: 100%;
+}
+
+/* Only add margin when scale is present */
+.vu-meter--vertical.vu-meter--with-scale .vu-meter__bars {
+  margin-right: 22px;
+}
+
+.vu-meter--vertical .vu-meter__bar {
+  position: relative;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+/* Peak bar - normal width with background zones */
+.vu-meter--vertical .vu-meter__bar--peak {
+  flex: 3;
+  min-width: 12px;
+  /* Background zones - ITU-R style */
+  /* Range: -90 to +6 (96dB total) */
+  /* -20dB position: (70/96) = 72.9% */
+  /* -10dB position: (80/96) = 83.3% */
+  background: linear-gradient(to top,
+    rgba(34, 197, 94, 0.08) 0%,           /* safe - faint green */
+    rgba(34, 197, 94, 0.08) 72.9%,        /* -20dB position */
+    rgba(234, 179, 8, 0.12) 72.9%,        /* warning - faint yellow */
+    rgba(234, 179, 8, 0.12) 83.3%,        /* -10dB position */
+    rgba(239, 68, 68, 0.15) 83.3%,        /* danger - faint red */
+    rgba(239, 68, 68, 0.15) 100%
+  );
+}
+
+/* RMS bar - thin with background zones */
+.vu-meter--vertical .vu-meter__bar--rms {
+  flex: 1;
+  min-width: 4px;
+  max-width: 6px;
+  /* RMS zones: safe < -18dB, nominal -18 to -12, hot > -12 */
+  /* Range -90 to +6: -18dB = 75%, -12dB = 81.25% */
+  background: linear-gradient(to top,
+    rgba(34, 197, 94, 0.1) 0%,
+    rgba(34, 197, 94, 0.1) 75%,
+    rgba(234, 179, 8, 0.15) 75%,
+    rgba(234, 179, 8, 0.15) 81.25%,
+    rgba(239, 68, 68, 0.18) 81.25%,
+    rgba(239, 68, 68, 0.18) 100%
+  );
+}
+
+/* LUFS bar - thin with background zones */
+.vu-meter--vertical .vu-meter__bar--lufs {
+  flex: 1;
+  min-width: 4px;
+  max-width: 6px;
+  /* LUFS zones: target -24 to -14, loud -14 to -9, too loud > -9 */
+  /* Range -90 to +6: -24dB = 68.75%, -14dB = 79.2%, -9dB = 84.4% */
+  background: linear-gradient(to top,
+    rgba(30, 30, 30, 0.8) 0%,
+    rgba(30, 30, 30, 0.8) 68.75%,
+    rgba(59, 130, 246, 0.12) 68.75%,
+    rgba(59, 130, 246, 0.12) 79.2%,
+    rgba(234, 179, 8, 0.15) 79.2%,
+    rgba(234, 179, 8, 0.15) 84.4%,
+    rgba(239, 68, 68, 0.18) 84.4%,
+    rgba(239, 68, 68, 0.18) 100%
+  );
+}
+
+.vu-meter--vertical .vu-meter__fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 0;
+  /* PPM-style response: fast attack, slower release */
+  transition: height 100ms ease-out;
+}
+
+.vu-meter--vertical .vu-meter__bar--peak .vu-meter__fill {
+  background: linear-gradient(to top,
+    var(--meter-peak) 0%,
+    var(--meter-peak) 70%,
+    var(--meter-warning) 70%,
+    var(--meter-warning) 85%,
+    var(--meter-danger) 85%,
+    var(--meter-danger) 100%);
+}
+
+/* RMS bar fill - solid dark green */
+.vu-meter--vertical .vu-meter__bar--rms .vu-meter__fill {
+  background: var(--meter-rms);
+}
+
+/* LUFS bar fill - blue/cyan for loudness */
+.vu-meter--vertical .vu-meter__bar--lufs .vu-meter__fill {
+  background: var(--meter-lufs, #3b82f6);
+}
+
+.vu-meter--vertical .vu-meter__hold {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--meter-hold);
+  transition: bottom 50ms linear;
+  z-index: 10;
+}
+
+.vu-meter--vertical .vu-meter__hold--clip {
+  background: var(--meter-clip);
+  box-shadow: 0 0 4px var(--meter-clip);
+}
+
+/* ============================================================================
+   Horizontal Orientation
+   ============================================================================ */
+
+.vu-meter--horizontal .vu-meter__wrapper {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.vu-meter--horizontal .vu-meter__area {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+
+.vu-meter--horizontal .vu-meter__scale {
+  position: relative;
+  width: 100%;
+  height: 12px;
+}
+
+.vu-meter--horizontal .vu-meter__tick {
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 12px;
+}
+
+/* Major ticks horizontal */
+.vu-meter--horizontal .vu-meter__tick--major::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  border-left: 1px solid var(--meter-scale);
+}
+
+/* Minor ticks horizontal */
+.vu-meter--horizontal .vu-meter__tick--minor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  border-left: 1px solid var(--meter-scale);
+  opacity: 0.6;
+}
+
+.vu-meter--horizontal .vu-meter__tick-label {
+  position: absolute;
+  top: 5px;
+  left: 2px;
+  color: var(--meter-scale);
+  font-size: 7px;
+}
+
+.vu-meter--horizontal .vu-meter__bars {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  width: 100%;
+}
+
+.vu-meter--horizontal .vu-meter__bar {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Peak bar - normal height with background zones */
+.vu-meter--horizontal .vu-meter__bar--peak {
+  flex: 3;
+  min-height: 8px;
+  /* Background zones - ITU-R style (horizontal) */
+  /* Range: -90 to +6 (96dB total) */
+  background: linear-gradient(to right,
+    rgba(34, 197, 94, 0.08) 0%,
+    rgba(34, 197, 94, 0.08) 72.9%,
+    rgba(234, 179, 8, 0.12) 72.9%,
+    rgba(234, 179, 8, 0.12) 83.3%,
+    rgba(239, 68, 68, 0.15) 83.3%,
+    rgba(239, 68, 68, 0.15) 100%
+  );
+}
+
+/* RMS bar - thin with background zones */
+.vu-meter--horizontal .vu-meter__bar--rms {
+  flex: 1;
+  min-height: 3px;
+  max-height: 4px;
+  background: linear-gradient(to right,
+    rgba(34, 197, 94, 0.1) 0%,
+    rgba(34, 197, 94, 0.1) 75%,
+    rgba(234, 179, 8, 0.15) 75%,
+    rgba(234, 179, 8, 0.15) 81.25%,
+    rgba(239, 68, 68, 0.18) 81.25%,
+    rgba(239, 68, 68, 0.18) 100%
+  );
+}
+
+/* LUFS bar - thin with background zones */
+.vu-meter--horizontal .vu-meter__bar--lufs {
+  flex: 1;
+  min-height: 3px;
+  max-height: 4px;
+  background: linear-gradient(to right,
+    rgba(30, 30, 30, 0.8) 0%,
+    rgba(30, 30, 30, 0.8) 68.75%,
+    rgba(59, 130, 246, 0.12) 68.75%,
+    rgba(59, 130, 246, 0.12) 79.2%,
+    rgba(234, 179, 8, 0.15) 79.2%,
+    rgba(234, 179, 8, 0.15) 84.4%,
+    rgba(239, 68, 68, 0.18) 84.4%,
+    rgba(239, 68, 68, 0.18) 100%
+  );
+}
+
+.vu-meter--horizontal .vu-meter__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  border-radius: 2px;
+  /* PPM-style response: fast attack, slower release */
+  transition: width 100ms ease-out;
+}
+
+.vu-meter--horizontal .vu-meter__bar--peak .vu-meter__fill {
+  background: linear-gradient(to right,
+    var(--meter-peak) 0%,
+    var(--meter-peak) 70%,
+    var(--meter-warning) 70%,
+    var(--meter-warning) 90%,
+    var(--meter-danger) 90%,
+    var(--meter-danger) 100%);
+}
+
+/* RMS bar fill horizontal - solid dark green */
+.vu-meter--horizontal .vu-meter__bar--rms .vu-meter__fill {
+  background: var(--meter-rms);
+}
+
+/* LUFS bar fill horizontal - blue */
+.vu-meter--horizontal .vu-meter__bar--lufs .vu-meter__fill {
+  background: var(--meter-lufs);
+}
+
+.vu-meter--horizontal .vu-meter__hold {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--meter-hold);
+  transition: left 50ms linear;
+  z-index: 10;
+}
+
+.vu-meter--horizontal .vu-meter__hold--clip {
+  background: var(--meter-clip);
+  box-shadow: 0 0 4px var(--meter-clip);
+}
+
+/* ============================================================================
+   Numeric Display
+   ============================================================================ */
+
+.vu-meter__numeric {
+  text-align: center;
+  color: var(--meter-text);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.vu-meter--horizontal .vu-meter__numeric {
+  min-width: 40px;
+  padding: 0 4px;
+  font-size: 11px;
+}
+
+.vu-meter__numeric--clip {
+  color: var(--meter-clip);
+}
+
+/* ============================================================================
+   LUFS Display
+   ============================================================================ */
+
+.vu-meter__lufs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 8px;
+}
+
+.vu-meter__lufs-label {
+  color: var(--meter-scale);
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.vu-meter__lufs-value {
+  color: var(--meter-text);
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================================
+   Compact variant adjustments
+   ============================================================================ */
+
+.vu-meter--horizontal.vu-meter--compact {
+  padding: 2px;
+}
+
+.vu-meter--horizontal.vu-meter--compact .vu-meter__numeric {
+  font-size: 10px;
+  min-width: 32px;
+}
+
+.vu-meter--horizontal.vu-meter--compact .vu-meter__bar {
+  min-height: 4px;
+}

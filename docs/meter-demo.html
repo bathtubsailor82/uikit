@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VUMeter Component Demo</title>
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/components/meter.css">
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 40px;
+    }
+
+    .demo-section {
+      margin-bottom: 48px;
+    }
+
+    .demo-section h2 {
+      font-size: 16px;
+      color: #999;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .demo-grid {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
+    .demo-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .demo-item label {
+      font-size: 11px;
+      color: #666;
+      text-transform: uppercase;
+    }
+
+    .horizontal-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .controls {
+      margin-top: 40px;
+      padding: 20px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .controls label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+      color: #999;
+    }
+
+    .controls input[type="range"] {
+      width: 150px;
+    }
+
+    .controls button {
+      padding: 8px 16px;
+      background: #333;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .controls button:hover {
+      background: #444;
+    }
+
+    .controls button.active {
+      background: #22c55e;
+    }
+
+    .value-display {
+      font-variant-numeric: tabular-nums;
+      min-width: 50px;
+    }
+  </style>
+</head>
+<body>
+  <h1>VUMeter Component</h1>
+  <p class="subtitle">Audio level visualization component with multiple presets</p>
+
+  <!-- Vertical meters -->
+  <div class="demo-section">
+    <h2>Vertical Orientation</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <div id="meter-minimal"></div>
+        <label>Minimal</label>
+      </div>
+      <div class="demo-item">
+        <div id="meter-standard"></div>
+        <label>Standard</label>
+      </div>
+      <div class="demo-item">
+        <div id="meter-broadcast"></div>
+        <label>Broadcast</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Horizontal meters -->
+  <div class="demo-section">
+    <h2>Horizontal Orientation</h2>
+    <div class="horizontal-group">
+      <div class="demo-item" style="align-items: flex-start;">
+        <label>Compact (for track lists)</label>
+        <div id="meter-compact"></div>
+      </div>
+      <div class="demo-item" style="align-items: flex-start;">
+        <label>Custom horizontal</label>
+        <div id="meter-horizontal-custom"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stereo pair -->
+  <div class="demo-section">
+    <h2>Stereo Pair</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <div style="display: flex; gap: 2px;">
+          <div id="meter-stereo-l"></div>
+          <div id="meter-stereo-r"></div>
+        </div>
+        <label>L / R</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <label>
+      Simulated Level (dB)
+      <input type="range" id="level-slider" min="-60" max="6" value="-20" step="0.5">
+      <span id="level-value" class="value-display">-20.0 dB</span>
+    </label>
+    <label>
+      RMS Offset
+      <input type="range" id="rms-offset" min="-20" max="0" value="-6" step="1">
+      <span id="rms-value" class="value-display">-6 dB</span>
+    </label>
+    <button id="btn-animate">Start Animation</button>
+    <button id="btn-reset">Reset Hold</button>
+    <button id="btn-websocket">Connect WebSocket</button>
+  </div>
+
+  <script src="../js/meter.js"></script>
+  <script>
+    // Create meters with different presets
+    const meters = {
+      minimal: new VUMeter(document.getElementById('meter-minimal'), { preset: 'minimal' }),
+      standard: new VUMeter(document.getElementById('meter-standard'), { preset: 'standard' }),
+      broadcast: new VUMeter(document.getElementById('meter-broadcast'), { preset: 'broadcast' }),
+      compact: new VUMeter(document.getElementById('meter-compact'), { preset: 'compact', width: 200 }),
+      horizontalCustom: new VUMeter(document.getElementById('meter-horizontal-custom'), {
+        orientation: 'horizontal',
+        showScale: true,
+        showRMS: true,
+        showHold: true,
+        width: 300,
+        height: 24
+      }),
+      stereoL: new VUMeter(document.getElementById('meter-stereo-l'), {
+        preset: 'standard',
+        showScale: false,
+        width: 16
+      }),
+      stereoR: new VUMeter(document.getElementById('meter-stereo-r'), {
+        preset: 'standard',
+        width: 16
+      })
+    }
+
+    // Manual level control
+    const levelSlider = document.getElementById('level-slider')
+    const levelValue = document.getElementById('level-value')
+    const rmsOffset = document.getElementById('rms-offset')
+    const rmsValue = document.getElementById('rms-value')
+
+    function updateMeters(peakDb) {
+      const rms = peakDb + parseInt(rmsOffset.value)
+      const lufs = peakDb - 2 // Simulated LUFS
+
+      Object.values(meters).forEach(meter => {
+        meter.update({ peak: peakDb, rms: rms, lufs: lufs })
+      })
+    }
+
+    levelSlider.addEventListener('input', (e) => {
+      const db = parseFloat(e.target.value)
+      levelValue.textContent = `${db.toFixed(1)} dB`
+      updateMeters(db)
+    })
+
+    rmsOffset.addEventListener('input', (e) => {
+      rmsValue.textContent = `${e.target.value} dB`
+      updateMeters(parseFloat(levelSlider.value))
+    })
+
+    // Animation demo
+    let animating = false
+    let animationPhase = 0
+    const btnAnimate = document.getElementById('btn-animate')
+
+    btnAnimate.addEventListener('click', () => {
+      animating = !animating
+      btnAnimate.textContent = animating ? 'Stop Animation' : 'Start Animation'
+      btnAnimate.classList.toggle('active', animating)
+
+      if (animating) {
+        animateMeters()
+      }
+    })
+
+    function animateMeters() {
+      if (!animating) return
+
+      animationPhase += 0.05
+
+      // Simulate varying audio levels
+      const base = -30 + Math.sin(animationPhase) * 15
+      const noise = (Math.random() - 0.5) * 10
+      const peak = Math.min(6, base + noise)
+
+      // Stereo with slight difference
+      const peakL = peak + (Math.random() - 0.5) * 3
+      const peakR = peak + (Math.random() - 0.5) * 3
+
+      // Update all meters
+      Object.entries(meters).forEach(([name, meter]) => {
+        if (name === 'stereoL') {
+          meter.update({ peak: peakL, rms: peakL - 6, lufs: peakL - 2 })
+        } else if (name === 'stereoR') {
+          meter.update({ peak: peakR, rms: peakR - 6, lufs: peakR - 2 })
+        } else {
+          meter.update({ peak: peak, rms: peak - 6, lufs: peak - 2 })
+        }
+      })
+
+      levelSlider.value = peak
+      levelValue.textContent = `${peak.toFixed(1)} dB`
+
+      requestAnimationFrame(animateMeters)
+    }
+
+    // Reset hold
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      Object.values(meters).forEach(meter => meter.resetHold())
+    })
+
+    // WebSocket connection to MR3 backend
+    let ws = null
+    const btnWebSocket = document.getElementById('btn-websocket')
+
+    btnWebSocket.addEventListener('click', () => {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.close()
+        ws = null
+        btnWebSocket.textContent = 'Connect WebSocket'
+        btnWebSocket.classList.remove('active')
+        return
+      }
+
+      ws = new WebSocket('ws://localhost:8080/ws/levels')
+
+      ws.onopen = () => {
+        btnWebSocket.textContent = 'Disconnect'
+        btnWebSocket.classList.add('active')
+        console.log('Connected to MR3 WebSocket')
+      }
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data)
+
+          // Map MR3 data to meter format
+          const meterData = {
+            peak: data.peakDB,
+            rms: data.rmsDB,
+            lufs: data.lufs?.momentary ?? data.lufsM,
+            hold: data.peak?.holdDB
+          }
+
+          Object.values(meters).forEach(meter => {
+            meter.update(meterData)
+          })
+
+          // Update slider to reflect actual level
+          levelSlider.value = meterData.peak
+          levelValue.textContent = `${meterData.peak.toFixed(1)} dB`
+        } catch (e) {
+          console.error('Failed to parse WebSocket message:', e)
+        }
+      }
+
+      ws.onclose = () => {
+        btnWebSocket.textContent = 'Connect WebSocket'
+        btnWebSocket.classList.remove('active')
+        console.log('WebSocket closed')
+      }
+
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error)
+      }
+    })
+
+    // Initial state
+    updateMeters(-20)
+  </script>
+</body>
+</html>
