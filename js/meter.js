@@ -87,6 +87,13 @@ const DEFAULT_CONFIG = {
   holdTime: 1500,      // ms avant decay
   decayRate: 20,       // dB/s
 
+  // Ballistics (meter response)
+  // Release rate in dB/s (like Logic Pro):
+  //   4 = Tres lent, 6.3 = EBU lent, 8.6 = IEC Type II/EBU Normal
+  //   11.8 = IEC Type I (default), 20 = Rapide, 30 = Plus rapide, 50 = Tres rapide
+  ballistics: true,          // Activer les ballistics
+  releaseRate: 11.8,         // dB/s - IEC Type I (recommande par Logic)
+
   // Couleurs (CSS variables ou valeurs directes)
   colors: {
     background: 'var(--meter-bg, #1a1a1a)',
@@ -133,6 +140,10 @@ class VUMeter {
     // Peak hold state
     this.holdValue = -Infinity
     this.holdTimestamp = 0
+
+    // Smoothed values (for PPM ballistics on peak only)
+    this.smoothedPeak = -Infinity
+    this.lastUpdateTime = performance.now()
 
     // Animation
     this.animationId = null
@@ -334,11 +345,22 @@ class VUMeter {
    * @param {Object} data - { peak, rms, hold, lufs } en dB
    */
   update(data) {
+    const now = performance.now()
+    const deltaTime = (now - this.lastUpdateTime) / 1000  // en secondes
+    this.lastUpdateTime = now
+
     if (data.peak !== undefined) {
-      this.values.peak = this.clampDb(data.peak)
+      const targetPeak = this.clampDb(data.peak)
+      if (this.config.ballistics) {
+        this.smoothedPeak = this.applyBallistics(this.smoothedPeak, targetPeak, deltaTime)
+        this.values.peak = this.smoothedPeak
+      } else {
+        this.values.peak = targetPeak
+      }
       this.updateHold(this.values.peak)
     }
     if (data.rms !== undefined) {
+      // RMS is already smoothed by backend (300ms EMA), no additional smoothing needed
       this.values.rms = this.clampDb(data.rms)
     }
     if (data.lufs !== undefined) {
@@ -347,6 +369,26 @@ class VUMeter {
     if (data.hold !== undefined) {
       // Hold externe (du backend)
       this.holdValue = this.clampDb(data.hold)
+    }
+  }
+
+  /**
+   * Applique les ballistics (attack instantane, release lineaire en dB/s)
+   * @param {number} current - Valeur actuelle (dB)
+   * @param {number} target - Valeur cible (dB)
+   * @param {number} deltaTime - Temps ecoule en secondes
+   * @returns {number} - Nouvelle valeur (dB)
+   */
+  applyBallistics(current, target, deltaTime) {
+    if (!Number.isFinite(current)) current = this.config.dbMin
+
+    if (target >= current) {
+      // Attack instantane
+      return target
+    } else {
+      // Release lineaire en dB/s
+      const decay = this.config.releaseRate * deltaTime
+      return Math.max(current - decay, target)
     }
   }
 
