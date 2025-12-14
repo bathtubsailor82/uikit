@@ -1,23 +1,21 @@
 /**
  * VUMeter Component Styles
  * Supports: vertical, horizontal orientations
+ * Support Light/Dark mode via tokens
  */
 
 /* ============================================================================
-   CSS Variables (overridable)
+   CSS Variables (dimensions and functional colors only)
    ============================================================================ */
 
 :root {
-  --meter-bg: #1a1a1a;
-  --meter-peak: #22c55e;
-  --meter-rms: #166534;
-  --meter-lufs: #3b82f6;
-  --meter-hold: #ffffff;
-  --meter-warning: #eab308;
-  --meter-danger: #ef4444;
-  --meter-scale: #666666;
-  --meter-text: #cccccc;
-  --meter-clip: #ff0000;
+    /* Functional colors - same in light and dark */
+    --meter-peak: var(--color-success);
+    --meter-rms: var(--color-success-dark);
+    --meter-lufs: var(--color-info);
+    --meter-warning: var(--color-warning);
+    --meter-danger: var(--color-danger);
+    --meter-clip: #ff0000;
 }
 
 /* ============================================================================
@@ -25,27 +23,28 @@
    ============================================================================ */
 
 .vu-meter {
-  display: inline-flex;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Monaco', monospace;
-  font-size: 10px;
-  background: var(--meter-bg);
-  border-radius: 4px;
-  padding: 0;
-  box-sizing: border-box;
-  overflow: hidden;
+    display: inline-flex;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    background: var(--color-bg-secondary);
+    border: var(--border-width) solid var(--color-border-light);
+    border-radius: var(--border-radius-lg);
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .vu-meter__wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
 }
 
 /* Add padding when meter has scale or numeric display */
 .vu-meter--with-scale .vu-meter__wrapper,
 .vu-meter:has(.vu-meter__numeric) .vu-meter__wrapper {
-  padding: 4px;
+    padding: var(--spacing-2);
 }
 
 /* ============================================================================
@@ -53,205 +52,205 @@
    ============================================================================ */
 
 .vu-meter--vertical .vu-meter__area {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  gap: 0;
-  position: relative;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    gap: 0;
+    position: relative;
 }
 
 .vu-meter--vertical .vu-meter__scale {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 20px;
-  pointer-events: none;
-  z-index: 5;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    pointer-events: none;
+    z-index: 5;
 }
 
 .vu-meter--vertical .vu-meter__tick {
-  position: absolute;
-  right: 0;
-  width: 20px;
-  height: 0;
+    position: absolute;
+    right: 0;
+    width: 20px;
+    height: 0;
 }
 
 /* Major ticks - longer line with label */
 .vu-meter--vertical .vu-meter__tick--major::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 5px;
-  top: 0;
-  border-top: 1px solid var(--meter-scale);
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 5px;
+    top: 0;
+    border-top: 1px solid var(--color-text-tertiary);
 }
 
 /* Minor ticks - shorter line, no label */
 .vu-meter--vertical .vu-meter__tick--minor::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 3px;
-  top: 0;
-  border-top: 1px solid var(--meter-scale);
-  opacity: 0.6;
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 3px;
+    top: 0;
+    border-top: 1px solid var(--color-text-tertiary);
+    opacity: 0.6;
 }
 
 .vu-meter--vertical .vu-meter__tick-label {
-  position: absolute;
-  left: 7px;
-  top: -4px;
-  color: var(--meter-scale);
-  font-size: 8px;
-  font-weight: 400;
-  line-height: 1;
+    position: absolute;
+    left: 7px;
+    top: -4px;
+    color: var(--color-text-tertiary);
+    font-size: 8px;
+    font-weight: var(--font-weight-normal);
+    line-height: 1;
 }
 
 /* Hide labels when meter is too short */
 .vu-meter--compact-scale .vu-meter__tick-label {
-  display: none;
+    display: none;
 }
 
 /* In compact mode, make ticks shorter since no labels */
 .vu-meter--compact-scale .vu-meter__tick--major::before {
-  width: 3px;
+    width: 3px;
 }
 
 .vu-meter--compact-scale .vu-meter__tick--minor::before {
-  width: 2px;
+    width: 2px;
 }
 
 .vu-meter--vertical .vu-meter__bars {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  gap: 1px;
-  flex: 1;
-  height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 1px;
+    flex: 1;
+    height: 100%;
 }
 
 /* Only add margin when scale is present */
 .vu-meter--vertical.vu-meter--with-scale .vu-meter__bars {
-  margin-right: 22px;
+    margin-right: 22px;
 }
 
 .vu-meter--vertical .vu-meter__bar {
-  position: relative;
-  border-radius: 0;
-  overflow: hidden;
+    position: relative;
+    border-radius: 0;
+    overflow: hidden;
 }
 
 /* Peak bar - normal width with background zones */
 .vu-meter--vertical .vu-meter__bar--peak {
-  flex: 3;
-  min-width: 12px;
-  /* Background zones - ITU-R style */
-  /* Range: -90 to +6 (96dB total) */
-  /* -20dB position: (70/96) = 72.9% */
-  /* -10dB position: (80/96) = 83.3% */
-  background: linear-gradient(to top,
-    rgba(34, 197, 94, 0.08) 0%,           /* safe - faint green */
-    rgba(34, 197, 94, 0.08) 72.9%,        /* -20dB position */
-    rgba(234, 179, 8, 0.12) 72.9%,        /* warning - faint yellow */
-    rgba(234, 179, 8, 0.12) 83.3%,        /* -10dB position */
-    rgba(239, 68, 68, 0.15) 83.3%,        /* danger - faint red */
-    rgba(239, 68, 68, 0.15) 100%
-  );
+    flex: 3;
+    min-width: 12px;
+    /* Background zones - ITU-R style */
+    /* Range: -90 to +6 (96dB total) */
+    /* -20dB position: (70/96) = 72.9% */
+    /* -10dB position: (80/96) = 83.3% */
+    background: linear-gradient(to top,
+        rgba(125, 180, 108, 0.15) 0%,
+        rgba(125, 180, 108, 0.15) 72.9%,
+        rgba(204, 136, 0, 0.15) 72.9%,
+        rgba(204, 136, 0, 0.15) 83.3%,
+        rgba(216, 68, 68, 0.15) 83.3%,
+        rgba(216, 68, 68, 0.15) 100%
+    );
 }
 
 /* Active fill gradient overlay - revealed by clip-path from JS */
 .vu-meter--vertical .vu-meter__bar--peak::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top,
-    var(--meter-peak) 0%,
-    var(--meter-peak) 72.9%,
-    var(--meter-warning) 72.9%,
-    var(--meter-warning) 83.3%,
-    var(--meter-danger) 83.3%,
-    var(--meter-danger) 100%
-  );
-  /* clip-path: inset(top right bottom left) - clip from top */
-  clip-path: inset(var(--peak-clip, 100%) 0 0 0);
-  transition: clip-path 100ms ease-out;
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top,
+        var(--meter-peak) 0%,
+        var(--meter-peak) 72.9%,
+        var(--meter-warning) 72.9%,
+        var(--meter-warning) 83.3%,
+        var(--meter-danger) 83.3%,
+        var(--meter-danger) 100%
+    );
+    /* clip-path: inset(top right bottom left) - clip from top */
+    clip-path: inset(var(--peak-clip, 100%) 0 0 0);
+    transition: clip-path 100ms ease-out;
 }
 
 /* RMS bar - thin with background zones */
 .vu-meter--vertical .vu-meter__bar--rms {
-  flex: 1;
-  min-width: 4px;
-  max-width: 6px;
-  /* RMS zones: safe < -18dB, nominal -18 to -12, hot > -12 */
-  /* Range -90 to +6: -18dB = 75%, -12dB = 81.25% */
-  background: linear-gradient(to top,
-    rgba(34, 197, 94, 0.1) 0%,
-    rgba(34, 197, 94, 0.1) 75%,
-    rgba(234, 179, 8, 0.15) 75%,
-    rgba(234, 179, 8, 0.15) 81.25%,
-    rgba(239, 68, 68, 0.18) 81.25%,
-    rgba(239, 68, 68, 0.18) 100%
-  );
+    flex: 1;
+    min-width: 4px;
+    max-width: 6px;
+    /* RMS zones: safe < -18dB, nominal -18 to -12, hot > -12 */
+    /* Range -90 to +6: -18dB = 75%, -12dB = 81.25% */
+    background: linear-gradient(to top,
+        rgba(125, 180, 108, 0.12) 0%,
+        rgba(125, 180, 108, 0.12) 75%,
+        rgba(204, 136, 0, 0.15) 75%,
+        rgba(204, 136, 0, 0.15) 81.25%,
+        rgba(216, 68, 68, 0.18) 81.25%,
+        rgba(216, 68, 68, 0.18) 100%
+    );
 }
 
 /* LUFS bar - thin with background zones */
 .vu-meter--vertical .vu-meter__bar--lufs {
-  flex: 1;
-  min-width: 4px;
-  max-width: 6px;
-  /* LUFS zones: target -24 to -14, loud -14 to -9, too loud > -9 */
-  /* Range -90 to +6: -24dB = 68.75%, -14dB = 79.2%, -9dB = 84.4% */
-  background: linear-gradient(to top,
-    rgba(30, 30, 30, 0.8) 0%,
-    rgba(30, 30, 30, 0.8) 68.75%,
-    rgba(59, 130, 246, 0.12) 68.75%,
-    rgba(59, 130, 246, 0.12) 79.2%,
-    rgba(234, 179, 8, 0.15) 79.2%,
-    rgba(234, 179, 8, 0.15) 84.4%,
-    rgba(239, 68, 68, 0.18) 84.4%,
-    rgba(239, 68, 68, 0.18) 100%
-  );
+    flex: 1;
+    min-width: 4px;
+    max-width: 6px;
+    /* LUFS zones: target -24 to -14, loud -14 to -9, too loud > -9 */
+    /* Range -90 to +6: -24dB = 68.75%, -14dB = 79.2%, -9dB = 84.4% */
+    background: linear-gradient(to top,
+        var(--color-bg-tertiary) 0%,
+        var(--color-bg-tertiary) 68.75%,
+        rgba(44, 127, 184, 0.15) 68.75%,
+        rgba(44, 127, 184, 0.15) 79.2%,
+        rgba(204, 136, 0, 0.15) 79.2%,
+        rgba(204, 136, 0, 0.15) 84.4%,
+        rgba(216, 68, 68, 0.18) 84.4%,
+        rgba(216, 68, 68, 0.18) 100%
+    );
 }
 
 .vu-meter--vertical .vu-meter__fill {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  border-radius: 0;
-  /* PPM-style response: fast attack, slower release */
-  transition: height 100ms ease-out;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0;
+    /* PPM-style response: fast attack, slower release */
+    transition: height 100ms ease-out;
 }
 
 .vu-meter--vertical .vu-meter__bar--peak .vu-meter__fill {
-  /* Hidden - using ::before pseudo-element with clip-path instead */
-  display: none;
+    /* Hidden - using ::before pseudo-element with clip-path instead */
+    display: none;
 }
 
 /* RMS bar fill - solid dark green */
 .vu-meter--vertical .vu-meter__bar--rms .vu-meter__fill {
-  background: var(--meter-rms);
+    background: var(--meter-rms);
 }
 
 /* LUFS bar fill - blue/cyan for loudness */
 .vu-meter--vertical .vu-meter__bar--lufs .vu-meter__fill {
-  background: var(--meter-lufs, #3b82f6);
+    background: var(--meter-lufs);
 }
 
 .vu-meter--vertical .vu-meter__hold {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--meter-hold);
-  transition: bottom 50ms linear;
-  z-index: 10;
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--color-text-primary);
+    transition: bottom 50ms linear;
+    z-index: 10;
 }
 
 .vu-meter--vertical .vu-meter__hold--clip {
-  background: var(--meter-clip);
-  box-shadow: 0 0 4px var(--meter-clip);
+    background: var(--meter-clip);
+    box-shadow: 0 0 4px var(--meter-clip);
 }
 
 /* ============================================================================
@@ -259,180 +258,180 @@
    ============================================================================ */
 
 .vu-meter--horizontal .vu-meter__wrapper {
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-4);
 }
 
 .vu-meter--horizontal .vu-meter__area {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
 }
 
 .vu-meter--horizontal .vu-meter__scale {
-  position: relative;
-  width: 100%;
-  height: 12px;
+    position: relative;
+    width: 100%;
+    height: 12px;
 }
 
 .vu-meter--horizontal .vu-meter__tick {
-  position: absolute;
-  top: 0;
-  width: 0;
-  height: 12px;
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 12px;
 }
 
 /* Major ticks horizontal */
 .vu-meter--horizontal .vu-meter__tick--major::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 5px;
-  border-left: 1px solid var(--meter-scale);
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5px;
+    border-left: 1px solid var(--color-text-tertiary);
 }
 
 /* Minor ticks horizontal */
 .vu-meter--horizontal .vu-meter__tick--minor::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 3px;
-  border-left: 1px solid var(--meter-scale);
-  opacity: 0.6;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 3px;
+    border-left: 1px solid var(--color-text-tertiary);
+    opacity: 0.6;
 }
 
 .vu-meter--horizontal .vu-meter__tick-label {
-  position: absolute;
-  top: 5px;
-  left: 2px;
-  color: var(--meter-scale);
-  font-size: 7px;
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    color: var(--color-text-tertiary);
+    font-size: 7px;
 }
 
 .vu-meter--horizontal .vu-meter__bars {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-  width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    width: 100%;
 }
 
 .vu-meter--horizontal .vu-meter__bar {
-  position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 2px;
-  overflow: hidden;
+    position: relative;
+    background: var(--color-bg-hover);
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
 }
 
 /* Peak bar - normal height with background zones */
 .vu-meter--horizontal .vu-meter__bar--peak {
-  flex: 3;
-  min-height: 8px;
-  /* Background zones - ITU-R style (horizontal) */
-  /* Range: -90 to +6 (96dB total) */
-  background: linear-gradient(to right,
-    rgba(34, 197, 94, 0.08) 0%,
-    rgba(34, 197, 94, 0.08) 72.9%,
-    rgba(234, 179, 8, 0.12) 72.9%,
-    rgba(234, 179, 8, 0.12) 83.3%,
-    rgba(239, 68, 68, 0.15) 83.3%,
-    rgba(239, 68, 68, 0.15) 100%
-  );
+    flex: 3;
+    min-height: 8px;
+    /* Background zones - ITU-R style (horizontal) */
+    /* Range: -90 to +6 (96dB total) */
+    background: linear-gradient(to right,
+        rgba(125, 180, 108, 0.15) 0%,
+        rgba(125, 180, 108, 0.15) 72.9%,
+        rgba(204, 136, 0, 0.15) 72.9%,
+        rgba(204, 136, 0, 0.15) 83.3%,
+        rgba(216, 68, 68, 0.15) 83.3%,
+        rgba(216, 68, 68, 0.15) 100%
+    );
 }
 
 /* Active fill gradient overlay - revealed by clip-path from JS */
 .vu-meter--horizontal .vu-meter__bar--peak::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right,
-    var(--meter-peak) 0%,
-    var(--meter-peak) 72.9%,
-    var(--meter-warning) 72.9%,
-    var(--meter-warning) 83.3%,
-    var(--meter-danger) 83.3%,
-    var(--meter-danger) 100%
-  );
-  /* clip-path: inset(top right bottom left) - clip from right */
-  clip-path: inset(0 var(--peak-clip, 100%) 0 0);
-  transition: clip-path 100ms ease-out;
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right,
+        var(--meter-peak) 0%,
+        var(--meter-peak) 72.9%,
+        var(--meter-warning) 72.9%,
+        var(--meter-warning) 83.3%,
+        var(--meter-danger) 83.3%,
+        var(--meter-danger) 100%
+    );
+    /* clip-path: inset(top right bottom left) - clip from right */
+    clip-path: inset(0 var(--peak-clip, 100%) 0 0);
+    transition: clip-path 100ms ease-out;
 }
 
 /* RMS bar - thin with background zones */
 .vu-meter--horizontal .vu-meter__bar--rms {
-  flex: 1;
-  min-height: 3px;
-  max-height: 4px;
-  background: linear-gradient(to right,
-    rgba(34, 197, 94, 0.1) 0%,
-    rgba(34, 197, 94, 0.1) 75%,
-    rgba(234, 179, 8, 0.15) 75%,
-    rgba(234, 179, 8, 0.15) 81.25%,
-    rgba(239, 68, 68, 0.18) 81.25%,
-    rgba(239, 68, 68, 0.18) 100%
-  );
+    flex: 1;
+    min-height: 3px;
+    max-height: 4px;
+    background: linear-gradient(to right,
+        rgba(125, 180, 108, 0.12) 0%,
+        rgba(125, 180, 108, 0.12) 75%,
+        rgba(204, 136, 0, 0.15) 75%,
+        rgba(204, 136, 0, 0.15) 81.25%,
+        rgba(216, 68, 68, 0.18) 81.25%,
+        rgba(216, 68, 68, 0.18) 100%
+    );
 }
 
 /* LUFS bar - thin with background zones */
 .vu-meter--horizontal .vu-meter__bar--lufs {
-  flex: 1;
-  min-height: 3px;
-  max-height: 4px;
-  background: linear-gradient(to right,
-    rgba(30, 30, 30, 0.8) 0%,
-    rgba(30, 30, 30, 0.8) 68.75%,
-    rgba(59, 130, 246, 0.12) 68.75%,
-    rgba(59, 130, 246, 0.12) 79.2%,
-    rgba(234, 179, 8, 0.15) 79.2%,
-    rgba(234, 179, 8, 0.15) 84.4%,
-    rgba(239, 68, 68, 0.18) 84.4%,
-    rgba(239, 68, 68, 0.18) 100%
-  );
+    flex: 1;
+    min-height: 3px;
+    max-height: 4px;
+    background: linear-gradient(to right,
+        var(--color-bg-tertiary) 0%,
+        var(--color-bg-tertiary) 68.75%,
+        rgba(44, 127, 184, 0.15) 68.75%,
+        rgba(44, 127, 184, 0.15) 79.2%,
+        rgba(204, 136, 0, 0.15) 79.2%,
+        rgba(204, 136, 0, 0.15) 84.4%,
+        rgba(216, 68, 68, 0.18) 84.4%,
+        rgba(216, 68, 68, 0.18) 100%
+    );
 }
 
 .vu-meter--horizontal .vu-meter__fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  border-radius: 2px;
-  /* PPM-style response: fast attack, slower release */
-  transition: width 100ms ease-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border-radius: var(--border-radius-sm);
+    /* PPM-style response: fast attack, slower release */
+    transition: width 100ms ease-out;
 }
 
 .vu-meter--horizontal .vu-meter__bar--peak .vu-meter__fill {
-  /* Hidden - using ::before pseudo-element with clip-path instead */
-  display: none;
+    /* Hidden - using ::before pseudo-element with clip-path instead */
+    display: none;
 }
 
 /* RMS bar fill horizontal - solid dark green */
 .vu-meter--horizontal .vu-meter__bar--rms .vu-meter__fill {
-  background: var(--meter-rms);
+    background: var(--meter-rms);
 }
 
 /* LUFS bar fill horizontal - blue */
 .vu-meter--horizontal .vu-meter__bar--lufs .vu-meter__fill {
-  background: var(--meter-lufs);
+    background: var(--meter-lufs);
 }
 
 .vu-meter--horizontal .vu-meter__hold {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--meter-hold);
-  transition: left 50ms linear;
-  z-index: 10;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-text-primary);
+    transition: left 50ms linear;
+    z-index: 10;
 }
 
 .vu-meter--horizontal .vu-meter__hold--clip {
-  background: var(--meter-clip);
-  box-shadow: 0 0 4px var(--meter-clip);
+    background: var(--meter-clip);
+    box-shadow: 0 0 4px var(--meter-clip);
 }
 
 /* ============================================================================
@@ -440,22 +439,22 @@
    ============================================================================ */
 
 .vu-meter__numeric {
-  text-align: center;
-  color: var(--meter-text);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 0;
-  font-variant-numeric: tabular-nums;
+    text-align: center;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--spacing-2) 0;
+    font-variant-numeric: tabular-nums;
 }
 
 .vu-meter--horizontal .vu-meter__numeric {
-  min-width: 40px;
-  padding: 0 4px;
-  font-size: 11px;
+    min-width: 40px;
+    padding: 0 var(--spacing-2);
+    font-size: var(--font-size-base);
 }
 
 .vu-meter__numeric--clip {
-  color: var(--meter-clip);
+    color: var(--meter-clip);
 }
 
 /* ============================================================================
@@ -463,26 +462,26 @@
    ============================================================================ */
 
 .vu-meter__lufs {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: var(--spacing-4);
+    border-top: var(--border-width) solid var(--color-border-light);
+    margin-top: var(--spacing-4);
 }
 
 .vu-meter__lufs-label {
-  color: var(--meter-scale);
-  font-size: 8px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+    color: var(--color-text-tertiary);
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .vu-meter__lufs-value {
-  color: var(--meter-text);
-  font-size: 14px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    font-variant-numeric: tabular-nums;
 }
 
 /* ============================================================================
@@ -490,14 +489,99 @@
    ============================================================================ */
 
 .vu-meter--horizontal.vu-meter--compact {
-  padding: 2px;
+    padding: var(--spacing-1);
 }
 
 .vu-meter--horizontal.vu-meter--compact .vu-meter__numeric {
-  font-size: 10px;
-  min-width: 32px;
+    font-size: var(--font-size-sm);
+    min-width: 32px;
 }
 
 .vu-meter--horizontal.vu-meter--compact .vu-meter__bar {
-  min-height: 4px;
+    min-height: 4px;
+}
+
+/* ============================================================================
+   Dark Mode
+   ============================================================================ */
+
+[data-theme="dark"] .vu-meter {
+    border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .vu-meter__hold {
+    background: var(--color-text-white);
+}
+
+/* Stronger zone backgrounds in dark mode for better visibility */
+[data-theme="dark"] .vu-meter--vertical .vu-meter__bar--peak,
+[data-theme="dark"] .vu-meter--horizontal .vu-meter__bar--peak {
+    background: linear-gradient(to top,
+        rgba(34, 197, 94, 0.08) 0%,
+        rgba(34, 197, 94, 0.08) 72.9%,
+        rgba(234, 179, 8, 0.12) 72.9%,
+        rgba(234, 179, 8, 0.12) 83.3%,
+        rgba(239, 68, 68, 0.15) 83.3%,
+        rgba(239, 68, 68, 0.15) 100%
+    );
+}
+
+[data-theme="dark"] .vu-meter--horizontal .vu-meter__bar--peak {
+    background: linear-gradient(to right,
+        rgba(34, 197, 94, 0.08) 0%,
+        rgba(34, 197, 94, 0.08) 72.9%,
+        rgba(234, 179, 8, 0.12) 72.9%,
+        rgba(234, 179, 8, 0.12) 83.3%,
+        rgba(239, 68, 68, 0.15) 83.3%,
+        rgba(239, 68, 68, 0.15) 100%
+    );
+}
+
+[data-theme="dark"] .vu-meter--vertical .vu-meter__bar--rms,
+[data-theme="dark"] .vu-meter--horizontal .vu-meter__bar--rms {
+    background: linear-gradient(to top,
+        rgba(34, 197, 94, 0.1) 0%,
+        rgba(34, 197, 94, 0.1) 75%,
+        rgba(234, 179, 8, 0.15) 75%,
+        rgba(234, 179, 8, 0.15) 81.25%,
+        rgba(239, 68, 68, 0.18) 81.25%,
+        rgba(239, 68, 68, 0.18) 100%
+    );
+}
+
+[data-theme="dark"] .vu-meter--horizontal .vu-meter__bar--rms {
+    background: linear-gradient(to right,
+        rgba(34, 197, 94, 0.1) 0%,
+        rgba(34, 197, 94, 0.1) 75%,
+        rgba(234, 179, 8, 0.15) 75%,
+        rgba(234, 179, 8, 0.15) 81.25%,
+        rgba(239, 68, 68, 0.18) 81.25%,
+        rgba(239, 68, 68, 0.18) 100%
+    );
+}
+
+[data-theme="dark"] .vu-meter--vertical .vu-meter__bar--lufs {
+    background: linear-gradient(to top,
+        rgba(30, 30, 30, 0.8) 0%,
+        rgba(30, 30, 30, 0.8) 68.75%,
+        rgba(59, 130, 246, 0.12) 68.75%,
+        rgba(59, 130, 246, 0.12) 79.2%,
+        rgba(234, 179, 8, 0.15) 79.2%,
+        rgba(234, 179, 8, 0.15) 84.4%,
+        rgba(239, 68, 68, 0.18) 84.4%,
+        rgba(239, 68, 68, 0.18) 100%
+    );
+}
+
+[data-theme="dark"] .vu-meter--horizontal .vu-meter__bar--lufs {
+    background: linear-gradient(to right,
+        rgba(30, 30, 30, 0.8) 0%,
+        rgba(30, 30, 30, 0.8) 68.75%,
+        rgba(59, 130, 246, 0.12) 68.75%,
+        rgba(59, 130, 246, 0.12) 79.2%,
+        rgba(234, 179, 8, 0.15) 79.2%,
+        rgba(234, 179, 8, 0.15) 84.4%,
+        rgba(239, 68, 68, 0.18) 84.4%,
+        rgba(239, 68, 68, 0.18) 100%
+    );
 }

@@ -287,6 +287,64 @@
     color: var(--color-text-primary);
 }
 
+/* Switch color variants */
+.form-switch-success .form-switch-input:checked,
+.form-switch-input.form-switch-success:checked {
+    background: var(--color-success);
+}
+
+.form-switch-danger .form-switch-input:checked,
+.form-switch-input.form-switch-danger:checked {
+    background: var(--color-danger);
+}
+
+.form-switch-warning .form-switch-input:checked,
+.form-switch-input.form-switch-warning:checked {
+    background: var(--color-warning);
+}
+
+.form-switch-info .form-switch-input:checked,
+.form-switch-input.form-switch-info:checked {
+    background: var(--color-info);
+}
+
+/* Switch sizes */
+.form-switch-sm .form-switch-input,
+.form-switch-input.form-switch-sm {
+    width: 32px;
+    height: 18px;
+    border-radius: 9px;
+}
+
+.form-switch-sm .form-switch-input::before,
+.form-switch-input.form-switch-sm::before {
+    width: 14px;
+    height: 14px;
+}
+
+.form-switch-sm .form-switch-input:checked::before,
+.form-switch-input.form-switch-sm:checked::before {
+    transform: translateX(14px);
+}
+
+.form-switch-lg .form-switch-input,
+.form-switch-input.form-switch-lg {
+    width: 50px;
+    height: 28px;
+    border-radius: 14px;
+}
+
+.form-switch-lg .form-switch-input::before,
+.form-switch-input.form-switch-lg::before {
+    width: 24px;
+    height: 24px;
+}
+
+.form-switch-lg .form-switch-input:checked::before,
+.form-switch-input.form-switch-lg:checked::before {
+    transform: translateX(22px);
+}
+
 /* === SEARCH INPUT === */
 
 .form-search {
