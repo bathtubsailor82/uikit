@@ -112,14 +112,32 @@
         <a href="#buttons">Buttons</a>
         <a href="#badges">Badges</a>
         <a href="#cards">Cards</a>
+        <a href="#avatar">Avatar</a>
         <a href="#progress">Progress</a>
         <a href="#tabs">Tabs</a>
+        <a href="#accordion">Accordion</a>
         <a href="#forms">Forms</a>
+        <a href="#range">Range</a>
+        <a href="#number-input">Number Input</a>
+        <a href="#file-input">File Input</a>
+        <a href="#tags">Tags</a>
+        <a href="#segmented">Segmented</a>
         <a href="#tables">Tables</a>
+        <a href="#list-items">List Items</a>
+        <a href="#pagination">Pagination</a>
+        <a href="#breadcrumb">Breadcrumb</a>
+        <a href="#stepper">Stepper</a>
+        <a href="#timeline">Timeline</a>
         <a href="#alerts">Alerts</a>
+        <a href="#notifications">Notifications</a>
+        <a href="#empty-state">Empty State</a>
         <a href="#loading">Loading</a>
         <a href="#modals">Modals</a>
+        <a href="#popover">Popover</a>
+        <a href="#divider">Divider</a>
         <a href="#logs">Logs</a>
+        <a href="#matrix">Matrix</a>
+        <a href="#meter">Meter</a>
         <a href="#layout">Layout</a>
         <a href="#colors">Colors</a>
         <a href="#dark-mode">Dark Mode</a>
@@ -269,6 +287,65 @@
         </div>
     </div>
 
+    <!-- Avatar -->
+    <div class="demo-section" id="avatar">
+        <h2>Avatar</h2>
+
+        <h3>Sizes</h3>
+        <div class="demo-row">
+            <div class="avatar avatar-xs">XS</div>
+            <div class="avatar avatar-sm">SM</div>
+            <div class="avatar">MD</div>
+            <div class="avatar avatar-lg">LG</div>
+            <div class="avatar avatar-xl">XL</div>
+        </div>
+
+        <h3>With Status</h3>
+        <div class="demo-row">
+            <div class="avatar">
+                JD
+                <span class="avatar-status online"></span>
+            </div>
+            <div class="avatar">
+                AB
+                <span class="avatar-status offline"></span>
+            </div>
+            <div class="avatar">
+                CD
+                <span class="avatar-status away"></span>
+            </div>
+            <div class="avatar">
+                EF
+                <span class="avatar-status busy"></span>
+            </div>
+        </div>
+
+        <h3>Colors</h3>
+        <div class="demo-row">
+            <div class="avatar avatar-primary">P</div>
+            <div class="avatar avatar-success">S</div>
+            <div class="avatar avatar-warning">W</div>
+            <div class="avatar avatar-danger">D</div>
+            <div class="avatar avatar-info">I</div>
+        </div>
+
+        <h3>Group</h3>
+        <div class="avatar-group">
+            <div class="avatar">A</div>
+            <div class="avatar">B</div>
+            <div class="avatar">C</div>
+            <div class="avatar-group-count">+5</div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="avatar"&gt;JD&lt;/div&gt;
+&lt;div class="avatar avatar-lg avatar-primary"&gt;
+    AB
+    &lt;span class="avatar-status online"&gt;&lt;/span&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
     <!-- Progress Bars -->
     <div class="demo-section" id="progress">
         <h2>Progress Bars</h2>
@@ -354,6 +431,55 @@
 &lt;/div&gt;
 &lt;div class="tab-content active"&gt;...&lt;/div&gt;
 &lt;div class="tab-content"&gt;...&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Accordion -->
+    <div class="demo-section" id="accordion">
+        <h2>Accordion</h2>
+
+        <div class="accordion" style="max-width: 600px;">
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="true" onclick="toggleAccordion(this)">
+                    <span>Section 1</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </button>
+                <div class="accordion-content" aria-hidden="false">
+                    <p>Content for section 1. This accordion item is expanded by default.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false" onclick="toggleAccordion(this)">
+                    <span>Section 2</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </button>
+                <div class="accordion-content" aria-hidden="true">
+                    <p>Content for section 2. Click the header to expand this section.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false" onclick="toggleAccordion(this)">
+                    <span>Section 3</span>
+                    <span class="accordion-icon">&#9660;</span>
+                </button>
+                <div class="accordion-content" aria-hidden="true">
+                    <p>Content for section 3. Each section can contain any content.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="accordion"&gt;
+    &lt;div class="accordion-item"&gt;
+        &lt;button class="accordion-header" aria-expanded="false"&gt;
+            Section Title
+            &lt;span class="accordion-icon"&gt;&amp;#9660;&lt;/span&gt;
+        &lt;/button&gt;
+        &lt;div class="accordion-content" aria-hidden="true"&gt;
+            Content here...
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
         </div>
     </div>
 
@@ -460,6 +586,199 @@
         </div>
     </div>
 
+    <!-- Range -->
+    <div class="demo-section" id="range">
+        <h2>Range / Slider</h2>
+
+        <div style="max-width: 400px;">
+            <h3>Basic Range</h3>
+            <div class="range">
+                <input type="range" class="range-input" min="0" max="100" value="50">
+            </div>
+
+            <h3>With Value Display</h3>
+            <div class="range-wrapper">
+                <div class="range">
+                    <input type="range" class="range-input" min="0" max="100" value="75" id="range-demo" oninput="document.getElementById('range-value').textContent = this.value">
+                </div>
+                <span class="range-value" id="range-value">75</span>
+            </div>
+
+            <h3>Sizes</h3>
+            <div class="range range-sm" style="margin-bottom: var(--spacing-4);">
+                <input type="range" class="range-input" value="30">
+            </div>
+            <div class="range" style="margin-bottom: var(--spacing-4);">
+                <input type="range" class="range-input" value="50">
+            </div>
+            <div class="range range-lg">
+                <input type="range" class="range-input" value="70">
+            </div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="range"&gt;
+    &lt;input type="range" class="range-input" min="0" max="100" value="50"&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Number Input -->
+    <div class="demo-section" id="number-input">
+        <h2>Number Input</h2>
+
+        <div style="max-width: 400px;">
+            <h3>Basic</h3>
+            <div class="number-input">
+                <button class="number-input-btn number-input-decrement">-</button>
+                <input type="number" value="5" min="0" max="100">
+                <button class="number-input-btn number-input-increment">+</button>
+            </div>
+
+            <h3>Sizes</h3>
+            <div class="demo-row">
+                <div class="number-input number-input-sm">
+                    <button class="number-input-btn number-input-decrement">-</button>
+                    <input type="number" value="3">
+                    <button class="number-input-btn number-input-increment">+</button>
+                </div>
+                <div class="number-input">
+                    <button class="number-input-btn number-input-decrement">-</button>
+                    <input type="number" value="5">
+                    <button class="number-input-btn number-input-increment">+</button>
+                </div>
+                <div class="number-input number-input-lg">
+                    <button class="number-input-btn number-input-decrement">-</button>
+                    <input type="number" value="7">
+                    <button class="number-input-btn number-input-increment">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="number-input"&gt;
+    &lt;button class="number-input-btn number-input-decrement"&gt;-&lt;/button&gt;
+    &lt;input type="number" value="5"&gt;
+    &lt;button class="number-input-btn number-input-increment"&gt;+&lt;/button&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- File Input -->
+    <div class="demo-section" id="file-input">
+        <h2>File Input</h2>
+
+        <div style="max-width: 500px;">
+            <h3>Basic Button</h3>
+            <div class="file-input">
+                <span class="file-input-btn">Choose File</span>
+                <input type="file">
+            </div>
+
+            <h3>Drop Zone</h3>
+            <div class="dropzone">
+                <div class="dropzone-icon">&#128193;</div>
+                <div class="dropzone-text">
+                    <strong>Click to upload</strong> or drag and drop
+                </div>
+                <div class="dropzone-hint">PNG, JPG up to 10MB</div>
+                <input type="file">
+            </div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="dropzone"&gt;
+    &lt;div class="dropzone-icon"&gt;&amp;#128193;&lt;/div&gt;
+    &lt;div class="dropzone-text"&gt;Drag and drop&lt;/div&gt;
+    &lt;input type="file"&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="demo-section" id="tags">
+        <h2>Tags</h2>
+
+        <h3>Basic Tags</h3>
+        <div class="tag-group">
+            <span class="tag">Default</span>
+            <span class="tag tag-primary">Primary</span>
+            <span class="tag tag-success">Success</span>
+            <span class="tag tag-warning">Warning</span>
+            <span class="tag tag-danger">Danger</span>
+        </div>
+
+        <h3>Solid Variant</h3>
+        <div class="tag-group">
+            <span class="tag tag-solid tag-primary">Primary</span>
+            <span class="tag tag-solid tag-success">Success</span>
+            <span class="tag tag-solid tag-warning">Warning</span>
+            <span class="tag tag-solid tag-danger">Danger</span>
+        </div>
+
+        <h3>Removable Tags</h3>
+        <div class="tag-group">
+            <span class="tag tag-removable">
+                Removable
+                <button class="tag-remove"></button>
+            </span>
+            <span class="tag tag-primary tag-removable">
+                Primary
+                <button class="tag-remove"></button>
+            </span>
+        </div>
+
+        <h3>Pill Shape</h3>
+        <div class="tag-group">
+            <span class="tag tag-pill">Pill</span>
+            <span class="tag tag-pill tag-primary">Primary Pill</span>
+            <span class="tag tag-pill tag-success">Success Pill</span>
+        </div>
+
+        <div class="code-block">
+&lt;span class="tag"&gt;Default&lt;/span&gt;
+&lt;span class="tag tag-primary"&gt;Primary&lt;/span&gt;
+&lt;span class="tag tag-removable"&gt;
+    Removable
+    &lt;button class="tag-remove"&gt;&lt;/button&gt;
+&lt;/span&gt;
+        </div>
+    </div>
+
+    <!-- Segmented -->
+    <div class="demo-section" id="segmented">
+        <h2>Segmented Control</h2>
+
+        <h3>Basic</h3>
+        <div class="segmented">
+            <button class="segmented-item active">Day</button>
+            <button class="segmented-item">Week</button>
+            <button class="segmented-item">Month</button>
+        </div>
+
+        <h3>Primary Color</h3>
+        <div class="segmented segmented-primary">
+            <button class="segmented-item active">Option 1</button>
+            <button class="segmented-item">Option 2</button>
+            <button class="segmented-item">Option 3</button>
+        </div>
+
+        <h3>Block (Full Width)</h3>
+        <div class="segmented segmented-block" style="max-width: 400px;">
+            <button class="segmented-item active">Left</button>
+            <button class="segmented-item">Center</button>
+            <button class="segmented-item">Right</button>
+        </div>
+
+        <div class="code-block">
+&lt;div class="segmented"&gt;
+    &lt;button class="segmented-item active"&gt;Day&lt;/button&gt;
+    &lt;button class="segmented-item"&gt;Week&lt;/button&gt;
+    &lt;button class="segmented-item"&gt;Month&lt;/button&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
     <!-- Tables -->
     <div class="demo-section" id="tables">
         <h2>Tables</h2>
@@ -536,6 +855,238 @@
         </div>
     </div>
 
+    <!-- List Items -->
+    <div class="demo-section" id="list-items">
+        <h2>List Items</h2>
+
+        <div class="list-container" style="max-width: 600px;">
+            <div class="list-item">
+                <div class="list-item-header">
+                    <h4 class="list-item-title">Meeting with Team</h4>
+                    <div class="list-item-badges">
+                        <span class="badge badge-success">Confirmed</span>
+                    </div>
+                </div>
+                <div class="list-item-meta">2024-01-15 14:00 - 15:30</div>
+                <div class="list-item-account">john@example.com</div>
+            </div>
+            <div class="list-item selected">
+                <div class="list-item-header">
+                    <h4 class="list-item-title">Project Review</h4>
+                    <div class="list-item-badges">
+                        <span class="badge badge-warning">Pending</span>
+                    </div>
+                </div>
+                <div class="list-item-meta">2024-01-16 10:00 - 11:00</div>
+                <div class="list-item-account">team@example.com</div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-header">
+                    <h4 class="list-item-title">Client Call</h4>
+                    <div class="list-item-badges">
+                        <span class="badge badge-danger">Cancelled</span>
+                    </div>
+                </div>
+                <div class="list-item-meta">2024-01-17 09:00 - 09:30</div>
+            </div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="list-container"&gt;
+    &lt;div class="list-item"&gt;
+        &lt;div class="list-item-header"&gt;
+            &lt;h4 class="list-item-title"&gt;Title&lt;/h4&gt;
+            &lt;span class="badge"&gt;Status&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class="list-item-meta"&gt;Meta info&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="demo-section" id="pagination">
+        <h2>Pagination</h2>
+
+        <h3>Basic</h3>
+        <nav class="pagination">
+            <div class="pagination-item pagination-prev">
+                <a class="pagination-link" href="#">&#8592;</a>
+            </div>
+            <div class="pagination-item">
+                <a class="pagination-link" href="#">1</a>
+            </div>
+            <div class="pagination-item">
+                <a class="pagination-link active" href="#">2</a>
+            </div>
+            <div class="pagination-item">
+                <a class="pagination-link" href="#">3</a>
+            </div>
+            <span class="pagination-ellipsis">...</span>
+            <div class="pagination-item">
+                <a class="pagination-link" href="#">10</a>
+            </div>
+            <div class="pagination-item pagination-next">
+                <a class="pagination-link" href="#">&#8594;</a>
+            </div>
+        </nav>
+
+        <h3>Rounded</h3>
+        <nav class="pagination pagination-rounded">
+            <div class="pagination-item">
+                <a class="pagination-link" href="#">1</a>
+            </div>
+            <div class="pagination-item">
+                <a class="pagination-link active" href="#">2</a>
+            </div>
+            <div class="pagination-item">
+                <a class="pagination-link" href="#">3</a>
+            </div>
+        </nav>
+
+        <div class="code-block">
+&lt;nav class="pagination"&gt;
+    &lt;div class="pagination-item"&gt;
+        &lt;a class="pagination-link" href="#"&gt;1&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;div class="pagination-item"&gt;
+        &lt;a class="pagination-link active" href="#"&gt;2&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="demo-section" id="breadcrumb">
+        <h2>Breadcrumb</h2>
+
+        <h3>Basic</h3>
+        <nav aria-label="Breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Products</a></li>
+                <li class="breadcrumb-item"><a href="#">Category</a></li>
+                <li class="breadcrumb-item" aria-current="page">Current Page</li>
+            </ol>
+        </nav>
+
+        <h3>With Chevron</h3>
+        <nav aria-label="Breadcrumb">
+            <ol class="breadcrumb breadcrumb-chevron">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Section</a></li>
+                <li class="breadcrumb-item" aria-current="page">Page</li>
+            </ol>
+        </nav>
+
+        <div class="code-block">
+&lt;ol class="breadcrumb"&gt;
+    &lt;li class="breadcrumb-item"&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="breadcrumb-item" aria-current="page"&gt;Current&lt;/li&gt;
+&lt;/ol&gt;
+        </div>
+    </div>
+
+    <!-- Stepper -->
+    <div class="demo-section" id="stepper">
+        <h2>Stepper</h2>
+
+        <h3>Horizontal</h3>
+        <div class="stepper" style="max-width: 600px;">
+            <div class="stepper-step completed">
+                <div class="stepper-indicator">
+                    <span class="stepper-indicator-number">1</span>
+                </div>
+                <div class="stepper-content">
+                    <div class="stepper-title">Account</div>
+                    <div class="stepper-description">Create your account</div>
+                </div>
+            </div>
+            <div class="stepper-step active">
+                <div class="stepper-indicator">
+                    <span class="stepper-indicator-number">2</span>
+                </div>
+                <div class="stepper-content">
+                    <div class="stepper-title">Profile</div>
+                    <div class="stepper-description">Set up your profile</div>
+                </div>
+            </div>
+            <div class="stepper-step">
+                <div class="stepper-indicator">
+                    <span class="stepper-indicator-number">3</span>
+                </div>
+                <div class="stepper-content">
+                    <div class="stepper-title">Complete</div>
+                    <div class="stepper-description">Review and finish</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="stepper"&gt;
+    &lt;div class="stepper-step completed"&gt;...&lt;/div&gt;
+    &lt;div class="stepper-step active"&gt;...&lt;/div&gt;
+    &lt;div class="stepper-step"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="demo-section" id="timeline">
+        <h2>Timeline</h2>
+
+        <ul class="timeline" style="max-width: 500px;">
+            <li class="timeline-item success">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <h4 class="timeline-title">Order Delivered</h4>
+                        <span class="timeline-date">Today 14:30</span>
+                    </div>
+                    <div class="timeline-body">
+                        <p>Package was delivered successfully.</p>
+                    </div>
+                </div>
+            </li>
+            <li class="timeline-item info">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <h4 class="timeline-title">Out for Delivery</h4>
+                        <span class="timeline-date">Today 09:00</span>
+                    </div>
+                    <div class="timeline-body">
+                        <p>Package is out for delivery.</p>
+                    </div>
+                </div>
+            </li>
+            <li class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <h4 class="timeline-title">Order Shipped</h4>
+                        <span class="timeline-date">Yesterday</span>
+                    </div>
+                    <div class="timeline-body">
+                        <p>Order has been shipped.</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <div class="code-block">
+&lt;ul class="timeline"&gt;
+    &lt;li class="timeline-item success"&gt;
+        &lt;div class="timeline-marker"&gt;&lt;/div&gt;
+        &lt;div class="timeline-content"&gt;
+            &lt;h4 class="timeline-title"&gt;Event&lt;/h4&gt;
+            &lt;p&gt;Description&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+        </div>
+    </div>
+
     <!-- Alerts -->
     <div class="demo-section" id="alerts">
         <h2>Alerts</h2>
@@ -588,6 +1139,62 @@
     &lt;div class="alert-content"&gt;
         &lt;div class="alert-title"&gt;Success!&lt;/div&gt;
         &lt;div class="alert-message"&gt;Operation completed.&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="demo-section" id="notifications">
+        <h2>Notifications (Toast)</h2>
+
+        <p>Les notifications apparaissent en haut a droite de l'ecran.</p>
+
+        <div class="demo-row">
+            <button class="btn btn-success" onclick="showNotification('success')">Success</button>
+            <button class="btn btn-danger" onclick="showNotification('error')">Error</button>
+            <button class="btn btn-primary" onclick="showNotification('info')">Info</button>
+            <button class="btn btn-warning" onclick="showNotification('warning')">Warning</button>
+        </div>
+
+        <div class="code-block">
+&lt;div class="notification success show"&gt;
+    Operation completed successfully!
+&lt;/div&gt;
+
+&lt;!-- Classes: success, error, info, warning --&gt;
+&lt;!-- Add 'show' class to display --&gt;
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="demo-section" id="empty-state">
+        <h2>Empty State</h2>
+
+        <h3>Basic</h3>
+        <div class="empty-state" style="max-width: 400px; border: 1px dashed var(--color-border-medium); border-radius: var(--border-radius-lg);">
+            <div class="empty-state-icon">&#128193;</div>
+            <h3 class="empty-state-title">No files found</h3>
+            <p class="empty-state-description">Upload your first file to get started.</p>
+            <div class="empty-state-action">
+                <button class="btn btn-primary">Upload File</button>
+            </div>
+        </div>
+
+        <h3>With Color</h3>
+        <div class="empty-state empty-state-info" style="max-width: 400px; border: 1px dashed var(--color-border-medium); border-radius: var(--border-radius-lg);">
+            <div class="empty-state-icon">&#128269;</div>
+            <h3 class="empty-state-title">No results</h3>
+            <p class="empty-state-description">Try adjusting your search criteria.</p>
+        </div>
+
+        <div class="code-block">
+&lt;div class="empty-state"&gt;
+    &lt;div class="empty-state-icon"&gt;&amp;#128193;&lt;/div&gt;
+    &lt;h3 class="empty-state-title"&gt;No files&lt;/h3&gt;
+    &lt;p class="empty-state-description"&gt;Description&lt;/p&gt;
+    &lt;div class="empty-state-action"&gt;
+        &lt;button class="btn btn-primary"&gt;Action&lt;/button&gt;
     &lt;/div&gt;
 &lt;/div&gt;
         </div>
@@ -697,6 +1304,76 @@
         </div>
     </div>
 
+    <!-- Popover -->
+    <div class="demo-section" id="popover">
+        <h2>Popover</h2>
+
+        <h3>Basic (Hover)</h3>
+        <div class="demo-row">
+            <div class="popover-trigger popover-hover">
+                <button class="btn">Hover me</button>
+                <div class="popover popover-bottom">
+                    <div class="popover-body">
+                        <p>This is a popover with rich content.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>With Header</h3>
+        <div class="popover-trigger popover-hover">
+            <button class="btn btn-primary">With Header</button>
+            <div class="popover popover-bottom">
+                <div class="popover-header">
+                    <h4 class="popover-title">Popover Title</h4>
+                </div>
+                <div class="popover-body">
+                    <p>This popover has a header and body content.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="popover-trigger popover-hover"&gt;
+    &lt;button class="btn"&gt;Trigger&lt;/button&gt;
+    &lt;div class="popover popover-bottom"&gt;
+        &lt;div class="popover-body"&gt;Content&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="demo-section" id="divider">
+        <h2>Divider</h2>
+
+        <h3>Simple</h3>
+        <div class="divider"></div>
+
+        <h3>With Text</h3>
+        <div class="divider">OR</div>
+
+        <h3>Dashed</h3>
+        <div class="divider divider-dashed"></div>
+
+        <h3>With Colors</h3>
+        <div class="divider divider-primary">Primary</div>
+        <div class="divider divider-success">Success</div>
+
+        <h3>Vertical (in flex container)</h3>
+        <div class="demo-row" style="height: 60px; align-items: stretch;">
+            <span>Left</span>
+            <div class="divider-vertical"></div>
+            <span>Right</span>
+        </div>
+
+        <div class="code-block">
+&lt;div class="divider"&gt;&lt;/div&gt;
+&lt;div class="divider"&gt;OR&lt;/div&gt;
+&lt;div class="divider divider-dashed"&gt;&lt;/div&gt;
+        </div>
+    </div>
+
     <!-- Logs -->
     <div class="demo-section" id="logs">
         <h2>Logs</h2>
@@ -739,6 +1416,100 @@
                 <span class="log-component">[system]</span>
                 Backup completed successfully
             </div>
+        </div>
+    </div>
+
+    <!-- Matrix -->
+    <div class="demo-section" id="matrix">
+        <h2>Matrix</h2>
+        <p>Matrice de routage audio avec cellules cliquables. Voir la <a href="matrix-demo.html">demo complete</a>.</p>
+
+        <div class="matrix-wrapper" style="max-width: 400px;">
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th class="matrix-header-cell"></th>
+                        <th class="matrix-header-cell"><span>IN 1</span></th>
+                        <th class="matrix-header-cell"><span>IN 2</span></th>
+                        <th class="matrix-header-cell"><span>IN 3</span></th>
+                        <th class="matrix-header-cell"><span>IN 4</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="matrix-row-label">Track 1</td>
+                        <td class="matrix-cell active">&#10003;</td>
+                        <td class="matrix-cell"></td>
+                        <td class="matrix-cell"></td>
+                        <td class="matrix-cell"></td>
+                    </tr>
+                    <tr>
+                        <td class="matrix-row-label">Track 2</td>
+                        <td class="matrix-cell"></td>
+                        <td class="matrix-cell active">&#10003;</td>
+                        <td class="matrix-cell"></td>
+                        <td class="matrix-cell"></td>
+                    </tr>
+                    <tr>
+                        <td class="matrix-row-label">Track 3</td>
+                        <td class="matrix-cell"></td>
+                        <td class="matrix-cell"></td>
+                        <td class="matrix-cell active">&#10003;</td>
+                        <td class="matrix-cell"></td>
+                    </tr>
+                    <tr>
+                        <td class="matrix-row-label">Track 4</td>
+                        <td class="matrix-cell"></td>
+                        <td class="matrix-cell"></td>
+                        <td class="matrix-cell"></td>
+                        <td class="matrix-cell active">&#10003;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="code-block">
+&lt;div class="matrix-wrapper"&gt;
+    &lt;table class="matrix-table"&gt;
+        &lt;tr&gt;
+            &lt;td class="matrix-cell"&gt;&lt;/td&gt;
+            &lt;td class="matrix-cell active"&gt;&amp;#10003;&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- Meter -->
+    <div class="demo-section" id="meter">
+        <h2>Meter</h2>
+        <p>Vu-metres audio avec variantes horizontales et verticales. Voir la <a href="meter-demo.html">demo complete</a>.</p>
+
+        <h3>Horizontal</h3>
+        <div class="demo-row">
+            <div class="meter meter-horizontal" style="width: 200px;">
+                <div class="meter-bar" style="width: 75%;"></div>
+            </div>
+        </div>
+
+        <h3>Vertical (Stereo)</h3>
+        <div class="demo-row" style="height: 150px; align-items: flex-end;">
+            <div class="meter meter-vertical">
+                <div class="meter-bar" style="height: 80%;"></div>
+            </div>
+            <div class="meter meter-vertical">
+                <div class="meter-bar" style="height: 65%;"></div>
+            </div>
+        </div>
+
+        <div class="code-block">
+&lt;div class="meter meter-horizontal"&gt;
+    &lt;div class="meter-bar" style="width: 75%;"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="meter meter-vertical"&gt;
+    &lt;div class="meter-bar" style="height: 80%;"&gt;&lt;/div&gt;
+&lt;/div&gt;
         </div>
     </div>
 
@@ -935,6 +1706,51 @@ window.addEventListener('themechange', (e) => {
         window.addEventListener('themechange', (e) => {
             console.log('Theme changed to:', e.detail.theme);
         });
+
+        // Accordion functionality
+        function toggleAccordion(button) {
+            const item = button.closest('.accordion-item');
+            const content = item.querySelector('.accordion-content');
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+            button.setAttribute('aria-expanded', !isExpanded);
+            content.setAttribute('aria-hidden', isExpanded);
+
+            if (isExpanded) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            }
+        }
+
+        // Initialize accordion heights
+        document.querySelectorAll('.accordion-content').forEach(content => {
+            if (content.getAttribute('aria-hidden') === 'false') {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            }
+        });
+
+        // Notification functionality
+        function showNotification(type) {
+            const messages = {
+                success: 'Operation completed successfully!',
+                error: 'An error occurred. Please try again.',
+                info: 'Here is some useful information.',
+                warning: 'Please review this warning.'
+            };
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = messages[type];
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.classList.add('show'), 10);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
     </script>
 </body>
 </html>
