@@ -1,0 +1,357 @@
+/**
+ * UIKit Range/Slider
+ * Curseur de valeur stylise
+ */
+
+/* === BASE === */
+
+.range {
+    --range-track-height: 4px;
+    --range-thumb-size: 16px;
+    --range-track-bg: var(--color-border-medium);
+    --range-track-fill: var(--color-primary);
+    --range-thumb-bg: var(--color-bg-primary);
+    --range-thumb-border: var(--color-primary);
+
+    width: 100%;
+    height: var(--range-thumb-size);
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.range-input {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: var(--range-track-height);
+    background: var(--range-track-bg);
+    border-radius: var(--range-track-height);
+    outline: none;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Track - WebKit */
+.range-input::-webkit-slider-runnable-track {
+    width: 100%;
+    height: var(--range-track-height);
+    background: var(--range-track-bg);
+    border-radius: var(--range-track-height);
+}
+
+/* Track - Firefox */
+.range-input::-moz-range-track {
+    width: 100%;
+    height: var(--range-track-height);
+    background: var(--range-track-bg);
+    border-radius: var(--range-track-height);
+    border: none;
+}
+
+/* Thumb - WebKit */
+.range-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: var(--range-thumb-size);
+    height: var(--range-thumb-size);
+    background: var(--range-thumb-bg);
+    border: 2px solid var(--range-thumb-border);
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: calc((var(--range-track-height) - var(--range-thumb-size)) / 2);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* Thumb - Firefox */
+.range-input::-moz-range-thumb {
+    width: var(--range-thumb-size);
+    height: var(--range-thumb-size);
+    background: var(--range-thumb-bg);
+    border: 2px solid var(--range-thumb-border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* Progress fill - Firefox only (WebKit needs JS) */
+.range-input::-moz-range-progress {
+    height: var(--range-track-height);
+    background: var(--range-track-fill);
+    border-radius: var(--range-track-height);
+}
+
+/* === HOVER & FOCUS === */
+
+.range-input:hover::-webkit-slider-thumb {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px var(--color-primary-light);
+}
+
+.range-input:hover::-moz-range-thumb {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px var(--color-primary-light);
+}
+
+.range-input:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.range-input:focus::-moz-range-thumb {
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.range-input:active::-webkit-slider-thumb {
+    transform: scale(0.95);
+}
+
+.range-input:active::-moz-range-thumb {
+    transform: scale(0.95);
+}
+
+/* === DISABLED === */
+
+.range-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.range-input:disabled::-webkit-slider-thumb {
+    cursor: not-allowed;
+}
+
+.range-input:disabled::-moz-range-thumb {
+    cursor: not-allowed;
+}
+
+/* === SIZES === */
+
+.range-sm {
+    --range-track-height: 2px;
+    --range-thumb-size: 12px;
+}
+
+.range-lg {
+    --range-track-height: 6px;
+    --range-thumb-size: 20px;
+}
+
+/* === COLOR VARIANTS === */
+
+.range-success {
+    --range-track-fill: var(--color-success);
+    --range-thumb-border: var(--color-success);
+}
+
+.range-success .range-input:hover::-webkit-slider-thumb,
+.range-success .range-input:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 4px var(--color-success-light);
+}
+
+.range-success .range-input:hover::-moz-range-thumb,
+.range-success .range-input:focus::-moz-range-thumb {
+    box-shadow: 0 0 0 4px var(--color-success-light);
+}
+
+.range-warning {
+    --range-track-fill: var(--color-warning);
+    --range-thumb-border: var(--color-warning);
+}
+
+.range-warning .range-input:hover::-webkit-slider-thumb,
+.range-warning .range-input:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 4px var(--color-warning-light);
+}
+
+.range-warning .range-input:hover::-moz-range-thumb,
+.range-warning .range-input:focus::-moz-range-thumb {
+    box-shadow: 0 0 0 4px var(--color-warning-light);
+}
+
+.range-danger {
+    --range-track-fill: var(--color-danger);
+    --range-thumb-border: var(--color-danger);
+}
+
+.range-danger .range-input:hover::-webkit-slider-thumb,
+.range-danger .range-input:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 4px var(--color-danger-light);
+}
+
+.range-danger .range-input:hover::-moz-range-thumb,
+.range-danger .range-input:focus::-moz-range-thumb {
+    box-shadow: 0 0 0 4px var(--color-danger-light);
+}
+
+/* === WITH VALUE DISPLAY === */
+
+.range-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+}
+
+.range-wrapper .range {
+    flex: 1;
+}
+
+.range-value {
+    min-width: 40px;
+    text-align: right;
+    font-size: var(--font-size-md);
+    font-family: var(--font-family-mono);
+    color: var(--color-text-secondary);
+}
+
+.range-value-left {
+    text-align: left;
+}
+
+/* === WITH LABELS === */
+
+.range-labeled {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+}
+
+/* === VERTICAL ORIENTATION === */
+
+.range-vertical {
+    width: var(--range-thumb-size);
+    height: 120px;
+    flex-direction: column;
+}
+
+.range-vertical .range-input {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    width: var(--range-track-height);
+    height: 100%;
+}
+
+.range-vertical .range-input::-webkit-slider-runnable-track {
+    width: var(--range-track-height);
+    height: 100%;
+}
+
+.range-vertical .range-input::-webkit-slider-thumb {
+    margin-top: 0;
+    margin-left: calc((var(--range-track-height) - var(--range-thumb-size)) / 2);
+}
+
+/* === DUAL THUMB (min/max) - requires JS === */
+
+.range-dual {
+    position: relative;
+}
+
+.range-dual .range-input {
+    position: absolute;
+    pointer-events: none;
+    background: transparent;
+}
+
+.range-dual .range-input::-webkit-slider-thumb {
+    pointer-events: auto;
+}
+
+.range-dual .range-input::-moz-range-thumb {
+    pointer-events: auto;
+}
+
+.range-dual-track {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: var(--range-track-height);
+    background: var(--range-track-bg);
+    border-radius: var(--range-track-height);
+    width: 100%;
+}
+
+.range-dual-fill {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: var(--range-track-height);
+    background: var(--range-track-fill);
+    border-radius: var(--range-track-height);
+}
+
+/* === TICKS/STEPS === */
+
+.range-ticks {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-2) 0 0;
+}
+
+.range-tick {
+    width: 1px;
+    height: 6px;
+    background: var(--color-border-dark);
+}
+
+.range-tick-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    text-align: center;
+    margin-top: var(--spacing-1);
+}
+
+/* === TOOLTIP (on hover/drag) === */
+
+.range-tooltip {
+    position: relative;
+}
+
+.range-tooltip-value {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: var(--tooltip-left, 50%);
+    transform: translateX(-50%);
+    background: var(--color-dark);
+    color: var(--color-text-white);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    font-family: var(--font-family-mono);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-fast), visibility var(--transition-fast);
+}
+
+.range-tooltip-value::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--color-dark);
+}
+
+.range-tooltip:hover .range-tooltip-value,
+.range-tooltip:focus-within .range-tooltip-value {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* === FORM INTEGRATION === */
+
+.form-group .range {
+    margin-top: var(--spacing-2);
+}
+
+.form-group .range-wrapper {
+    margin-top: var(--spacing-2);
+}

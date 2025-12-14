@@ -1,0 +1,245 @@
+/**
+ * UIKit Divider
+ * Separateur horizontal/vertical
+ */
+
+/* === HORIZONTAL DIVIDER === */
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: var(--spacing-6) 0;
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--color-border-light);
+}
+
+/* Simple divider (no text) */
+.divider:empty::before {
+    flex: 1;
+}
+
+.divider:empty::after {
+    display: none;
+}
+
+/* Divider with text */
+.divider:not(:empty)::before {
+    margin-right: var(--spacing-4);
+}
+
+.divider:not(:empty)::after {
+    margin-left: var(--spacing-4);
+}
+
+/* === VERTICAL DIVIDER === */
+
+.divider-vertical {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 var(--spacing-4);
+    height: 100%;
+    min-height: 20px;
+}
+
+.divider-vertical::before,
+.divider-vertical::after {
+    width: 1px;
+    height: auto;
+    flex: 1;
+    background: var(--color-border-light);
+}
+
+.divider-vertical:not(:empty)::before {
+    margin-right: 0;
+    margin-bottom: var(--spacing-2);
+}
+
+.divider-vertical:not(:empty)::after {
+    margin-left: 0;
+    margin-top: var(--spacing-2);
+}
+
+/* === STYLES === */
+
+/* Dashed */
+.divider-dashed::before,
+.divider-dashed::after {
+    background: none;
+    border-top: 1px dashed var(--color-border-medium);
+    height: 0;
+}
+
+.divider-vertical.divider-dashed::before,
+.divider-vertical.divider-dashed::after {
+    border-top: none;
+    border-left: 1px dashed var(--color-border-medium);
+    width: 0;
+}
+
+/* Dotted */
+.divider-dotted::before,
+.divider-dotted::after {
+    background: none;
+    border-top: 1px dotted var(--color-border-medium);
+    height: 0;
+}
+
+.divider-vertical.divider-dotted::before,
+.divider-vertical.divider-dotted::after {
+    border-top: none;
+    border-left: 1px dotted var(--color-border-medium);
+    width: 0;
+}
+
+/* Thick */
+.divider-thick::before,
+.divider-thick::after {
+    height: 2px;
+}
+
+.divider-vertical.divider-thick::before,
+.divider-vertical.divider-thick::after {
+    width: 2px;
+    height: auto;
+}
+
+/* === SPACING VARIANTS === */
+
+.divider-sm {
+    margin: var(--spacing-3) 0;
+}
+
+.divider-lg {
+    margin: var(--spacing-10) 0;
+}
+
+.divider-vertical.divider-sm {
+    margin: 0 var(--spacing-2);
+}
+
+.divider-vertical.divider-lg {
+    margin: 0 var(--spacing-6);
+}
+
+/* === TEXT ALIGNMENT === */
+
+.divider-left::before {
+    flex: 0 0 20px;
+}
+
+.divider-right::after {
+    flex: 0 0 20px;
+}
+
+/* === COLOR VARIANTS === */
+
+.divider-primary::before,
+.divider-primary::after {
+    background: var(--color-primary);
+}
+
+.divider-primary {
+    color: var(--color-primary);
+}
+
+.divider-success::before,
+.divider-success::after {
+    background: var(--color-success);
+}
+
+.divider-success {
+    color: var(--color-success);
+}
+
+.divider-warning::before,
+.divider-warning::after {
+    background: var(--color-warning);
+}
+
+.divider-warning {
+    color: var(--color-warning);
+}
+
+.divider-danger::before,
+.divider-danger::after {
+    background: var(--color-danger);
+}
+
+.divider-danger {
+    color: var(--color-danger);
+}
+
+/* === WITH ICON === */
+
+.divider-icon {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.divider-icon .icon {
+    color: var(--color-text-tertiary);
+}
+
+/* === INLINE SEPARATOR (for horizontal lists) === */
+
+.separator {
+    display: inline-block;
+    width: 1px;
+    height: 1em;
+    background: var(--color-border-medium);
+    margin: 0 var(--spacing-3);
+    vertical-align: middle;
+}
+
+.separator-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-text-tertiary);
+}
+
+.separator-slash::before {
+    content: '/';
+    color: var(--color-text-tertiary);
+    margin: 0 var(--spacing-2);
+}
+
+/* === SECTION DIVIDER === */
+
+.divider-section {
+    position: relative;
+    text-align: center;
+    margin: var(--spacing-8) 0;
+}
+
+.divider-section::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--color-border-light);
+}
+
+.divider-section-text {
+    position: relative;
+    display: inline-block;
+    padding: 0 var(--spacing-4);
+    background: var(--color-bg-primary);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
