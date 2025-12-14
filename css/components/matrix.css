@@ -1,0 +1,444 @@
+/**
+ * UIKit Matrix Component
+ * Matrice de routage audio style Dante Controller
+ */
+
+/* === TOKENS === */
+
+:root {
+    --matrix-cell-size: 28px;
+    --matrix-cell-size-large: 36px;
+    --matrix-header-width: 140px;
+    --matrix-col-header-height: 120px;
+    --matrix-device-row-height: 24px;
+    --matrix-bg: #1a1a1c;
+    --matrix-header-bg: #2a2a2c;
+    --matrix-device-bg: #232325;
+    --matrix-cell-bg: #3a3a3c;
+    --matrix-cell-hover: #4a4a4c;
+    --matrix-active-color: #22c55e;
+    --matrix-highlight-color: #0891b2;
+    --matrix-border-color: #2a2a2c;
+    --matrix-text: #e5e5e5;
+    --matrix-text-dim: #888888;
+}
+
+/* === CONTAINER === */
+
+.matrix {
+    display: flex;
+    flex-direction: column;
+    background: var(--matrix-bg);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    font-size: var(--font-size-sm);
+    color: var(--matrix-text);
+}
+
+/* === SCROLL CONTAINER === */
+
+.matrix-scroll {
+    overflow: auto;
+    max-height: 600px;
+    position: relative;
+}
+
+/* === TABLE === */
+
+.matrix-table {
+    border-collapse: separate;
+    border-spacing: 1px;
+    background: var(--matrix-border-color);
+}
+
+/* === CORNER CELL === */
+
+.matrix-corner {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    min-width: var(--matrix-header-width);
+    height: var(--matrix-col-header-height);
+    padding: var(--spacing-2);
+    background: var(--matrix-header-bg);
+    text-align: left;
+    vertical-align: bottom;
+    font-weight: var(--font-weight-medium);
+    color: var(--matrix-text-dim);
+}
+
+/* === COLUMN HEADERS === */
+
+.matrix-col-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    width: var(--matrix-cell-size);
+    min-width: var(--matrix-cell-size);
+    height: var(--matrix-col-header-height);
+    padding: var(--spacing-2) var(--spacing-1);
+    background: var(--matrix-header-bg);
+    text-align: center;
+    vertical-align: bottom;
+    font-weight: var(--font-weight-normal);
+    color: var(--matrix-text);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Vertical text */
+.matrix-col-header .matrix-header-text {
+    display: block;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    max-height: calc(var(--matrix-col-header-height) - 16px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--font-size-xs);
+}
+
+/* Highlighted column header */
+.matrix-col-header.highlight {
+    background: var(--matrix-highlight-color);
+}
+
+.matrix-col-header.highlight .matrix-header-text {
+    color: white;
+}
+
+/* === DEVICE ROW (hardware names) === */
+
+.matrix-device-row th,
+.matrix-device-row td {
+    position: sticky;
+    top: var(--matrix-col-header-height);
+    z-index: 2;
+    height: var(--matrix-device-row-height);
+    padding: 0 var(--spacing-2);
+    background: var(--matrix-device-bg);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--matrix-text);
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.matrix-device-row th {
+    left: 0;
+    z-index: 3;
+    text-align: left;
+    color: var(--matrix-text-dim);
+}
+
+/* Device cell spans multiple columns */
+.matrix-device-cell {
+    background: var(--matrix-device-bg);
+    border-left: 1px solid var(--matrix-border-color);
+}
+
+.matrix-device-cell:first-of-type {
+    border-left: none;
+}
+
+/* === ROW HEADERS === */
+
+.matrix-row-header {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    min-width: var(--matrix-header-width);
+    max-width: var(--matrix-header-width);
+    height: var(--matrix-cell-size);
+    padding: 0 var(--spacing-3);
+    background: var(--matrix-header-bg);
+    text-align: left;
+    vertical-align: middle;
+    font-weight: var(--font-weight-normal);
+    color: var(--matrix-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--font-size-xs);
+}
+
+/* Row selection */
+.matrix-row-header.selected,
+tr.selected .matrix-row-header {
+    background: var(--matrix-highlight-color);
+    color: white;
+}
+
+/* === ROW GROUPS (hierarchical) === */
+
+.matrix-row-group {
+    background: var(--matrix-bg);
+}
+
+.matrix-row-group .matrix-row-header {
+    background: var(--matrix-device-bg);
+    font-weight: var(--font-weight-medium);
+    color: var(--matrix-text);
+}
+
+.matrix-row-group .matrix-cell {
+    background: var(--matrix-device-bg);
+}
+
+/* Expand/collapse toggle */
+.matrix-row-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    margin-right: var(--spacing-1);
+    background: transparent;
+    border: none;
+    color: var(--matrix-text-dim);
+    cursor: pointer;
+    font-size: 10px;
+    transition: transform var(--transition-fast);
+}
+
+.matrix-row-toggle::before {
+    content: "\25B6";
+}
+
+.matrix-row-toggle.expanded::before {
+    content: "\25BC";
+}
+
+.matrix-row-toggle:hover {
+    color: var(--matrix-text);
+}
+
+/* Indentation for child rows */
+.matrix-row-child .matrix-row-header {
+    padding-left: var(--spacing-6);
+}
+
+.matrix-row-child-2 .matrix-row-header {
+    padding-left: var(--spacing-10);
+}
+
+/* Channel indicator */
+.matrix-channel-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    margin-right: var(--spacing-1);
+    background: var(--matrix-cell-bg);
+    border-radius: 2px;
+    font-size: 8px;
+    color: var(--matrix-text-dim);
+}
+
+.matrix-channel-icon::before {
+    content: "\266A";
+}
+
+/* === CELLS === */
+
+.matrix-cell {
+    position: relative;
+    width: var(--matrix-cell-size);
+    min-width: var(--matrix-cell-size);
+    height: var(--matrix-cell-size);
+    padding: 0;
+    background: var(--matrix-cell-bg);
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    user-select: none;
+}
+
+.matrix-cell:hover {
+    background: var(--matrix-cell-hover);
+}
+
+/* Available cell (can be activated) */
+.matrix-cell.available::after {
+    content: "+";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--matrix-text-dim);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.matrix-cell.available:hover::after {
+    opacity: 1;
+}
+
+/* Active cell (routed) - checkmark by default */
+.matrix-cell.active {
+    background: var(--matrix-active-color);
+}
+
+.matrix-cell.active::after {
+    content: "\2713";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    color: white;
+}
+
+/* Disabled cell */
+.matrix-cell.disabled {
+    background: var(--matrix-bg);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.matrix-cell.disabled::after {
+    display: none;
+}
+
+/* === CELL STATES BY ROW/COL SELECTION === */
+
+tr.selected .matrix-cell {
+    background: var(--matrix-cell-hover);
+}
+
+tr.selected .matrix-cell.active {
+    background: var(--matrix-active-color);
+}
+
+/* Column highlight on hover (needs JS) */
+.matrix-cell.col-hover {
+    background: var(--matrix-cell-hover);
+}
+
+/* === STATUS BAR === */
+
+.matrix-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-4);
+    padding: var(--spacing-2) var(--spacing-4);
+    background: var(--matrix-header-bg);
+    border-top: 1px solid var(--matrix-border-color);
+    font-size: var(--font-size-xs);
+    color: var(--matrix-text-dim);
+}
+
+.matrix-status-left,
+.matrix-status-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+}
+
+.matrix-status-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.matrix-status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--matrix-text-dim);
+}
+
+.matrix-status-indicator.online {
+    background: var(--matrix-active-color);
+}
+
+.matrix-status-indicator.error {
+    background: var(--color-danger);
+}
+
+/* === SIZE VARIANT === */
+
+.matrix--large {
+    --matrix-cell-size: var(--matrix-cell-size-large);
+    --matrix-col-header-height: 140px;
+    --matrix-header-width: 160px;
+}
+
+/* === SCROLLBAR STYLING === */
+
+.matrix-scroll::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.matrix-scroll::-webkit-scrollbar-track {
+    background: var(--matrix-bg);
+}
+
+.matrix-scroll::-webkit-scrollbar-thumb {
+    background: var(--matrix-cell-bg);
+    border-radius: 5px;
+}
+
+.matrix-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--matrix-cell-hover);
+}
+
+.matrix-scroll::-webkit-scrollbar-corner {
+    background: var(--matrix-bg);
+}
+
+/* === LOADING STATE === */
+
+.matrix.loading .matrix-scroll {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.matrix.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--matrix-text-dim);
+    border-top-color: var(--matrix-active-color);
+    border-radius: 50%;
+    animation: matrix-spin 0.8s linear infinite;
+}
+
+@keyframes matrix-spin {
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* === EMPTY STATE === */
+
+.matrix-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-12);
+    color: var(--matrix-text-dim);
+    text-align: center;
+}
+
+.matrix-empty-icon {
+    font-size: 32px;
+    opacity: 0.5;
+}

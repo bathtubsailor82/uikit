@@ -116,6 +116,18 @@ Plan de developpement des composants manquants.
 
 ## Phase 4 - Composants audio
 
+### 4.0 Routing Matrix [COMPLETE]
+**Fichier:** `css/components/matrix.css`
+
+- [x] Matrice style Dante Controller
+- [x] Headers colonnes verticaux avec highlight
+- [x] Headers lignes hierarchiques (groupes depliables)
+- [x] Cellules : available, active, diagonal, multicast
+- [x] Sticky headers (corner z-3, cols z-2, rows z-1)
+- [x] Status bar avec indicateurs
+- [x] Variantes : compact, large, light, high-contrast
+- [x] Scrollbar stylisee
+
 ### 4.1 Knob/Rotary
 **Fichier:** `js/knob.js` + `css/components/knob.css`
 
@@ -288,3 +300,4 @@ export const COMPONENT_PRESETS = { };
 - [x] Number Input avec variantes
 - [x] Tags/Chips avec tag input
 - [x] File Input avec dropzone
+- [x] Routing Matrix (style Dante Controller)
