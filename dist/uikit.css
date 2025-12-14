@@ -1823,6 +1823,64 @@ body.keyboard-nav *:focus {
     color: var(--color-text-primary);
 }
 
+/* Switch color variants */
+.form-switch-success .form-switch-input:checked,
+.form-switch-input.form-switch-success:checked {
+    background: var(--color-success);
+}
+
+.form-switch-danger .form-switch-input:checked,
+.form-switch-input.form-switch-danger:checked {
+    background: var(--color-danger);
+}
+
+.form-switch-warning .form-switch-input:checked,
+.form-switch-input.form-switch-warning:checked {
+    background: var(--color-warning);
+}
+
+.form-switch-info .form-switch-input:checked,
+.form-switch-input.form-switch-info:checked {
+    background: var(--color-info);
+}
+
+/* Switch sizes */
+.form-switch-sm .form-switch-input,
+.form-switch-input.form-switch-sm {
+    width: 32px;
+    height: 18px;
+    border-radius: 9px;
+}
+
+.form-switch-sm .form-switch-input::before,
+.form-switch-input.form-switch-sm::before {
+    width: 14px;
+    height: 14px;
+}
+
+.form-switch-sm .form-switch-input:checked::before,
+.form-switch-input.form-switch-sm:checked::before {
+    transform: translateX(14px);
+}
+
+.form-switch-lg .form-switch-input,
+.form-switch-input.form-switch-lg {
+    width: 50px;
+    height: 28px;
+    border-radius: 14px;
+}
+
+.form-switch-lg .form-switch-input::before,
+.form-switch-input.form-switch-lg::before {
+    width: 24px;
+    height: 24px;
+}
+
+.form-switch-lg .form-switch-input:checked::before,
+.form-switch-input.form-switch-lg:checked::before {
+    transform: translateX(22px);
+}
+
 /* === SEARCH INPUT === */
 
 .form-search {
@@ -10473,23 +10531,21 @@ nav[aria-label="Pagination"] {
 /**
  * VUMeter Component Styles
  * Supports: vertical, horizontal orientations
+ * Support Light/Dark mode via tokens
  */
 
 /* ============================================================================
-   CSS Variables (overridable)
+   CSS Variables (dimensions and functional colors only)
    ============================================================================ */
 
 :root {
-  --meter-bg: #1a1a1a;
-  --meter-peak: #22c55e;
-  --meter-rms: #166534;
-  --meter-lufs: #3b82f6;
-  --meter-hold: #ffffff;
-  --meter-warning: #eab308;
-  --meter-danger: #ef4444;
-  --meter-scale: #666666;
-  --meter-text: #cccccc;
-  --meter-clip: #ff0000;
+    /* Functional colors - same in light and dark */
+    --meter-peak: var(--color-success);
+    --meter-rms: var(--color-success-dark);
+    --meter-lufs: var(--color-info);
+    --meter-warning: var(--color-warning);
+    --meter-danger: var(--color-danger);
+    --meter-clip: #ff0000;
 }
 
 /* ============================================================================
@@ -10497,27 +10553,28 @@ nav[aria-label="Pagination"] {
    ============================================================================ */
 
 .vu-meter {
-  display: inline-flex;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Monaco', monospace;
-  font-size: 10px;
-  background: var(--meter-bg);
-  border-radius: 4px;
-  padding: 0;
-  box-sizing: border-box;
-  overflow: hidden;
+    display: inline-flex;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    background: var(--color-bg-secondary);
+    border: var(--border-width) solid var(--color-border-light);
+    border-radius: var(--border-radius-lg);
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .vu-meter__wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
 }
 
 /* Add padding when meter has scale or numeric display */
 .vu-meter--with-scale .vu-meter__wrapper,
 .vu-meter:has(.vu-meter__numeric) .vu-meter__wrapper {
-  padding: 4px;
+    padding: var(--spacing-2);
 }
 
 /* ============================================================================
@@ -10525,205 +10582,205 @@ nav[aria-label="Pagination"] {
    ============================================================================ */
 
 .vu-meter--vertical .vu-meter__area {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  gap: 0;
-  position: relative;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    gap: 0;
+    position: relative;
 }
 
 .vu-meter--vertical .vu-meter__scale {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 20px;
-  pointer-events: none;
-  z-index: 5;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    pointer-events: none;
+    z-index: 5;
 }
 
 .vu-meter--vertical .vu-meter__tick {
-  position: absolute;
-  right: 0;
-  width: 20px;
-  height: 0;
+    position: absolute;
+    right: 0;
+    width: 20px;
+    height: 0;
 }
 
 /* Major ticks - longer line with label */
 .vu-meter--vertical .vu-meter__tick--major::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 5px;
-  top: 0;
-  border-top: 1px solid var(--meter-scale);
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 5px;
+    top: 0;
+    border-top: 1px solid var(--color-text-tertiary);
 }
 
 /* Minor ticks - shorter line, no label */
 .vu-meter--vertical .vu-meter__tick--minor::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 3px;
-  top: 0;
-  border-top: 1px solid var(--meter-scale);
-  opacity: 0.6;
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 3px;
+    top: 0;
+    border-top: 1px solid var(--color-text-tertiary);
+    opacity: 0.6;
 }
 
 .vu-meter--vertical .vu-meter__tick-label {
-  position: absolute;
-  left: 7px;
-  top: -4px;
-  color: var(--meter-scale);
-  font-size: 8px;
-  font-weight: 400;
-  line-height: 1;
+    position: absolute;
+    left: 7px;
+    top: -4px;
+    color: var(--color-text-tertiary);
+    font-size: 8px;
+    font-weight: var(--font-weight-normal);
+    line-height: 1;
 }
 
 /* Hide labels when meter is too short */
 .vu-meter--compact-scale .vu-meter__tick-label {
-  display: none;
+    display: none;
 }
 
 /* In compact mode, make ticks shorter since no labels */
 .vu-meter--compact-scale .vu-meter__tick--major::before {
-  width: 3px;
+    width: 3px;
 }
 
 .vu-meter--compact-scale .vu-meter__tick--minor::before {
-  width: 2px;
+    width: 2px;
 }
 
 .vu-meter--vertical .vu-meter__bars {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  gap: 1px;
-  flex: 1;
-  height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 1px;
+    flex: 1;
+    height: 100%;
 }
 
 /* Only add margin when scale is present */
 .vu-meter--vertical.vu-meter--with-scale .vu-meter__bars {
-  margin-right: 22px;
+    margin-right: 22px;
 }
 
 .vu-meter--vertical .vu-meter__bar {
-  position: relative;
-  border-radius: 0;
-  overflow: hidden;
+    position: relative;
+    border-radius: 0;
+    overflow: hidden;
 }
 
 /* Peak bar - normal width with background zones */
 .vu-meter--vertical .vu-meter__bar--peak {
-  flex: 3;
-  min-width: 12px;
-  /* Background zones - ITU-R style */
-  /* Range: -90 to +6 (96dB total) */
-  /* -20dB position: (70/96) = 72.9% */
-  /* -10dB position: (80/96) = 83.3% */
-  background: linear-gradient(to top,
-    rgba(34, 197, 94, 0.08) 0%,           /* safe - faint green */
-    rgba(34, 197, 94, 0.08) 72.9%,        /* -20dB position */
-    rgba(234, 179, 8, 0.12) 72.9%,        /* warning - faint yellow */
-    rgba(234, 179, 8, 0.12) 83.3%,        /* -10dB position */
-    rgba(239, 68, 68, 0.15) 83.3%,        /* danger - faint red */
-    rgba(239, 68, 68, 0.15) 100%
-  );
+    flex: 3;
+    min-width: 12px;
+    /* Background zones - ITU-R style */
+    /* Range: -90 to +6 (96dB total) */
+    /* -20dB position: (70/96) = 72.9% */
+    /* -10dB position: (80/96) = 83.3% */
+    background: linear-gradient(to top,
+        rgba(125, 180, 108, 0.15) 0%,
+        rgba(125, 180, 108, 0.15) 72.9%,
+        rgba(204, 136, 0, 0.15) 72.9%,
+        rgba(204, 136, 0, 0.15) 83.3%,
+        rgba(216, 68, 68, 0.15) 83.3%,
+        rgba(216, 68, 68, 0.15) 100%
+    );
 }
 
 /* Active fill gradient overlay - revealed by clip-path from JS */
 .vu-meter--vertical .vu-meter__bar--peak::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top,
-    var(--meter-peak) 0%,
-    var(--meter-peak) 72.9%,
-    var(--meter-warning) 72.9%,
-    var(--meter-warning) 83.3%,
-    var(--meter-danger) 83.3%,
-    var(--meter-danger) 100%
-  );
-  /* clip-path: inset(top right bottom left) - clip from top */
-  clip-path: inset(var(--peak-clip, 100%) 0 0 0);
-  transition: clip-path 100ms ease-out;
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top,
+        var(--meter-peak) 0%,
+        var(--meter-peak) 72.9%,
+        var(--meter-warning) 72.9%,
+        var(--meter-warning) 83.3%,
+        var(--meter-danger) 83.3%,
+        var(--meter-danger) 100%
+    );
+    /* clip-path: inset(top right bottom left) - clip from top */
+    clip-path: inset(var(--peak-clip, 100%) 0 0 0);
+    transition: clip-path 100ms ease-out;
 }
 
 /* RMS bar - thin with background zones */
 .vu-meter--vertical .vu-meter__bar--rms {
-  flex: 1;
-  min-width: 4px;
-  max-width: 6px;
-  /* RMS zones: safe < -18dB, nominal -18 to -12, hot > -12 */
-  /* Range -90 to +6: -18dB = 75%, -12dB = 81.25% */
-  background: linear-gradient(to top,
-    rgba(34, 197, 94, 0.1) 0%,
-    rgba(34, 197, 94, 0.1) 75%,
-    rgba(234, 179, 8, 0.15) 75%,
-    rgba(234, 179, 8, 0.15) 81.25%,
-    rgba(239, 68, 68, 0.18) 81.25%,
-    rgba(239, 68, 68, 0.18) 100%
-  );
+    flex: 1;
+    min-width: 4px;
+    max-width: 6px;
+    /* RMS zones: safe < -18dB, nominal -18 to -12, hot > -12 */
+    /* Range -90 to +6: -18dB = 75%, -12dB = 81.25% */
+    background: linear-gradient(to top,
+        rgba(125, 180, 108, 0.12) 0%,
+        rgba(125, 180, 108, 0.12) 75%,
+        rgba(204, 136, 0, 0.15) 75%,
+        rgba(204, 136, 0, 0.15) 81.25%,
+        rgba(216, 68, 68, 0.18) 81.25%,
+        rgba(216, 68, 68, 0.18) 100%
+    );
 }
 
 /* LUFS bar - thin with background zones */
 .vu-meter--vertical .vu-meter__bar--lufs {
-  flex: 1;
-  min-width: 4px;
-  max-width: 6px;
-  /* LUFS zones: target -24 to -14, loud -14 to -9, too loud > -9 */
-  /* Range -90 to +6: -24dB = 68.75%, -14dB = 79.2%, -9dB = 84.4% */
-  background: linear-gradient(to top,
-    rgba(30, 30, 30, 0.8) 0%,
-    rgba(30, 30, 30, 0.8) 68.75%,
-    rgba(59, 130, 246, 0.12) 68.75%,
-    rgba(59, 130, 246, 0.12) 79.2%,
-    rgba(234, 179, 8, 0.15) 79.2%,
-    rgba(234, 179, 8, 0.15) 84.4%,
-    rgba(239, 68, 68, 0.18) 84.4%,
-    rgba(239, 68, 68, 0.18) 100%
-  );
+    flex: 1;
+    min-width: 4px;
+    max-width: 6px;
+    /* LUFS zones: target -24 to -14, loud -14 to -9, too loud > -9 */
+    /* Range -90 to +6: -24dB = 68.75%, -14dB = 79.2%, -9dB = 84.4% */
+    background: linear-gradient(to top,
+        var(--color-bg-tertiary) 0%,
+        var(--color-bg-tertiary) 68.75%,
+        rgba(44, 127, 184, 0.15) 68.75%,
+        rgba(44, 127, 184, 0.15) 79.2%,
+        rgba(204, 136, 0, 0.15) 79.2%,
+        rgba(204, 136, 0, 0.15) 84.4%,
+        rgba(216, 68, 68, 0.18) 84.4%,
+        rgba(216, 68, 68, 0.18) 100%
+    );
 }
 
 .vu-meter--vertical .vu-meter__fill {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  border-radius: 0;
-  /* PPM-style response: fast attack, slower release */
-  transition: height 100ms ease-out;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0;
+    /* PPM-style response: fast attack, slower release */
+    transition: height 100ms ease-out;
 }
 
 .vu-meter--vertical .vu-meter__bar--peak .vu-meter__fill {
-  /* Hidden - using ::before pseudo-element with clip-path instead */
-  display: none;
+    /* Hidden - using ::before pseudo-element with clip-path instead */
+    display: none;
 }
 
 /* RMS bar fill - solid dark green */
 .vu-meter--vertical .vu-meter__bar--rms .vu-meter__fill {
-  background: var(--meter-rms);
+    background: var(--meter-rms);
 }
 
 /* LUFS bar fill - blue/cyan for loudness */
 .vu-meter--vertical .vu-meter__bar--lufs .vu-meter__fill {
-  background: var(--meter-lufs, #3b82f6);
+    background: var(--meter-lufs);
 }
 
 .vu-meter--vertical .vu-meter__hold {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--meter-hold);
-  transition: bottom 50ms linear;
-  z-index: 10;
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--color-text-primary);
+    transition: bottom 50ms linear;
+    z-index: 10;
 }
 
 .vu-meter--vertical .vu-meter__hold--clip {
-  background: var(--meter-clip);
-  box-shadow: 0 0 4px var(--meter-clip);
+    background: var(--meter-clip);
+    box-shadow: 0 0 4px var(--meter-clip);
 }
 
 /* ============================================================================
@@ -10731,180 +10788,180 @@ nav[aria-label="Pagination"] {
    ============================================================================ */
 
 .vu-meter--horizontal .vu-meter__wrapper {
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-4);
 }
 
 .vu-meter--horizontal .vu-meter__area {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
 }
 
 .vu-meter--horizontal .vu-meter__scale {
-  position: relative;
-  width: 100%;
-  height: 12px;
+    position: relative;
+    width: 100%;
+    height: 12px;
 }
 
 .vu-meter--horizontal .vu-meter__tick {
-  position: absolute;
-  top: 0;
-  width: 0;
-  height: 12px;
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 12px;
 }
 
 /* Major ticks horizontal */
 .vu-meter--horizontal .vu-meter__tick--major::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 5px;
-  border-left: 1px solid var(--meter-scale);
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5px;
+    border-left: 1px solid var(--color-text-tertiary);
 }
 
 /* Minor ticks horizontal */
 .vu-meter--horizontal .vu-meter__tick--minor::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 3px;
-  border-left: 1px solid var(--meter-scale);
-  opacity: 0.6;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 3px;
+    border-left: 1px solid var(--color-text-tertiary);
+    opacity: 0.6;
 }
 
 .vu-meter--horizontal .vu-meter__tick-label {
-  position: absolute;
-  top: 5px;
-  left: 2px;
-  color: var(--meter-scale);
-  font-size: 7px;
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    color: var(--color-text-tertiary);
+    font-size: 7px;
 }
 
 .vu-meter--horizontal .vu-meter__bars {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-  width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    width: 100%;
 }
 
 .vu-meter--horizontal .vu-meter__bar {
-  position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 2px;
-  overflow: hidden;
+    position: relative;
+    background: var(--color-bg-hover);
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
 }
 
 /* Peak bar - normal height with background zones */
 .vu-meter--horizontal .vu-meter__bar--peak {
-  flex: 3;
-  min-height: 8px;
-  /* Background zones - ITU-R style (horizontal) */
-  /* Range: -90 to +6 (96dB total) */
-  background: linear-gradient(to right,
-    rgba(34, 197, 94, 0.08) 0%,
-    rgba(34, 197, 94, 0.08) 72.9%,
-    rgba(234, 179, 8, 0.12) 72.9%,
-    rgba(234, 179, 8, 0.12) 83.3%,
-    rgba(239, 68, 68, 0.15) 83.3%,
-    rgba(239, 68, 68, 0.15) 100%
-  );
+    flex: 3;
+    min-height: 8px;
+    /* Background zones - ITU-R style (horizontal) */
+    /* Range: -90 to +6 (96dB total) */
+    background: linear-gradient(to right,
+        rgba(125, 180, 108, 0.15) 0%,
+        rgba(125, 180, 108, 0.15) 72.9%,
+        rgba(204, 136, 0, 0.15) 72.9%,
+        rgba(204, 136, 0, 0.15) 83.3%,
+        rgba(216, 68, 68, 0.15) 83.3%,
+        rgba(216, 68, 68, 0.15) 100%
+    );
 }
 
 /* Active fill gradient overlay - revealed by clip-path from JS */
 .vu-meter--horizontal .vu-meter__bar--peak::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right,
-    var(--meter-peak) 0%,
-    var(--meter-peak) 72.9%,
-    var(--meter-warning) 72.9%,
-    var(--meter-warning) 83.3%,
-    var(--meter-danger) 83.3%,
-    var(--meter-danger) 100%
-  );
-  /* clip-path: inset(top right bottom left) - clip from right */
-  clip-path: inset(0 var(--peak-clip, 100%) 0 0);
-  transition: clip-path 100ms ease-out;
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right,
+        var(--meter-peak) 0%,
+        var(--meter-peak) 72.9%,
+        var(--meter-warning) 72.9%,
+        var(--meter-warning) 83.3%,
+        var(--meter-danger) 83.3%,
+        var(--meter-danger) 100%
+    );
+    /* clip-path: inset(top right bottom left) - clip from right */
+    clip-path: inset(0 var(--peak-clip, 100%) 0 0);
+    transition: clip-path 100ms ease-out;
 }
 
 /* RMS bar - thin with background zones */
 .vu-meter--horizontal .vu-meter__bar--rms {
-  flex: 1;
-  min-height: 3px;
-  max-height: 4px;
-  background: linear-gradient(to right,
-    rgba(34, 197, 94, 0.1) 0%,
-    rgba(34, 197, 94, 0.1) 75%,
-    rgba(234, 179, 8, 0.15) 75%,
-    rgba(234, 179, 8, 0.15) 81.25%,
-    rgba(239, 68, 68, 0.18) 81.25%,
-    rgba(239, 68, 68, 0.18) 100%
-  );
+    flex: 1;
+    min-height: 3px;
+    max-height: 4px;
+    background: linear-gradient(to right,
+        rgba(125, 180, 108, 0.12) 0%,
+        rgba(125, 180, 108, 0.12) 75%,
+        rgba(204, 136, 0, 0.15) 75%,
+        rgba(204, 136, 0, 0.15) 81.25%,
+        rgba(216, 68, 68, 0.18) 81.25%,
+        rgba(216, 68, 68, 0.18) 100%
+    );
 }
 
 /* LUFS bar - thin with background zones */
 .vu-meter--horizontal .vu-meter__bar--lufs {
-  flex: 1;
-  min-height: 3px;
-  max-height: 4px;
-  background: linear-gradient(to right,
-    rgba(30, 30, 30, 0.8) 0%,
-    rgba(30, 30, 30, 0.8) 68.75%,
-    rgba(59, 130, 246, 0.12) 68.75%,
-    rgba(59, 130, 246, 0.12) 79.2%,
-    rgba(234, 179, 8, 0.15) 79.2%,
-    rgba(234, 179, 8, 0.15) 84.4%,
-    rgba(239, 68, 68, 0.18) 84.4%,
-    rgba(239, 68, 68, 0.18) 100%
-  );
+    flex: 1;
+    min-height: 3px;
+    max-height: 4px;
+    background: linear-gradient(to right,
+        var(--color-bg-tertiary) 0%,
+        var(--color-bg-tertiary) 68.75%,
+        rgba(44, 127, 184, 0.15) 68.75%,
+        rgba(44, 127, 184, 0.15) 79.2%,
+        rgba(204, 136, 0, 0.15) 79.2%,
+        rgba(204, 136, 0, 0.15) 84.4%,
+        rgba(216, 68, 68, 0.18) 84.4%,
+        rgba(216, 68, 68, 0.18) 100%
+    );
 }
 
 .vu-meter--horizontal .vu-meter__fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  border-radius: 2px;
-  /* PPM-style response: fast attack, slower release */
-  transition: width 100ms ease-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border-radius: var(--border-radius-sm);
+    /* PPM-style response: fast attack, slower release */
+    transition: width 100ms ease-out;
 }
 
 .vu-meter--horizontal .vu-meter__bar--peak .vu-meter__fill {
-  /* Hidden - using ::before pseudo-element with clip-path instead */
-  display: none;
+    /* Hidden - using ::before pseudo-element with clip-path instead */
+    display: none;
 }
 
 /* RMS bar fill horizontal - solid dark green */
 .vu-meter--horizontal .vu-meter__bar--rms .vu-meter__fill {
-  background: var(--meter-rms);
+    background: var(--meter-rms);
 }
 
 /* LUFS bar fill horizontal - blue */
 .vu-meter--horizontal .vu-meter__bar--lufs .vu-meter__fill {
-  background: var(--meter-lufs);
+    background: var(--meter-lufs);
 }
 
 .vu-meter--horizontal .vu-meter__hold {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--meter-hold);
-  transition: left 50ms linear;
-  z-index: 10;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-text-primary);
+    transition: left 50ms linear;
+    z-index: 10;
 }
 
 .vu-meter--horizontal .vu-meter__hold--clip {
-  background: var(--meter-clip);
-  box-shadow: 0 0 4px var(--meter-clip);
+    background: var(--meter-clip);
+    box-shadow: 0 0 4px var(--meter-clip);
 }
 
 /* ============================================================================
@@ -10912,22 +10969,22 @@ nav[aria-label="Pagination"] {
    ============================================================================ */
 
 .vu-meter__numeric {
-  text-align: center;
-  color: var(--meter-text);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 0;
-  font-variant-numeric: tabular-nums;
+    text-align: center;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--spacing-2) 0;
+    font-variant-numeric: tabular-nums;
 }
 
 .vu-meter--horizontal .vu-meter__numeric {
-  min-width: 40px;
-  padding: 0 4px;
-  font-size: 11px;
+    min-width: 40px;
+    padding: 0 var(--spacing-2);
+    font-size: var(--font-size-base);
 }
 
 .vu-meter__numeric--clip {
-  color: var(--meter-clip);
+    color: var(--meter-clip);
 }
 
 /* ============================================================================
@@ -10935,26 +10992,26 @@ nav[aria-label="Pagination"] {
    ============================================================================ */
 
 .vu-meter__lufs {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: var(--spacing-4);
+    border-top: var(--border-width) solid var(--color-border-light);
+    margin-top: var(--spacing-4);
 }
 
 .vu-meter__lufs-label {
-  color: var(--meter-scale);
-  font-size: 8px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+    color: var(--color-text-tertiary);
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .vu-meter__lufs-value {
-  color: var(--meter-text);
-  font-size: 14px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    font-variant-numeric: tabular-nums;
 }
 
 /* ============================================================================
@@ -10962,23 +11019,109 @@ nav[aria-label="Pagination"] {
    ============================================================================ */
 
 .vu-meter--horizontal.vu-meter--compact {
-  padding: 2px;
+    padding: var(--spacing-1);
 }
 
 .vu-meter--horizontal.vu-meter--compact .vu-meter__numeric {
-  font-size: 10px;
-  min-width: 32px;
+    font-size: var(--font-size-sm);
+    min-width: 32px;
 }
 
 .vu-meter--horizontal.vu-meter--compact .vu-meter__bar {
-  min-height: 4px;
+    min-height: 4px;
+}
+
+/* ============================================================================
+   Dark Mode
+   ============================================================================ */
+
+[data-theme="dark"] .vu-meter {
+    border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .vu-meter__hold {
+    background: var(--color-text-white);
+}
+
+/* Stronger zone backgrounds in dark mode for better visibility */
+[data-theme="dark"] .vu-meter--vertical .vu-meter__bar--peak,
+[data-theme="dark"] .vu-meter--horizontal .vu-meter__bar--peak {
+    background: linear-gradient(to top,
+        rgba(34, 197, 94, 0.08) 0%,
+        rgba(34, 197, 94, 0.08) 72.9%,
+        rgba(234, 179, 8, 0.12) 72.9%,
+        rgba(234, 179, 8, 0.12) 83.3%,
+        rgba(239, 68, 68, 0.15) 83.3%,
+        rgba(239, 68, 68, 0.15) 100%
+    );
+}
+
+[data-theme="dark"] .vu-meter--horizontal .vu-meter__bar--peak {
+    background: linear-gradient(to right,
+        rgba(34, 197, 94, 0.08) 0%,
+        rgba(34, 197, 94, 0.08) 72.9%,
+        rgba(234, 179, 8, 0.12) 72.9%,
+        rgba(234, 179, 8, 0.12) 83.3%,
+        rgba(239, 68, 68, 0.15) 83.3%,
+        rgba(239, 68, 68, 0.15) 100%
+    );
+}
+
+[data-theme="dark"] .vu-meter--vertical .vu-meter__bar--rms,
+[data-theme="dark"] .vu-meter--horizontal .vu-meter__bar--rms {
+    background: linear-gradient(to top,
+        rgba(34, 197, 94, 0.1) 0%,
+        rgba(34, 197, 94, 0.1) 75%,
+        rgba(234, 179, 8, 0.15) 75%,
+        rgba(234, 179, 8, 0.15) 81.25%,
+        rgba(239, 68, 68, 0.18) 81.25%,
+        rgba(239, 68, 68, 0.18) 100%
+    );
+}
+
+[data-theme="dark"] .vu-meter--horizontal .vu-meter__bar--rms {
+    background: linear-gradient(to right,
+        rgba(34, 197, 94, 0.1) 0%,
+        rgba(34, 197, 94, 0.1) 75%,
+        rgba(234, 179, 8, 0.15) 75%,
+        rgba(234, 179, 8, 0.15) 81.25%,
+        rgba(239, 68, 68, 0.18) 81.25%,
+        rgba(239, 68, 68, 0.18) 100%
+    );
+}
+
+[data-theme="dark"] .vu-meter--vertical .vu-meter__bar--lufs {
+    background: linear-gradient(to top,
+        rgba(30, 30, 30, 0.8) 0%,
+        rgba(30, 30, 30, 0.8) 68.75%,
+        rgba(59, 130, 246, 0.12) 68.75%,
+        rgba(59, 130, 246, 0.12) 79.2%,
+        rgba(234, 179, 8, 0.15) 79.2%,
+        rgba(234, 179, 8, 0.15) 84.4%,
+        rgba(239, 68, 68, 0.18) 84.4%,
+        rgba(239, 68, 68, 0.18) 100%
+    );
+}
+
+[data-theme="dark"] .vu-meter--horizontal .vu-meter__bar--lufs {
+    background: linear-gradient(to right,
+        rgba(30, 30, 30, 0.8) 0%,
+        rgba(30, 30, 30, 0.8) 68.75%,
+        rgba(59, 130, 246, 0.12) 68.75%,
+        rgba(59, 130, 246, 0.12) 79.2%,
+        rgba(234, 179, 8, 0.15) 79.2%,
+        rgba(234, 179, 8, 0.15) 84.4%,
+        rgba(239, 68, 68, 0.18) 84.4%,
+        rgba(239, 68, 68, 0.18) 100%
+    );
 }
 /**
  * UIKit Matrix Component
  * Matrice de routage audio style Dante Controller
+ * Support Light/Dark mode via tokens
  */
 
-/* === TOKENS === */
+/* === TOKENS (dimensions only) === */
 
 :root {
     --matrix-cell-size: 28px;
@@ -10986,16 +11129,6 @@ nav[aria-label="Pagination"] {
     --matrix-header-width: 140px;
     --matrix-col-header-height: 120px;
     --matrix-device-row-height: 24px;
-    --matrix-bg: #1a1a1c;
-    --matrix-header-bg: #2a2a2c;
-    --matrix-device-bg: #232325;
-    --matrix-cell-bg: #3a3a3c;
-    --matrix-cell-hover: #4a4a4c;
-    --matrix-active-color: #22c55e;
-    --matrix-highlight-color: #0891b2;
-    --matrix-border-color: #2a2a2c;
-    --matrix-text: #e5e5e5;
-    --matrix-text-dim: #888888;
 }
 
 /* === CONTAINER === */
@@ -11003,11 +11136,12 @@ nav[aria-label="Pagination"] {
 .matrix {
     display: flex;
     flex-direction: column;
-    background: var(--matrix-bg);
+    background: var(--color-bg-secondary);
+    border: var(--border-width) solid var(--color-border-light);
     border-radius: var(--border-radius-lg);
     overflow: hidden;
     font-size: var(--font-size-sm);
-    color: var(--matrix-text);
+    color: var(--color-text-primary);
 }
 
 /* === SCROLL CONTAINER === */
@@ -11023,7 +11157,7 @@ nav[aria-label="Pagination"] {
 .matrix-table {
     border-collapse: separate;
     border-spacing: 1px;
-    background: var(--matrix-border-color);
+    background: var(--color-border-light);
 }
 
 /* === CORNER CELL === */
@@ -11036,11 +11170,11 @@ nav[aria-label="Pagination"] {
     min-width: var(--matrix-header-width);
     height: var(--matrix-col-header-height);
     padding: var(--spacing-2);
-    background: var(--matrix-header-bg);
+    background: var(--color-bg-tertiary);
     text-align: left;
     vertical-align: bottom;
     font-weight: var(--font-weight-medium);
-    color: var(--matrix-text-dim);
+    color: var(--color-text-tertiary);
 }
 
 /* === COLUMN HEADERS === */
@@ -11053,11 +11187,11 @@ nav[aria-label="Pagination"] {
     min-width: var(--matrix-cell-size);
     height: var(--matrix-col-header-height);
     padding: var(--spacing-2) var(--spacing-1);
-    background: var(--matrix-header-bg);
+    background: var(--color-bg-tertiary);
     text-align: center;
     vertical-align: bottom;
     font-weight: var(--font-weight-normal);
-    color: var(--matrix-text);
+    color: var(--color-text-primary);
     white-space: nowrap;
     overflow: hidden;
 }
@@ -11076,11 +11210,12 @@ nav[aria-label="Pagination"] {
 
 /* Highlighted column header */
 .matrix-col-header.highlight {
-    background: var(--matrix-highlight-color);
+    background: var(--color-info);
+    color: var(--color-text-white);
 }
 
 .matrix-col-header.highlight .matrix-header-text {
-    color: white;
+    color: var(--color-text-white);
 }
 
 /* === DEVICE ROW (hardware names) === */
@@ -11092,10 +11227,10 @@ nav[aria-label="Pagination"] {
     z-index: 2;
     height: var(--matrix-device-row-height);
     padding: 0 var(--spacing-2);
-    background: var(--matrix-device-bg);
+    background: var(--color-bg-hover);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-medium);
-    color: var(--matrix-text);
+    color: var(--color-text-primary);
     text-align: center;
     vertical-align: middle;
     white-space: nowrap;
@@ -11107,13 +11242,13 @@ nav[aria-label="Pagination"] {
     left: 0;
     z-index: 3;
     text-align: left;
-    color: var(--matrix-text-dim);
+    color: var(--color-text-tertiary);
 }
 
 /* Device cell spans multiple columns */
 .matrix-device-cell {
-    background: var(--matrix-device-bg);
-    border-left: 1px solid var(--matrix-border-color);
+    background: var(--color-bg-hover);
+    border-left: 1px solid var(--color-border-light);
 }
 
 .matrix-device-cell:first-of-type {
@@ -11130,11 +11265,11 @@ nav[aria-label="Pagination"] {
     max-width: var(--matrix-header-width);
     height: var(--matrix-cell-size);
     padding: 0 var(--spacing-3);
-    background: var(--matrix-header-bg);
+    background: var(--color-bg-tertiary);
     text-align: left;
     vertical-align: middle;
     font-weight: var(--font-weight-normal);
-    color: var(--matrix-text);
+    color: var(--color-text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -11144,24 +11279,24 @@ nav[aria-label="Pagination"] {
 /* Row selection */
 .matrix-row-header.selected,
 tr.selected .matrix-row-header {
-    background: var(--matrix-highlight-color);
-    color: white;
+    background: var(--color-info);
+    color: var(--color-text-white);
 }
 
 /* === ROW GROUPS (hierarchical) === */
 
 .matrix-row-group {
-    background: var(--matrix-bg);
+    background: var(--color-bg-secondary);
 }
 
 .matrix-row-group .matrix-row-header {
-    background: var(--matrix-device-bg);
+    background: var(--color-bg-hover);
     font-weight: var(--font-weight-medium);
-    color: var(--matrix-text);
+    color: var(--color-text-primary);
 }
 
 .matrix-row-group .matrix-cell {
-    background: var(--matrix-device-bg);
+    background: var(--color-bg-hover);
 }
 
 /* Expand/collapse toggle */
@@ -11174,7 +11309,7 @@ tr.selected .matrix-row-header {
     margin-right: var(--spacing-1);
     background: transparent;
     border: none;
-    color: var(--matrix-text-dim);
+    color: var(--color-text-tertiary);
     cursor: pointer;
     font-size: 10px;
     transition: transform var(--transition-fast);
@@ -11189,7 +11324,7 @@ tr.selected .matrix-row-header {
 }
 
 .matrix-row-toggle:hover {
-    color: var(--matrix-text);
+    color: var(--color-text-primary);
 }
 
 /* Indentation for child rows */
@@ -11209,10 +11344,10 @@ tr.selected .matrix-row-header {
     width: 14px;
     height: 14px;
     margin-right: var(--spacing-1);
-    background: var(--matrix-cell-bg);
+    background: var(--color-bg-active);
     border-radius: 2px;
     font-size: 8px;
-    color: var(--matrix-text-dim);
+    color: var(--color-text-tertiary);
 }
 
 .matrix-channel-icon::before {
@@ -11227,7 +11362,7 @@ tr.selected .matrix-row-header {
     min-width: var(--matrix-cell-size);
     height: var(--matrix-cell-size);
     padding: 0;
-    background: var(--matrix-cell-bg);
+    background: var(--color-bg-primary);
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
@@ -11236,7 +11371,7 @@ tr.selected .matrix-row-header {
 }
 
 .matrix-cell:hover {
-    background: var(--matrix-cell-hover);
+    background: var(--color-bg-hover);
 }
 
 /* Available cell (can be activated) */
@@ -11248,7 +11383,7 @@ tr.selected .matrix-row-header {
     transform: translate(-50%, -50%);
     font-size: 14px;
     font-weight: var(--font-weight-semibold);
-    color: var(--matrix-text-dim);
+    color: var(--color-text-tertiary);
     opacity: 0;
     transition: opacity var(--transition-fast);
 }
@@ -11259,7 +11394,7 @@ tr.selected .matrix-row-header {
 
 /* Active cell (routed) - checkmark by default */
 .matrix-cell.active {
-    background: var(--matrix-active-color);
+    background: var(--color-success);
 }
 
 .matrix-cell.active::after {
@@ -11270,12 +11405,12 @@ tr.selected .matrix-row-header {
     transform: translate(-50%, -50%);
     font-size: 14px;
     font-weight: var(--font-weight-semibold);
-    color: white;
+    color: var(--color-text-white);
 }
 
 /* Disabled cell */
 .matrix-cell.disabled {
-    background: var(--matrix-bg);
+    background: var(--color-bg-secondary);
     cursor: not-allowed;
     opacity: 0.5;
 }
@@ -11287,16 +11422,16 @@ tr.selected .matrix-row-header {
 /* === CELL STATES BY ROW/COL SELECTION === */
 
 tr.selected .matrix-cell {
-    background: var(--matrix-cell-hover);
+    background: var(--color-bg-hover);
 }
 
 tr.selected .matrix-cell.active {
-    background: var(--matrix-active-color);
+    background: var(--color-success);
 }
 
 /* Column highlight on hover (needs JS) */
 .matrix-cell.col-hover {
-    background: var(--matrix-cell-hover);
+    background: var(--color-bg-hover);
 }
 
 /* === STATUS BAR === */
@@ -11307,10 +11442,10 @@ tr.selected .matrix-cell.active {
     justify-content: space-between;
     gap: var(--spacing-4);
     padding: var(--spacing-2) var(--spacing-4);
-    background: var(--matrix-header-bg);
-    border-top: 1px solid var(--matrix-border-color);
+    background: var(--color-bg-tertiary);
+    border-top: 1px solid var(--color-border-light);
     font-size: var(--font-size-xs);
-    color: var(--matrix-text-dim);
+    color: var(--color-text-tertiary);
 }
 
 .matrix-status-left,
@@ -11330,11 +11465,11 @@ tr.selected .matrix-cell.active {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--matrix-text-dim);
+    background: var(--color-text-tertiary);
 }
 
 .matrix-status-indicator.online {
-    background: var(--matrix-active-color);
+    background: var(--color-success);
 }
 
 .matrix-status-indicator.error {
@@ -11349,6 +11484,15 @@ tr.selected .matrix-cell.active {
     --matrix-header-width: 160px;
 }
 
+/* === COMPACT VARIANT === */
+
+.matrix--compact {
+    --matrix-cell-size: 22px;
+    --matrix-col-header-height: 100px;
+    --matrix-header-width: 120px;
+    --matrix-device-row-height: 20px;
+}
+
 /* === SCROLLBAR STYLING === */
 
 .matrix-scroll::-webkit-scrollbar {
@@ -11357,23 +11501,27 @@ tr.selected .matrix-cell.active {
 }
 
 .matrix-scroll::-webkit-scrollbar-track {
-    background: var(--matrix-bg);
+    background: var(--color-bg-secondary);
 }
 
 .matrix-scroll::-webkit-scrollbar-thumb {
-    background: var(--matrix-cell-bg);
+    background: var(--color-bg-active);
     border-radius: 5px;
 }
 
 .matrix-scroll::-webkit-scrollbar-thumb:hover {
-    background: var(--matrix-cell-hover);
+    background: var(--color-border-dark);
 }
 
 .matrix-scroll::-webkit-scrollbar-corner {
-    background: var(--matrix-bg);
+    background: var(--color-bg-secondary);
 }
 
 /* === LOADING STATE === */
+
+.matrix.loading {
+    position: relative;
+}
 
 .matrix.loading .matrix-scroll {
     opacity: 0.5;
@@ -11388,8 +11536,8 @@ tr.selected .matrix-cell.active {
     transform: translate(-50%, -50%);
     width: 24px;
     height: 24px;
-    border: 2px solid var(--matrix-text-dim);
-    border-top-color: var(--matrix-active-color);
+    border: 2px solid var(--color-text-tertiary);
+    border-top-color: var(--color-success);
     border-radius: 50%;
     animation: matrix-spin 0.8s linear infinite;
 }
@@ -11409,11 +11557,45 @@ tr.selected .matrix-cell.active {
     justify-content: center;
     gap: var(--spacing-3);
     padding: var(--spacing-12);
-    color: var(--matrix-text-dim);
+    color: var(--color-text-tertiary);
     text-align: center;
 }
 
 .matrix-empty-icon {
     font-size: 32px;
     opacity: 0.5;
+}
+
+/* === DARK MODE === */
+
+[data-theme="dark"] .matrix {
+    border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .matrix-table {
+    background: var(--color-border-dark);
+}
+
+[data-theme="dark"] .matrix-cell {
+    background: var(--color-bg-tertiary);
+}
+
+[data-theme="dark"] .matrix-cell:hover {
+    background: var(--color-bg-active);
+}
+
+[data-theme="dark"] .matrix-cell.available::after {
+    color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] tr.selected .matrix-cell {
+    background: var(--color-bg-active);
+}
+
+[data-theme="dark"] .matrix-cell.col-hover {
+    background: var(--color-bg-active);
+}
+
+[data-theme="dark"] .matrix-device-cell {
+    border-left-color: var(--color-border-dark);
 }
