@@ -1,0 +1,429 @@
+/**
+ * UIKit Stepper
+ * Indicateur d'etapes numerotees avec etats completed, active et pending
+ * Support orientations horizontale et verticale
+ */
+
+/* === BASE === */
+
+.stepper {
+    display: flex;
+    gap: var(--spacing-4);
+}
+
+.stepper-step {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    flex: 1;
+    position: relative;
+}
+
+/* === STEP INDICATOR (numero/icone) === */
+
+.stepper-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    background: var(--color-bg-hover);
+    border: var(--border-width-thick) solid var(--color-border-medium);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    transition: all var(--transition-base);
+    z-index: 1;
+}
+
+/* === STEP CONTENT === */
+
+.stepper-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    padding-top: var(--spacing-1);
+    min-width: 0;
+    flex: 1;
+}
+
+.stepper-title {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-tertiary);
+    line-height: var(--line-height-tight);
+    transition: color var(--transition-base);
+}
+
+.stepper-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    line-height: var(--line-height-base);
+}
+
+/* === CONNECTOR LINE === */
+
+.stepper-step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    background: var(--color-border-medium);
+    transition: background var(--transition-base);
+}
+
+/* Horizontal connector (default) */
+.stepper:not(.stepper-vertical) .stepper-step:not(:last-child)::after {
+    top: 14px;
+    left: calc(28px + var(--spacing-3));
+    right: calc(-1 * var(--spacing-4));
+    height: 2px;
+}
+
+/* === STATES === */
+
+/* Active state */
+.stepper-step.active .stepper-indicator {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-white);
+}
+
+.stepper-step.active .stepper-title {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Completed state */
+.stepper-step.completed .stepper-indicator {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: var(--color-text-white);
+}
+
+.stepper-step.completed .stepper-title {
+    color: var(--color-text-primary);
+}
+
+.stepper-step.completed:not(:last-child)::after {
+    background: var(--color-success);
+}
+
+/* Completed checkmark icon */
+.stepper-step.completed .stepper-indicator::before {
+    content: "\2713";
+    font-size: var(--font-size-base);
+}
+
+.stepper-step.completed .stepper-indicator-number {
+    display: none;
+}
+
+/* Error state */
+.stepper-step.error .stepper-indicator {
+    background: var(--color-danger);
+    border-color: var(--color-danger);
+    color: var(--color-text-white);
+}
+
+.stepper-step.error .stepper-title {
+    color: var(--color-danger);
+}
+
+/* Error X icon */
+.stepper-step.error .stepper-indicator::before {
+    content: "\00d7";
+    font-size: var(--font-size-lg);
+}
+
+.stepper-step.error .stepper-indicator-number {
+    display: none;
+}
+
+/* === VERTICAL ORIENTATION === */
+
+.stepper-vertical {
+    flex-direction: column;
+    gap: 0;
+}
+
+.stepper-vertical .stepper-step {
+    padding-bottom: var(--spacing-8);
+}
+
+.stepper-vertical .stepper-step:last-child {
+    padding-bottom: 0;
+}
+
+.stepper-vertical .stepper-step:not(:last-child)::after {
+    top: calc(28px + var(--spacing-2));
+    left: 13px;
+    bottom: var(--spacing-2);
+    right: auto;
+    width: 2px;
+    height: auto;
+}
+
+.stepper-vertical .stepper-content {
+    padding-top: var(--spacing-1);
+    padding-bottom: 0;
+}
+
+/* === SIZES === */
+
+/* Small */
+.stepper-sm .stepper-indicator {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    font-size: var(--font-size-xs);
+}
+
+.stepper-sm:not(.stepper-vertical) .stepper-step:not(:last-child)::after {
+    top: 11px;
+    left: calc(22px + var(--spacing-3));
+}
+
+.stepper-sm.stepper-vertical .stepper-step:not(:last-child)::after {
+    left: 10px;
+    top: calc(22px + var(--spacing-2));
+}
+
+.stepper-sm .stepper-title {
+    font-size: var(--font-size-sm);
+}
+
+.stepper-sm .stepper-description {
+    font-size: var(--font-size-xs);
+}
+
+/* Large */
+.stepper-lg .stepper-indicator {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    font-size: var(--font-size-md);
+}
+
+.stepper-lg:not(.stepper-vertical) .stepper-step:not(:last-child)::after {
+    top: 18px;
+    left: calc(36px + var(--spacing-3));
+}
+
+.stepper-lg.stepper-vertical .stepper-step:not(:last-child)::after {
+    left: 17px;
+    top: calc(36px + var(--spacing-2));
+}
+
+.stepper-lg .stepper-title {
+    font-size: var(--font-size-md);
+}
+
+.stepper-lg .stepper-description {
+    font-size: var(--font-size-base);
+}
+
+/* === VARIANTS === */
+
+/* Compact - without descriptions */
+.stepper-compact .stepper-content {
+    padding-top: var(--spacing-2);
+}
+
+.stepper-compact .stepper-description {
+    display: none;
+}
+
+/* Clickable steps */
+.stepper-clickable .stepper-step {
+    cursor: pointer;
+}
+
+.stepper-clickable .stepper-step:hover .stepper-indicator {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+.stepper-clickable .stepper-step.completed:hover .stepper-indicator,
+.stepper-clickable .stepper-step.active:hover .stepper-indicator {
+    opacity: 0.9;
+}
+
+/* Dotted connector */
+.stepper-dotted .stepper-step:not(:last-child)::after {
+    background: transparent;
+    border: none;
+    background-image: repeating-linear-gradient(
+        to right,
+        var(--color-border-medium) 0,
+        var(--color-border-medium) 4px,
+        transparent 4px,
+        transparent 8px
+    );
+}
+
+.stepper-dotted.stepper-vertical .stepper-step:not(:last-child)::after {
+    background-image: repeating-linear-gradient(
+        to bottom,
+        var(--color-border-medium) 0,
+        var(--color-border-medium) 4px,
+        transparent 4px,
+        transparent 8px
+    );
+}
+
+.stepper-dotted .stepper-step.completed:not(:last-child)::after {
+    background-image: repeating-linear-gradient(
+        to right,
+        var(--color-success) 0,
+        var(--color-success) 4px,
+        transparent 4px,
+        transparent 8px
+    );
+}
+
+.stepper-dotted.stepper-vertical .stepper-step.completed:not(:last-child)::after {
+    background-image: repeating-linear-gradient(
+        to bottom,
+        var(--color-success) 0,
+        var(--color-success) 4px,
+        transparent 4px,
+        transparent 8px
+    );
+}
+
+/* === ALTERNATIVE LAYOUTS === */
+
+/* Center aligned (horizontal only) */
+.stepper-centered:not(.stepper-vertical) .stepper-step {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.stepper-centered:not(.stepper-vertical) .stepper-content {
+    padding-top: var(--spacing-3);
+}
+
+.stepper-centered:not(.stepper-vertical) .stepper-step:not(:last-child)::after {
+    top: 14px;
+    left: calc(50% + 14px + var(--spacing-2));
+    right: calc(50% - 14px + var(--spacing-2));
+}
+
+.stepper-centered.stepper-sm:not(.stepper-vertical) .stepper-step:not(:last-child)::after {
+    top: 11px;
+    left: calc(50% + 11px + var(--spacing-2));
+    right: calc(50% - 11px + var(--spacing-2));
+}
+
+.stepper-centered.stepper-lg:not(.stepper-vertical) .stepper-step:not(:last-child)::after {
+    top: 18px;
+    left: calc(50% + 18px + var(--spacing-2));
+    right: calc(50% - 18px + var(--spacing-2));
+}
+
+/* === ICON VARIANT === */
+
+.stepper-icon .stepper-indicator {
+    font-size: var(--font-size-md);
+}
+
+.stepper-icon .stepper-indicator .icon {
+    width: 14px;
+    height: 14px;
+}
+
+/* === COLOR VARIANTS === */
+
+/* Primary theme */
+.stepper-primary .stepper-step.completed .stepper-indicator {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.stepper-primary .stepper-step.completed:not(:last-child)::after {
+    background: var(--color-primary);
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 640px) {
+    .stepper:not(.stepper-vertical) {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .stepper:not(.stepper-vertical) .stepper-step {
+        padding-bottom: var(--spacing-8);
+    }
+
+    .stepper:not(.stepper-vertical) .stepper-step:last-child {
+        padding-bottom: 0;
+    }
+
+    .stepper:not(.stepper-vertical) .stepper-step:not(:last-child)::after {
+        top: calc(28px + var(--spacing-2));
+        left: 13px;
+        bottom: var(--spacing-2);
+        right: auto;
+        width: 2px;
+        height: auto;
+    }
+
+    .stepper-sm:not(.stepper-vertical) .stepper-step:not(:last-child)::after {
+        left: 10px;
+        top: calc(22px + var(--spacing-2));
+    }
+
+    .stepper-lg:not(.stepper-vertical) .stepper-step:not(:last-child)::after {
+        left: 17px;
+        top: calc(36px + var(--spacing-2));
+    }
+
+    .stepper-centered:not(.stepper-vertical) .stepper-step {
+        flex-direction: row;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .stepper-centered:not(.stepper-vertical) .stepper-content {
+        padding-top: var(--spacing-1);
+    }
+
+    .stepper-centered:not(.stepper-vertical) .stepper-step:not(:last-child)::after {
+        left: 13px;
+        right: auto;
+    }
+}
+
+/* === DARK MODE === */
+
+[data-theme="dark"] .stepper-indicator {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .stepper-step:not(:last-child)::after {
+    background: var(--color-border-dark);
+}
+
+[data-theme="dark"] .stepper-dotted .stepper-step:not(:last-child)::after {
+    background-image: repeating-linear-gradient(
+        to right,
+        var(--color-border-dark) 0,
+        var(--color-border-dark) 4px,
+        transparent 4px,
+        transparent 8px
+    );
+}
+
+[data-theme="dark"] .stepper-dotted.stepper-vertical .stepper-step:not(:last-child)::after {
+    background-image: repeating-linear-gradient(
+        to bottom,
+        var(--color-border-dark) 0,
+        var(--color-border-dark) 4px,
+        transparent 4px,
+        transparent 8px
+    );
+}

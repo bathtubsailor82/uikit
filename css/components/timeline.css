@@ -1,0 +1,484 @@
+/**
+ * UIKit Timeline
+ * Chronologie verticale avec points, icones et dates
+ * Support alternance gauche/droite optionnelle
+ */
+
+/* === BASE === */
+
+.timeline {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+/* Vertical line */
+.timeline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 11px;
+    width: 2px;
+    background: var(--color-border-medium);
+}
+
+/* === TIMELINE ITEM === */
+
+.timeline-item {
+    position: relative;
+    padding-left: calc(24px + var(--spacing-4));
+    padding-bottom: var(--spacing-8);
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+/* === TIMELINE MARKER (point/icone) === */
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-bg-primary);
+    border: var(--border-width-thick) solid var(--color-border-medium);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+    z-index: 1;
+    transition: all var(--transition-base);
+}
+
+/* Dot marker (default) */
+.timeline-marker::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-border-dark);
+    transition: background var(--transition-base);
+}
+
+/* Icon marker - hide dot when icon present */
+.timeline-marker .icon,
+.timeline-marker svg {
+    position: relative;
+    z-index: 1;
+}
+
+.timeline-marker:has(.icon)::before,
+.timeline-marker:has(svg)::before {
+    display: none;
+}
+
+/* === TIMELINE CONTENT === */
+
+.timeline-content {
+    background: var(--color-bg-secondary);
+    border: var(--border-width) solid var(--color-border-light);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-4);
+}
+
+.timeline-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-2);
+}
+
+.timeline-title {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-tight);
+    margin: 0;
+}
+
+.timeline-date {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    white-space: nowrap;
+}
+
+.timeline-body {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-base);
+}
+
+.timeline-body p {
+    margin: 0;
+}
+
+.timeline-body p + p {
+    margin-top: var(--spacing-2);
+}
+
+/* === MARKER COLOR VARIANTS === */
+
+.timeline-item.primary .timeline-marker {
+    border-color: var(--color-primary);
+}
+
+.timeline-item.primary .timeline-marker::before {
+    background: var(--color-primary);
+}
+
+.timeline-item.success .timeline-marker {
+    border-color: var(--color-success);
+    background: var(--color-success);
+    color: var(--color-text-white);
+}
+
+.timeline-item.success .timeline-marker::before {
+    background: var(--color-text-white);
+}
+
+.timeline-item.warning .timeline-marker {
+    border-color: var(--color-warning);
+    background: var(--color-warning);
+    color: var(--color-text-white);
+}
+
+.timeline-item.warning .timeline-marker::before {
+    background: var(--color-text-white);
+}
+
+.timeline-item.danger .timeline-marker {
+    border-color: var(--color-danger);
+    background: var(--color-danger);
+    color: var(--color-text-white);
+}
+
+.timeline-item.danger .timeline-marker::before {
+    background: var(--color-text-white);
+}
+
+.timeline-item.info .timeline-marker {
+    border-color: var(--color-info);
+    background: var(--color-info);
+    color: var(--color-text-white);
+}
+
+.timeline-item.info .timeline-marker::before {
+    background: var(--color-text-white);
+}
+
+/* === SIZES === */
+
+/* Small */
+.timeline-sm::before {
+    left: 9px;
+}
+
+.timeline-sm .timeline-item {
+    padding-left: calc(20px + var(--spacing-3));
+}
+
+.timeline-sm .timeline-marker {
+    width: 20px;
+    height: 20px;
+}
+
+.timeline-sm .timeline-marker::before {
+    width: 6px;
+    height: 6px;
+}
+
+.timeline-sm .timeline-content {
+    padding: var(--spacing-3);
+}
+
+.timeline-sm .timeline-title {
+    font-size: var(--font-size-sm);
+}
+
+.timeline-sm .timeline-body {
+    font-size: var(--font-size-xs);
+}
+
+/* Large */
+.timeline-lg::before {
+    left: 15px;
+}
+
+.timeline-lg .timeline-item {
+    padding-left: calc(32px + var(--spacing-6));
+    padding-bottom: var(--spacing-10);
+}
+
+.timeline-lg .timeline-marker {
+    width: 32px;
+    height: 32px;
+    font-size: var(--font-size-md);
+}
+
+.timeline-lg .timeline-marker::before {
+    width: 10px;
+    height: 10px;
+}
+
+.timeline-lg .timeline-content {
+    padding: var(--spacing-6);
+}
+
+.timeline-lg .timeline-title {
+    font-size: var(--font-size-md);
+}
+
+.timeline-lg .timeline-body {
+    font-size: var(--font-size-base);
+}
+
+/* === VARIANTS === */
+
+/* Simple - no content box */
+.timeline-simple .timeline-content {
+    background: transparent;
+    border: none;
+    padding: 0;
+    padding-top: var(--spacing-1);
+}
+
+/* Compact - no content box, tight spacing */
+.timeline-compact .timeline-item {
+    padding-bottom: var(--spacing-4);
+}
+
+.timeline-compact .timeline-content {
+    background: transparent;
+    border: none;
+    padding: 0;
+    padding-top: var(--spacing-1);
+}
+
+/* Dotted line */
+.timeline-dotted::before {
+    background: transparent;
+    border-left: 2px dashed var(--color-border-medium);
+}
+
+/* === ALTERNATING LAYOUT === */
+
+.timeline-alternate {
+    padding-left: 0;
+}
+
+.timeline-alternate::before {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.timeline-alternate .timeline-item {
+    width: 50%;
+    padding-left: 0;
+    padding-right: calc(24px + var(--spacing-4));
+    margin-left: 0;
+    text-align: right;
+}
+
+.timeline-alternate .timeline-item:nth-child(even) {
+    margin-left: 50%;
+    padding-right: 0;
+    padding-left: calc(24px + var(--spacing-4));
+    text-align: left;
+}
+
+.timeline-alternate .timeline-marker {
+    left: auto;
+    right: -12px;
+}
+
+.timeline-alternate .timeline-item:nth-child(even) .timeline-marker {
+    right: auto;
+    left: -12px;
+}
+
+.timeline-alternate .timeline-header {
+    flex-direction: row-reverse;
+}
+
+.timeline-alternate .timeline-item:nth-child(even) .timeline-header {
+    flex-direction: row;
+}
+
+/* === CENTERED LAYOUT === */
+
+.timeline-centered {
+    padding-left: 0;
+}
+
+.timeline-centered::before {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.timeline-centered .timeline-item {
+    padding-left: calc(50% + 12px + var(--spacing-4));
+}
+
+.timeline-centered .timeline-marker {
+    left: calc(50% - 12px);
+}
+
+/* === HORIZONTAL TIMELINE === */
+
+.timeline-horizontal {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: var(--spacing-4);
+}
+
+.timeline-horizontal::before {
+    top: 11px;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 2px;
+}
+
+.timeline-horizontal .timeline-item {
+    flex: 0 0 auto;
+    min-width: 150px;
+    padding-left: 0;
+    padding-bottom: 0;
+    padding-top: calc(24px + var(--spacing-3));
+    padding-right: var(--spacing-6);
+}
+
+.timeline-horizontal .timeline-item:last-child {
+    padding-right: 0;
+}
+
+.timeline-horizontal .timeline-marker {
+    left: 0;
+    top: 0;
+}
+
+.timeline-horizontal .timeline-content {
+    text-align: left;
+}
+
+/* === CONNECTED CARDS === */
+
+.timeline-connected .timeline-content {
+    position: relative;
+}
+
+.timeline-connected .timeline-content::before {
+    content: "";
+    position: absolute;
+    top: var(--spacing-4);
+    left: calc(-1 * var(--spacing-4) - 8px);
+    width: 8px;
+    height: 2px;
+    background: var(--color-border-medium);
+}
+
+/* === LOADING STATE === */
+
+.timeline-item.loading .timeline-marker::before {
+    animation: timeline-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes timeline-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(0.8);
+    }
+}
+
+/* === INTERACTIVE === */
+
+.timeline-interactive .timeline-item {
+    cursor: pointer;
+}
+
+.timeline-interactive .timeline-item:hover .timeline-marker {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-md);
+}
+
+.timeline-interactive .timeline-item:hover .timeline-content {
+    border-color: var(--color-border-dark);
+    box-shadow: var(--shadow-sm);
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 768px) {
+    .timeline-alternate,
+    .timeline-centered {
+        padding-left: 0;
+    }
+
+    .timeline-alternate::before,
+    .timeline-centered::before {
+        left: 11px;
+        transform: none;
+    }
+
+    .timeline-alternate .timeline-item,
+    .timeline-alternate .timeline-item:nth-child(even),
+    .timeline-centered .timeline-item {
+        width: 100%;
+        margin-left: 0;
+        padding-left: calc(24px + var(--spacing-4));
+        padding-right: 0;
+        text-align: left;
+    }
+
+    .timeline-alternate .timeline-marker,
+    .timeline-alternate .timeline-item:nth-child(even) .timeline-marker,
+    .timeline-centered .timeline-marker {
+        left: 0;
+        right: auto;
+    }
+
+    .timeline-alternate .timeline-header,
+    .timeline-alternate .timeline-item:nth-child(even) .timeline-header {
+        flex-direction: row;
+    }
+}
+
+/* === DARK MODE === */
+
+[data-theme="dark"] .timeline::before {
+    background: var(--color-border-dark);
+}
+
+[data-theme="dark"] .timeline-dotted::before {
+    border-left-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .timeline-marker {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .timeline-marker::before {
+    background: var(--color-border-medium);
+}
+
+[data-theme="dark"] .timeline-content {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .timeline-connected .timeline-content::before {
+    background: var(--color-border-dark);
+}

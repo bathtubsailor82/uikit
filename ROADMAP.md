@@ -183,40 +183,60 @@ Plan de developpement des composants manquants.
 
 ---
 
-## Phase 5 - Composants UI supplementaires
+## Phase 5 - Composants UI supplementaires [COMPLETE]
 
 ### 5.1 Stepper
 **Fichier:** `css/components/stepper.css`
 
-- [ ] Indicateur d'etapes numerotees
-- [ ] Etats : completed, active, pending
-- [ ] Orientation : horizontal, vertical
-- [ ] Avec descriptions
+- [x] Indicateur d'etapes numerotees
+- [x] Etats : completed, active, pending, error
+- [x] Orientation : horizontal, vertical
+- [x] Avec descriptions
+- [x] Tailles : sm, md, lg
+- [x] Variantes : compact, clickable, dotted, centered, icon
+- [x] Responsive (passe en vertical sur mobile)
+- [x] Dark mode
 
 ### 5.2 Timeline
 **Fichier:** `css/components/timeline.css`
 
-- [ ] Chronologie verticale
-- [ ] Points avec icones/dates
-- [ ] Contenu flexible
-- [ ] Alternance gauche/droite optionnelle
+- [x] Chronologie verticale
+- [x] Points avec icones/dates
+- [x] Contenu flexible (cards)
+- [x] Alternance gauche/droite optionnelle
+- [x] Variantes : simple, compact, dotted, horizontal, centered
+- [x] Couleurs de marker (primary, success, warning, danger, info)
+- [x] Tailles : sm, md, lg
+- [x] Interactive (hover effects)
+- [x] Dark mode
 
 ### 5.3 Empty State
 **Fichier:** `css/components/empty-state.css`
 
-- [ ] Etat vide centre
-- [ ] Icone/illustration
-- [ ] Titre + description
-- [ ] Action optionnelle (bouton)
+- [x] Etat vide centre
+- [x] Icone/illustration
+- [x] Titre + description
+- [x] Action optionnelle (bouton)
+- [x] Tailles : sm, md, lg
+- [x] Variantes : bordered, filled, inline, horizontal
+- [x] Couleurs (primary, success, warning, danger, info)
+- [x] Use cases specifiques (search, no-data, 404, maintenance)
+- [x] Dark mode
 
 ### 5.4 Popover
 **Fichier:** `css/components/popover.css`
 
-- [ ] Contenu riche au click
-- [ ] Positions multiples
-- [ ] Fleche de direction
-- [ ] Header optionnel
-- [ ] Fermeture au click exterieur
+- [x] Contenu riche au click
+- [x] Positions multiples (top, bottom, left, right)
+- [x] Alignements (start, end, center)
+- [x] Fleche de direction
+- [x] Header optionnel avec close button
+- [x] Footer optionnel
+- [x] Fermeture au click exterieur (via classe .show)
+- [x] Tailles : sm, md, lg, full
+- [x] Variantes : menu, confirm, rich, dark, hover-trigger
+- [x] Animations : scale, fade, slide
+- [x] Dark mode
 
 ---
 

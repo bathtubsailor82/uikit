@@ -1,0 +1,388 @@
+/**
+ * UIKit Empty State
+ * Etat vide centre avec icone, titre, description et action optionnelle
+ */
+
+/* === BASE === */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-12);
+    min-height: 200px;
+}
+
+/* === ICON/ILLUSTRATION === */
+
+.empty-state-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--spacing-6);
+    border-radius: 50%;
+    background: var(--color-bg-hover);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-2xl);
+}
+
+.empty-state-icon .icon,
+.empty-state-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.empty-state-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+/* Large illustration (not in circle) */
+.empty-state-illustration {
+    width: 120px;
+    height: 120px;
+    margin-bottom: var(--spacing-6);
+    color: var(--color-text-tertiary);
+    opacity: 0.6;
+}
+
+.empty-state-illustration img,
+.empty-state-illustration svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* === CONTENT === */
+
+.empty-state-title {
+    margin: 0 0 var(--spacing-2);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-tight);
+}
+
+.empty-state-description {
+    margin: 0 0 var(--spacing-6);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-base);
+    max-width: 320px;
+}
+
+/* No description, reduce spacing */
+.empty-state-title:last-child {
+    margin-bottom: 0;
+}
+
+.empty-state-description:last-child {
+    margin-bottom: 0;
+}
+
+/* === ACTION === */
+
+.empty-state-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.empty-state-action .btn {
+    min-width: 120px;
+}
+
+/* Secondary action link */
+.empty-state-link {
+    font-size: var(--font-size-sm);
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.empty-state-link:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+}
+
+/* === SIZES === */
+
+/* Small */
+.empty-state-sm {
+    padding: var(--spacing-8);
+    min-height: 150px;
+}
+
+.empty-state-sm .empty-state-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: var(--spacing-4);
+    font-size: var(--font-size-xl);
+}
+
+.empty-state-sm .empty-state-icon .icon,
+.empty-state-sm .empty-state-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.empty-state-sm .empty-state-illustration {
+    width: 80px;
+    height: 80px;
+    margin-bottom: var(--spacing-4);
+}
+
+.empty-state-sm .empty-state-title {
+    font-size: var(--font-size-base);
+}
+
+.empty-state-sm .empty-state-description {
+    font-size: var(--font-size-xs);
+    max-width: 240px;
+    margin-bottom: var(--spacing-4);
+}
+
+/* Large */
+.empty-state-lg {
+    padding: var(--spacing-12) var(--spacing-8);
+    min-height: 300px;
+}
+
+.empty-state-lg .empty-state-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: var(--spacing-8);
+    font-size: 28px;
+}
+
+.empty-state-lg .empty-state-icon .icon,
+.empty-state-lg .empty-state-icon svg {
+    width: 40px;
+    height: 40px;
+}
+
+.empty-state-lg .empty-state-illustration {
+    width: 160px;
+    height: 160px;
+    margin-bottom: var(--spacing-8);
+}
+
+.empty-state-lg .empty-state-title {
+    font-size: var(--font-size-lg);
+}
+
+.empty-state-lg .empty-state-description {
+    font-size: var(--font-size-base);
+    max-width: 400px;
+    margin-bottom: var(--spacing-8);
+}
+
+/* === VARIANTS === */
+
+/* Bordered */
+.empty-state-bordered {
+    border: var(--border-width) dashed var(--color-border-medium);
+    border-radius: var(--border-radius-lg);
+    background: var(--color-bg-secondary);
+}
+
+/* Filled */
+.empty-state-filled {
+    background: var(--color-bg-secondary);
+    border-radius: var(--border-radius-lg);
+}
+
+/* Inline (minimal padding, for use in tables, lists, etc.) */
+.empty-state-inline {
+    padding: var(--spacing-6);
+    min-height: auto;
+}
+
+.empty-state-inline .empty-state-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: var(--spacing-3);
+}
+
+.empty-state-inline .empty-state-title {
+    font-size: var(--font-size-sm);
+}
+
+.empty-state-inline .empty-state-description {
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-3);
+}
+
+/* Horizontal layout */
+.empty-state-horizontal {
+    flex-direction: row;
+    text-align: left;
+    gap: var(--spacing-6);
+    padding: var(--spacing-8);
+}
+
+.empty-state-horizontal .empty-state-icon {
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+.empty-state-horizontal .empty-state-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.empty-state-horizontal .empty-state-description {
+    margin-bottom: var(--spacing-4);
+}
+
+.empty-state-horizontal .empty-state-action {
+    align-items: flex-start;
+}
+
+/* === COLOR VARIANTS === */
+
+/* Primary */
+.empty-state-primary .empty-state-icon {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+/* Success */
+.empty-state-success .empty-state-icon {
+    background: var(--color-success-light);
+    color: var(--color-success);
+}
+
+/* Warning */
+.empty-state-warning .empty-state-icon {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+/* Danger / Error */
+.empty-state-danger .empty-state-icon,
+.empty-state-error .empty-state-icon {
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+}
+
+/* Info */
+.empty-state-info .empty-state-icon {
+    background: var(--color-info-light);
+    color: var(--color-info);
+}
+
+/* === SPECIFIC USE CASES === */
+
+/* Search results */
+.empty-state-search .empty-state-icon::before {
+    content: "\2315";
+    font-size: inherit;
+}
+
+/* No data */
+.empty-state-no-data .empty-state-icon::before {
+    content: "\2205";
+    font-size: inherit;
+}
+
+/* Error state */
+.empty-state-error-page {
+    min-height: 400px;
+}
+
+.empty-state-error-page .empty-state-title {
+    font-size: var(--font-size-xl);
+}
+
+/* 404 Page */
+.empty-state-404 .empty-state-title::before {
+    content: "404";
+    display: block;
+    font-size: 48px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--spacing-4);
+}
+
+/* Maintenance */
+.empty-state-maintenance .empty-state-icon {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+/* === LOADING PLACEHOLDER === */
+
+.empty-state-loading .empty-state-icon {
+    animation: empty-state-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes empty-state-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 640px) {
+    .empty-state {
+        padding: var(--spacing-8);
+    }
+
+    .empty-state-lg {
+        padding: var(--spacing-8);
+        min-height: 250px;
+    }
+
+    .empty-state-horizontal {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .empty-state-horizontal .empty-state-icon {
+        margin-bottom: var(--spacing-6);
+    }
+
+    .empty-state-horizontal .empty-state-content {
+        align-items: center;
+    }
+
+    .empty-state-horizontal .empty-state-action {
+        align-items: center;
+    }
+
+    .empty-state-description {
+        max-width: 100%;
+    }
+}
+
+/* === DARK MODE === */
+
+[data-theme="dark"] .empty-state-icon {
+    background: var(--color-bg-tertiary);
+}
+
+[data-theme="dark"] .empty-state-bordered {
+    border-color: var(--color-border-dark);
+    background: var(--color-bg-secondary);
+}
+
+[data-theme="dark"] .empty-state-filled {
+    background: var(--color-bg-tertiary);
+}
+
+[data-theme="dark"] .empty-state-illustration {
+    opacity: 0.5;
+}
