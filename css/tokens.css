@@ -82,9 +82,9 @@
     --color-text-white: #ffffff;
 
     /* Couleurs de bordure inversées */
-    --color-border-light: #3d3d3f;
-    --color-border-medium: #4d4d4f;
-    --color-border-dark: #5d5d5f;
+    --color-border-light: #222224;
+    --color-border-medium: #2a2a2c;
+    --color-border-dark: #333335;
 
     /* Couleurs sombres en mode dark */
     --color-dark: #0d0d0f;
@@ -113,9 +113,9 @@
         --color-text-tertiary: #86868b;
         --color-text-disabled: #6e6e73;
 
-        --color-border-light: #3d3d3f;
-        --color-border-medium: #4d4d4f;
-        --color-border-dark: #5d5d5f;
+        --color-border-light: #222224;
+        --color-border-medium: #2a2a2c;
+        --color-border-dark: #333335;
 
         --color-dark: #0d0d0f;
         --color-dark-hover: #1d1d1f;

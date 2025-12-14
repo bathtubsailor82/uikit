@@ -124,8 +124,10 @@ class VUMeter {
    */
   constructor(container, config = {}) {
     // Merge preset + config + defaults
-    const preset = METER_PRESETS[config.preset] || METER_PRESETS.standard
+    const presetName = config.preset || 'standard'
+    const preset = METER_PRESETS[presetName] || METER_PRESETS.standard
     this.config = { ...DEFAULT_CONFIG, ...preset, ...config }
+    this.config.presetName = presetName
     this.config.colors = { ...DEFAULT_CONFIG.colors, ...preset.colors, ...config.colors }
     this.config.thresholds = { ...DEFAULT_CONFIG.thresholds, ...config.thresholds }
 
@@ -157,13 +159,17 @@ class VUMeter {
   // ==========================================================================
 
   render() {
-    const { orientation, width, height, showScale, showNumeric, showLUFS } = this.config
+    const { orientation, width, height, showScale, showNumeric, showLUFS, presetName } = this.config
     const isVertical = orientation === 'vertical'
 
     this.container.innerHTML = ''
     this.container.classList.add('vu-meter', `vu-meter--${orientation}`)
     if (showScale) {
       this.container.classList.add('vu-meter--with-scale')
+    }
+    // Add compact class for compact preset
+    if (presetName === 'compact') {
+      this.container.classList.add('vu-meter--compact')
     }
     // Hide tick labels if meter is too short (< 180px)
     if (height < 180) {
@@ -610,6 +616,7 @@ class VUMeter {
       'vu-meter--vertical',
       'vu-meter--horizontal',
       'vu-meter--with-scale',
+      'vu-meter--compact',
       'vu-meter--compact-scale'
     )
   }
