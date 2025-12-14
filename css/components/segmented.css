@@ -1,0 +1,219 @@
+/**
+ * UIKit Segmented Control
+ * Style iOS/macOS pour groupes de boutons mutuellement exclusifs
+ */
+
+.segmented {
+    display: inline-flex;
+    padding: var(--spacing-1);
+    background: var(--color-bg-secondary);
+    border-radius: var(--border-radius-md);
+    gap: var(--spacing-1);
+    position: relative;
+}
+
+.segmented-item {
+    position: relative;
+    padding: var(--spacing-2) var(--spacing-4);
+    background: transparent;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+    z-index: 1;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+}
+
+.segmented-item:hover:not(.active):not(:disabled) {
+    color: var(--color-text-primary);
+}
+
+.segmented-item.active {
+    color: var(--color-text-primary);
+    background: var(--color-bg-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.segmented-item:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* === SIZES === */
+
+.segmented-sm {
+    padding: 2px;
+    gap: 2px;
+}
+
+.segmented-sm .segmented-item {
+    padding: var(--spacing-1) var(--spacing-3);
+    font-size: var(--font-size-sm);
+}
+
+.segmented-lg {
+    padding: var(--spacing-2);
+    gap: var(--spacing-2);
+    border-radius: var(--border-radius-lg);
+}
+
+.segmented-lg .segmented-item {
+    padding: var(--spacing-3) var(--spacing-6);
+    font-size: var(--font-size-md);
+    border-radius: var(--border-radius-md);
+}
+
+/* === BLOCK (full width) === */
+
+.segmented-block {
+    display: flex;
+    width: 100%;
+}
+
+.segmented-block .segmented-item {
+    flex: 1;
+}
+
+/* === WITH ICONS === */
+
+.segmented-item .icon {
+    font-size: var(--font-size-md);
+    line-height: 1;
+}
+
+/* Icon only */
+.segmented-icon-only .segmented-item {
+    padding: var(--spacing-2);
+    aspect-ratio: 1;
+}
+
+.segmented-icon-only.segmented-sm .segmented-item {
+    padding: var(--spacing-1);
+}
+
+.segmented-icon-only.segmented-lg .segmented-item {
+    padding: var(--spacing-3);
+}
+
+/* === COLOR VARIANTS === */
+
+.segmented-primary .segmented-item.active {
+    background: var(--color-primary);
+    color: var(--color-text-white);
+}
+
+.segmented-dark .segmented-item.active {
+    background: var(--color-dark);
+    color: var(--color-text-white);
+}
+
+/* === BORDERED VARIANT === */
+
+.segmented-bordered {
+    background: transparent;
+    border: var(--border-width) solid var(--color-border-medium);
+    padding: 0;
+    gap: 0;
+}
+
+.segmented-bordered .segmented-item {
+    border-radius: 0;
+    padding: var(--spacing-2) var(--spacing-4);
+}
+
+.segmented-bordered .segmented-item:not(:last-child) {
+    border-right: var(--border-width) solid var(--color-border-medium);
+}
+
+.segmented-bordered .segmented-item:first-child {
+    border-top-left-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--border-radius-md);
+}
+
+.segmented-bordered .segmented-item:last-child {
+    border-top-right-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
+}
+
+.segmented-bordered .segmented-item.active {
+    background: var(--color-bg-hover);
+    box-shadow: none;
+}
+
+/* === PILL VARIANT === */
+
+.segmented-pill {
+    border-radius: 9999px;
+}
+
+.segmented-pill .segmented-item {
+    border-radius: 9999px;
+}
+
+/* === VERTICAL VARIANT === */
+
+.segmented-vertical {
+    flex-direction: column;
+}
+
+.segmented-vertical.segmented-bordered .segmented-item:not(:last-child) {
+    border-right: none;
+    border-bottom: var(--border-width) solid var(--color-border-medium);
+}
+
+.segmented-vertical.segmented-bordered .segmented-item:first-child {
+    border-radius: 0;
+    border-top-left-radius: var(--border-radius-md);
+    border-top-right-radius: var(--border-radius-md);
+}
+
+.segmented-vertical.segmented-bordered .segmented-item:last-child {
+    border-radius: 0;
+    border-bottom-left-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
+}
+
+/* === ANIMATED SLIDER (optional JS enhancement) === */
+
+.segmented-animated {
+    position: relative;
+}
+
+.segmented-slider {
+    position: absolute;
+    top: var(--spacing-1);
+    left: var(--spacing-1);
+    height: calc(100% - var(--spacing-1) * 2);
+    background: var(--color-bg-primary);
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-base), width var(--transition-base);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.segmented-animated .segmented-item.active {
+    background: transparent;
+    box-shadow: none;
+}
+
+/* === DARK MODE ADJUSTMENTS === */
+
+[data-theme="dark"] .segmented {
+    background: var(--color-bg-tertiary);
+}
+
+[data-theme="dark"] .segmented-item.active {
+    background: var(--color-bg-hover);
+}
+
+[data-theme="dark"] .segmented-bordered {
+    background: transparent;
+}

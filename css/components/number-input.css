@@ -1,0 +1,244 @@
+/**
+ * UIKit Number Input
+ * Input numerique avec boutons +/-
+ */
+
+/* === BASE === */
+
+.number-input {
+    display: inline-flex;
+    align-items: stretch;
+    border: var(--border-width) solid var(--color-border-medium);
+    border-radius: var(--border-radius-md);
+    background: var(--color-bg-primary);
+    overflow: hidden;
+}
+
+.number-input:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 var(--focus-ring-width) rgba(90, 144, 199, 0.2);
+}
+
+.number-input input {
+    flex: 1;
+    min-width: 0;
+    width: 60px;
+    padding: var(--spacing-2) var(--spacing-3);
+    border: none;
+    background: transparent;
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-mono);
+    color: var(--color-text-primary);
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+.number-input input::-webkit-outer-spin-button,
+.number-input input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.number-input input:focus {
+    outline: none;
+}
+
+/* === BUTTONS === */
+
+.number-input-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    padding: 0;
+    border: none;
+    background: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast);
+    user-select: none;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+}
+
+.number-input-btn:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+}
+
+.number-input-btn:active {
+    background: var(--color-bg-active);
+}
+
+.number-input-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.number-input-decrement {
+    border-right: var(--border-width) solid var(--color-border-light);
+}
+
+.number-input-increment {
+    border-left: var(--border-width) solid var(--color-border-light);
+}
+
+/* === SIZES === */
+
+.number-input-sm {
+    border-radius: var(--border-radius-sm);
+}
+
+.number-input-sm input {
+    width: 48px;
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--font-size-sm);
+}
+
+.number-input-sm .number-input-btn {
+    width: 24px;
+    font-size: var(--font-size-sm);
+}
+
+.number-input-lg {
+    border-radius: var(--border-radius-lg);
+}
+
+.number-input-lg input {
+    width: 80px;
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--font-size-md);
+}
+
+.number-input-lg .number-input-btn {
+    width: 36px;
+    font-size: var(--font-size-lg);
+}
+
+/* === COMPACT VARIANT (buttons side by side on right) === */
+
+.number-input-compact {
+    position: relative;
+}
+
+.number-input-compact input {
+    padding-right: 56px;
+    text-align: left;
+}
+
+.number-input-compact .number-input-buttons {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    border-left: var(--border-width) solid var(--color-border-light);
+}
+
+.number-input-compact .number-input-btn {
+    border: none;
+    border-radius: 0;
+}
+
+.number-input-compact .number-input-decrement {
+    border-right: var(--border-width) solid var(--color-border-light);
+}
+
+/* === VERTICAL VARIANT (buttons stacked) === */
+
+.number-input-vertical {
+    position: relative;
+}
+
+.number-input-vertical input {
+    padding-right: 28px;
+    text-align: left;
+}
+
+.number-input-vertical .number-input-buttons {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    border-left: var(--border-width) solid var(--color-border-light);
+}
+
+.number-input-vertical .number-input-btn {
+    flex: 1;
+    width: 24px;
+    border: none;
+    border-radius: 0;
+    font-size: var(--font-size-xs);
+}
+
+.number-input-vertical .number-input-increment {
+    border-bottom: var(--border-width) solid var(--color-border-light);
+}
+
+.number-input-vertical .number-input-decrement {
+    border-right: none;
+}
+
+/* === WITH UNIT === */
+
+.number-input-unit {
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-3);
+    background: var(--color-bg-secondary);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+    border-left: var(--border-width) solid var(--color-border-light);
+}
+
+/* === BLOCK (full width) === */
+
+.number-input-block {
+    display: flex;
+    width: 100%;
+}
+
+.number-input-block input {
+    width: auto;
+    flex: 1;
+}
+
+/* === DISABLED STATE === */
+
+.number-input.disabled,
+.number-input:has(input:disabled) {
+    opacity: 0.5;
+    pointer-events: none;
+    background: var(--color-bg-secondary);
+}
+
+/* === ERROR STATE === */
+
+.number-input.error {
+    border-color: var(--color-danger);
+}
+
+.number-input.error:focus-within {
+    box-shadow: 0 0 0 var(--focus-ring-width) rgba(216, 68, 68, 0.2);
+}
+
+/* === DARK MODE === */
+
+[data-theme="dark"] .number-input {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .number-input-btn {
+    background: var(--color-bg-tertiary);
+}
+
+[data-theme="dark"] .number-input-btn:hover {
+    background: var(--color-bg-hover);
+}
+
+[data-theme="dark"] .number-input-unit {
+    background: var(--color-bg-tertiary);
+}

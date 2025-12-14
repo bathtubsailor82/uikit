@@ -4,7 +4,7 @@ Plan de developpement des composants manquants.
 
 ---
 
-## Phase 1 - Atomes essentiels
+## Phase 1 - Atomes essentiels [COMPLETE]
 
 ### 1.1 Icons manquantes
 **Fichier:** `css/components/icons.css`
@@ -20,97 +20,97 @@ Plan de developpement des composants manquants.
 ### 1.2 Range/Slider
 **Fichier:** `css/components/range.css`
 
-- [ ] Style de base pour `input[type="range"]`
-- [ ] Variantes : horizontal, vertical
-- [ ] Tailles : sm, md, lg
-- [ ] Track et thumb personnalises
-- [ ] Support des couleurs (primary, success, warning, danger)
-- [ ] Affichage de valeur optionnel
-- [ ] Dark mode
+- [x] Style de base pour `input[type="range"]`
+- [x] Variantes : horizontal, vertical
+- [x] Tailles : sm, md, lg
+- [x] Track et thumb personnalises
+- [x] Support des couleurs (primary, success, warning, danger)
+- [x] Affichage de valeur optionnel
+- [x] Dark mode
 
 ### 1.3 Divider
 **Fichier:** `css/components/divider.css`
 
-- [ ] Separateur horizontal
-- [ ] Separateur vertical
-- [ ] Avec texte centre (ex: "ou")
-- [ ] Variantes : solid, dashed, dotted
-- [ ] Espacements configurables
+- [x] Separateur horizontal
+- [x] Separateur vertical
+- [x] Avec texte centre (ex: "ou")
+- [x] Variantes : solid, dashed, dotted
+- [x] Espacements configurables
 
 ---
 
-## Phase 2 - Ameliorations composants existants
+## Phase 2 - Ameliorations composants existants [COMPLETE]
 
 ### 2.1 Buttons - Variantes manquantes
 **Fichier:** `css/components/buttons.css`
 
-- [ ] `btn-warning` - Bouton orange/jaune
-- [ ] `btn-outline-primary`, `btn-outline-danger`, etc.
-- [ ] `btn-pill` - Bords completement arrondis
+- [x] `btn-warning` - Bouton orange/jaune
+- [x] `btn-outline-primary`, `btn-outline-danger`, etc.
+- [x] `btn-pill` - Bords completement arrondis
 
 ### 2.2 Badges - Types manquants
 **Fichier:** `css/components/badges.css`
 
-- [ ] Badge dot (point de notification sans texte)
-- [ ] Badge count (compact pour nombres)
-- [ ] Badge pill (arrondi)
-- [ ] Badge avec icone
-- [ ] Badge removable (avec bouton X)
+- [x] Badge dot (point de notification sans texte)
+- [x] Badge count (compact pour nombres)
+- [x] Badge pill (arrondi)
+- [x] Badge avec icone
+- [x] Badge removable (avec bouton X)
 
 ### 2.3 Segmented Control
 **Fichier:** `css/components/segmented.css`
 
-- [ ] Groupe de boutons mutuellement exclusifs
-- [ ] Style iOS/macOS
-- [ ] Tailles : sm, md, lg
-- [ ] Support icones
-- [ ] Animation de selection
+- [x] Groupe de boutons mutuellement exclusifs
+- [x] Style iOS/macOS
+- [x] Tailles : sm, md, lg
+- [x] Support icones
+- [x] Animation de selection
 
 ### 2.4 Tooltip ameliore
 **Fichier:** `css/components/tooltip.css`
 
-- [ ] Positions : top, bottom, left, right
-- [ ] Fleche pointant vers l'element
-- [ ] Variantes de couleur
-- [ ] Delai configurable (CSS custom properties)
+- [x] Positions : top, bottom, left, right
+- [x] Fleche pointant vers l'element
+- [x] Variantes de couleur
+- [x] Delai configurable (CSS custom properties)
 
 ### 2.5 Dropdown ameliore
 **Fichier:** `css/components/dropdown.css`
 
-- [ ] Support sous-menus
-- [ ] Items avec icones
-- [ ] Items avec description
-- [ ] Separateurs de groupe
-- [ ] Header de section
+- [x] Support sous-menus
+- [x] Items avec icones
+- [x] Items avec description
+- [x] Separateurs de groupe
+- [x] Header de section
 
 ---
 
-## Phase 3 - Composants formulaire avances
+## Phase 3 - Composants formulaire avances [COMPLETE]
 
 ### 3.1 Number Input
 **Fichier:** `css/components/number-input.css`
 
-- [ ] Input avec boutons +/-
-- [ ] Tailles : sm, md, lg
-- [ ] Variante compacte (boutons cote a cote)
-- [ ] Variante verticale (boutons empiles)
+- [x] Input avec boutons +/-
+- [x] Tailles : sm, md, lg
+- [x] Variante compacte (boutons cote a cote)
+- [x] Variante verticale (boutons empiles)
 
 ### 3.2 Tag Input
 **Fichier:** `css/components/tags.css`
 
-- [ ] Tag/chip de base
-- [ ] Tag removable
-- [ ] Tag avec icone
-- [ ] Variantes de couleur
-- [ ] Tag input (champ multi-selection)
+- [x] Tag/chip de base
+- [x] Tag removable
+- [x] Tag avec icone
+- [x] Variantes de couleur
+- [x] Tag input (champ multi-selection)
 
 ### 3.3 File Input
 **Fichier:** `css/components/file-input.css`
 
-- [ ] Style pour input type="file"
-- [ ] Zone de drop (drag & drop)
-- [ ] Apercu de fichier
-- [ ] Liste de fichiers selectionnes
+- [x] Style pour input type="file"
+- [x] Zone de drop (drag & drop)
+- [x] Apercu de fichier
+- [x] Liste de fichiers selectionnes
 
 ---
 
@@ -275,6 +275,16 @@ export const COMPONENT_PRESETS = { };
 - Support presets (minimal, standard, broadcast, compact)
 
 ### v1.4.0 (prochain)
-- [ ] Icons manquantes
-- [ ] Range/Slider
-- [ ] Divider
+- [x] Icons manquantes
+- [x] Range/Slider
+- [x] Divider
+
+### v1.5.0 (prochain)
+- [x] Buttons: btn-warning, btn-outline-*, btn-pill
+- [x] Badges: dot, count, pill, icon, removable
+- [x] Segmented Control (nouveau composant)
+- [x] Tooltip avec positions et fleches
+- [x] Dropdown avec sous-menus et icones
+- [x] Number Input avec variantes
+- [x] Tags/Chips avec tag input
+- [x] File Input avec dropzone

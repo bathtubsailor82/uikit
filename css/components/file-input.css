@@ -1,0 +1,386 @@
+/**
+ * UIKit File Input
+ * Input fichier style, zone de drop, apercu
+ */
+
+/* === BASIC FILE INPUT === */
+
+.file-input {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.file-input input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.file-input-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-4);
+    background: var(--color-bg-primary);
+    border: var(--border-width) solid var(--color-border-medium);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.file-input:hover .file-input-btn {
+    background: var(--color-bg-hover);
+    border-color: var(--color-primary);
+}
+
+.file-input-btn .icon {
+    color: var(--color-text-tertiary);
+}
+
+/* === FILE INPUT WITH TEXT === */
+
+.file-input-group {
+    display: flex;
+    gap: 0;
+}
+
+.file-input-group .file-input-btn {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+}
+
+.file-input-text {
+    flex: 1;
+    padding: var(--spacing-2) var(--spacing-3);
+    background: var(--color-bg-primary);
+    border: var(--border-width) solid var(--color-border-medium);
+    border-left: none;
+    border-top-right-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
+    font-size: var(--font-size-base);
+    color: var(--color-text-tertiary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-input-text.has-file {
+    color: var(--color-text-primary);
+}
+
+/* === DROP ZONE === */
+
+.dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-8);
+    background: var(--color-bg-secondary);
+    border: 2px dashed var(--color-border-medium);
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.dropzone:hover {
+    background: var(--color-bg-hover);
+    border-color: var(--color-primary);
+}
+
+.dropzone.dragover {
+    background: var(--color-primary-light);
+    border-color: var(--color-primary);
+    border-style: solid;
+}
+
+.dropzone input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.dropzone-icon {
+    font-size: 32px;
+    color: var(--color-text-tertiary);
+    line-height: 1;
+}
+
+.dropzone.dragover .dropzone-icon {
+    color: var(--color-primary);
+}
+
+.dropzone-text {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+}
+
+.dropzone-text strong {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-medium);
+}
+
+.dropzone-hint {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+}
+
+/* Dropzone sizes */
+.dropzone-sm {
+    padding: var(--spacing-4);
+    gap: var(--spacing-2);
+}
+
+.dropzone-sm .dropzone-icon {
+    font-size: 24px;
+}
+
+.dropzone-sm .dropzone-text {
+    font-size: var(--font-size-sm);
+}
+
+.dropzone-lg {
+    padding: var(--spacing-12);
+}
+
+.dropzone-lg .dropzone-icon {
+    font-size: 48px;
+}
+
+/* === FILE LIST === */
+
+.file-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    margin-top: var(--spacing-3);
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-2) var(--spacing-3);
+    background: var(--color-bg-secondary);
+    border-radius: var(--border-radius-md);
+}
+
+.file-item-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-hover);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-lg);
+}
+
+.file-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-item-name {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-item-size {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+}
+
+.file-item-remove {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-item-remove:hover {
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+}
+
+.file-item-remove::before {
+    content: "\00d7";
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* File item with progress */
+.file-item-progress {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-2);
+}
+
+.file-item-progress .file-item-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.file-item-progress .progress {
+    height: 4px;
+    background: var(--color-bg-hover);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.file-item-progress .progress-bar {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 2px;
+    transition: width var(--transition-base);
+}
+
+/* === FILE PREVIEW (images) === */
+
+.file-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: var(--spacing-3);
+    margin-top: var(--spacing-3);
+}
+
+.file-preview {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    background: var(--color-bg-secondary);
+}
+
+.file-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.file-preview-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.file-preview:hover .file-preview-overlay {
+    opacity: 1;
+}
+
+.file-preview-remove {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: var(--color-danger);
+    border: none;
+    border-radius: 50%;
+    color: var(--color-text-white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-preview-remove::before {
+    content: "\00d7";
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Non-image file preview */
+.file-preview-file {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3);
+}
+
+.file-preview-file .file-icon {
+    font-size: 24px;
+    color: var(--color-text-tertiary);
+}
+
+.file-preview-file .file-ext {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+}
+
+/* === DISABLED STATE === */
+
+.file-input.disabled,
+.dropzone.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* === ERROR STATE === */
+
+.dropzone.error {
+    border-color: var(--color-danger);
+    background: var(--color-danger-light);
+}
+
+/* === DARK MODE === */
+
+[data-theme="dark"] .file-input-btn {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .file-input-text {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .dropzone {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .file-item {
+    background: var(--color-bg-tertiary);
+}
+
+[data-theme="dark"] .file-preview {
+    background: var(--color-bg-tertiary);
+}

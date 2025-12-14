@@ -271,3 +271,92 @@
 .btn-link:active:not(:disabled):not(.loading) {
     transform: none;
 }
+
+/* Warning button */
+.btn-warning {
+    background: var(--color-warning);
+    color: var(--color-text-white);
+    border-color: var(--color-warning);
+}
+
+.btn-warning:hover:not(:disabled):not(.loading) {
+    background: #b37700;
+    border-color: #b37700;
+}
+
+.btn-warning.loading::after {
+    color: var(--color-text-white);
+}
+
+/* === OUTLINE VARIANTS === */
+
+.btn-outline-primary {
+    background: transparent;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.btn-outline-primary:hover:not(:disabled):not(.loading) {
+    background: var(--color-primary);
+    color: var(--color-text-white);
+}
+
+.btn-outline-secondary {
+    background: transparent;
+    border-color: var(--color-border-dark);
+    color: var(--color-text-primary);
+}
+
+.btn-outline-secondary:hover:not(:disabled):not(.loading) {
+    background: var(--color-bg-hover);
+    border-color: var(--color-text-primary);
+}
+
+.btn-outline-success {
+    background: transparent;
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+.btn-outline-success:hover:not(:disabled):not(.loading) {
+    background: var(--color-success);
+    color: var(--color-text-white);
+}
+
+.btn-outline-danger {
+    background: transparent;
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
+.btn-outline-danger:hover:not(:disabled):not(.loading) {
+    background: var(--color-danger);
+    color: var(--color-text-white);
+}
+
+.btn-outline-warning {
+    background: transparent;
+    border-color: var(--color-warning);
+    color: var(--color-warning);
+}
+
+.btn-outline-warning:hover:not(:disabled):not(.loading) {
+    background: var(--color-warning);
+    color: var(--color-text-white);
+}
+
+/* === PILL VARIANT === */
+
+.btn-pill {
+    border-radius: 9999px;
+}
+
+.btn-group .btn-pill:first-child {
+    border-top-left-radius: 9999px;
+    border-bottom-left-radius: 9999px;
+}
+
+.btn-group .btn-pill:last-child {
+    border-top-right-radius: 9999px;
+    border-bottom-right-radius: 9999px;
+}

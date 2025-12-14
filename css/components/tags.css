@@ -1,0 +1,322 @@
+/**
+ * UIKit Tags / Chips
+ * Tags avec variantes et tag input multi-selection
+ */
+
+/* === BASE TAG === */
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    padding: var(--spacing-1) var(--spacing-2);
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.2;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* === SIZES === */
+
+.tag-sm {
+    padding: 2px var(--spacing-1);
+    font-size: var(--font-size-xs);
+    border-radius: 2px;
+}
+
+.tag-lg {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-base);
+    border-radius: var(--border-radius-md);
+}
+
+/* === COLOR VARIANTS === */
+
+.tag-primary {
+    background: var(--color-primary-light);
+    color: var(--color-info);
+}
+
+.tag-success {
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
+}
+
+.tag-warning {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+.tag-danger {
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+}
+
+.tag-info {
+    background: var(--color-info-light);
+    color: var(--color-info-dark);
+}
+
+/* Solid variants */
+.tag-solid {
+    background: var(--color-text-tertiary);
+    color: var(--color-text-white);
+}
+
+.tag-solid.tag-primary {
+    background: var(--color-primary);
+    color: var(--color-text-white);
+}
+
+.tag-solid.tag-success {
+    background: var(--color-success);
+    color: var(--color-text-white);
+}
+
+.tag-solid.tag-warning {
+    background: var(--color-warning);
+    color: var(--color-text-white);
+}
+
+.tag-solid.tag-danger {
+    background: var(--color-danger);
+    color: var(--color-text-white);
+}
+
+/* Outline variants */
+.tag-outline {
+    background: transparent;
+    border: var(--border-width) solid var(--color-border-dark);
+    color: var(--color-text-secondary);
+}
+
+.tag-outline.tag-primary {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.tag-outline.tag-success {
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+.tag-outline.tag-warning {
+    border-color: var(--color-warning);
+    color: var(--color-warning);
+}
+
+.tag-outline.tag-danger {
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
+/* === PILL (fully rounded) === */
+
+.tag-pill {
+    border-radius: 9999px;
+    padding-left: var(--spacing-3);
+    padding-right: var(--spacing-3);
+}
+
+.tag-pill.tag-sm {
+    padding-left: var(--spacing-2);
+    padding-right: var(--spacing-2);
+}
+
+/* === WITH ICON === */
+
+.tag .tag-icon {
+    font-size: var(--font-size-sm);
+    line-height: 1;
+    opacity: 0.8;
+}
+
+.tag-sm .tag-icon {
+    font-size: var(--font-size-xs);
+}
+
+.tag-lg .tag-icon {
+    font-size: var(--font-size-base);
+}
+
+/* === REMOVABLE TAG === */
+
+.tag-removable {
+    padding-right: var(--spacing-1);
+}
+
+.tag-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    margin-left: var(--spacing-1);
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity var(--transition-fast), background var(--transition-fast);
+    font-size: 10px;
+    line-height: 1;
+}
+
+.tag-remove:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.tag-remove::before {
+    content: "\00d7";
+    font-weight: var(--font-weight-semibold);
+}
+
+.tag-solid .tag-remove:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* === CLICKABLE TAG === */
+
+.tag-clickable {
+    cursor: pointer;
+    transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.tag-clickable:hover {
+    filter: brightness(0.95);
+}
+
+.tag-clickable:active {
+    transform: scale(0.98);
+}
+
+/* === TAG GROUP === */
+
+.tag-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+}
+
+.tag-group-compact {
+    gap: var(--spacing-1);
+}
+
+/* === TAG INPUT (multi-selection field) === */
+
+.tag-input {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-2);
+    min-height: 36px;
+    padding: var(--spacing-2);
+    background: var(--color-bg-primary);
+    border: var(--border-width) solid var(--color-border-medium);
+    border-radius: var(--border-radius-md);
+    cursor: text;
+}
+
+.tag-input:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 var(--focus-ring-width) rgba(90, 144, 199, 0.2);
+}
+
+.tag-input .tag {
+    margin: 0;
+}
+
+.tag-input input {
+    flex: 1;
+    min-width: 80px;
+    padding: var(--spacing-1) 0;
+    border: none;
+    background: transparent;
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+    outline: none;
+}
+
+.tag-input input::placeholder {
+    color: var(--color-text-tertiary);
+}
+
+/* Tag input sizes */
+.tag-input-sm {
+    min-height: 28px;
+    padding: var(--spacing-1);
+    gap: var(--spacing-1);
+}
+
+.tag-input-sm input {
+    font-size: var(--font-size-sm);
+}
+
+.tag-input-sm .tag {
+    padding: 2px var(--spacing-1);
+    font-size: var(--font-size-xs);
+}
+
+.tag-input-lg {
+    min-height: 44px;
+    padding: var(--spacing-3);
+}
+
+.tag-input-lg input {
+    font-size: var(--font-size-md);
+}
+
+/* Tag input states */
+.tag-input.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    background: var(--color-bg-secondary);
+}
+
+.tag-input.error {
+    border-color: var(--color-danger);
+}
+
+.tag-input.error:focus-within {
+    box-shadow: 0 0 0 var(--focus-ring-width) rgba(216, 68, 68, 0.2);
+}
+
+/* === AVATAR TAG === */
+
+.tag-avatar {
+    padding-left: var(--spacing-1);
+}
+
+.tag-avatar img {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.tag-lg.tag-avatar img {
+    width: 20px;
+    height: 20px;
+}
+
+/* === DARK MODE === */
+
+[data-theme="dark"] .tag {
+    background: var(--color-bg-tertiary);
+}
+
+[data-theme="dark"] .tag-remove:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .tag-input {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-border-dark);
+}
