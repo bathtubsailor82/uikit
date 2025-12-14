@@ -2767,6 +2767,124 @@ body.keyboard-nav *:focus {
 }
 
 /* Stat icons - for sidebar stats component */
+/* === AUDIO ICONS - Transport / Controls === */
+
+.icon-input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='14' y='4' width='8' height='16' rx='1'/%3E%3Cpath d='M10 12H2'/%3E%3Cpolyline points='6 8 10 12 6 16'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-output {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='8' height='16' rx='1'/%3E%3Cpath d='M14 12h8'/%3E%3Cpolyline points='18 8 22 12 18 16'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-matrix {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='6' cy='6' r='2'/%3E%3Ccircle cx='12' cy='6' r='2'/%3E%3Ccircle cx='18' cy='6' r='2'/%3E%3Ccircle cx='6' cy='12' r='2'/%3E%3Ccircle cx='12' cy='12' r='2' fill='currentColor'/%3E%3Ccircle cx='18' cy='12' r='2'/%3E%3Ccircle cx='6' cy='18' r='2' fill='currentColor'/%3E%3Ccircle cx='12' cy='18' r='2'/%3E%3Ccircle cx='18' cy='18' r='2' fill='currentColor'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-mute {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5'/%3E%3Cline x1='23' y1='9' x2='17' y2='15'/%3E%3Cline x1='17' y1='9' x2='23' y2='15'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-solo {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17c-2 0-3-1-3-2.5S5 12 7 12s3 1 3 2.5S9 17 7 17z'/%3E%3Cpath d='M7 12c-2 0-3-1-3-2.5S5 7 7 7s3 1 3 2.5'/%3E%3Crect x='13' y='6' width='8' height='12' rx='1' fill='none'/%3E%3Ctext x='17' y='15' font-family='system-ui' font-size='10' font-weight='bold' fill='currentColor' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-arm {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='4' fill='currentColor'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+/* === AUDIO ICONS - Signals / Metering === */
+
+.icon-waveform {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12c1-3 2-6 4-6s3 12 5 12 3-9 4-9 2 3 3 3 2-2 4-2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-spectrum {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='4' y1='20' x2='4' y2='14'/%3E%3Cline x1='8' y1='20' x2='8' y2='8'/%3E%3Cline x1='12' y1='20' x2='12' y2='4'/%3E%3Cline x1='16' y1='20' x2='16' y2='10'/%3E%3Cline x1='20' y1='20' x2='20' y2='16'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-phase {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 8c2 0 3 4 5 4s3-4 5-4 3 4 5 4 3-4 5-4'/%3E%3Cpath d='M2 16c2 0 3-4 5-4s3 4 5 4 3-4 5-4 3 4 5 4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-mono {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Ccircle cx='12' cy='12' r='3' fill='currentColor'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-stereo {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='7' cy='12' r='5'/%3E%3Ccircle cx='17' cy='12' r='5'/%3E%3Ccircle cx='7' cy='12' r='2' fill='currentColor'/%3E%3Ccircle cx='17' cy='12' r='2' fill='currentColor'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+/* === AUDIO ICONS - Routing / Connections === */
+
+.icon-route {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='5' cy='6' r='3'/%3E%3Ccircle cx='19' cy='18' r='3'/%3E%3Cpath d='M8 6h4a4 4 0 0 1 4 4v4'/%3E%3Cpolyline points='13 11 16 14 13 17'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-bus {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='4' y1='4' x2='4' y2='12'/%3E%3Cline x1='10' y1='4' x2='10' y2='12'/%3E%3Cline x1='16' y1='4' x2='16' y2='12'/%3E%3Cpath d='M4 12l6 6h4l6-6'/%3E%3Cline x1='14' y1='18' x2='14' y2='22'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-send {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='4' y1='20' x2='4' y2='8'/%3E%3Cpath d='M4 14l8-8h8'/%3E%3Cpolyline points='16 10 20 6 16 2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-return {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='4' y1='4' x2='4' y2='16'/%3E%3Cpath d='M4 10l8 8h8'/%3E%3Cpolyline points='16 14 20 18 16 22'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-insert {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12h6'/%3E%3Cpolyline points='6 9 8 12 6 15'/%3E%3Crect x='8' y='6' width='8' height='12' rx='1'/%3E%3Cpath d='M16 12h6'/%3E%3Cpolyline points='20 9 22 12 20 15'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
 .stat-icon-svg {
     width: 14px;
     height: 14px;
@@ -11578,6 +11696,10 @@ tr.selected .matrix-cell.active {
 
 [data-theme="dark"] .matrix-cell {
     background: var(--color-bg-tertiary);
+}
+
+[data-theme="dark"] .matrix-cell.active {
+    background: var(--color-success);
 }
 
 [data-theme="dark"] .matrix-cell:hover {

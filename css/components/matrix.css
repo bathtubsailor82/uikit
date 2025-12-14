@@ -463,6 +463,10 @@ tr.selected .matrix-cell.active {
     background: var(--color-bg-tertiary);
 }
 
+[data-theme="dark"] .matrix-cell.active {
+    background: var(--color-success);
+}
+
 [data-theme="dark"] .matrix-cell:hover {
     background: var(--color-bg-active);
 }
