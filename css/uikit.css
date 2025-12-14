@@ -1,0 +1,62 @@
+/**
+ * UIKit - Complete CSS Bundle
+ * v1.6.0
+ *
+ * Import this single file to get all UIKit styles.
+ * Or import individual components as needed.
+ */
+
+/* === FOUNDATION === */
+@import "tokens.css";
+@import "reset.css";
+@import "accessibility.css";
+
+/* === LAYOUT === */
+@import "layout.css";
+@import "layouts.css";
+
+/* === CORE COMPONENTS === */
+@import "components/buttons.css";
+@import "components/forms.css";
+@import "components/icons.css";
+
+/* === NAVIGATION === */
+@import "components/header.css";
+@import "components/tabs.css";
+@import "components/breadcrumb.css";
+@import "components/pagination.css";
+
+/* === DATA DISPLAY === */
+@import "components/tables.css";
+@import "components/cards.css";
+@import "components/list-items.css";
+@import "components/badges.css";
+@import "components/avatar.css";
+@import "components/stats.css";
+
+/* === FEEDBACK === */
+@import "components/alerts.css";
+@import "components/notifications.css";
+@import "components/modals.css";
+@import "components/loading.css";
+@import "components/progress.css";
+@import "components/logs.css";
+
+/* === FORM COMPONENTS === */
+@import "components/range.css";
+@import "components/number-input.css";
+@import "components/tags.css";
+@import "components/file-input.css";
+
+/* === INTERACTIVE === */
+@import "components/accordion.css";
+@import "components/dropdown.css";
+@import "components/tooltip.css";
+@import "components/segmented.css";
+
+/* === LAYOUT HELPERS === */
+@import "components/divider.css";
+
+/* === AUDIO / SPECIALIZED === */
+@import "components/meter.css";
+@import "components/matrix.css";
