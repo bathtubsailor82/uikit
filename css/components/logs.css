@@ -43,6 +43,12 @@
     color: #ff6b6b;
 }
 
+.log-entry.debug {
+    background: transparent;
+    color: var(--color-text-tertiary);
+    opacity: 0.8;
+}
+
 /* Dark mode: brighter text colors for better readability */
 [data-theme="dark"] .log-entry.info {
     color: #6ba6e8;
