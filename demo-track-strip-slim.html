@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackStripSlim - Demo</title>
+
+    <!-- UIKit CSS -->
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components/meter.css">
+    <link rel="stylesheet" href="css/layouts/track-strip-slim.css">
+
+    <style>
+        body {
+            padding: 40px;
+            background: var(--color-bg-primary);
+        }
+
+        .demo-container {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            color: var(--color-text-primary);
+            margin-bottom: 24px;
+        }
+
+        .demo-info {
+            background: var(--color-bg-secondary);
+            padding: 16px;
+            border-radius: var(--border-radius-md);
+            margin-bottom: 24px;
+            color: var(--color-text-secondary);
+            font-size: 14px;
+        }
+
+        .demo-info code {
+            background: var(--color-bg-tertiary);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: var(--font-family-mono);
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+<body>
+    <h1>TrackStripSlim Component Demo</h1>
+
+    <div class="demo-info">
+        <strong>Largeur:</strong> 40px par défaut (override avec <code>--wide</code> pour 50px)<br>
+        <strong>Contrôles:</strong>
+        <ul>
+            <li><strong>M</strong> - Monitor toggle</li>
+            <li><strong>S</strong> - Solo toggle</li>
+            <li><strong>Rotary</strong> - Gain (non-interactive pour l'instant)</li>
+            <li><strong>●</strong> - Record (click: idle→armed→recording→idle, shift/right-click: cancel)</li>
+            <li><strong>Threshold line</strong> - Drag vertical pour ajuster</li>
+            <li><strong>Footer</strong> - Click FR/location pour éditer (events disponibles)</li>
+        </ul>
+    </div>
+
+    <div class="demo-container" id="tracks-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/meter.js"></script>
+    <script src="js/components/TrackStripSlim.js"></script>
+
+    <script>
+        const container = document.getElementById('tracks-container');
+
+        // Create demo tracks
+        const demoTracks = [
+            {
+                trackId: 0,
+                location: 'TRACK-0',
+                language: 'FR',
+                threshold: -30,
+                gain: 0,
+                monitoring: false,
+                solo: false
+            },
+            {
+                trackId: 1,
+                location: 'P-01',
+                language: 'FR',
+                threshold: -25,
+                gain: 3,
+                monitoring: true,
+                solo: false
+            },
+            {
+                trackId: 2,
+                location: 'AG01',
+                language: 'EN',
+                threshold: -35,
+                gain: -6,
+                monitoring: false,
+                solo: false,
+                armed: true
+            },
+            {
+                trackId: 3,
+                location: 'MIC-A',
+                language: 'DE',
+                threshold: -40,
+                gain: 0,
+                monitoring: false,
+                solo: false,
+                recording: true
+            }
+        ];
+
+        const trackInstances = [];
+
+        demoTracks.forEach(config => {
+            const trackDiv = document.createElement('div');
+            container.appendChild(trackDiv);
+
+            const track = new TrackStripSlim(trackDiv, {
+                ...config,
+                onMonitorToggle: (enabled) => {
+                    console.log(`Track ${config.trackId} monitoring:`, enabled);
+                },
+                onSoloToggle: (enabled) => {
+                    console.log(`Track ${config.trackId} solo:`, enabled);
+                },
+                onRecordToggle: (state) => {
+                    console.log(`Track ${config.trackId} record:`, state);
+                },
+                onThresholdChange: (value) => {
+                    console.log(`Track ${config.trackId} threshold:`, value);
+                },
+                onLocationClick: (location) => {
+                    console.log(`Track ${config.trackId} location click:`, location);
+                    const newLocation = prompt('New location:', location);
+                    if (newLocation) {
+                        track.updateLocation(newLocation);
+                    }
+                },
+                onLanguageClick: (language) => {
+                    console.log(`Track ${config.trackId} language click:`, language);
+                    const newLang = prompt('New language (2 letters):', language);
+                    if (newLang && newLang.length === 2) {
+                        track.updateLanguage(newLang.toUpperCase());
+                    }
+                }
+            });
+
+            trackInstances.push(track);
+        });
+
+        // Simulate metering data
+        function updateMetering() {
+            trackInstances.forEach((track, i) => {
+                const peak = -60 + Math.random() * 60;
+                const rms = peak - 6 - Math.random() * 6;
+                track.updateMetering(peak, rms);
+            });
+        }
+
+        // Update at 30Hz
+        setInterval(updateMetering, 33);
+    </script>
+</body>
+</html>

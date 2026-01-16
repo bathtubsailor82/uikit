@@ -622,6 +622,12 @@ class VUMeter {
   }
 }
 
+// Export for browser usage
+if (typeof window !== 'undefined') {
+  window.VUMeter = VUMeter
+  window.METER_PRESETS = METER_PRESETS
+}
+
 // Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { VUMeter, METER_PRESETS }
