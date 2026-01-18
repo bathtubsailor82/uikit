@@ -47,6 +47,11 @@
     padding: var(--spacing-2);
 }
 
+/* Track preset - reduced padding for tighter fit (more specific selector) */
+.vu-meter--track.vu-meter--with-scale .vu-meter__wrapper {
+    padding: 2px;
+}
+
 /* ============================================================================
    Vertical Orientation
    ============================================================================ */
@@ -54,47 +59,71 @@
 .vu-meter--vertical .vu-meter__area {
     display: flex;
     flex-direction: row;
+    align-items: stretch;  /* Étire les enfants en hauteur */
     flex: 1;
-    gap: 0;
+    gap: 2px;
     position: relative;
 }
 
 .vu-meter--vertical .vu-meter__scale {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
+    position: relative;
+    flex-shrink: 0;  /* Ne pas rétrécir */
     width: 20px;
+    height: 100%;    /* Prend toute la hauteur disponible */
     pointer-events: none;
     z-index: 5;
 }
 
+/* Track preset - narrower scale since no labels */
+.vu-meter--track.vu-meter--vertical .vu-meter__scale {
+    width: 8px;
+}
+
 .vu-meter--vertical .vu-meter__tick {
     position: absolute;
-    right: 0;
+    left: 0;  /* Ticks à gauche du scale */
     width: 20px;
     height: 0;
+}
+
+/* Track preset - narrower ticks to match narrower scale */
+.vu-meter--track.vu-meter--vertical .vu-meter__tick {
+    width: 8px;
+}
+
+/* Track preset - adjust tick line lengths for narrower scale */
+.vu-meter--track.vu-meter--vertical .vu-meter__tick--major::before {
+    width: 4px;
+}
+
+.vu-meter--track.vu-meter--vertical .vu-meter__tick--minor::before {
+    width: 2px;
 }
 
 /* Major ticks - longer line with label */
 .vu-meter--vertical .vu-meter__tick--major::before {
     content: '';
     position: absolute;
-    left: 0;
+    left: 0;  /* Trait part du bord gauche (vers les bars) */
     width: 5px;
+    height: 1px; /* Ligne horizontale */
     top: 0;
-    border-top: 1px solid var(--color-text-tertiary);
+    background: #888;  /* Gris clair */
+    opacity: 0.25;
+    border: none;
 }
 
 /* Minor ticks - shorter line, no label */
 .vu-meter--vertical .vu-meter__tick--minor::before {
     content: '';
     position: absolute;
-    left: 0;
+    left: 0;  /* Trait part du bord gauche (vers les bars) */
     width: 3px;
+    height: 1px; /* Ligne horizontale */
     top: 0;
-    border-top: 1px solid var(--color-text-tertiary);
-    opacity: 0.6;
+    background: #777;  /* Gris clair discret */
+    opacity: 0.2;
+    border: none;
 }
 
 .vu-meter--vertical .vu-meter__tick-label {
@@ -130,11 +159,6 @@
     height: 100%;
 }
 
-/* Only add margin when scale is present */
-.vu-meter--vertical.vu-meter--with-scale .vu-meter__bars {
-    margin-right: 22px;
-}
-
 .vu-meter--vertical .vu-meter__bar {
     position: relative;
     border-radius: 0;
@@ -145,6 +169,7 @@
 .vu-meter--vertical .vu-meter__bar--peak {
     flex: 3;
     min-width: 12px;
+    will-change: transform; /* Force GPU layer for animated ::before */
     /* Background zones - ITU-R style */
     /* Range: -90 to +6 (96dB total) */
     /* -20dB position: (70/96) = 72.9% */
@@ -172,9 +197,11 @@
         var(--meter-danger) 83.3%,
         var(--meter-danger) 100%
     );
-    /* clip-path: inset(top right bottom left) - clip from top */
+    /* clip-path with GPU hints for better performance */
     clip-path: inset(var(--peak-clip, 100%) 0 0 0);
+    will-change: clip-path;
     transition: clip-path 100ms ease-out;
+    z-index: 1; /* Below hold indicator (z-index: 10) */
 }
 
 /* RMS bar - thin with background zones */
@@ -240,11 +267,13 @@
 
 .vu-meter--vertical .vu-meter__hold {
     position: absolute;
+    bottom: var(--hold-bottom, 0);
     left: 0;
     right: 0;
     height: 2px;
     background: var(--color-text-primary);
     transition: bottom 50ms linear;
+    will-change: bottom;  /* GPU hint */
     z-index: 10;
 }
 
@@ -332,6 +361,7 @@
 .vu-meter--horizontal .vu-meter__bar--peak {
     flex: 3;
     min-height: 8px;
+    will-change: transform; /* Force GPU layer for animated ::before */
     /* Background zones - ITU-R style (horizontal) */
     /* Range: -90 to +6 (96dB total) */
     background: linear-gradient(to right,
@@ -357,9 +387,11 @@
         var(--meter-danger) 83.3%,
         var(--meter-danger) 100%
     );
-    /* clip-path: inset(top right bottom left) - clip from right */
+    /* clip-path with GPU hints for better performance */
     clip-path: inset(0 var(--peak-clip, 100%) 0 0);
+    will-change: clip-path;
     transition: clip-path 100ms ease-out;
+    z-index: 1; /* Below hold indicator (z-index: 10) */
 }
 
 /* RMS bar - thin with background zones */
@@ -421,11 +453,13 @@
 
 .vu-meter--horizontal .vu-meter__hold {
     position: absolute;
+    left: var(--hold-left, 0);
     top: 0;
     bottom: 0;
     width: 2px;
     background: var(--color-text-primary);
     transition: left 50ms linear;
+    will-change: left;  /* GPU hint */
     z-index: 10;
 }
 
@@ -447,6 +481,11 @@
     font-variant-numeric: tabular-nums;
 }
 
+/* Display value via CSS custom property (performance: no DOM textContent mutations) */
+.vu-meter__numeric::before {
+    content: var(--peak-value, "---");
+}
+
 .vu-meter--horizontal .vu-meter__numeric {
     min-width: 40px;
     padding: 0 var(--spacing-2);
@@ -455,6 +494,21 @@
 
 .vu-meter__numeric--clip {
     color: var(--meter-clip);
+}
+
+/* Track preset - compact numeric display très discret */
+.vu-meter--track .vu-meter__numeric {
+    font-size: 7px;
+    padding: 1px 2px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 1px;
+    margin-bottom: 1px;
+    font-weight: var(--font-weight-normal);
+    opacity: 0.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+    max-width: 100%;
 }
 
 /* ============================================================================

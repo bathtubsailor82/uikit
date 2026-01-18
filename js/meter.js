@@ -56,6 +56,18 @@ const METER_PRESETS = {
     showHold: false,
     width: 120,
     height: 12
+  },
+
+  // Track vertical compact - Performance optimisée pour 128 tracks
+  track: {
+    orientation: 'vertical',
+    showScale: true,          // Graduation visible
+    showScaleLabels: false,   // Sans labels dB (perf)
+    showNumeric: true,        // CSS custom property + throttle 10Hz (perf MVP)
+    showRMS: true,
+    showHold: false,          // Désactivé (perf)
+    width: 24,
+    height: 200
   }
 }
 
@@ -69,6 +81,7 @@ const DEFAULT_CONFIG = {
 
   // Affichage
   showScale: true,
+  showScaleLabels: true,  // Labels dB sur graduation (true par défaut)
   showNumeric: true,
   showRMS: true,
   showHold: true,
@@ -144,8 +157,12 @@ class VUMeter {
     this.holdTimestamp = 0
 
     // Smoothed values (for PPM ballistics on peak only)
-    this.smoothedPeak = -Infinity
+    this.targetPeak = -Infinity      // Target from WebSocket
+    this.smoothedPeak = -Infinity    // Smoothed value with ballistics
     this.lastUpdateTime = performance.now()
+
+    // Throttle numeric updates to 10Hz for performance with 128 tracks
+    this.lastNumericUpdate = 0
 
     // Animation
     this.animationId = null
@@ -171,6 +188,10 @@ class VUMeter {
     if (presetName === 'compact') {
       this.container.classList.add('vu-meter--compact')
     }
+    // Add track class for track preset
+    if (presetName === 'track') {
+      this.container.classList.add('vu-meter--track')
+    }
     // Hide tick labels if meter is too short (< 180px)
     if (height < 180) {
       this.container.classList.add('vu-meter--compact-scale')
@@ -184,7 +205,7 @@ class VUMeter {
     if (showNumeric) {
       this.numericEl = document.createElement('div')
       this.numericEl.className = 'vu-meter__numeric'
-      this.numericEl.textContent = '---'
+      // Content handled by CSS ::before with --peak-value custom property
       wrapper.appendChild(this.numericEl)
     }
 
@@ -219,13 +240,13 @@ class VUMeter {
       barsContainer.appendChild(this.lufsBarEl)
     }
 
-    meterArea.appendChild(barsContainer)
-
-    // Scale (overlaid, with labels on right)
+    // Scale (to the right of bars, inside barsContainer)
     if (showScale) {
       this.scaleEl = this.createScale()
-      meterArea.appendChild(this.scaleEl)
+      barsContainer.appendChild(this.scaleEl)
     }
+
+    meterArea.appendChild(barsContainer)
 
     wrapper.appendChild(meterArea)
 
@@ -290,10 +311,13 @@ class VUMeter {
         tick.style.left = `${percent}%`
       }
 
-      const label = document.createElement('span')
-      label.className = 'vu-meter__tick-label'
-      label.textContent = db > 0 ? `+${db}` : (db === 0 ? '0' : db.toString())
-      tick.appendChild(label)
+      // Add label only if showScaleLabels is true
+      if (this.config.showScaleLabels !== false) {
+        const label = document.createElement('span')
+        label.className = 'vu-meter__tick-label'
+        label.textContent = db > 0 ? `+${db}` : (db === 0 ? '0' : db.toString())
+        tick.appendChild(label)
+      }
 
       scale.appendChild(tick)
     }
@@ -330,12 +354,16 @@ class VUMeter {
   }
 
   applyDimensions() {
-    const { width, height, orientation } = this.config
+    const { width, height, orientation, presetName } = this.config
     const isVertical = orientation === 'vertical'
 
     if (isVertical) {
-      this.container.style.width = `${width + (this.config.showScale ? 30 : 0)}px`
-      this.container.style.height = `${height + (this.config.showNumeric ? 24 : 0) + (this.config.showLUFS ? 32 : 0)}px`
+      // Scale width: 10px for ticks only (no labels), 30px with labels
+      const scaleWidth = this.config.showScale ? (this.config.showScaleLabels === false ? 10 : 30) : 0
+      // Numeric height: 12px for compact track preset, 24px for others
+      const numericHeight = this.config.showNumeric ? (presetName === 'track' ? 12 : 24) : 0
+      this.container.style.width = `${width + scaleWidth}px`
+      this.container.style.height = `${height + numericHeight + (this.config.showLUFS ? 32 : 0)}px`
     } else {
       this.container.style.width = `${width}px`
       this.container.style.height = `${height + (this.config.showNumeric ? 16 : 0)}px`
@@ -351,19 +379,16 @@ class VUMeter {
    * @param {Object} data - { peak, rms, hold, lufs } en dB
    */
   update(data) {
-    const now = performance.now()
-    const deltaTime = (now - this.lastUpdateTime) / 1000  // en secondes
-    this.lastUpdateTime = now
-
     if (data.peak !== undefined) {
-      const targetPeak = this.clampDb(data.peak)
-      if (this.config.ballistics) {
-        this.smoothedPeak = this.applyBallistics(this.smoothedPeak, targetPeak, deltaTime)
-        this.values.peak = this.smoothedPeak
-      } else {
-        this.values.peak = targetPeak
+      // Store target peak - ballistics applied in paint() for smooth 60fps decay
+      this.targetPeak = this.clampDb(data.peak)
+
+      if (!this.config.ballistics) {
+        // No ballistics: apply immediately
+        this.values.peak = this.targetPeak
+        this.updateHold(this.values.peak)
       }
-      this.updateHold(this.values.peak)
+      // With ballistics: peak updated in paint()
     }
     if (data.rms !== undefined) {
       // RMS is already smoothed by backend (300ms EMA), no additional smoothing needed
@@ -435,7 +460,18 @@ class VUMeter {
     const { orientation } = this.config
     const isVertical = orientation === 'vertical'
 
-    // Peak bar - use CSS custom property for clip-path on ::before pseudo-element
+    // Apply ballistics to peak if enabled (smooth 60fps decay)
+    if (this.config.ballistics && this.targetPeak !== undefined) {
+      const now = performance.now()
+      const deltaTime = (now - this.lastUpdateTime) / 1000  // en secondes
+      this.lastUpdateTime = now
+
+      this.smoothedPeak = this.applyBallistics(this.smoothedPeak, this.targetPeak, deltaTime)
+      this.values.peak = this.smoothedPeak
+      this.updateHold(this.values.peak)
+    }
+
+    // Peak bar - use CSS custom property for clip-path (with will-change for GPU hint)
     const peakPercent = this.dbToPercent(this.values.peak)
 
     if (isVertical) {
@@ -468,13 +504,15 @@ class VUMeter {
       }
     }
 
-    // Hold indicator
+    // Hold indicator - use CSS custom property like peak bar
     if (this.holdEl) {
       const holdPercent = this.dbToPercent(this.holdValue)
       if (isVertical) {
-        this.holdEl.style.bottom = `${holdPercent}%`
+        // Use CSS custom property for bottom position
+        this.holdEl.style.setProperty('--hold-bottom', `${holdPercent}%`)
       } else {
-        this.holdEl.style.left = `${holdPercent}%`
+        // Horizontal: use CSS custom property for left position
+        this.holdEl.style.setProperty('--hold-left', `${holdPercent}%`)
       }
 
       // Clip indicator
@@ -485,18 +523,26 @@ class VUMeter {
       }
     }
 
-    // Numeric display - shows peak hold value (more useful than instant peak)
+    // Numeric display - throttled to 10Hz (100ms) for performance with 128 tracks
+    // Uses CSS custom property to avoid textContent DOM mutations
     if (this.numericEl) {
-      const displayValue = this.holdValue > this.config.dbMin
-        ? this.holdValue.toFixed(1)
-        : '---'
-      this.numericEl.textContent = displayValue
+      const now = performance.now()
+      if (now - this.lastNumericUpdate > 100) {
+        const displayValue = this.holdValue > this.config.dbMin
+          ? this.holdValue.toFixed(1)
+          : '---'
 
-      // Red when clipping
-      if (this.holdValue >= this.config.dbClip) {
-        this.numericEl.classList.add('vu-meter__numeric--clip')
-      } else {
-        this.numericEl.classList.remove('vu-meter__numeric--clip')
+        // Use CSS custom property instead of textContent (no DOM mutation)
+        this.numericEl.style.setProperty('--peak-value', `"${displayValue}"`)
+
+        // Red when clipping
+        if (this.holdValue >= this.config.dbClip) {
+          this.numericEl.classList.add('vu-meter__numeric--clip')
+        } else {
+          this.numericEl.classList.remove('vu-meter__numeric--clip')
+        }
+
+        this.lastNumericUpdate = now
       }
     }
 

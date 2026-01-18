@@ -131,6 +131,10 @@
         <div id="meter-broadcast"></div>
         <label>Broadcast</label>
       </div>
+      <div class="demo-item">
+        <div id="meter-track"></div>
+        <label>Track (compact)</label>
+      </div>
     </div>
   </div>
 
@@ -187,6 +191,7 @@
       minimal: new VUMeter(document.getElementById('meter-minimal'), { preset: 'minimal' }),
       standard: new VUMeter(document.getElementById('meter-standard'), { preset: 'standard' }),
       broadcast: new VUMeter(document.getElementById('meter-broadcast'), { preset: 'broadcast' }),
+      track: new VUMeter(document.getElementById('meter-track'), { preset: 'track' }),
       compact: new VUMeter(document.getElementById('meter-compact'), { preset: 'compact', width: 200 }),
       horizontalCustom: new VUMeter(document.getElementById('meter-horizontal-custom'), {
         orientation: 'horizontal',
