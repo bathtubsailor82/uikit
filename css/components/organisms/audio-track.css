@@ -1,0 +1,276 @@
+/**
+ * AudioTrack - Professional Audio Console Track Strip
+ * Hardware-inspired design with 3D depth
+ * Width: 60px (normal), adapts for compact/normal/large
+ * Note: mini variant (40px, no VU-meter) will be added separately
+ */
+
+/* ============================================================================
+   Container - Hardware Panel Base
+   ============================================================================ */
+
+.audio-track {
+    display: flex;
+    flex-direction: column;
+    width: 60px;
+    min-height: 600px;
+    background: linear-gradient(135deg, #2d2d2d 0%, #252525 100%);
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.03),
+        0 2px 8px rgba(0, 0, 0, 0.4),
+        0 1px 2px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+/* Top highlight */
+.audio-track::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 100%);
+    pointer-events: none;
+}
+
+/* ============================================================================
+   State Borders
+   ============================================================================ */
+
+.audio-track--armed {
+    /* No border change - visual feedback on record button only */
+}
+
+.audio-track--recording {
+    border-color: rgba(212, 63, 63, 0.5);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.03),
+        0 2px 8px rgba(0, 0, 0, 0.4),
+        0 0 16px rgba(212, 63, 63, 0.3);
+}
+
+/* ============================================================================
+   VU Meter Section
+   ============================================================================ */
+
+.audio-track__meter {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 6px 0 0;  /* Padding on right for scale + border */
+    background: linear-gradient(180deg, #1e1e1e 0%, #252525 100%);
+    border-bottom: 1px solid #1a1a1a;
+    position: relative;
+    min-height: 450px;
+}
+
+.audio-track__meter::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 100%);
+}
+
+.audio-track__meter-target {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Make VUMeter fill available width */
+.audio-track__meter-target .vu-meter {
+    width: 100% !important;
+    max-width: 100%;
+}
+
+/* Threshold indicator triangle */
+.audio-track__threshold-indicator {
+    position: absolute;
+    left: -8px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 3px 5px 3px 0;
+    border-color: transparent #fff transparent transparent;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.4));
+    pointer-events: none;
+    z-index: 10;
+    transform: translateY(-50%);
+}
+
+/* ============================================================================
+   Controls Section
+   ============================================================================ */
+
+.audio-track__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px;
+    background: linear-gradient(180deg, #252525 0%, #2a2a2a 100%);
+}
+
+.audio-track__buttons {
+    /* ButtonGroup styles in button-group.css */
+}
+
+.audio-track__rotaries {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.audio-track__record {
+    /* RecordControl styles in record-control.css */
+}
+
+/* ============================================================================
+   Footer Section
+   ============================================================================ */
+
+.audio-track__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 4px 2px 2px 2px;
+    background: linear-gradient(180deg, #1e1e1e 0%, #1a1a1a 100%);
+    border-top: 1px solid #0d0d0d;
+    font-size: 9px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-weight: 600;
+    position: relative;
+}
+
+.audio-track__footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 100%);
+}
+
+.audio-track__footer-item {
+    color: #888;
+    cursor: pointer;
+    transition: color 0.15s ease;
+    padding: 1px 2px;
+    border-radius: 2px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.audio-track__footer-item:hover {
+    color: #bbb;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.audio-track__lang {
+    text-transform: uppercase;
+    font-size: 9px;
+}
+
+.audio-track__location {
+    font-size: 8px;
+    max-width: 100%;
+}
+
+.audio-track__number {
+    font-size: 7px;
+    color: #555;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    padding-top: 2px;
+    margin-top: 1px;
+}
+
+.audio-track__number:hover {
+    color: #888;
+}
+
+/* ============================================================================
+   Size Variants
+   ============================================================================ */
+
+/* Compact - 40px wide (formerly mini) */
+.audio-track--compact {
+    width: 40px;
+    min-height: 400px;
+}
+
+.audio-track--compact .audio-track__meter {
+    padding: 0 4px 0 0;  /* Minimal padding for scale + border */
+    min-height: 250px;
+}
+
+.audio-track--compact .audio-track__footer {
+    padding: 3px 1px 1px 1px;
+    gap: 0;
+    font-size: 8px;
+}
+
+.audio-track--compact .audio-track__lang {
+    font-size: 8px;
+}
+
+.audio-track--compact .audio-track__location {
+    font-size: 7px;
+}
+
+.audio-track--compact .audio-track__number {
+    font-size: 6px;
+}
+
+.audio-track--compact .audio-track__controls {
+    padding: 4px;
+    gap: 3px;
+}
+
+.audio-track--compact .audio-track__rotaries {
+    /* Only threshold rotary for compact */
+    gap: 0;
+}
+
+/* Normal - 60px wide (default, formerly compact) */
+/* Uses base styles, no modifier needed */
+
+/* Large - 75px wide (formerly normal) */
+.audio-track--large {
+    width: 75px;
+    min-height: 650px;
+}
+
+.audio-track--large .audio-track__meter {
+    padding: 0 6px 0 0;  /* Same as base */
+    min-height: 450px;
+}
+
+.audio-track--large .audio-track__controls {
+    padding: 6px;
+    gap: 4px;
+}

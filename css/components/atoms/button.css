@@ -1,0 +1,174 @@
+/**
+ * Button - Audio Console Button Styles
+ * Hardware-inspired 3D appearance with realistic depth
+ */
+
+/* ============================================================================
+   Base Button - 3D Hardware Style
+   ============================================================================ */
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 50%, #2e2e2e 100%);
+    border: 1px solid #1a1a1a;
+    border-radius: 3px;
+    color: #e0e0e0;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+    position: relative;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Subtle highlight on top half */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.08) 0%,
+        transparent 100%);
+    border-radius: 3px 3px 0 0;
+    pointer-events: none;
+}
+
+/* Hover state */
+.btn:hover:not(:disabled) {
+    background: linear-gradient(180deg, #525252 0%, #424242 50%, #363636 100%);
+    border-color: #222;
+}
+
+/* Active (pressed) state */
+.btn:active:not(:disabled) {
+    background: linear-gradient(180deg, #2e2e2e 0%, #3a3a3a 50%, #3a3a3a 100%);
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.5),
+        inset 0 1px 2px rgba(0, 0, 0, 0.3),
+        0 1px 1px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+}
+
+/* Disabled state */
+.btn:disabled,
+.btn--disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* ============================================================================
+   Active State Colors
+   ============================================================================ */
+
+/* Blue (Monitor, Solo) */
+.btn--active.btn--blue {
+    background: linear-gradient(180deg, #5a8fd6 0%, #4a7fc6 50%, #3a6fb6 100%);
+    border-color: #2d5a91;
+    color: #fff;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(74, 127, 198, 0.4),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btn--active.btn--blue::before {
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        transparent 100%);
+}
+
+/* Amber (Mute, Armed) */
+.btn--active.btn--amber {
+    background: linear-gradient(180deg, #e6b84a 0%, #d6a83a 50%, #c6982a 100%);
+    border-color: #a67e1a;
+    color: #2a2a2a;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(214, 168, 58, 0.5),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Red (Record) */
+.btn--active.btn--red {
+    background: radial-gradient(ellipse at center, #ff5555 0%, #d43f3f 50%, #b82e2e 100%);
+    border-color: #8a1f1f;
+    color: #fff;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+        0 0 12px rgba(212, 63, 63, 0.8),
+        0 0 20px rgba(212, 63, 63, 0.4),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+    animation: pulse-btn 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-btn {
+    0%, 100% {
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+            0 0 12px rgba(212, 63, 63, 0.8),
+            0 0 20px rgba(212, 63, 63, 0.4),
+            0 2px 3px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+            0 0 16px rgba(212, 63, 63, 1),
+            0 0 28px rgba(212, 63, 63, 0.6),
+            0 2px 3px rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* Green (generic active) */
+.btn--active.btn--green {
+    background: linear-gradient(180deg, #6fd66f 0%, #5fc65f 50%, #4fb64f 100%);
+    border-color: #2e7d32;
+    color: #fff;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(76, 175, 80, 0.4),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================================================
+   Size Variants
+   ============================================================================ */
+
+/* Compact size (for narrower tracks) */
+.btn--compact {
+    width: 23px;
+    height: 23px;
+    font-size: 9px;
+}
+
+/* Mini size (future use) */
+.btn--mini {
+    width: 20px;
+    height: 20px;
+    font-size: 8px;
+}
+
+/* Large size (future use) */
+.btn--large {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+}

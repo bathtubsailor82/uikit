@@ -1,0 +1,171 @@
+/**
+ * LED - Hardware LED Indicator Styles
+ * Realistic LED with glow effects and pulse animations
+ */
+
+/* ============================================================================
+   Base LED - Off State (Hardware Style)
+   ============================================================================ */
+
+.led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #3a3a3a, #2a2a2a);
+    border: 1px solid #1a1a1a;
+    box-shadow:
+        inset 0 1px 2px rgba(0, 0, 0, 0.6),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.1),
+        0 1px 1px rgba(0, 0, 0, 0.3);
+    transition: all 0.15s ease;
+    position: relative;
+}
+
+/* Subtle highlight when off */
+.led::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+/* ============================================================================
+   Active State (Lit)
+   ============================================================================ */
+
+.led--active::before {
+    opacity: 1;
+}
+
+/* Green (default armed state) */
+.led--active.led--green {
+    background: radial-gradient(circle at 30% 30%, #6fd66f, #4caf50);
+    border-color: #2e7d32;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(76, 175, 80, 0.6),
+        0 0 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Red (recording state) */
+.led--active.led--red {
+    background: radial-gradient(circle at 30% 30%, #ff6b6b, #d43f3f);
+    border-color: #a62929;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(212, 63, 63, 0.8),
+        0 0 16px rgba(212, 63, 63, 0.4);
+}
+
+/* Amber (warning state) */
+.led--active.led--amber {
+    background: radial-gradient(circle at 30% 30%, #ffa726, #ff9800);
+    border-color: #e65100;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(255, 152, 0, 0.6),
+        0 0 12px rgba(255, 152, 0, 0.3);
+}
+
+/* Blue (info state) */
+.led--active.led--blue {
+    background: radial-gradient(circle at 30% 30%, #64b5f6, #2196f3);
+    border-color: #1565c0;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(33, 150, 243, 0.6),
+        0 0 12px rgba(33, 150, 243, 0.3);
+}
+
+/* ============================================================================
+   Recording State (Red with Pulse)
+   ============================================================================ */
+
+.led--recording {
+    background: radial-gradient(circle at 30% 30%, #ff6b6b, #d43f3f);
+    border-color: #a62929;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(212, 63, 63, 0.8),
+        0 0 16px rgba(212, 63, 63, 0.4);
+    animation: pulse-led 1.5s ease-in-out infinite;
+}
+
+.led--recording::before {
+    opacity: 1;
+}
+
+@keyframes pulse-led {
+    0%, 100% {
+        box-shadow:
+            inset 0 1px 2px rgba(255, 255, 255, 0.3),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+            0 0 10px rgba(212, 63, 63, 0.8),
+            0 0 16px rgba(212, 63, 63, 0.4);
+    }
+    50% {
+        box-shadow:
+            inset 0 1px 2px rgba(255, 255, 255, 0.3),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+            0 0 14px rgba(212, 63, 63, 1),
+            0 0 24px rgba(212, 63, 63, 0.6);
+    }
+}
+
+/* ============================================================================
+   Blink Modifier (for any active state)
+   ============================================================================ */
+
+.led--blink {
+    animation: blink-led 1s ease-in-out infinite;
+}
+
+@keyframes blink-led {
+    0%, 49% {
+        opacity: 1;
+    }
+    50%, 99% {
+        opacity: 0.2;
+    }
+}
+
+/* ============================================================================
+   Size Variants
+   ============================================================================ */
+
+/* Small LED (6px) */
+.led--small {
+    width: 6px;
+    height: 6px;
+}
+
+.led--small::before {
+    top: 1px;
+    left: 1px;
+    width: 2px;
+    height: 2px;
+}
+
+/* Large LED (10px) */
+.led--large {
+    width: 10px;
+    height: 10px;
+}
+
+.led--large::before {
+    top: 2px;
+    left: 2px;
+    width: 4px;
+    height: 4px;
+}

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AudioTrack Test - Compact/Normal/Large</title>
+
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/reset.css">
+
+    <!-- Components CSS -->
+    <link rel="stylesheet" href="css/components/meter.css">
+    <link rel="stylesheet" href="css/components/atoms/button.css">
+    <link rel="stylesheet" href="css/components/atoms/led.css">
+    <link rel="stylesheet" href="css/components/atoms/rotary.css">
+    <link rel="stylesheet" href="css/components/atoms/record-button.css">
+    <link rel="stylesheet" href="css/components/atoms/timer.css">
+    <link rel="stylesheet" href="css/components/molecules/button-group.css">
+    <link rel="stylesheet" href="css/components/molecules/record-control.css">
+    <link rel="stylesheet" href="css/components/organisms/audio-track.css">
+
+    <style>
+        body {
+            padding: 40px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 32px;
+            font-size: 28px;
+        }
+
+        .test-section {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border: 1px solid #1a1a1a;
+        }
+
+        .test-section h2 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tracks-grid {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .track-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .track-label {
+            font-size: 11px;
+            color: #888;
+            font-family: 'Monaco', 'Courier New', monospace;
+            text-transform: uppercase;
+        }
+
+        .log {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            padding: 12px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 11px;
+            color: #0f0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log div {
+            margin: 2px 0;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .btn-demo {
+            background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 50%, #2e2e2e 100%);
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            color: #e0e0e0;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0 4px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-demo:hover {
+            background: linear-gradient(180deg, #525252 0%, #424242 50%, #363636 100%);
+        }
+    </style>
+</head>
+<body>
+    <h1>AudioTrack - Complete Track Test</h1>
+
+    <!-- Tracks Grid -->
+    <div class="test-section">
+        <h2>▸ All Sizes (Compact / Normal / Large)</h2>
+        <div class="tracks-grid" id="tracks-container"></div>
+        <div class="controls">
+            <button class="btn-demo" onclick="toggleMetering()">Toggle Metering</button>
+            <button class="btn-demo" onclick="resetAll()">Reset All</button>
+        </div>
+    </div>
+
+    <!-- Event Log -->
+    <div class="test-section">
+        <h2>▸ Event Log</h2>
+        <div class="log" id="event-log"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/meter.js"></script>
+    <script type="module">
+        import AudioTrack from './js/components/organisms/AudioTrack.js';
+
+        const eventLog = document.getElementById('event-log');
+        let meteringActive = true;
+        let meteringInterval = null;
+
+        function log(message) {
+            const div = document.createElement('div');
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            eventLog.insertBefore(div, eventLog.firstChild);
+
+            while (eventLog.children.length > 30) {
+                eventLog.removeChild(eventLog.lastChild);
+            }
+        }
+
+        // Make log available globally
+        window.log = log;
+
+        // ===================================================================
+        // Create Tracks
+        // ===================================================================
+        const container = document.getElementById('tracks-container');
+        const sizes = ['compact', 'normal', 'large'];
+        const trackInstances = [];
+
+        sizes.forEach((size, index) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'track-wrapper';
+
+            const trackContainer = document.createElement('div');
+            wrapper.appendChild(trackContainer);
+
+            const label = document.createElement('div');
+            label.className = 'track-label';
+            label.textContent = size;
+            wrapper.appendChild(label);
+
+            container.appendChild(wrapper);
+
+            const track = new AudioTrack(trackContainer, {
+                trackId: index + 1,
+                size: size,
+                location: ['AG02', 'BG01', 'CX12', 'DH05'][index],
+                language: ['FR', 'EN', 'DE', 'ES'][index],
+                threshold: -30 + (index * 5),
+                gain: index * 3,
+                monitoring: index === 1,
+                solo: false,
+                onMonitorToggle: (enabled) => {
+                    log(`Track ${index + 1} (${size}) monitor: ${enabled ? 'ON' : 'OFF'}`);
+                },
+                onSoloToggle: (enabled) => {
+                    log(`Track ${index + 1} (${size}) solo: ${enabled ? 'ON' : 'OFF'}`);
+                },
+                onRecordToggle: (state) => {
+                    log(`Track ${index + 1} (${size}) record: armed=${state.armed}, recording=${state.recording}`);
+                },
+                onThresholdChange: (value) => {
+                    log(`Track ${index + 1} (${size}) threshold: ${value}dB`);
+                },
+                onGainChange: (value) => {
+                    log(`Track ${index + 1} (${size}) gain: ${value}dB`);
+                },
+                onLocationClick: (location) => {
+                    const newLocation = prompt('New location:', location);
+                    if (newLocation) {
+                        track.updateLocation(newLocation);
+                        log(`Track ${index + 1} (${size}) location: ${newLocation}`);
+                    }
+                },
+                onLanguageClick: (language) => {
+                    const newLang = prompt('New language (2 letters):', language);
+                    if (newLang && newLang.length === 2) {
+                        track.updateLanguage(newLang.toUpperCase());
+                        log(`Track ${index + 1} (${size}) language: ${newLang.toUpperCase()}`);
+                    }
+                }
+            });
+
+            trackInstances.push(track);
+        });
+
+        // ===================================================================
+        // Metering Simulation
+        // ===================================================================
+        function updateMetering() {
+            if (!meteringActive) return;
+
+            trackInstances.forEach((track, i) => {
+                const baseLevel = -40 + (i * 8);
+                const variation = Math.sin(Date.now() / 1000 + i) * 15;
+                const randomSpike = Math.random() > 0.95 ? Math.random() * 10 : 0;
+
+                const peak = Math.min(6, baseLevel + variation + randomSpike);
+                const rms = peak - 6 - Math.random() * 4;
+
+                track.updateMetering(peak, rms);
+                track.paintMeter();
+            });
+        }
+
+        window.toggleMetering = () => {
+            meteringActive = !meteringActive;
+            log(`Metering ${meteringActive ? 'STARTED' : 'STOPPED'}`);
+        };
+
+        window.resetAll = () => {
+            trackInstances.forEach((track, i) => {
+                track.config.monitoring = false;
+                track.config.solo = false;
+                track.config.armed = false;
+                track.config.recording = false;
+                track.config.gain = 0;
+                track.render();
+            });
+            log('All tracks reset');
+        };
+
+        // Start metering at 30Hz
+        meteringInterval = setInterval(updateMetering, 33);
+
+        log('AudioTrack test initialized - 3 track sizes ready');
+        log('Sizes: Compact (40px), Normal (60px), Large (75px)');
+        log('→ Click buttons, drag rotaries, click record button');
+        log('→ Right-click record button to cancel armed/recording');
+        log('→ Click footer language/location to edit');
+    </script>
+</body>
+</html>

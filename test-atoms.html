@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atoms Components - Test</title>
+
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/reset.css">
+
+    <!-- Atoms CSS -->
+    <link rel="stylesheet" href="css/components/atoms/button.css">
+    <link rel="stylesheet" href="css/components/atoms/led.css">
+    <link rel="stylesheet" href="css/components/atoms/rotary.css">
+    <link rel="stylesheet" href="css/components/atoms/record-button.css">
+    <link rel="stylesheet" href="css/components/atoms/timer.css">
+
+    <style>
+        body {
+            padding: 40px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 32px;
+            font-size: 28px;
+        }
+
+        .test-section {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border: 1px solid #1a1a1a;
+        }
+
+        .test-section h2 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .component-grid {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .component-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .component-label {
+            font-size: 11px;
+            color: #888;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        .log {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            padding: 12px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 11px;
+            color: #0f0;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 16px;
+        }
+
+        .log div {
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Atoms Components - Full Test Suite</h1>
+
+    <!-- Buttons -->
+    <div class="test-section">
+        <h2>▸ Button Atoms</h2>
+        <div class="component-grid" id="button-container"></div>
+    </div>
+
+    <!-- LEDs -->
+    <div class="test-section">
+        <h2>▸ LED Atoms</h2>
+        <div class="component-grid" id="led-container"></div>
+    </div>
+
+    <!-- Rotaries -->
+    <div class="test-section">
+        <h2>▸ Rotary Atoms</h2>
+        <div class="component-grid" id="rotary-container"></div>
+    </div>
+
+    <!-- Record Buttons -->
+    <div class="test-section">
+        <h2>▸ RecordButton Atoms</h2>
+        <div class="component-grid" id="record-button-container"></div>
+    </div>
+
+    <!-- Timers -->
+    <div class="test-section">
+        <h2>▸ Timer Atoms</h2>
+        <div class="component-grid" id="timer-container"></div>
+    </div>
+
+    <!-- Event Log -->
+    <div class="test-section">
+        <h2>▸ Event Log</h2>
+        <div class="log" id="event-log"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import Button from './js/components/atoms/Button.js';
+        import LED from './js/components/atoms/LED.js';
+        import Rotary from './js/components/atoms/Rotary.js';
+        import RecordButton from './js/components/atoms/RecordButton.js';
+        import Timer from './js/components/atoms/Timer.js';
+
+        const eventLog = document.getElementById('event-log');
+
+        function log(message) {
+            const div = document.createElement('div');
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            eventLog.insertBefore(div, eventLog.firstChild);
+
+            // Keep only last 30 messages
+            while (eventLog.children.length > 30) {
+                eventLog.removeChild(eventLog.lastChild);
+            }
+        }
+
+        // ===================================================================
+        // Buttons
+        // ===================================================================
+        const buttonContainer = document.getElementById('button-container');
+        const buttonPresets = ['monitor', 'solo', 'phase', 'mute', 'record'];
+
+        buttonPresets.forEach(preset => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'component-wrapper';
+
+            const btnContainer = document.createElement('div');
+            wrapper.appendChild(btnContainer);
+
+            const label = document.createElement('div');
+            label.className = 'component-label';
+            label.textContent = preset;
+            wrapper.appendChild(label);
+
+            buttonContainer.appendChild(wrapper);
+
+            new Button(btnContainer, {
+                preset: preset,
+                onToggle: (active) => {
+                    log(`BTN ${preset.toUpperCase()}: ${active ? 'ON' : 'OFF'}`);
+                }
+            });
+        });
+
+        // ===================================================================
+        // LEDs
+        // ===================================================================
+        const ledContainer = document.getElementById('led-container');
+        const ledStates = [
+            { state: 'off', color: 'green', label: 'OFF' },
+            { state: 'active', color: 'green', label: 'ARMED' },
+            { state: 'recording', color: 'red', label: 'REC' },
+            { state: 'active', color: 'amber', label: 'WARNING' },
+            { state: 'active', color: 'blue', label: 'INFO' }
+        ];
+
+        ledStates.forEach(config => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'component-wrapper';
+
+            const ledContainerDiv = document.createElement('div');
+            wrapper.appendChild(ledContainerDiv);
+
+            const label = document.createElement('div');
+            label.className = 'component-label';
+            label.textContent = config.label;
+            wrapper.appendChild(label);
+
+            ledContainer.appendChild(wrapper);
+
+            new LED(ledContainerDiv, config);
+        });
+
+        // ===================================================================
+        // Rotaries
+        // ===================================================================
+        const rotaryContainer = document.getElementById('rotary-container');
+
+        // Threshold Rotary
+        const thresholdWrapper = document.createElement('div');
+        thresholdWrapper.className = 'component-wrapper';
+        const thresholdContainer = document.createElement('div');
+        thresholdWrapper.appendChild(thresholdContainer);
+        const thresholdLabel = document.createElement('div');
+        thresholdLabel.className = 'component-label';
+        thresholdLabel.textContent = 'THRESHOLD';
+        thresholdWrapper.appendChild(thresholdLabel);
+        rotaryContainer.appendChild(thresholdWrapper);
+
+        new Rotary(thresholdContainer, {
+            preset: 'threshold',
+            value: -30,
+            onChange: (value) => {
+                log(`ROTARY threshold: ${value}dB`);
+            }
+        });
+
+        // Gain Rotary
+        const gainWrapper = document.createElement('div');
+        gainWrapper.className = 'component-wrapper';
+        const gainContainer = document.createElement('div');
+        gainWrapper.appendChild(gainContainer);
+        const gainLabel = document.createElement('div');
+        gainLabel.className = 'component-label';
+        gainLabel.textContent = 'GAIN';
+        gainWrapper.appendChild(gainLabel);
+        rotaryContainer.appendChild(gainWrapper);
+
+        new Rotary(gainContainer, {
+            preset: 'gain',
+            value: 0,
+            onChange: (value) => {
+                log(`ROTARY gain: ${value}dB`);
+            }
+        });
+
+        // ===================================================================
+        // Record Buttons
+        // ===================================================================
+        const recordButtonContainer = document.getElementById('record-button-container');
+        const recordStates = ['idle', 'armed', 'recording'];
+
+        recordStates.forEach(state => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'component-wrapper';
+
+            const btnContainer = document.createElement('div');
+            wrapper.appendChild(btnContainer);
+
+            const label = document.createElement('div');
+            label.className = 'component-label';
+            label.textContent = state.toUpperCase();
+            wrapper.appendChild(label);
+
+            recordButtonContainer.appendChild(wrapper);
+
+            new RecordButton(btnContainer, {
+                state: state,
+                onClick: (currentState) => {
+                    log(`RECORD BTN clicked (state: ${currentState})`);
+                },
+                onCancel: () => {
+                    log(`RECORD BTN cancelled (right-click/shift)`);
+                }
+            });
+        });
+
+        // ===================================================================
+        // Timers
+        // ===================================================================
+        const timerContainer = document.getElementById('timer-container');
+
+        // Idle Timer
+        const idleTimerWrapper = document.createElement('div');
+        idleTimerWrapper.className = 'component-wrapper';
+        const idleTimerContainer = document.createElement('div');
+        idleTimerWrapper.appendChild(idleTimerContainer);
+        const idleTimerLabel = document.createElement('div');
+        idleTimerLabel.className = 'component-label';
+        idleTimerLabel.textContent = 'IDLE (gray)';
+        idleTimerWrapper.appendChild(idleTimerLabel);
+        timerContainer.appendChild(idleTimerWrapper);
+
+        new Timer(idleTimerContainer, {
+            state: 'idle',
+            time: 0,
+            colorIdle: '#666666',
+            colorRunning: '#ff3333'
+        });
+
+        // Running Timer (simulated)
+        const runningTimerWrapper = document.createElement('div');
+        runningTimerWrapper.className = 'component-wrapper';
+        const runningTimerContainer = document.createElement('div');
+        runningTimerWrapper.appendChild(runningTimerContainer);
+        const runningTimerLabel = document.createElement('div');
+        runningTimerLabel.className = 'component-label';
+        runningTimerLabel.textContent = 'RUNNING (red)';
+        runningTimerWrapper.appendChild(runningTimerLabel);
+        timerContainer.appendChild(runningTimerWrapper);
+
+        const runningTimer = new Timer(runningTimerContainer, {
+            state: 'running',
+            time: 125,  // 2:05
+            colorIdle: '#666666',
+            colorRunning: '#ff3333'
+        });
+
+        // Simulate running timer
+        let elapsed = 125;
+        setInterval(() => {
+            elapsed++;
+            runningTimer.setTime(elapsed);
+        }, 1000);
+
+        // Custom Color Timer
+        const customTimerWrapper = document.createElement('div');
+        customTimerWrapper.className = 'component-wrapper';
+        const customTimerContainer = document.createElement('div');
+        customTimerWrapper.appendChild(customTimerContainer);
+        const customTimerLabel = document.createElement('div');
+        customTimerLabel.className = 'component-label';
+        customTimerLabel.textContent = 'CUSTOM (amber)';
+        customTimerWrapper.appendChild(customTimerLabel);
+        timerContainer.appendChild(customTimerWrapper);
+
+        const customTimer = new Timer(customTimerContainer, {
+            state: 'running',
+            time: 42,
+            colorIdle: '#444444',
+            colorRunning: '#ff9900'  // Amber
+        });
+
+        // Simulate custom timer
+        let customElapsed = 42;
+        setInterval(() => {
+            customElapsed++;
+            customTimer.setTime(customElapsed);
+        }, 1000);
+
+        log('Atoms test suite initialized');
+        log('→ Click buttons to toggle');
+        log('→ Drag rotaries up/down to adjust values');
+        log('→ Click record buttons (right-click to cancel)');
+        log('→ Timers show idle (gray) and running (red/custom) states');
+    </script>
+</body>
+</html>

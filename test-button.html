@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Component - Test</title>
+
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/reset.css">
+
+    <!-- Button Atom CSS -->
+    <link rel="stylesheet" href="css/components/atoms/button.css">
+
+    <style>
+        body {
+            padding: 40px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 32px;
+            font-size: 24px;
+        }
+
+        .test-section {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border: 1px solid #1a1a1a;
+        }
+
+        .test-section h2 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .button-grid {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .button-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .button-label {
+            font-size: 11px;
+            color: #888;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        .log {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            padding: 12px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 11px;
+            color: #0f0;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 16px;
+        }
+
+        .log div {
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Button Component - Atomic Test</h1>
+
+    <!-- Presets Test -->
+    <div class="test-section">
+        <h2>Button Presets (Latch)</h2>
+        <div class="button-grid" id="preset-buttons"></div>
+    </div>
+
+    <!-- Size Variants -->
+    <div class="test-section">
+        <h2>Size Variants</h2>
+        <div class="button-grid" id="size-buttons"></div>
+    </div>
+
+    <!-- Color Variants (Active States) -->
+    <div class="test-section">
+        <h2>Active State Colors</h2>
+        <div class="button-grid" id="color-buttons"></div>
+    </div>
+
+    <!-- Event Log -->
+    <div class="test-section">
+        <h2>Event Log</h2>
+        <div class="log" id="event-log"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import Button from './js/components/atoms/Button.js';
+
+        const eventLog = document.getElementById('event-log');
+
+        function log(message) {
+            const div = document.createElement('div');
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            eventLog.insertBefore(div, eventLog.firstChild);
+
+            // Keep only last 20 messages
+            while (eventLog.children.length > 20) {
+                eventLog.removeChild(eventLog.lastChild);
+            }
+        }
+
+        // ===================================================================
+        // Test 1: Button Presets
+        // ===================================================================
+        const presetContainer = document.getElementById('preset-buttons');
+        const presets = ['monitor', 'solo', 'phase', 'mute', 'record'];
+
+        presets.forEach(preset => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'button-wrapper';
+
+            const btnContainer = document.createElement('div');
+            wrapper.appendChild(btnContainer);
+
+            const label = document.createElement('div');
+            label.className = 'button-label';
+            label.textContent = preset;
+            wrapper.appendChild(label);
+
+            presetContainer.appendChild(wrapper);
+
+            new Button(btnContainer, {
+                preset: preset,
+                onToggle: (active) => {
+                    log(`${preset.toUpperCase()}: ${active ? 'ON' : 'OFF'}`);
+                }
+            });
+        });
+
+        // ===================================================================
+        // Test 2: Size Variants
+        // ===================================================================
+        const sizeContainer = document.getElementById('size-buttons');
+        const sizes = ['mini', 'compact', 'normal', 'large'];
+
+        sizes.forEach(size => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'button-wrapper';
+
+            const btnContainer = document.createElement('div');
+            wrapper.appendChild(btnContainer);
+
+            const label = document.createElement('div');
+            label.className = 'button-label';
+            label.textContent = size;
+            wrapper.appendChild(label);
+
+            sizeContainer.appendChild(wrapper);
+
+            new Button(btnContainer, {
+                label: 'M',
+                size: size,
+                onToggle: (active) => {
+                    log(`SIZE ${size}: ${active ? 'ON' : 'OFF'}`);
+                }
+            });
+        });
+
+        // ===================================================================
+        // Test 3: Color Variants (Active States)
+        // ===================================================================
+        const colorContainer = document.getElementById('color-buttons');
+        const colors = ['blue', 'amber', 'red', 'green'];
+
+        colors.forEach(color => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'button-wrapper';
+
+            const btnContainer = document.createElement('div');
+            wrapper.appendChild(btnContainer);
+
+            const label = document.createElement('div');
+            label.className = 'button-label';
+            label.textContent = color;
+            wrapper.appendChild(label);
+
+            colorContainer.appendChild(wrapper);
+
+            new Button(btnContainer, {
+                label: '●',
+                colorActive: color,
+                active: true,  // Start active to show color
+                onToggle: (active) => {
+                    log(`COLOR ${color}: ${active ? 'ON' : 'OFF'}`);
+                }
+            });
+        });
+
+        log('Button component test initialized');
+    </script>
+</body>
+</html>

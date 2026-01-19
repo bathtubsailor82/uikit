@@ -1,0 +1,39 @@
+/**
+ * ButtonGroup - Adaptive Button Layout
+ * Grid layout adapts to track size
+ */
+
+/* ============================================================================
+   Base ButtonGroup - 2x2 Grid (Normal/Large)
+   ============================================================================ */
+
+.button-group {
+    display: grid;
+    grid-template-columns: repeat(2, 24px);
+    gap: 2px;
+    justify-content: center;
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.button-group__item {
+    /* Container for each button */
+}
+
+/* ============================================================================
+   Size Variants
+   ============================================================================ */
+
+/* Compact - 2 buttons vertical (formerly mini) */
+.button-group--compact {
+    grid-template-columns: 24px;
+    grid-template-rows: repeat(2, 24px);
+}
+
+/* Normal - 3 buttons (uses 2-column grid from base)
+   No modifier needed, handled by base styles */
+
+/* Large - 2x2 grid (4 buttons) */
+.button-group--large {
+    grid-template-columns: repeat(2, 24px);
+}

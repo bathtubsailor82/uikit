@@ -1,0 +1,40 @@
+/**
+ * Timer - LCD-Style Timer Display
+ * Hardware-inspired monospace timer
+ */
+
+/* ============================================================================
+   Base Timer
+   ============================================================================ */
+
+.timer {
+    text-align: center;
+    font-size: 9px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-weight: 600;
+    padding: 2px 4px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 2px;
+    min-height: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.5px;
+    transition: color 0.2s ease;
+}
+
+/* ============================================================================
+   State Variants
+   ============================================================================ */
+
+/* Idle state - dimmed color (set via inline style) */
+.timer {
+    /* Default color set by JS config.colorIdle */
+}
+
+/* Running state - bright color (set via inline style) */
+.timer--running {
+    /* Color set by JS config.colorRunning */
+}
