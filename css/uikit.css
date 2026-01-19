@@ -66,3 +66,18 @@
 /* === AUDIO / SPECIALIZED === */
 @import "components/meter.css";
 @import "components/matrix.css";
+
+/* === ATOMIC DESIGN: AUDIO COMPONENTS === */
+/* Atoms */
+@import "components/atoms/button.css";
+@import "components/atoms/led.css";
+@import "components/atoms/rotary.css";
+@import "components/atoms/record-button.css";
+@import "components/atoms/timer.css";
+
+/* Molecules */
+@import "components/molecules/button-group.css";
+@import "components/molecules/record-control.css";
+
+/* Organisms */
+@import "components/organisms/audio-track.css";
