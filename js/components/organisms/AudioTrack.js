@@ -138,8 +138,8 @@ class AudioTrack {
       const availableWidth = meterTarget.offsetWidth;
 
       if (window.VUMeter) {
-        // Calculate meter width - account for padding (6px right for scale+border)
-        const meterWidth = Math.max(20, availableWidth - 6);
+        // Use full available width - CSS handles padding
+        const meterWidth = Math.max(20, availableWidth);
 
         this.meter = new window.VUMeter(meterTarget, {
           preset: 'track',

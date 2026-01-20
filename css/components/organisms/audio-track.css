@@ -65,7 +65,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 0 6px 0 0;  /* Padding on right for scale + border */
+    padding: 0;  /* No padding - VUMeter handles its own spacing */
     background: linear-gradient(180deg, #1e1e1e 0%, #252525 100%);
     border-bottom: 1px solid #1a1a1a;
     position: relative;
@@ -224,7 +224,7 @@
 }
 
 .audio-track--compact .audio-track__meter {
-    padding: 0 4px 0 0;  /* Minimal padding for scale + border */
+    padding: 0;  /* No padding */
     min-height: 250px;
 }
 
@@ -266,7 +266,7 @@
 }
 
 .audio-track--large .audio-track__meter {
-    padding: 0 6px 0 0;  /* Same as base */
+    padding: 0;  /* No padding */
     min-height: 450px;
 }
 

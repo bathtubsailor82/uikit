@@ -19,7 +19,7 @@ const BUTTON_PRESETS = {
   monitor: {
     type: 'latch',
     label: 'M',
-    colorActive: 'blue',    // CSS modifier: .btn--blue
+    colorActive: 'blue',    // CSS modifier: .audio-btn--blue
     title: 'Monitor'
   },
   solo: {
@@ -100,22 +100,22 @@ class Button {
   }
 
   getClassNames() {
-    const classes = ['btn'];
+    const classes = ['audio-btn'];
 
     // Size modifier
     if (this.config.size !== 'normal') {
-      classes.push(`btn--${this.config.size}`);
+      classes.push(`audio-btn--${this.config.size}`);
     }
 
     // Active state
     if (this.config.active) {
-      classes.push('btn--active');
-      classes.push(`btn--${this.config.colorActive}`);
+      classes.push('audio-btn--active');
+      classes.push(`audio-btn--${this.config.colorActive}`);
     }
 
     // Disabled state
     if (this.config.disabled) {
-      classes.push('btn--disabled');
+      classes.push('audio-btn--disabled');
     }
 
     return classes.join(' ');

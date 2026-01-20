@@ -7,7 +7,7 @@
    Base Button - 3D Hardware Style
    ============================================================================ */
 
-.btn {
+.audio-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -31,7 +31,7 @@
 }
 
 /* Subtle highlight on top half */
-.btn::before {
+.audio-btn::before {
     content: '';
     position: absolute;
     top: 0;
@@ -46,13 +46,13 @@
 }
 
 /* Hover state */
-.btn:hover:not(:disabled) {
+.audio-btn:hover:not(:disabled) {
     background: linear-gradient(180deg, #525252 0%, #424242 50%, #363636 100%);
     border-color: #222;
 }
 
 /* Active (pressed) state */
-.btn:active:not(:disabled) {
+.audio-btn:active:not(:disabled) {
     background: linear-gradient(180deg, #2e2e2e 0%, #3a3a3a 50%, #3a3a3a 100%);
     box-shadow:
         inset 0 2px 4px rgba(0, 0, 0, 0.5),
@@ -62,8 +62,8 @@
 }
 
 /* Disabled state */
-.btn:disabled,
-.btn--disabled {
+.audio-btn:disabled,
+.audio-btn--disabled {
     opacity: 0.3;
     cursor: not-allowed;
 }
@@ -73,7 +73,7 @@
    ============================================================================ */
 
 /* Blue (Monitor, Solo) */
-.btn--active.btn--blue {
+.audio-btn--active.audio-btn--blue {
     background: linear-gradient(180deg, #5a8fd6 0%, #4a7fc6 50%, #3a6fb6 100%);
     border-color: #2d5a91;
     color: #fff;
@@ -84,14 +84,14 @@
         0 2px 3px rgba(0, 0, 0, 0.3);
 }
 
-.btn--active.btn--blue::before {
+.audio-btn--active.audio-btn--blue::before {
     background: linear-gradient(180deg,
         rgba(255, 255, 255, 0.15) 0%,
         transparent 100%);
 }
 
 /* Amber (Mute, Armed) */
-.btn--active.btn--amber {
+.audio-btn--active.audio-btn--amber {
     background: linear-gradient(180deg, #e6b84a 0%, #d6a83a 50%, #c6982a 100%);
     border-color: #a67e1a;
     color: #2a2a2a;
@@ -104,7 +104,7 @@
 }
 
 /* Red (Record) */
-.btn--active.btn--red {
+.audio-btn--active.audio-btn--red {
     background: radial-gradient(ellipse at center, #ff5555 0%, #d43f3f 50%, #b82e2e 100%);
     border-color: #8a1f1f;
     color: #fff;
@@ -137,7 +137,7 @@
 }
 
 /* Green (generic active) */
-.btn--active.btn--green {
+.audio-btn--active.audio-btn--green {
     background: linear-gradient(180deg, #6fd66f 0%, #5fc65f 50%, #4fb64f 100%);
     border-color: #2e7d32;
     color: #fff;
@@ -153,21 +153,21 @@
    ============================================================================ */
 
 /* Compact size (for narrower tracks) */
-.btn--compact {
+.audio-btn--compact {
     width: 23px;
     height: 23px;
     font-size: 9px;
 }
 
 /* Mini size (future use) */
-.btn--mini {
+.audio-btn--mini {
     width: 20px;
     height: 20px;
     font-size: 8px;
 }
 
 /* Large size (future use) */
-.btn--large {
+.audio-btn--large {
     width: 28px;
     height: 28px;
     font-size: 11px;
