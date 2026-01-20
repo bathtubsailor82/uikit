@@ -133,33 +133,33 @@ class AudioTrack {
     const meterTarget = this.element.querySelector('.audio-track__meter-target');
     if (!meterTarget) return;
 
-    requestAnimationFrame(() => {
-      const availableHeight = meterTarget.offsetHeight;
-      const availableWidth = meterTarget.offsetWidth;
+    // Get dimensions directly - no RAF needed
+    // Browser has already laid out the element after render()
+    const availableHeight = meterTarget.offsetHeight;
+    const availableWidth = meterTarget.offsetWidth;
 
-      if (window.VUMeter) {
-        // Use full available width - CSS handles padding
-        const meterWidth = Math.max(20, availableWidth);
+    if (window.VUMeter && availableHeight > 0) {
+      // Use full available width - CSS handles padding
+      const meterWidth = Math.max(20, availableWidth);
 
-        this.meter = new window.VUMeter(meterTarget, {
-          preset: 'track',
-          orientation: 'vertical',
-          showRMS: true,
-          width: meterWidth,
-          height: availableHeight,
-          dbMin: -90,
-          dbMax: 6,
-          ballistics: true,
-          releaseRate: 11.8
-        });
+      this.meter = new window.VUMeter(meterTarget, {
+        preset: 'track',
+        orientation: 'vertical',
+        showRMS: true,
+        width: meterWidth,
+        height: availableHeight,
+        dbMin: -90,
+        dbMax: 6,
+        ballistics: true,
+        releaseRate: 11.8
+      });
 
-        // Stop individual RAF - use shared RAF loop
-        this.meter.stopAnimation();
+      // Stop individual RAF - use shared RAF loop
+      this.meter.stopAnimation();
 
-        // Add threshold indicator
-        this.addThresholdIndicator();
-      }
-    });
+      // Add threshold indicator
+      this.addThresholdIndicator();
+    }
   }
 
   addThresholdIndicator() {
