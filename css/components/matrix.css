@@ -248,8 +248,8 @@ tr.selected .matrix-row-header {
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
-    transition: background var(--transition-fast);
     user-select: none;
+    /* Transition removed for performance with large matrices (128 tracks) */
 }
 
 .matrix-cell:hover {
@@ -267,7 +267,7 @@ tr.selected .matrix-row-header {
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-tertiary);
     opacity: 0;
-    transition: opacity var(--transition-fast);
+    /* Transition removed for performance with large matrices */
 }
 
 .matrix-cell.available:hover::after {

@@ -272,17 +272,17 @@ class AudioTrack {
     const locationEl = this.element.querySelector('.audio-track__location');
 
     if (langEl) {
-      langEl.addEventListener('click', () => {
+      langEl.addEventListener('click', (e) => {
         if (this.config.onLanguageClick) {
-          this.config.onLanguageClick(this.config.language);
+          this.config.onLanguageClick(this.config.language, e.currentTarget);
         }
       });
     }
 
     if (locationEl) {
-      locationEl.addEventListener('click', () => {
+      locationEl.addEventListener('click', (e) => {
         if (this.config.onLocationClick) {
-          this.config.onLocationClick(this.config.location);
+          this.config.onLocationClick(this.config.location, e.currentTarget);
         }
       });
     }
