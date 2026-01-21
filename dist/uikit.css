@@ -1,3 +1,4 @@
+/* === css/tokens.css === */
 /**
  * UIKit Design Tokens
  * Variables CSS globales pour une cohérence visuelle
@@ -206,6 +207,8 @@
     /* Touch targets (minimum recommandé WCAG) */
     --touch-target-min: 44px;
 }
+
+/* === css/reset.css === */
 /**
  * UIKit Reset
  * Reset CSS minimaliste inspiré du dashboard
@@ -235,6 +238,8 @@ select,
 textarea {
     font-family: inherit;
 }
+
+/* === css/accessibility.css === */
 /**
  * UIKit Accessibility
  * Focus states, keyboard navigation, screen reader utilities
@@ -528,6 +533,8 @@ body.keyboard-nav *:focus {
     /* Ajoutez des styles si besoin pour indiquer
        qu'un focus trap est actif */
 }
+
+/* === css/layout.css === */
 /**
  * UIKit Layout Utilities
  * Grid, Flexbox et autres utilitaires de mise en page
@@ -726,6 +733,8 @@ body.keyboard-nav *:focus {
 
 .w-full { width: 100%; }
 .h-full { height: 100%; }
+
+/* === css/layouts.css === */
 /**
  * UIKit Layouts
  * Structures CSS réutilisables pour layouts classiques
@@ -1035,6 +1044,8 @@ body.keyboard-nav *:focus {
     background: var(--color-bg-primary);
     border: 1px solid var(--color-border-light);
 }
+
+/* === css/components/buttons.css === */
 /**
  * UIKit Buttons
  */
@@ -1534,6 +1545,8 @@ body.keyboard-nav *:focus {
     background: var(--color-bg-tertiary);
     color: var(--color-text-primary);
 }
+
+/* === css/components/forms.css === */
 /**
  * UIKit Forms
  */
@@ -2215,6 +2228,8 @@ body.keyboard-nav *:focus {
 .form-group.has-icon-right .form-input {
     padding-right: var(--spacing-10);
 }
+
+/* === css/components/icons.css === */
 /* ================================================
    Icons Component - SVG icon system
    ================================================ */
@@ -3244,6 +3259,8 @@ body.keyboard-nav *:focus {
 .stat-icon-svg.status-stopped {
     opacity: 0.4;
 }
+
+/* === css/components/header.css === */
 /**
  * UIKit Header
  */
@@ -3269,6 +3286,8 @@ body.keyboard-nav *:focus {
     font-size: var(--font-size-md);
     opacity: 0.9;
 }
+
+/* === css/components/tabs.css === */
 /**
  * UIKit Tabs
  */
@@ -3310,6 +3329,8 @@ body.keyboard-nav *:focus {
 .tab-content.active {
     display: block;
 }
+
+/* === css/components/breadcrumb.css === */
 /**
  * UIKit Breadcrumb
  * Fil d'Ariane pour la navigation hiérarchique
@@ -3541,6 +3562,8 @@ body.keyboard-nav *:focus {
 nav[aria-label="Breadcrumb"] {
     margin-bottom: var(--spacing-6);
 }
+
+/* === css/components/pagination.css === */
 /**
  * UIKit Pagination
  * Navigation de pages pour listes et tables
@@ -3902,6 +3925,8 @@ nav[aria-label="Pagination"] {
         transform: rotate(360deg);
     }
 }
+
+/* === css/components/tables.css === */
 /**
  * UIKit Tables
  */
@@ -4152,6 +4177,8 @@ nav[aria-label="Pagination"] {
     font-size: var(--font-size-lg);
     color: var(--color-text-secondary);
 }
+
+/* === css/components/cards.css === */
 /**
  * UIKit Cards
  */
@@ -4300,6 +4327,8 @@ nav[aria-label="Pagination"] {
     font-weight: var(--font-weight-medium);
     color: var(--color-text-primary);
 }
+
+/* === css/components/list-items.css === */
 /**
  * UIKit List Items
  * Composant pour listes d'items multi-lignes
@@ -4493,6 +4522,8 @@ nav[aria-label="Pagination"] {
         flex: 1;
     }
 }
+
+/* === css/components/badges.css === */
 /**
  * UIKit Badges
  */
@@ -4756,6 +4787,8 @@ nav[aria-label="Pagination"] {
     top: -6px;
     right: -6px;
 }
+
+/* === css/components/avatar.css === */
 /**
  * UIKit Avatar
  * Composant pour afficher des photos de profil utilisateur
@@ -5081,6 +5114,8 @@ nav[aria-label="Pagination"] {
         font-size: var(--font-size-xl);
     }
 }
+
+/* === css/components/stats.css === */
 /* ================================================
    Stats Component - Terminal-style status display
    ================================================ */
@@ -5162,6 +5197,8 @@ nav[aria-label="Pagination"] {
 .sidebar-collapsed .stat-icon.stat-active {
     color: var(--color-success);
 }
+
+/* === css/components/alerts.css === */
 /**
  * UIKit Alerts
  * Messages inline (différent des notifications toast)
@@ -5345,6 +5382,8 @@ nav[aria-label="Pagination"] {
     font-size: var(--font-size-base);
     padding: var(--spacing-2) var(--spacing-4);
 }
+
+/* === css/components/notifications.css === */
 /**
  * UIKit Notifications
  */
@@ -5382,6 +5421,8 @@ nav[aria-label="Pagination"] {
 .notification.warning {
     background: var(--color-warning);
 }
+
+/* === css/components/modals.css === */
 /**
  * UIKit Modals & Dialogs
  */
@@ -5731,6 +5772,8 @@ nav[aria-label="Pagination"] {
     border-top-color: transparent;
     border-bottom-color: var(--color-dark);
 }
+
+/* === css/components/loading.css === */
 /**
  * UIKit Loading States
  * Spinners, skeletons et loading indicators
@@ -6104,6 +6147,8 @@ nav[aria-label="Pagination"] {
     border-color: var(--color-text-white);
     border-top-color: transparent;
 }
+
+/* === css/components/progress.css === */
 /**
  * UIKit Progress Bars
  */
@@ -6201,6 +6246,8 @@ nav[aria-label="Pagination"] {
 .storage-fill.critical {
     background: var(--color-danger);
 }
+
+/* === css/components/logs.css === */
 /**
  * UIKit Logs
  */
@@ -6244,6 +6291,12 @@ nav[aria-label="Pagination"] {
 .log-entry.error {
     background: var(--color-danger-bg);
     color: #ff6b6b;
+}
+
+.log-entry.debug {
+    background: transparent;
+    color: var(--color-text-tertiary);
+    opacity: 0.8;
 }
 
 /* Dark mode: brighter text colors for better readability */
@@ -6351,6 +6404,8 @@ nav[aria-label="Pagination"] {
         background: #ff8080;
     }
 }
+
+/* === css/components/range.css === */
 /**
  * UIKit Range/Slider
  * Curseur de valeur stylise
@@ -6708,6 +6763,8 @@ nav[aria-label="Pagination"] {
 .form-group .range-wrapper {
     margin-top: var(--spacing-2);
 }
+
+/* === css/components/number-input.css === */
 /**
  * UIKit Number Input
  * Input numerique avec boutons +/-
@@ -6952,6 +7009,8 @@ nav[aria-label="Pagination"] {
 [data-theme="dark"] .number-input-unit {
     background: var(--color-bg-tertiary);
 }
+
+/* === css/components/tags.css === */
 /**
  * UIKit Tags / Chips
  * Tags avec variantes et tag input multi-selection
@@ -7274,6 +7333,8 @@ nav[aria-label="Pagination"] {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
+
+/* === css/components/file-input.css === */
 /**
  * UIKit File Input
  * Input fichier style, zone de drop, apercu
@@ -7660,6 +7721,8 @@ nav[aria-label="Pagination"] {
 [data-theme="dark"] .file-preview {
     background: var(--color-bg-tertiary);
 }
+
+/* === css/components/accordion.css === */
 /**
  * UIKit Accordion
  * Composant collapsible pour sections de contenu
@@ -7850,6 +7913,8 @@ nav[aria-label="Pagination"] {
         transition: none;
     }
 }
+
+/* === css/components/dropdown.css === */
 /**
  * UIKit Dropdown
  * Menu dropdown avec sous-menus, icones, descriptions et separateurs
@@ -8201,6 +8266,8 @@ nav[aria-label="Pagination"] {
 [data-theme="dark"] .dropdown-search input {
     background: var(--color-bg-tertiary);
 }
+
+/* === css/components/tooltip.css === */
 /**
  * UIKit Tooltip
  * Tooltips avec positions multiples, fleche et variantes de couleur
@@ -8546,6 +8613,8 @@ nav[aria-label="Pagination"] {
     transform: translateX(-50%) translateY(0);
     transition-delay: 0.3s;
 }
+
+/* === css/components/popover.css === */
 /**
  * UIKit Popover
  * Contenu riche au click avec positions multiples, fleche et header optionnel
@@ -9226,6 +9295,8 @@ nav[aria-label="Pagination"] {
 [data-theme="dark"] .popover-menu-divider {
     background: var(--color-border-dark);
 }
+
+/* === css/components/segmented.css === */
 /**
  * UIKit Segmented Control
  * Style iOS/macOS pour groupes de boutons mutuellement exclusifs
@@ -9445,6 +9516,8 @@ nav[aria-label="Pagination"] {
 [data-theme="dark"] .segmented-bordered {
     background: transparent;
 }
+
+/* === css/components/divider.css === */
 /**
  * UIKit Divider
  * Separateur horizontal/vertical
@@ -9690,6 +9763,8 @@ nav[aria-label="Pagination"] {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
+
+/* === css/components/empty-state.css === */
 /**
  * UIKit Empty State
  * Etat vide centre avec icone, titre, description et action optionnelle
@@ -10078,6 +10153,8 @@ nav[aria-label="Pagination"] {
 [data-theme="dark"] .empty-state-illustration {
     opacity: 0.5;
 }
+
+/* === css/components/stepper.css === */
 /**
  * UIKit Stepper
  * Indicateur d'etapes numerotees avec etats completed, active et pending
@@ -10507,6 +10584,8 @@ nav[aria-label="Pagination"] {
         transparent 8px
     );
 }
+
+/* === css/components/timeline.css === */
 /**
  * UIKit Timeline
  * Chronologie verticale avec points, icones et dates
@@ -10991,6 +11070,8 @@ nav[aria-label="Pagination"] {
 [data-theme="dark"] .timeline-connected .timeline-content::before {
     background: var(--color-border-dark);
 }
+
+/* === css/components/meter.css === */
 /**
  * VUMeter Component Styles
  * Supports: vertical, horizontal orientations
@@ -11040,6 +11121,11 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-2);
 }
 
+/* Track preset - reduced padding for tighter fit (more specific selector) */
+.vu-meter--track.vu-meter--with-scale .vu-meter__wrapper {
+    padding: 2px;
+}
+
 /* ============================================================================
    Vertical Orientation
    ============================================================================ */
@@ -11047,47 +11133,71 @@ nav[aria-label="Pagination"] {
 .vu-meter--vertical .vu-meter__area {
     display: flex;
     flex-direction: row;
+    align-items: stretch;  /* Étire les enfants en hauteur */
     flex: 1;
-    gap: 0;
+    gap: 2px;
     position: relative;
 }
 
 .vu-meter--vertical .vu-meter__scale {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
+    position: relative;
+    flex-shrink: 0;  /* Ne pas rétrécir */
     width: 20px;
+    height: 100%;    /* Prend toute la hauteur disponible */
     pointer-events: none;
     z-index: 5;
 }
 
+/* Track preset - narrower scale since no labels */
+.vu-meter--track.vu-meter--vertical .vu-meter__scale {
+    width: 8px;
+}
+
 .vu-meter--vertical .vu-meter__tick {
     position: absolute;
-    right: 0;
+    left: 0;  /* Ticks à gauche du scale */
     width: 20px;
     height: 0;
+}
+
+/* Track preset - narrower ticks to match narrower scale */
+.vu-meter--track.vu-meter--vertical .vu-meter__tick {
+    width: 8px;
+}
+
+/* Track preset - adjust tick line lengths for narrower scale */
+.vu-meter--track.vu-meter--vertical .vu-meter__tick--major::before {
+    width: 4px;
+}
+
+.vu-meter--track.vu-meter--vertical .vu-meter__tick--minor::before {
+    width: 2px;
 }
 
 /* Major ticks - longer line with label */
 .vu-meter--vertical .vu-meter__tick--major::before {
     content: '';
     position: absolute;
-    left: 0;
+    left: 0;  /* Trait part du bord gauche (vers les bars) */
     width: 5px;
+    height: 1px; /* Ligne horizontale */
     top: 0;
-    border-top: 1px solid var(--color-text-tertiary);
+    background: #888;  /* Gris clair */
+    opacity: 0.25;
+    border: none;
 }
 
 /* Minor ticks - shorter line, no label */
 .vu-meter--vertical .vu-meter__tick--minor::before {
     content: '';
     position: absolute;
-    left: 0;
+    left: 0;  /* Trait part du bord gauche (vers les bars) */
     width: 3px;
+    height: 1px; /* Ligne horizontale */
     top: 0;
-    border-top: 1px solid var(--color-text-tertiary);
-    opacity: 0.6;
+    background: #777;  /* Gris clair discret */
+    opacity: 0.2;
+    border: none;
 }
 
 .vu-meter--vertical .vu-meter__tick-label {
@@ -11123,11 +11233,6 @@ nav[aria-label="Pagination"] {
     height: 100%;
 }
 
-/* Only add margin when scale is present */
-.vu-meter--vertical.vu-meter--with-scale .vu-meter__bars {
-    margin-right: 22px;
-}
-
 .vu-meter--vertical .vu-meter__bar {
     position: relative;
     border-radius: 0;
@@ -11138,6 +11243,7 @@ nav[aria-label="Pagination"] {
 .vu-meter--vertical .vu-meter__bar--peak {
     flex: 3;
     min-width: 12px;
+    will-change: transform; /* Force GPU layer for animated ::before */
     /* Background zones - ITU-R style */
     /* Range: -90 to +6 (96dB total) */
     /* -20dB position: (70/96) = 72.9% */
@@ -11165,9 +11271,11 @@ nav[aria-label="Pagination"] {
         var(--meter-danger) 83.3%,
         var(--meter-danger) 100%
     );
-    /* clip-path: inset(top right bottom left) - clip from top */
+    /* clip-path with GPU hints for better performance */
     clip-path: inset(var(--peak-clip, 100%) 0 0 0);
+    will-change: clip-path;
     transition: clip-path 100ms ease-out;
+    z-index: 1; /* Below hold indicator (z-index: 10) */
 }
 
 /* RMS bar - thin with background zones */
@@ -11233,11 +11341,13 @@ nav[aria-label="Pagination"] {
 
 .vu-meter--vertical .vu-meter__hold {
     position: absolute;
+    bottom: var(--hold-bottom, 0);
     left: 0;
     right: 0;
     height: 2px;
     background: var(--color-text-primary);
     transition: bottom 50ms linear;
+    will-change: bottom;  /* GPU hint */
     z-index: 10;
 }
 
@@ -11325,6 +11435,7 @@ nav[aria-label="Pagination"] {
 .vu-meter--horizontal .vu-meter__bar--peak {
     flex: 3;
     min-height: 8px;
+    will-change: transform; /* Force GPU layer for animated ::before */
     /* Background zones - ITU-R style (horizontal) */
     /* Range: -90 to +6 (96dB total) */
     background: linear-gradient(to right,
@@ -11350,9 +11461,11 @@ nav[aria-label="Pagination"] {
         var(--meter-danger) 83.3%,
         var(--meter-danger) 100%
     );
-    /* clip-path: inset(top right bottom left) - clip from right */
+    /* clip-path with GPU hints for better performance */
     clip-path: inset(0 var(--peak-clip, 100%) 0 0);
+    will-change: clip-path;
     transition: clip-path 100ms ease-out;
+    z-index: 1; /* Below hold indicator (z-index: 10) */
 }
 
 /* RMS bar - thin with background zones */
@@ -11414,11 +11527,13 @@ nav[aria-label="Pagination"] {
 
 .vu-meter--horizontal .vu-meter__hold {
     position: absolute;
+    left: var(--hold-left, 0);
     top: 0;
     bottom: 0;
     width: 2px;
     background: var(--color-text-primary);
     transition: left 50ms linear;
+    will-change: left;  /* GPU hint */
     z-index: 10;
 }
 
@@ -11440,6 +11555,11 @@ nav[aria-label="Pagination"] {
     font-variant-numeric: tabular-nums;
 }
 
+/* Display value via CSS custom property (performance: no DOM textContent mutations) */
+.vu-meter__numeric::before {
+    content: var(--peak-value, "---");
+}
+
 .vu-meter--horizontal .vu-meter__numeric {
     min-width: 40px;
     padding: 0 var(--spacing-2);
@@ -11448,6 +11568,21 @@ nav[aria-label="Pagination"] {
 
 .vu-meter__numeric--clip {
     color: var(--meter-clip);
+}
+
+/* Track preset - compact numeric display très discret */
+.vu-meter--track .vu-meter__numeric {
+    font-size: 7px;
+    padding: 1px 2px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 1px;
+    margin-bottom: 1px;
+    font-weight: var(--font-weight-normal);
+    opacity: 0.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+    max-width: 100%;
 }
 
 /* ============================================================================
@@ -11586,6 +11721,8 @@ nav[aria-label="Pagination"] {
         rgba(239, 68, 68, 0.25) 100%
     ), #141414;
 }
+
+/* === css/components/matrix.css === */
 /**
  * UIKit Matrix Component
  * Matrice de routage audio style Dante Controller
@@ -12070,3 +12207,1012 @@ tr.selected .matrix-cell.active {
 [data-theme="dark"] .matrix-device-cell {
     border-left-color: var(--color-border-dark);
 }
+
+/* === css/components/atoms/button.css === */
+/**
+ * Button - Audio Console Button Styles
+ * Hardware-inspired 3D appearance with realistic depth
+ */
+
+/* ============================================================================
+   Base Button - 3D Hardware Style
+   ============================================================================ */
+
+.audio-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 50%, #2e2e2e 100%);
+    border: 1px solid #1a1a1a;
+    border-radius: 3px;
+    color: #e0e0e0;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+    position: relative;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Subtle highlight on top half */
+.audio-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.08) 0%,
+        transparent 100%);
+    border-radius: 3px 3px 0 0;
+    pointer-events: none;
+}
+
+/* Hover state */
+.audio-btn:hover:not(:disabled) {
+    background: linear-gradient(180deg, #525252 0%, #424242 50%, #363636 100%);
+    border-color: #222;
+}
+
+/* Active (pressed) state */
+.audio-btn:active:not(:disabled) {
+    background: linear-gradient(180deg, #2e2e2e 0%, #3a3a3a 50%, #3a3a3a 100%);
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.5),
+        inset 0 1px 2px rgba(0, 0, 0, 0.3),
+        0 1px 1px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+}
+
+/* Disabled state */
+.audio-btn:disabled,
+.audio-btn--disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* ============================================================================
+   Active State Colors
+   ============================================================================ */
+
+/* Blue (Monitor, Solo) */
+.audio-btn--active.audio-btn--blue {
+    background: linear-gradient(180deg, #5a8fd6 0%, #4a7fc6 50%, #3a6fb6 100%);
+    border-color: #2d5a91;
+    color: #fff;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(74, 127, 198, 0.4),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.audio-btn--active.audio-btn--blue::before {
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        transparent 100%);
+}
+
+/* Amber (Mute, Armed) */
+.audio-btn--active.audio-btn--amber {
+    background: linear-gradient(180deg, #e6b84a 0%, #d6a83a 50%, #c6982a 100%);
+    border-color: #a67e1a;
+    color: #2a2a2a;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(214, 168, 58, 0.5),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Red (Record) */
+.audio-btn--active.audio-btn--red {
+    background: radial-gradient(ellipse at center, #ff5555 0%, #d43f3f 50%, #b82e2e 100%);
+    border-color: #8a1f1f;
+    color: #fff;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+        0 0 12px rgba(212, 63, 63, 0.8),
+        0 0 20px rgba(212, 63, 63, 0.4),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+    animation: pulse-btn 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-btn {
+    0%, 100% {
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+            0 0 12px rgba(212, 63, 63, 0.8),
+            0 0 20px rgba(212, 63, 63, 0.4),
+            0 2px 3px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+            0 0 16px rgba(212, 63, 63, 1),
+            0 0 28px rgba(212, 63, 63, 0.6),
+            0 2px 3px rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* Green (generic active) */
+.audio-btn--active.audio-btn--green {
+    background: linear-gradient(180deg, #6fd66f 0%, #5fc65f 50%, #4fb64f 100%);
+    border-color: #2e7d32;
+    color: #fff;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(76, 175, 80, 0.4),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================================================
+   Size Variants
+   ============================================================================ */
+
+/* Compact size (for narrower tracks) */
+.audio-btn--compact {
+    width: 23px;
+    height: 23px;
+    font-size: 9px;
+}
+
+/* Mini size (future use) */
+.audio-btn--mini {
+    width: 20px;
+    height: 20px;
+    font-size: 8px;
+}
+
+/* Large size (future use) */
+.audio-btn--large {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+}
+
+/* === css/components/atoms/led.css === */
+/**
+ * LED - Hardware LED Indicator Styles
+ * Realistic LED with glow effects and pulse animations
+ */
+
+/* ============================================================================
+   Base LED - Off State (Hardware Style)
+   ============================================================================ */
+
+.led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #3a3a3a, #2a2a2a);
+    border: 1px solid #1a1a1a;
+    box-shadow:
+        inset 0 1px 2px rgba(0, 0, 0, 0.6),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.1),
+        0 1px 1px rgba(0, 0, 0, 0.3);
+    transition: all 0.15s ease;
+    position: relative;
+}
+
+/* Subtle highlight when off */
+.led::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+/* ============================================================================
+   Active State (Lit)
+   ============================================================================ */
+
+.led--active::before {
+    opacity: 1;
+}
+
+/* Green (default armed state) */
+.led--active.led--green {
+    background: radial-gradient(circle at 30% 30%, #6fd66f, #4caf50);
+    border-color: #2e7d32;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(76, 175, 80, 0.6),
+        0 0 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Red (recording state) */
+.led--active.led--red {
+    background: radial-gradient(circle at 30% 30%, #ff6b6b, #d43f3f);
+    border-color: #a62929;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(212, 63, 63, 0.8),
+        0 0 16px rgba(212, 63, 63, 0.4);
+}
+
+/* Amber (warning state) */
+.led--active.led--amber {
+    background: radial-gradient(circle at 30% 30%, #ffa726, #ff9800);
+    border-color: #e65100;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(255, 152, 0, 0.6),
+        0 0 12px rgba(255, 152, 0, 0.3);
+}
+
+/* Blue (info state) */
+.led--active.led--blue {
+    background: radial-gradient(circle at 30% 30%, #64b5f6, #2196f3);
+    border-color: #1565c0;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(33, 150, 243, 0.6),
+        0 0 12px rgba(33, 150, 243, 0.3);
+}
+
+/* ============================================================================
+   Recording State (Red with Pulse)
+   ============================================================================ */
+
+.led--recording {
+    background: radial-gradient(circle at 30% 30%, #ff6b6b, #d43f3f);
+    border-color: #a62929;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(212, 63, 63, 0.8),
+        0 0 16px rgba(212, 63, 63, 0.4);
+    animation: pulse-led 1.5s ease-in-out infinite;
+}
+
+.led--recording::before {
+    opacity: 1;
+}
+
+@keyframes pulse-led {
+    0%, 100% {
+        box-shadow:
+            inset 0 1px 2px rgba(255, 255, 255, 0.3),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+            0 0 10px rgba(212, 63, 63, 0.8),
+            0 0 16px rgba(212, 63, 63, 0.4);
+    }
+    50% {
+        box-shadow:
+            inset 0 1px 2px rgba(255, 255, 255, 0.3),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+            0 0 14px rgba(212, 63, 63, 1),
+            0 0 24px rgba(212, 63, 63, 0.6);
+    }
+}
+
+/* ============================================================================
+   Blink Modifier (for any active state)
+   ============================================================================ */
+
+.led--blink {
+    animation: blink-led 1s ease-in-out infinite;
+}
+
+@keyframes blink-led {
+    0%, 49% {
+        opacity: 1;
+    }
+    50%, 99% {
+        opacity: 0.2;
+    }
+}
+
+/* ============================================================================
+   Size Variants
+   ============================================================================ */
+
+/* Small LED (6px) */
+.led--small {
+    width: 6px;
+    height: 6px;
+}
+
+.led--small::before {
+    top: 1px;
+    left: 1px;
+    width: 2px;
+    height: 2px;
+}
+
+/* Large LED (10px) */
+.led--large {
+    width: 10px;
+    height: 10px;
+}
+
+.led--large::before {
+    top: 2px;
+    left: 2px;
+    width: 4px;
+    height: 4px;
+}
+
+/* === css/components/atoms/rotary.css === */
+/**
+ * Rotary - Hardware Rotary Knob Styles
+ * Realistic 3D rotary with indicator and labels
+ */
+
+/* ============================================================================
+   Base Rotary Container
+   ============================================================================ */
+
+.rotary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px;
+}
+
+/* ============================================================================
+   Rotary Knob - 3D Hardware Style
+   ============================================================================ */
+
+.rotary__knob {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #5a5a5a, #2a2a2a);
+    border: 2px solid #1a1a1a;
+    box-shadow:
+        inset 0 -2px 4px rgba(0, 0, 0, 0.6),
+        inset 0 2px 2px rgba(255, 255, 255, 0.1),
+        0 2px 4px rgba(0, 0, 0, 0.4);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.rotary__knob:hover {
+    background: radial-gradient(circle at 35% 35%, #626262, #323232);
+}
+
+.rotary__knob:active,
+.rotary__knob--dragging {
+    box-shadow:
+        inset 0 -2px 4px rgba(0, 0, 0, 0.5),
+        inset 0 2px 3px rgba(255, 255, 255, 0.08),
+        0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Knob top highlight (creates 3D effect) */
+.rotary__knob::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+        rgba(255, 255, 255, 0.12) 0%,
+        rgba(255, 255, 255, 0.04) 40%,
+        transparent 70%);
+    pointer-events: none;
+}
+
+/* ============================================================================
+   Knob Indicator (position marker)
+   ============================================================================ */
+
+.rotary__indicator {
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 8px;
+    background: linear-gradient(180deg, #fff 0%, #ccc 100%);
+    border-radius: 1px;
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================================================
+   Value Display & Label
+   ============================================================================ */
+
+.rotary__value {
+    font-size: 7px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    color: #888;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    margin-top: 2px;
+}
+
+.rotary__label {
+    font-size: 6px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 1px;
+}
+
+/* === css/components/atoms/record-button.css === */
+/**
+ * RecordButton - Circular Record Button Styles
+ * Hardware-inspired with states: idle, armed, recording
+ */
+
+/* ============================================================================
+   Base Button (Idle State)
+   ============================================================================ */
+
+.record-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 50%, #2e2e2e 100%);
+    border: 1px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.4);
+    position: relative;
+}
+
+/* Subtle highlight on button */
+.record-button::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+        rgba(255, 255, 255, 0.08) 0%,
+        transparent 60%);
+    pointer-events: none;
+}
+
+/* ============================================================================
+   Inner Dot
+   ============================================================================ */
+
+.record-button__dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #7a4a4a, #5a2a2a);
+    border: 1px solid #3a1a1a;
+    box-shadow:
+        inset 0 1px 2px rgba(0, 0, 0, 0.5),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.05);
+    transition: all 0.15s ease;
+}
+
+/* ============================================================================
+   Hover State
+   ============================================================================ */
+
+.record-button:hover {
+    background: linear-gradient(180deg, #525252 0%, #424242 50%, #363636 100%);
+}
+
+.record-button:hover .record-button__dot {
+    background: radial-gradient(circle at 35% 35%, #a55555, #752f2f);
+}
+
+/* ============================================================================
+   Armed State (Pulsing Red Dot)
+   ============================================================================ */
+
+.record-button--armed .record-button__dot {
+    background: radial-gradient(circle at 35% 35%, #d43f3f, #a62929);
+    border-color: #8a1f1f;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.2),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.3),
+        0 0 6px rgba(212, 63, 63, 0.4);
+    animation: pulse-armed-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-armed-dot {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* ============================================================================
+   Recording State (Glowing Red)
+   ============================================================================ */
+
+.record-button--recording {
+    background: linear-gradient(180deg, #5a3a3a 0%, #4a2a2a 50%, #3a2020 100%);
+    border-color: #d43f3f;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(212, 63, 63, 0.8),
+        0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.record-button--recording .record-button__dot {
+    background: radial-gradient(circle at 35% 35%, #ff5555, #d43f3f);
+    border-color: #8a1f1f;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.4),
+        0 0 12px rgba(212, 63, 63, 1),
+        0 0 20px rgba(212, 63, 63, 0.6);
+    animation: pulse-recording-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-recording-dot {
+    0%, 100% {
+        box-shadow:
+            inset 0 1px 2px rgba(255, 255, 255, 0.3),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.4),
+            0 0 12px rgba(212, 63, 63, 1),
+            0 0 20px rgba(212, 63, 63, 0.6);
+    }
+    50% {
+        box-shadow:
+            inset 0 1px 2px rgba(255, 255, 255, 0.3),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.4),
+            0 0 16px rgba(212, 63, 63, 1),
+            0 0 28px rgba(212, 63, 63, 0.8);
+    }
+}
+
+/* === css/components/atoms/timer.css === */
+/**
+ * Timer - LCD-Style Timer Display
+ * Hardware-inspired monospace timer
+ */
+
+/* ============================================================================
+   Base Timer
+   ============================================================================ */
+
+.timer {
+    text-align: center;
+    font-size: 9px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-weight: 600;
+    padding: 2px 4px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 2px;
+    min-height: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.5px;
+    transition: color 0.2s ease;
+}
+
+/* ============================================================================
+   State Variants
+   ============================================================================ */
+
+/* Idle state - dimmed color (set via inline style) */
+.timer {
+    /* Default color set by JS config.colorIdle */
+}
+
+/* Running state - bright color (set via inline style) */
+.timer--running {
+    /* Color set by JS config.colorRunning */
+}
+
+/* === css/components/molecules/button-group.css === */
+/**
+ * ButtonGroup - Adaptive Button Layout
+ * Grid layout adapts to track size
+ */
+
+/* ============================================================================
+   Base ButtonGroup - 2x2 Grid (Normal/Large)
+   ============================================================================ */
+
+.button-group {
+    display: grid;
+    grid-template-columns: repeat(2, 24px);
+    gap: 2px;
+    justify-content: center;
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.button-group__item {
+    /* Container for each button */
+}
+
+/* ============================================================================
+   Size Variants
+   ============================================================================ */
+
+/* Compact - 2 buttons vertical (formerly mini) */
+.button-group--compact {
+    grid-template-columns: 24px;
+    grid-template-rows: repeat(2, 24px);
+}
+
+/* Normal - 3 buttons (uses 2-column grid from base)
+   No modifier needed, handled by base styles */
+
+/* Large - 2x2 grid (4 buttons) */
+.button-group--large {
+    grid-template-columns: repeat(2, 24px);
+}
+
+/* === css/components/molecules/record-control.css === */
+/**
+ * RecordControl - Record Button with LEDs and Timer
+ * Container for RecordButton atom + LEDs + Timer
+ */
+
+/* ============================================================================
+   Container
+   ============================================================================ */
+
+.record-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+/* ============================================================================
+   LEDs Section
+   ============================================================================ */
+
+.record-control__leds {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding: 3px;
+    background: linear-gradient(180deg, #2a2a2a 0%, #252525 100%);
+    border-bottom: 1px solid #1a1a1a;
+    position: relative;
+}
+
+.record-control__leds::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 100%);
+}
+
+/* ============================================================================
+   Timer Container
+   ============================================================================ */
+
+.record-control__timer {
+    /* Timer styles in atoms/timer.css */
+}
+
+/* ============================================================================
+   Button Container
+   ============================================================================ */
+
+.record-control__button {
+    /* RecordButton styles in atoms/record-button.css */
+}
+
+/* === css/components/organisms/audio-track.css === */
+/**
+ * AudioTrack - Professional Audio Console Track Strip
+ * Hardware-inspired design with 3D depth
+ * Width: 60px (normal), adapts for compact/normal/large
+ * Note: mini variant (40px, no VU-meter) will be added separately
+ */
+
+/* ============================================================================
+   Container - Hardware Panel Base
+   ============================================================================ */
+
+.audio-track {
+    display: flex;
+    flex-direction: column;
+    width: 60px;
+    min-height: 600px;
+    background: linear-gradient(135deg, #2d2d2d 0%, #252525 100%);
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.03),
+        0 2px 8px rgba(0, 0, 0, 0.4),
+        0 1px 2px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+/* Top highlight */
+.audio-track::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 100%);
+    pointer-events: none;
+}
+
+/* ============================================================================
+   State Borders
+   ============================================================================ */
+
+.audio-track--armed {
+    /* No border change - visual feedback on record button only */
+}
+
+.audio-track--recording {
+    border-color: rgba(212, 63, 63, 0.5);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.03),
+        0 2px 8px rgba(0, 0, 0, 0.4),
+        0 0 16px rgba(212, 63, 63, 0.3);
+}
+
+/* ============================================================================
+   VU Meter Section
+   ============================================================================ */
+
+.audio-track__meter {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;  /* No padding - VUMeter handles its own spacing */
+    background: linear-gradient(180deg, #1e1e1e 0%, #252525 100%);
+    border-bottom: 1px solid #1a1a1a;
+    position: relative;
+    min-height: 450px;
+}
+
+.audio-track__meter::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 100%);
+}
+
+.audio-track__meter-target {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Make VUMeter fill available width */
+.audio-track__meter-target .vu-meter {
+    width: 100% !important;
+    max-width: 100%;
+}
+
+/* Threshold indicator triangle */
+.audio-track__threshold-indicator {
+    position: absolute;
+    left: -8px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 3px 5px 3px 0;
+    border-color: transparent #fff transparent transparent;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.4));
+    pointer-events: none;
+    z-index: 10;
+    transform: translateY(-50%);
+}
+
+/* ============================================================================
+   Controls Section
+   ============================================================================ */
+
+.audio-track__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px;
+    background: linear-gradient(180deg, #252525 0%, #2a2a2a 100%);
+}
+
+.audio-track__buttons {
+    /* ButtonGroup styles in button-group.css */
+}
+
+.audio-track__rotaries {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.audio-track__record {
+    /* RecordControl styles in record-control.css */
+}
+
+/* ============================================================================
+   Footer Section
+   ============================================================================ */
+
+.audio-track__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 4px 2px 2px 2px;
+    background: linear-gradient(180deg, #1e1e1e 0%, #1a1a1a 100%);
+    border-top: 1px solid #0d0d0d;
+    font-size: 9px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-weight: 600;
+    position: relative;
+}
+
+.audio-track__footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 100%);
+}
+
+.audio-track__footer-item {
+    color: #888;
+    cursor: pointer;
+    transition: color 0.15s ease;
+    padding: 1px 2px;
+    border-radius: 2px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.audio-track__footer-item:hover {
+    color: #bbb;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.audio-track__lang {
+    text-transform: uppercase;
+    font-size: 9px;
+}
+
+.audio-track__location {
+    font-size: 8px;
+    max-width: 100%;
+}
+
+.audio-track__number {
+    font-size: 7px;
+    color: #555;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    padding-top: 2px;
+    margin-top: 1px;
+}
+
+.audio-track__number:hover {
+    color: #888;
+}
+
+/* ============================================================================
+   Size Variants
+   ============================================================================ */
+
+/* Compact - 40px wide (formerly mini) */
+.audio-track--compact {
+    width: 40px;
+    min-height: 400px;
+}
+
+.audio-track--compact .audio-track__meter {
+    padding: 0;  /* No padding */
+    min-height: 250px;
+}
+
+.audio-track--compact .audio-track__footer {
+    padding: 3px 1px 1px 1px;
+    gap: 0;
+    font-size: 8px;
+}
+
+.audio-track--compact .audio-track__lang {
+    font-size: 8px;
+}
+
+.audio-track--compact .audio-track__location {
+    font-size: 7px;
+}
+
+.audio-track--compact .audio-track__number {
+    font-size: 6px;
+}
+
+.audio-track--compact .audio-track__controls {
+    padding: 4px;
+    gap: 3px;
+}
+
+.audio-track--compact .audio-track__rotaries {
+    /* Only threshold rotary for compact */
+    gap: 0;
+}
+
+/* Normal - 60px wide (default, formerly compact) */
+/* Uses base styles, no modifier needed */
+
+/* Large - 75px wide (formerly normal) */
+.audio-track--large {
+    width: 75px;
+    min-height: 650px;
+}
+
+.audio-track--large .audio-track__meter {
+    padding: 0;  /* No padding */
+    min-height: 450px;
+}
+
+.audio-track--large .audio-track__controls {
+    padding: 6px;
+    gap: 4px;
+}
+

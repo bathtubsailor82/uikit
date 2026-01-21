@@ -4,6 +4,8 @@
   "description": "Design system réutilisable style Apple/macOS",
   "main": "dist/uikit.css",
   "scripts": {
+    "build": "./css/build.sh",
+    "watch": "echo 'Watch not implemented yet'",
     "dev": "open docs/index.html"
   },
   "keywords": [
