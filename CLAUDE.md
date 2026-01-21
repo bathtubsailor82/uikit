@@ -57,7 +57,8 @@ test-*.html                 # Pages test locales
 - Commits : Conventional Commits (feat/fix/perf/docs)
 - Commit order : UIKit submodule AVANT parent app
 - Modifications dist/ : TOUJOURS incluides avec sources modifiées
-- YOU MUST: Rebuilder dist/ AVANT chaque commit CSS → `npm run build` ou `./css/build.sh`
+- ⚠️ YOU MUST: Rebuilder dist/ AVANT chaque commit CSS → `npm run build` ou `./css/build.sh`
+- ⚠️ REMINDER: Demander rebuild si tu modifies CSS (pas de hook auto dans submodule)
 - NEVER: Commit sources CSS sans rebuilder dist/ (désynchronisation)
 
 ## Build Commands
