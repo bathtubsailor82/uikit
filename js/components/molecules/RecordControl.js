@@ -1,11 +1,13 @@
 /**
  * RecordControl - Record Button with LEDs and Timer
  * Manages record states: idle → armed → recording
+ * LEDs: 1=threshold exceeded, 2=armed, 3=recording
  *
  * @example
  * const recordControl = new RecordControl(container, {
  *   armed: false,
  *   recording: false,
+ *   thresholdExceeded: false,
  *   onStateChange: (state) => {}  // state: { armed, recording }
  * })
  */
@@ -20,13 +22,16 @@ class RecordControl {
     this.config = {
       armed: false,
       recording: false,
+      thresholdExceeded: false,
       onStateChange: null,
       ...config
     };
 
     this.element = null;
     this.recordButton = null;
-    this.leds = [];
+    this.thresholdLED = null;  // LED 1: threshold exceeded (yellow)
+    this.armedLED = null;      // LED 2: armed (green)
+    this.recordingLED = null;  // LED 3: recording (red)
     this.timer = null;
 
     this.recordingStartTime = null;
@@ -64,16 +69,30 @@ class RecordControl {
 
     // Create LED instances
     const ledsContainer = control.querySelector('.record-control__leds');
-    for (let i = 0; i < 2; i++) {
-      const ledContainer = document.createElement('div');
-      ledsContainer.appendChild(ledContainer);
 
-      const led = new LED(ledContainer, {
-        state: this.getLEDState(),
-        color: this.config.recording ? 'red' : 'green'
-      });
-      this.leds.push(led);
-    }
+    // LED 1: Threshold exceeded (amber/orange)
+    const thresholdLEDContainer = document.createElement('div');
+    ledsContainer.appendChild(thresholdLEDContainer);
+    this.thresholdLED = new LED(thresholdLEDContainer, {
+      state: this.config.thresholdExceeded ? 'active' : 'off',
+      color: 'amber'
+    });
+
+    // LED 2: Armed (green)
+    const armedLEDContainer = document.createElement('div');
+    ledsContainer.appendChild(armedLEDContainer);
+    this.armedLED = new LED(armedLEDContainer, {
+      state: this.config.armed ? 'active' : 'off',
+      color: 'green'
+    });
+
+    // LED 3: Recording (red)
+    const recordingLEDContainer = document.createElement('div');
+    ledsContainer.appendChild(recordingLEDContainer);
+    this.recordingLED = new LED(recordingLEDContainer, {
+      state: this.config.recording ? 'recording' : 'off',
+      color: 'red'
+    });
 
     // Create Timer instance
     const timerContainer = control.querySelector('.record-control__timer');
@@ -142,25 +161,35 @@ class RecordControl {
     return 'idle';
   }
 
-  getLEDState() {
-    if (this.config.recording) return 'recording';
-    if (this.config.armed) return 'active';
-    return 'off';
-  }
-
   updateVisualState() {
     // Update RecordButton
     if (this.recordButton) {
       this.recordButton.setState(this.getState());
     }
 
-    // Update LEDs
-    const ledState = this.getLEDState();
-    const ledColor = this.config.recording ? 'red' : 'green';
-    this.leds.forEach(led => {
-      led.setState(ledState);
-      led.setColor(ledColor);
-    });
+    // Update individual LEDs
+    if (this.thresholdLED) {
+      this.thresholdLED.setState(this.config.thresholdExceeded ? 'active' : 'off');
+    }
+    if (this.armedLED) {
+      this.armedLED.setState(this.config.armed ? 'active' : 'off');
+    }
+    if (this.recordingLED) {
+      this.recordingLED.setState(this.config.recording ? 'recording' : 'off');
+    }
+  }
+
+  /**
+   * Set threshold exceeded state (external control from metering)
+   * @param {boolean} exceeded - True if signal exceeds threshold
+   */
+  setThresholdExceeded(exceeded) {
+    if (this.config.thresholdExceeded !== exceeded) {
+      this.config.thresholdExceeded = exceeded;
+      if (this.thresholdLED) {
+        this.thresholdLED.setState(exceeded ? 'active' : 'off');
+      }
+    }
   }
 
   setState(armed, recording) {
@@ -234,9 +263,19 @@ class RecordControl {
       this.recordButton = null;
     }
 
-    // Destroy LED instances
-    this.leds.forEach(led => led.destroy());
-    this.leds = [];
+    // Destroy individual LED instances
+    if (this.thresholdLED) {
+      this.thresholdLED.destroy();
+      this.thresholdLED = null;
+    }
+    if (this.armedLED) {
+      this.armedLED.destroy();
+      this.armedLED = null;
+    }
+    if (this.recordingLED) {
+      this.recordingLED.destroy();
+      this.recordingLED = null;
+    }
 
     if (this.element) {
       this.element.remove();

@@ -11,7 +11,8 @@
  *   max: 6,
  *   step: 1,
  *   sensitivity: 0.3,
- *   onChange: (value) => {}
+ *   onInput: (value) => {},   // Called during drag (real-time)
+ *   onChange: (value) => {}   // Called at end of drag
  * })
  */
 
@@ -54,7 +55,8 @@ class Rotary {
       step: 1,
       sensitivity: 0.5,        // Drag sensitivity (dB per pixel)
       format: (v) => `${v}`,   // Value formatter
-      onChange: null,
+      onInput: null,           // Called during drag (real-time)
+      onChange: null,          // Called at end of drag
       ...preset,
       ...config
     };
@@ -140,6 +142,11 @@ class Rotary {
     const steppedValue = Math.round(clampedValue / this.config.step) * this.config.step;
 
     this.setValue(steppedValue, false); // Update visual without triggering onChange during drag
+
+    // Trigger onInput during drag for real-time updates
+    if (this.config.onInput) {
+      this.config.onInput(steppedValue);
+    }
   }
 
   stopDrag(onMouseMove, onMouseUp) {
