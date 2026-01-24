@@ -143,33 +143,40 @@ class AudioTrack {
     const meterTarget = this.element.querySelector('.audio-track__meter-target');
     if (!meterTarget) return;
 
-    // Get dimensions directly - no RAF needed
-    // Browser has already laid out the element after render()
-    const availableHeight = meterTarget.offsetHeight;
-    const availableWidth = meterTarget.offsetWidth;
+    // RAF guard - ensure layout complete before measuring (Chrome flexbox timing)
+    requestAnimationFrame(() => {
+      const availableHeight = meterTarget.offsetHeight;
+      const availableWidth = meterTarget.offsetWidth;
 
-    if (window.VUMeter && availableHeight > 0) {
-      // Use full available width - CSS handles padding
-      const meterWidth = Math.max(20, availableWidth);
+      // Guard against zero dimensions (Chrome flexbox race condition)
+      if (window.VUMeter && availableHeight > 0 && availableWidth > 0) {
+        // Use full available width - CSS handles padding
+        const meterWidth = Math.max(20, availableWidth);
 
-      this.meter = new window.VUMeter(meterTarget, {
-        preset: 'track',
-        orientation: 'vertical',
-        showRMS: true,
-        width: meterWidth,
-        height: availableHeight,
-        dbMin: -90,
-        dbMax: 6,
-        ballistics: true,
-        releaseRate: 11.8
-      });
+        this.meter = new window.VUMeter(meterTarget, {
+          preset: 'track',
+          orientation: 'vertical',
+          showRMS: true,
+          width: meterWidth,
+          height: availableHeight,
+          dbMin: -90,
+          dbMax: 6,
+          ballistics: true,
+          releaseRate: 11.8
+        });
 
-      // Stop individual RAF - use shared RAF loop
-      this.meter.stopAnimation();
+        // Stop individual RAF - use shared RAF loop
+        this.meter.stopAnimation();
 
-      // Add threshold indicator
-      this.addThresholdIndicator();
-    }
+        // Add threshold indicator
+        this.addThresholdIndicator();
+      } else if (availableHeight === 0 || availableWidth === 0) {
+        console.warn('AudioTrack: VUMeter init skipped - zero dimensions', {
+          height: availableHeight,
+          width: availableWidth
+        });
+      }
+    });
   }
 
   addThresholdIndicator() {

@@ -11114,6 +11114,7 @@ nav[aria-label="Pagination"] {
     width: 100%;
     height: 100%;
     flex: 1;  /* Ensure wrapper fills parent in flex context */
+    min-height: 0;  /* Chrome W3C flexbox spec - allow height: 100% to work */
 }
 
 /* Add padding when meter has scale or numeric display */
@@ -11138,6 +11139,7 @@ nav[aria-label="Pagination"] {
     flex: 1;
     gap: 2px;
     position: relative;
+    min-height: 0;  /* Chrome W3C flexbox spec - allow flex children to shrink */
 }
 
 .vu-meter--vertical .vu-meter__scale {
@@ -11232,19 +11234,20 @@ nav[aria-label="Pagination"] {
     gap: 1px;
     flex: 1;
     height: 100%;
+    min-height: 0;  /* Chrome W3C flexbox spec - allow flex children to shrink */
 }
 
 .vu-meter--vertical .vu-meter__bar {
     position: relative;
     border-radius: 0;
     overflow: hidden;
+    min-height: 0;  /* Chrome W3C flexbox spec - allow flex children to shrink */
 }
 
 /* Peak bar - normal width with background zones */
 .vu-meter--vertical .vu-meter__bar--peak {
     flex: 3;
     min-width: 12px;
-    will-change: transform; /* Force GPU layer for animated ::before */
     /* Background zones - ITU-R style */
     /* Range: -90 to +6 (96dB total) */
     /* -20dB position: (70/96) = 72.9% */
@@ -11272,10 +11275,8 @@ nav[aria-label="Pagination"] {
         var(--meter-danger) 83.3%,
         var(--meter-danger) 100%
     );
-    /* clip-path with GPU hints for better performance */
+    /* Remove clip-path animation - Chrome rendering issues with CSS custom props */
     clip-path: inset(var(--peak-clip, 100%) 0 0 0);
-    will-change: clip-path;
-    transition: clip-path 100ms ease-out;
     z-index: 1; /* Below hold indicator (z-index: 10) */
 }
 
@@ -11348,7 +11349,6 @@ nav[aria-label="Pagination"] {
     height: 2px;
     background: var(--color-text-primary);
     transition: bottom 50ms linear;
-    will-change: bottom;  /* GPU hint */
     z-index: 10;
 }
 
@@ -11436,7 +11436,6 @@ nav[aria-label="Pagination"] {
 .vu-meter--horizontal .vu-meter__bar--peak {
     flex: 3;
     min-height: 8px;
-    will-change: transform; /* Force GPU layer for animated ::before */
     /* Background zones - ITU-R style (horizontal) */
     /* Range: -90 to +6 (96dB total) */
     background: linear-gradient(to right,
@@ -11462,10 +11461,8 @@ nav[aria-label="Pagination"] {
         var(--meter-danger) 83.3%,
         var(--meter-danger) 100%
     );
-    /* clip-path with GPU hints for better performance */
+    /* Remove clip-path animation - Chrome rendering issues with CSS custom props */
     clip-path: inset(0 var(--peak-clip, 100%) 0 0);
-    will-change: clip-path;
-    transition: clip-path 100ms ease-out;
     z-index: 1; /* Below hold indicator (z-index: 10) */
 }
 
@@ -11534,7 +11531,6 @@ nav[aria-label="Pagination"] {
     width: 2px;
     background: var(--color-text-primary);
     transition: left 50ms linear;
-    will-change: left;  /* GPU hint */
     z-index: 10;
 }
 
@@ -13011,7 +13007,7 @@ tr.selected .matrix-cell.active {
     background: linear-gradient(180deg, #1e1e1e 0%, #252525 100%);
     border-bottom: 1px solid #1a1a1a;
     position: relative;
-    min-height: 450px;
+    min-height: 450px;  /* Minimum, but allow flex: 1 to fill available space */
 }
 
 .audio-track__meter::after {
@@ -13033,11 +13029,12 @@ tr.selected .matrix-cell.active {
     display: flex;
     justify-content: center;
     width: 100%;
+    min-height: 0;  /* Chrome W3C flexbox spec - allow flex child to shrink */
 }
 
 /* Make VUMeter fill available width */
 .audio-track__meter-target .vu-meter {
-    width: 100% !important;
+    width: 100%;
     max-width: 100%;
 }
 

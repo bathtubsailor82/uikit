@@ -471,25 +471,31 @@ class VUMeter {
       this.updateHold(this.values.peak)
     }
 
-    // Peak bar - use CSS custom property for clip-path (with will-change for GPU hint)
+    // Peak bar - use CSS custom property for clip-path
     const peakPercent = this.dbToPercent(this.values.peak)
 
-    if (isVertical) {
-      // Set CSS custom property for clip-path (inset from top)
-      this.peakBarEl.style.setProperty('--peak-clip', `${100 - peakPercent}%`)
-    } else {
-      // Horizontal: inset from right
-      this.peakBarEl.style.setProperty('--peak-clip', `${100 - peakPercent}%`)
+    // NaN guard - Chrome rendering issue with invalid CSS custom property values
+    if (!Number.isNaN(peakPercent)) {
+      if (isVertical) {
+        // Set CSS custom property for clip-path (inset from top)
+        this.peakBarEl.style.setProperty('--peak-clip', `${100 - peakPercent}%`)
+      } else {
+        // Horizontal: inset from right
+        this.peakBarEl.style.setProperty('--peak-clip', `${100 - peakPercent}%`)
+      }
     }
 
     // RMS bar (separate thin bar)
     if (this.rmsBarEl) {
       const rmsPercent = this.dbToPercent(this.values.rms)
       const rmsFill = this.rmsBarEl.querySelector('.vu-meter__fill')
-      if (isVertical) {
-        rmsFill.style.height = `${rmsPercent}%`
-      } else {
-        rmsFill.style.width = `${rmsPercent}%`
+      // NaN guard - prevent invalid CSS values
+      if (!Number.isNaN(rmsPercent)) {
+        if (isVertical) {
+          rmsFill.style.height = `${rmsPercent}%`
+        } else {
+          rmsFill.style.width = `${rmsPercent}%`
+        }
       }
     }
 
@@ -497,29 +503,35 @@ class VUMeter {
     if (this.lufsBarEl) {
       const lufsPercent = this.dbToPercent(this.values.lufs)
       const lufsFill = this.lufsBarEl.querySelector('.vu-meter__fill')
-      if (isVertical) {
-        lufsFill.style.height = `${lufsPercent}%`
-      } else {
-        lufsFill.style.width = `${lufsPercent}%`
+      // NaN guard - prevent invalid CSS values
+      if (!Number.isNaN(lufsPercent)) {
+        if (isVertical) {
+          lufsFill.style.height = `${lufsPercent}%`
+        } else {
+          lufsFill.style.width = `${lufsPercent}%`
+        }
       }
     }
 
     // Hold indicator - use CSS custom property like peak bar
     if (this.holdEl) {
       const holdPercent = this.dbToPercent(this.holdValue)
-      if (isVertical) {
-        // Use CSS custom property for bottom position
-        this.holdEl.style.setProperty('--hold-bottom', `${holdPercent}%`)
-      } else {
-        // Horizontal: use CSS custom property for left position
-        this.holdEl.style.setProperty('--hold-left', `${holdPercent}%`)
-      }
+      // NaN guard - prevent invalid CSS custom property values
+      if (!Number.isNaN(holdPercent)) {
+        if (isVertical) {
+          // Use CSS custom property for bottom position
+          this.holdEl.style.setProperty('--hold-bottom', `${holdPercent}%`)
+        } else {
+          // Horizontal: use CSS custom property for left position
+          this.holdEl.style.setProperty('--hold-left', `${holdPercent}%`)
+        }
 
-      // Clip indicator
-      if (this.holdValue >= this.config.dbClip) {
-        this.holdEl.classList.add('vu-meter__hold--clip')
-      } else {
-        this.holdEl.classList.remove('vu-meter__hold--clip')
+        // Clip indicator
+        if (this.holdValue >= this.config.dbClip) {
+          this.holdEl.classList.add('vu-meter__hold--clip')
+        } else {
+          this.holdEl.classList.remove('vu-meter__hold--clip')
+        }
       }
     }
 
