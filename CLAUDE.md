@@ -97,6 +97,8 @@ const trackGroup = new AudioTrackGroup(container, {
 
 YOU MUST: Rebuild dist/ après tout changement CSS sources
 YOU MUST: Apps chargent dist/ uniquement (pas sources CSS individuelles)
+YOU MUST: Déclarer explicitement flex-direction sur classes orientation (Chrome assume row par défaut)
+NOTE: Chrome refuse height: 100% dans flex children → height: auto + align-self: stretch
 NOTE: AudioTrack callbacks reçoivent DOM element (positioning dropdowns, tooltips)
 NOTE: Performance matrix : transitions CSS supprimées pour 128+ cells
 NOTE: CSS custom properties = seul moyen JS contrôler pseudo-elements (::before/::after)
