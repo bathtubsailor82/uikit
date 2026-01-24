@@ -36,6 +36,7 @@ class RecordControl {
 
     this.recordingStartTime = null;
     this.timerInterval = null;
+    this.backendDuration = null;  // Duration from backend (overrides local timer)
 
     this.render();
   }
@@ -124,63 +125,30 @@ class RecordControl {
   toggleRecord(isCancel) {
     const currentState = this.getState();
 
-    if (isCancel && (currentState === 'armed' || currentState === 'recording')) {
-      // Cancel to idle (Shift+clic)
-      this.config.armed = false;
-      this.config.recording = false;
-      this.stopTimer();
+    // Option 1: Flux unidirectionnel - on envoie juste l'intention au backend
+    // L'UI ne change que quand le WebSocket renvoie le nouvel état
+    // Ca garantit que l'UI reflète toujours l'état réel du moteur
 
-      // Notify state change avec stop manuel
-      if (this.config.onStateChange) {
-        this.config.onStateChange({
-          armed: this.config.armed,
-          recording: this.config.recording,
-          manualRecording: false  // Stop manuel
-        });
-      }
+    if (!this.config.onStateChange) return;
+
+    if (isCancel && (currentState === 'armed' || currentState === 'recording')) {
+      // Cancel to idle (Shift+clic ou clic droit)
+      this.config.onStateChange({ armed: false, recording: false });
 
     } else if (currentState === 'idle') {
-      // CYCLE: idle → armed
-      this.config.armed = true;
-      this.config.recording = false;
-
-      // Notify state change
-      if (this.config.onStateChange) {
-        this.config.onStateChange({
-          armed: this.config.armed,
-          recording: this.config.recording
-        });
-      }
+      // CYCLE: idle -> armed
+      this.config.onStateChange({ armed: true, recording: false });
 
     } else if (currentState === 'armed') {
-      // CYCLE: armed → force recording (manual)
-      // NE PAS désarmer ici - le backend C le fera automatiquement
-      // On envoie juste manualRecording=true, le reste vient du WebSocket
-
-      // Notify state change avec manualRecording uniquement
-      if (this.config.onStateChange) {
-        this.config.onStateChange({
-          manualRecording: true
-        });
-      }
+      // CYCLE: armed -> force recording (manual)
+      this.config.onStateChange({ manualRecording: true });
 
     } else {
-      // CYCLE: recording (auto or manual) → idle
-      this.config.armed = false;
-      this.config.recording = false;
-      this.stopTimer();
-
-      // Notify state change avec stop manuel
-      if (this.config.onStateChange) {
-        this.config.onStateChange({
-          armed: this.config.armed,
-          recording: this.config.recording,
-          manualRecording: false
-        });
-      }
+      // CYCLE: recording -> idle
+      this.config.onStateChange({ armed: false, recording: false });
     }
 
-    this.updateVisualState();
+    // PAS de updateVisualState() ici - l'UI sera mise à jour par le WebSocket
   }
 
   getState() {
@@ -218,17 +186,17 @@ class RecordControl {
 
     if (this.thresholdLED) {
       // Comportement LED selon gateState :
-      // - idle/attacking : LED suit thresholdExceeded en temps réel
+      // - idle/attack : LED suit thresholdExceeded en temps réel
       // - recording : LED fixe active
-      // - releasing : LED clignote (signal absent mais still recording)
+      // - release : LED clignote (signal absent mais still recording)
       if (gateState === 'recording') {
         this.thresholdLED.setState('active');
         this.thresholdLED.setBlink(false);
-      } else if (gateState === 'releasing') {
+      } else if (gateState === 'release') {
         this.thresholdLED.setState('active');
         this.thresholdLED.setBlink(true);  // Clignote à 4Hz
       } else {
-        // idle ou attacking : suit le signal en temps réel
+        // idle ou attack : suit le signal en temps réel
         this.thresholdLED.setState(exceeded ? 'active' : 'off');
         this.thresholdLED.setBlink(false);
       }
@@ -279,12 +247,25 @@ class RecordControl {
   updateTimerDisplay() {
     if (!this.timer) return;
 
-    if (this.recordingStartTime) {
-      const elapsed = Math.floor((Date.now() - this.recordingStartTime) / 1000);
-      this.timer.setTime(elapsed);
-    } else {
-      this.timer.setTime(0);
+    let seconds = 0;
+
+    // Priorité : durée backend > timer local
+    if (this.backendDuration !== undefined && this.backendDuration !== null) {
+      seconds = Math.floor(this.backendDuration);
+    } else if (this.recordingStartTime) {
+      seconds = Math.floor((Date.now() - this.recordingStartTime) / 1000);
     }
+
+    this.timer.setTime(seconds);
+  }
+
+  /**
+   * Set recording duration from backend (overrides local timer)
+   * @param {number} durationSeconds - Duration in seconds
+   */
+  setDuration(durationSeconds) {
+    this.backendDuration = durationSeconds;
+    this.updateTimerDisplay();
   }
 
   // ========================================================================

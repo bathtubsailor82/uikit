@@ -63,6 +63,7 @@ class AudioTrack {
 
   // ========================================================================
   // STATE DERIVATION (trackState → armed/recording)
+  // 0=IDLE, 1=ARMED, 2=RECORDING (auto), 3=MANUAL_RECORDING
   // ========================================================================
 
   get armed() {
@@ -70,7 +71,8 @@ class AudioTrack {
   }
 
   get recording() {
-    return this.config.trackState === 2;
+    // RECORDING (2) ou MANUAL_RECORDING (3)
+    return this.config.trackState === 2 || this.config.trackState === 3;
   }
 
   // ========================================================================
@@ -280,15 +282,19 @@ class AudioTrack {
       thresholdExceeded: false,
       onStateChange: (state) => {
         // Convert armed/recording → trackState for backend
+        // 0=IDLE, 1=ARMED, 2=RECORDING (auto), 3=MANUAL_RECORDING
         let newTrackState = 0; // IDLE
-        if (state.recording) {
-          newTrackState = 2; // RECORDING
+
+        if (state.manualRecording === true) {
+          newTrackState = 3; // MANUAL_RECORDING (force record, ignore threshold)
+        } else if (state.recording) {
+          newTrackState = 2; // RECORDING (auto threshold)
         } else if (state.armed) {
           newTrackState = 1; // ARMED
         }
 
-        this.config.trackState = newTrackState;
-        this.updateRecordState();
+        // Note: on ne met plus à jour this.config.trackState ici
+        // L'UI sera mise à jour par le WebSocket (flux unidirectionnel)
 
         if (this.config.onRecordToggle) {
           this.config.onRecordToggle(newTrackState);
@@ -347,17 +353,18 @@ class AudioTrack {
   // PUBLIC API
   // ========================================================================
 
-  updateMetering(peak, rms, trackState, thresholdExceeded, gateState) {
+  updateMetering(peak, rms, trackState, thresholdExceeded, gateState, recordingDurationSeconds) {
     if (this.meter) {
       this.meter.update({ peak, rms });
     }
 
-    // Update trackState from backend
-    if (trackState !== undefined && trackState !== this.config.trackState) {
+    // Update trackState from backend (toujours, sans condition)
+    // Flux unidirectionnel: le WebSocket est la source de vérité
+    if (trackState !== undefined) {
       this.config.trackState = trackState;
       this.updateRecordState();
 
-      // Update RecordControl state (syncs button + timer)
+      // Toujours synchroniser RecordControl avec l'état backend
       if (this.recordControl) {
         this.recordControl.setState(this.armed, this.recording);
       }
@@ -366,6 +373,11 @@ class AudioTrack {
     // Update LED from backend
     if (thresholdExceeded !== undefined && this.recordControl) {
       this.recordControl.setThresholdExceeded(thresholdExceeded, gateState);
+    }
+
+    // Update timer from backend
+    if (recordingDurationSeconds !== undefined && this.recordControl) {
+      this.recordControl.setDuration(recordingDurationSeconds);
     }
   }
 
