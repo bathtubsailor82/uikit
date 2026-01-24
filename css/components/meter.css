@@ -58,6 +58,10 @@
    Vertical Orientation
    ============================================================================ */
 
+.vu-meter--vertical {
+    flex-direction: column;
+}
+
 .vu-meter--vertical .vu-meter__area {
     display: flex;
     flex-direction: row;
@@ -159,7 +163,8 @@
     flex-direction: row;
     gap: 1px;
     flex: 1;
-    height: 100%;
+    height: auto;  /* Chrome: use auto with align-items: stretch on parent */
+    align-self: stretch;
     min-height: 0;  /* Chrome W3C flexbox spec - allow flex children to shrink */
 }
 
