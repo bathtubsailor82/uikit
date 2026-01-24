@@ -39,6 +39,7 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
+    flex: 1;  /* Ensure wrapper fills parent in flex context */
 }
 
 /* Add padding when meter has scale or numeric display */

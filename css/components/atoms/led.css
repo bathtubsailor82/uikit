@@ -128,7 +128,7 @@
    ============================================================================ */
 
 .led--blink {
-    animation: blink-led 1s ease-in-out infinite;
+    animation: blink-led 0.25s ease-in-out infinite;
 }
 
 @keyframes blink-led {

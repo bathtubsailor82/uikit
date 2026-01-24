@@ -23,7 +23,7 @@ class RecordControl {
       armed: false,
       recording: false,
       thresholdExceeded: false,
-      onStateChange: null,
+      onStateChange: null,  // Callback avec {armed, recording, manualRecording}
       ...config
     };
 
@@ -125,34 +125,62 @@ class RecordControl {
     const currentState = this.getState();
 
     if (isCancel && (currentState === 'armed' || currentState === 'recording')) {
-      // Cancel to idle
+      // Cancel to idle (Shift+clic)
       this.config.armed = false;
       this.config.recording = false;
       this.stopTimer();
+
+      // Notify state change avec stop manuel
+      if (this.config.onStateChange) {
+        this.config.onStateChange({
+          armed: this.config.armed,
+          recording: this.config.recording,
+          manualRecording: false  // Stop manuel
+        });
+      }
+
     } else if (currentState === 'idle') {
-      // idle → armed
+      // CYCLE: idle → armed
       this.config.armed = true;
       this.config.recording = false;
+
+      // Notify state change
+      if (this.config.onStateChange) {
+        this.config.onStateChange({
+          armed: this.config.armed,
+          recording: this.config.recording
+        });
+      }
+
     } else if (currentState === 'armed') {
-      // armed → recording
-      this.config.armed = false;
-      this.config.recording = true;
-      this.startTimer();
+      // CYCLE: armed → force recording (manual)
+      // NE PAS désarmer ici - le backend C le fera automatiquement
+      // On envoie juste manualRecording=true, le reste vient du WebSocket
+
+      // Notify state change avec manualRecording uniquement
+      if (this.config.onStateChange) {
+        this.config.onStateChange({
+          manualRecording: true
+        });
+      }
+
     } else {
-      // recording → idle
+      // CYCLE: recording (auto or manual) → idle
       this.config.armed = false;
       this.config.recording = false;
       this.stopTimer();
+
+      // Notify state change avec stop manuel
+      if (this.config.onStateChange) {
+        this.config.onStateChange({
+          armed: this.config.armed,
+          recording: this.config.recording,
+          manualRecording: false
+        });
+      }
     }
 
     this.updateVisualState();
-
-    if (this.config.onStateChange) {
-      this.config.onStateChange({
-        armed: this.config.armed,
-        recording: this.config.recording
-      });
-    }
   }
 
   getState() {
@@ -182,12 +210,27 @@ class RecordControl {
   /**
    * Set threshold exceeded state (external control from metering)
    * @param {boolean} exceeded - True if signal exceeds threshold
+   * @param {string} gateState - Gate state machine: 'idle', 'attacking', 'recording', 'releasing'
    */
-  setThresholdExceeded(exceeded) {
-    if (this.config.thresholdExceeded !== exceeded) {
-      this.config.thresholdExceeded = exceeded;
-      if (this.thresholdLED) {
+  setThresholdExceeded(exceeded, gateState = 'idle') {
+    this.config.thresholdExceeded = exceeded;
+    this.config.gateState = gateState;
+
+    if (this.thresholdLED) {
+      // Comportement LED selon gateState :
+      // - idle/attacking : LED suit thresholdExceeded en temps réel
+      // - recording : LED fixe active
+      // - releasing : LED clignote (signal absent mais still recording)
+      if (gateState === 'recording') {
+        this.thresholdLED.setState('active');
+        this.thresholdLED.setBlink(false);
+      } else if (gateState === 'releasing') {
+        this.thresholdLED.setState('active');
+        this.thresholdLED.setBlink(true);  // Clignote à 4Hz
+      } else {
+        // idle ou attacking : suit le signal en temps réel
         this.thresholdLED.setState(exceeded ? 'active' : 'off');
+        this.thresholdLED.setBlink(false);
       }
     }
   }

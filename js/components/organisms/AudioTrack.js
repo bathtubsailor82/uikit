@@ -13,13 +13,10 @@
  *   gain: 0,
  *   monitoring: false,
  *   solo: false,
- *   armed: false,
- *   recording: false,
- *   attackTime: 500,       // ms - time above threshold before recording starts
- *   releaseTime: 2000,     // ms - time below threshold before recording stops
+ *   trackState: 0,         // 0=IDLE, 1=ARMED, 2=RECORDING (backend enum)
  *   onMonitorToggle: (enabled) => {},
  *   onSoloToggle: (enabled) => {},
- *   onRecordToggle: (state) => {},
+ *   onRecordToggle: (trackState) => {},  // Callback avec trackState UInt32
  *   onThresholdChange: (value) => {},
  *   onGainChange: (value) => {},
  *   onLocationClick: (value) => {},
@@ -43,13 +40,10 @@ class AudioTrack {
       gain: 0,
       monitoring: false,
       solo: false,
-      armed: false,
-      recording: false,
-      attackTime: 500,       // ms - time above threshold before recording starts
-      releaseTime: 2000,     // ms - time below threshold before recording stops
+      trackState: 0,         // 0=IDLE, 1=ARMED, 2=RECORDING
       onMonitorToggle: null,
       onSoloToggle: null,
-      onRecordToggle: null,
+      onRecordToggle: null,  // Callback avec trackState (UInt32)
       onThresholdChange: null,
       onGainChange: null,
       onLocationClick: null,
@@ -64,14 +58,19 @@ class AudioTrack {
     this.thresholdRotary = null;
     this.gainRotary = null;
 
-    // Threshold gate state (hysteresis with timers)
-    this.gateState = {
-      aboveThresholdSince: null,  // timestamp when peak first exceeded threshold
-      belowThresholdSince: null,  // timestamp when peak first went below threshold
-      lastPeak: -Infinity
-    };
-
     this.render();
+  }
+
+  // ========================================================================
+  // STATE DERIVATION (trackState → armed/recording)
+  // ========================================================================
+
+  get armed() {
+    return this.config.trackState >= 1;
+  }
+
+  get recording() {
+    return this.config.trackState === 2;
   }
 
   // ========================================================================
@@ -133,9 +132,9 @@ class AudioTrack {
       classes.push(`audio-track--${this.config.size}`);
     }
 
-    // State modifiers
-    if (this.config.armed) classes.push('audio-track--armed');
-    if (this.config.recording) classes.push('audio-track--recording');
+    // State modifiers (derived from trackState)
+    if (this.armed) classes.push('audio-track--armed');
+    if (this.recording) classes.push('audio-track--recording');
 
     return classes.join(' ');
   }
@@ -269,16 +268,23 @@ class AudioTrack {
     if (!recordContainer) return;
 
     this.recordControl = new RecordControl(recordContainer, {
-      armed: this.config.armed,
-      recording: this.config.recording,
+      armed: this.armed,
+      recording: this.recording,
       thresholdExceeded: false,
       onStateChange: (state) => {
-        this.config.armed = state.armed;
-        this.config.recording = state.recording;
+        // Convert armed/recording → trackState for backend
+        let newTrackState = 0; // IDLE
+        if (state.recording) {
+          newTrackState = 2; // RECORDING
+        } else if (state.armed) {
+          newTrackState = 1; // ARMED
+        }
+
+        this.config.trackState = newTrackState;
         this.updateRecordState();
 
         if (this.config.onRecordToggle) {
-          this.config.onRecordToggle(state);
+          this.config.onRecordToggle(newTrackState);
         }
       }
     });
@@ -325,146 +331,34 @@ class AudioTrack {
   }
 
   updateRecordState() {
-    // Update track-level classes
-    this.element.classList.toggle('audio-track--armed', this.config.armed);
-    this.element.classList.toggle('audio-track--recording', this.config.recording);
+    // Update track-level classes (derived from trackState)
+    this.element.classList.toggle('audio-track--armed', this.armed);
+    this.element.classList.toggle('audio-track--recording', this.recording);
   }
 
   // ========================================================================
   // PUBLIC API
   // ========================================================================
 
-  updateMetering(peak, rms) {
+  updateMetering(peak, rms, trackState, thresholdExceeded, gateState) {
     if (this.meter) {
       this.meter.update({ peak, rms });
     }
 
-    // Threshold detection with hysteresis (gate)
-    // Peak and threshold are both in dB
-    if (peak !== undefined && this.config.threshold !== undefined) {
-      this.updateThresholdGate(peak);
-    }
-  }
-
-  /**
-   * Update threshold gate state with hysteresis
-   * - When armed: starts recording after peak > threshold for attackTime
-   * - When recording: stops recording after peak < threshold for releaseTime
-   * - LED: s'allume immédiatement quand threshold dépassé (feedback visuel)
-   */
-  updateThresholdGate(peak) {
-    const now = Date.now();
-    const isAboveThreshold = peak >= this.config.threshold;
-
-    // Update LED immediately for visual feedback (all states)
-    if (this.recordControl) {
-      this.recordControl.setThresholdExceeded(isAboveThreshold);
-    }
-
-    // ARMED STATE: Wait for attack time before starting recording
-    if (this.config.armed && !this.config.recording) {
-      if (isAboveThreshold) {
-        // Peak is above threshold
-        if (this.gateState.aboveThresholdSince === null) {
-          // First time above threshold - start attack timer
-          this.gateState.aboveThresholdSince = now;
-        }
-
-        // Reset release timer
-        this.gateState.belowThresholdSince = null;
-
-        // Check if attack time has elapsed
-        const timeAbove = now - this.gateState.aboveThresholdSince;
-        if (timeAbove >= this.config.attackTime) {
-          // Start recording!
-          this.startRecording();
-        }
-      } else {
-        // Peak is below threshold - reset attack timer
-        this.gateState.aboveThresholdSince = null;
-      }
-    }
-
-    // RECORDING STATE: Wait for release time before stopping recording
-    else if (this.config.recording) {
-      if (isAboveThreshold) {
-        // Peak is above threshold - reset release timer (keep recording)
-        this.gateState.belowThresholdSince = null;
-      } else {
-        // Peak is below threshold
-        if (this.gateState.belowThresholdSince === null) {
-          // First time below threshold - start release timer
-          this.gateState.belowThresholdSince = now;
-        }
-
-        // Check if release time has elapsed
-        const timeBelow = now - this.gateState.belowThresholdSince;
-        if (timeBelow >= this.config.releaseTime) {
-          // Stop recording!
-          this.stopRecording();
-        }
-      }
-    }
-
-    // IDLE STATE: Reset all timers
-    else {
-      this.gateState.aboveThresholdSince = null;
-      this.gateState.belowThresholdSince = null;
-    }
-
-    this.gateState.lastPeak = peak;
-  }
-
-  /**
-   * Start recording (called by threshold gate)
-   */
-  startRecording() {
-    if (!this.config.recording) {
-      this.config.armed = false;
-      this.config.recording = true;
+    // Update trackState from backend
+    if (trackState !== undefined && trackState !== this.config.trackState) {
+      this.config.trackState = trackState;
       this.updateRecordState();
 
-      // Reset gate state
-      this.gateState.aboveThresholdSince = null;
-      this.gateState.belowThresholdSince = null;
-
-      // Notify parent
-      if (this.config.onRecordToggle) {
-        this.config.onRecordToggle({
-          armed: this.config.armed,
-          recording: this.config.recording
-        });
-      }
-
-      // Update RecordControl UI
+      // Update RecordControl state (syncs button + timer)
       if (this.recordControl) {
-        this.recordControl.setState(false, true);
+        this.recordControl.setState(this.armed, this.recording);
       }
     }
-  }
 
-  /**
-   * Stop recording (will be called by threshold gate with release timer)
-   * For now, this is a placeholder - release logic will be added next
-   */
-  stopRecording() {
-    if (this.config.recording) {
-      this.config.recording = false;
-      this.config.armed = false;
-      this.updateRecordState();
-
-      // Notify parent
-      if (this.config.onRecordToggle) {
-        this.config.onRecordToggle({
-          armed: this.config.armed,
-          recording: this.config.recording
-        });
-      }
-
-      // Update RecordControl UI
-      if (this.recordControl) {
-        this.recordControl.setState(false, false);
-      }
+    // Update LED from backend
+    if (thresholdExceeded !== undefined && this.recordControl) {
+      this.recordControl.setThresholdExceeded(thresholdExceeded, gateState);
     }
   }
 

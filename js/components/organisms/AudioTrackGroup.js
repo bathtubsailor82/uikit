@@ -178,25 +178,27 @@ class AudioTrackGroup {
    * @param {Number} trackId
    * @param {Number} peak - Peak level in dB
    * @param {Number} rms - RMS level in dB
+   * @param {Boolean} recording - Recording state from backend
+   * @param {Boolean} thresholdExceeded - Threshold exceeded state from backend
    */
-  updateMetering(trackId, peak, rms) {
+  updateMetering(trackId, peak, rms, recording, thresholdExceeded, gateState) {
     const track = this.tracks.get(trackId);
     if (!track) return;
 
-    // Update data directly (like in index.html)
-    track.updateMetering(peak, rms);
+    // Update data directly (pass new params from backend)
+    track.updateMetering(peak, rms, recording, thresholdExceeded, gateState);
   }
 
   /**
    * Batch update metering for multiple tracks
    * More efficient than calling updateMetering() multiple times
-   * @param {Array} updates - Array of {trackId, peak, rms}
+   * @param {Array} updates - Array of {trackId, peak, rms, recording, thresholdExceeded}
    */
   batchUpdateMetering(updates) {
-    updates.forEach(({ trackId, peak, rms }) => {
+    updates.forEach(({ trackId, peak, rms, recording, thresholdExceeded, gateState }) => {
       const track = this.tracks.get(trackId);
       if (track) {
-        track.updateMetering(peak, rms);
+        track.updateMetering(peak, rms, recording, thresholdExceeded, gateState);
       }
     });
   }
