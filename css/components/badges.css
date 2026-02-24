@@ -56,6 +56,21 @@
     color: var(--color-text-secondary);
 }
 
+.badge-running {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+.badge-completed {
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
+}
+
+.badge-cancelled {
+    background: var(--color-bg-active);
+    color: var(--color-text-secondary);
+}
+
 /* Status badge (plus grand) */
 
 .status-badge {

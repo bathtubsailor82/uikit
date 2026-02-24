@@ -766,7 +766,7 @@ body.keyboard-nav *:focus {
 
 .layout-3col {
     display: grid;
-    grid-template-columns: 280px 400px 1fr;
+    grid-template-columns: 280px 500px 1fr;
     gap: var(--spacing-4);
     min-height: 100vh;
 }
@@ -4582,6 +4582,21 @@ nav[aria-label="Pagination"] {
     color: var(--color-text-secondary);
 }
 
+.badge-running {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+.badge-completed {
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
+}
+
+.badge-cancelled {
+    background: var(--color-bg-active);
+    color: var(--color-text-secondary);
+}
+
 /* Status badge (plus grand) */
 
 .status-badge {
@@ -6161,6 +6176,28 @@ nav[aria-label="Pagination"] {
     overflow: hidden;
     margin: var(--spacing-3) 0;
     position: relative;
+}
+
+/* Animated background for active processing */
+.progress-bar.processing {
+    background: repeating-linear-gradient(
+        45deg,
+        var(--color-border-light),
+        var(--color-border-light) 10px,
+        var(--color-hover) 10px,
+        var(--color-hover) 20px
+    );
+    background-size: 200% 200%;
+    animation: progress-stripes 2s linear infinite;
+}
+
+@keyframes progress-stripes {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
 }
 
 .progress-fill {

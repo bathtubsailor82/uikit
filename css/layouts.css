@@ -29,7 +29,7 @@
 
 .layout-3col {
     display: grid;
-    grid-template-columns: 280px 400px 1fr;
+    grid-template-columns: 280px 500px 1fr;
     gap: var(--spacing-4);
     min-height: 100vh;
 }

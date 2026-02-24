@@ -12,6 +12,28 @@
     position: relative;
 }
 
+/* Animated background for active processing */
+.progress-bar.processing {
+    background: repeating-linear-gradient(
+        45deg,
+        var(--color-border-light),
+        var(--color-border-light) 10px,
+        var(--color-hover) 10px,
+        var(--color-hover) 20px
+    );
+    background-size: 200% 200%;
+    animation: progress-stripes 2s linear infinite;
+}
+
+@keyframes progress-stripes {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
 .progress-fill {
     height: 100%;
     background: linear-gradient(to bottom, #6ba1d8, var(--color-primary));
