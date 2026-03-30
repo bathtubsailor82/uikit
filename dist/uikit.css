@@ -12247,6 +12247,89 @@ tr.selected .matrix-cell.active {
     border-left-color: var(--color-border-dark);
 }
 
+/* === css/components/time-picker.css === */
+/* ================================================
+   Time Picker Component
+   MM:SS duration input with presets
+   ================================================ */
+
+.time-picker {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    background: var(--color-bg-primary);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-2);
+}
+
+.time-picker:focus-within {
+    border-color: var(--color-primary);
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-primary);
+    outline-offset: 1px;
+}
+
+.time-input {
+    width: 3ch;
+    padding: var(--spacing-1);
+    border: none;
+    background: transparent;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-lg);
+    text-align: center;
+    color: var(--color-text);
+    -moz-appearance: textfield;
+}
+
+.time-input::-webkit-outer-spin-button,
+.time-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.time-input:focus {
+    outline: none;
+    background: var(--color-bg-secondary);
+    border-radius: var(--border-radius-sm);
+}
+
+.time-separator {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-secondary);
+}
+
+.time-picker-presets {
+    display: flex;
+    gap: var(--spacing-1);
+    margin-top: var(--spacing-2);
+    justify-content: flex-end;
+}
+
+.preset-btn {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--font-size-xs);
+    background: var(--color-bg-tertiary);
+    border: var(--border-width) solid var(--color-border-light);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.preset-btn:hover {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
+.preset-btn.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+
 /* === css/components/atoms/button.css === */
 /**
  * Button - Audio Console Button Styles
@@ -13080,16 +13163,22 @@ tr.selected .matrix-cell.active {
     max-width: 100%;
 }
 
-/* Threshold indicator triangle */
+/* CanvasMeter - fixed width, centered */
+.audio-track__meter-target .canvas-meter {
+    display: block;
+    /* Canvas has inline style for width/height, don't override */
+}
+
+/* Threshold indicator triangle - small amber arrow pointing left */
 .audio-track__threshold-indicator {
     position: absolute;
-    left: -8px;
+    right: 0;
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 3px 5px 3px 0;
-    border-color: transparent #fff transparent transparent;
-    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.4));
+    border-width: 3px 4px 3px 0;
+    border-color: transparent #f59e0b transparent transparent;
+    filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.5));
     pointer-events: none;
     z-index: 10;
     transform: translateY(-50%);

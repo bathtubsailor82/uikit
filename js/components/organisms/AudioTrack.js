@@ -27,6 +27,35 @@
 import ButtonGroup, { BUTTON_SETS } from '../molecules/ButtonGroup.js';
 import RecordControl from '../molecules/RecordControl.js';
 import Rotary from '../atoms/Rotary.js';
+import CanvasMeter from '../../CanvasMeter.js';
+
+// Mapping mode -> CanvasMeter preset/config
+// See CANVAS-METER.md and TRACK-UI-MVP.md section 3
+// Track width 40px: meter 24px + ticks 4px = 28px canvas (labels overlay on meter, Reaper style)
+const METER_CONFIG_BY_MODE = {
+  compact: {
+    // Compact 40px track: 28px canvas (24px meter + 4px ticks), labels overlay
+    preset: 'track',
+    override: {
+      width: 24,
+      showScale: true,
+      showScaleLabels: true,  // Labels drawn ON meter (Reaper style)
+      showNumeric: false,
+      showNumericTop: true,
+      showRMS: true,
+      showPeakHold: true,
+      showClipIndicator: true
+    }
+  },
+  normal: {
+    preset: 'track',
+    override: { width: 24, showScaleLabels: true, showNumeric: false, showNumericTop: true, showPeakHold: true }
+  },
+  large: {
+    preset: 'track',
+    override: { width: 32, showScaleLabels: true, showNumeric: true, showNumericTop: true, showPeakHold: true }
+  }
+};
 
 class AudioTrack {
   constructor(container, config = {}) {
@@ -119,7 +148,7 @@ class AudioTrack {
     this.element = track;
 
     // Initialize components
-    this.initVUMeter();
+    this.initMeter();
     this.initButtonGroup();
     this.initRotaries();
     this.initRecordControl();
@@ -141,7 +170,7 @@ class AudioTrack {
     return classes.join(' ');
   }
 
-  initVUMeter() {
+  initMeter() {
     const meterTarget = this.element.querySelector('.audio-track__meter-target');
     if (!meterTarget) return;
 
@@ -151,29 +180,26 @@ class AudioTrack {
       const availableWidth = meterTarget.offsetWidth;
 
       // Guard against zero dimensions (Chrome flexbox race condition)
-      if (window.VUMeter && availableHeight > 0 && availableWidth > 0) {
-        // Use full available width - CSS handles padding
-        const meterWidth = Math.max(20, availableWidth);
+      if (availableHeight > 0 && availableWidth > 0) {
+        // Get meter config based on track size mode
+        const meterConfig = METER_CONFIG_BY_MODE[this.config.size] || METER_CONFIG_BY_MODE.normal;
 
-        this.meter = new window.VUMeter(meterTarget, {
-          preset: 'track',
-          orientation: 'vertical',
-          showRMS: true,
-          width: meterWidth,
+        // Build config object with preset and overrides
+        const config = {
+          preset: meterConfig.preset,
+          ...meterConfig.override,
+          // Override height to match available space
           height: availableHeight,
-          dbMin: -90,
-          dbMax: 6,
-          ballistics: true,
-          releaseRate: 11.8
-        });
+          context: 'track'
+        };
 
-        // Stop individual RAF - use shared RAF loop
-        this.meter.stopAnimation();
+        // Create CanvasMeter instance
+        this.meter = new CanvasMeter(meterTarget, config);
 
-        // Add threshold indicator
+        // Add threshold indicator (overlay, separate from meter)
         this.addThresholdIndicator();
-      } else if (availableHeight === 0 || availableWidth === 0) {
-        console.warn('AudioTrack: VUMeter init skipped - zero dimensions', {
+      } else {
+        console.warn('AudioTrack: Meter init skipped - zero dimensions', {
           height: availableHeight,
           width: availableWidth
         });
@@ -182,11 +208,20 @@ class AudioTrack {
   }
 
   addThresholdIndicator() {
-    let container = this.element.querySelector('.vu-meter__scale');
+    // Threshold indicator is an overlay on the meter container
+    // Works with both CanvasMeter and legacy VUMeter
+    let container = this.element.querySelector('.audio-track__meter-target');
     if (!container) {
-      container = this.element.querySelector('.vu-meter');
+      // Fallback to old selectors for backwards compatibility
+      container = this.element.querySelector('.vu-meter__scale');
+      if (!container) {
+        container = this.element.querySelector('.vu-meter');
+      }
     }
     if (!container) return;
+
+    // Ensure container has relative positioning for absolute threshold indicator
+    container.style.position = 'relative';
 
     const triangle = document.createElement('div');
     triangle.className = 'audio-track__threshold-indicator';
@@ -199,10 +234,12 @@ class AudioTrack {
     const triangle = this.element.querySelector('.audio-track__threshold-indicator');
     if (!triangle) return;
 
-    const dbMin = -90;
-    const dbMax = 6;
+    // Get range from meter config or use defaults
+    const dbMin = this.meter?.config?.minDB ?? -60;
+    const dbMax = this.meter?.config?.maxDB ?? 0;
     const threshold = this.config.threshold;
 
+    // Calculate percentage within dB range
     let percent;
     if (threshold <= dbMin) {
       percent = 0;
@@ -212,7 +249,29 @@ class AudioTrack {
       percent = ((threshold - dbMin) / (dbMax - dbMin)) * 100;
     }
 
-    triangle.style.bottom = `${percent}%`;
+    // Get meter dimensions from CanvasMeter instance
+    // Layout from top to bottom:
+    // - numericTopHeight (14px if showNumericTop)
+    // - clipHeight (4px if showClipIndicator)
+    // - barHeight (rest of meterHeight minus clipHeight)
+    if (this.meter) {
+      const numericTopHeight = this.meter._numericTopHeight || 0;
+      const clipHeight = this.meter.config.showClipIndicator ? 4 : 0;
+      const meterHeight = this.meter._meterHeight;
+      const barHeight = meterHeight - clipHeight;
+      const barStartY = numericTopHeight + clipHeight;
+
+      // Position from top: barStartY + barHeight * (1 - percent/100)
+      // At 0 dB (100%), position = barStartY (top of bar)
+      // At -60 dB (0%), position = barStartY + barHeight (bottom of bar)
+      const posFromTop = barStartY + barHeight * (1 - percent / 100);
+      triangle.style.top = `${posFromTop}px`;
+      triangle.style.bottom = 'auto';
+    } else {
+      // Fallback to percentage if meter not ready
+      triangle.style.bottom = `${percent}%`;
+      triangle.style.top = 'auto';
+    }
   }
 
   initButtonGroup() {
@@ -240,17 +299,22 @@ class AudioTrack {
     this.thresholdRotary = new Rotary(thresholdContainer, {
       preset: 'threshold',
       value: this.config.threshold,
-      onInput: (value) => {
+      onInput: (value, options) => {
         // Real-time update during drag (visual only, smooth)
         this.config.threshold = value;
         this.updateThresholdIndicatorPosition();
+        // Pass options.altKey for global threshold feature
+        if (options?.altKey && this.config.onThresholdChange) {
+          this.config.onThresholdChange(value, { altKey: true, realtime: true });
+        }
       },
-      onChange: (value) => {
+      onChange: (value, options) => {
         // Final update at end of drag (send to backend)
         this.config.threshold = value;
         this.updateThresholdIndicatorPosition();
         if (this.config.onThresholdChange) {
-          this.config.onThresholdChange(value);
+          // Pass options.altKey for global threshold feature
+          this.config.onThresholdChange(value, { altKey: options?.altKey || false });
         }
       }
     });
@@ -353,9 +417,18 @@ class AudioTrack {
   // PUBLIC API
   // ========================================================================
 
-  updateMetering(peak, rms, trackState, thresholdExceeded, gateState, recordingDurationSeconds) {
+  updateMetering(peak, rms, trackState, thresholdExceeded, gateState, recordingDurationSeconds, clip, peakHold, truePeak, ppm) {
     if (this.meter) {
-      this.meter.update({ peak, rms });
+      // CanvasMeter uses setValues() with all available metrics from backend
+      // All values are pre-calculated in dB by backend
+      this.meter.setValues({
+        peak: peak,
+        rms: rms,
+        clip: clip || false,
+        peakHold: peakHold,
+        truePeak: truePeak,
+        ppm: ppm
+      });
     }
 
     // Update trackState from backend (toujours, sans condition)
@@ -401,6 +474,19 @@ class AudioTrack {
     if (langEl) {
       langEl.textContent = language;
     }
+  }
+
+  /**
+   * Set threshold value (for global threshold feature)
+   * Updates rotary, config, and visual indicator
+   * @param {number} value - Threshold in dB
+   */
+  setThreshold(value) {
+    this.config.threshold = value;
+    if (this.thresholdRotary) {
+      this.thresholdRotary.setValue(value, false); // false = don't trigger callback
+    }
+    this.updateThresholdIndicatorPosition();
   }
 
   destroy() {

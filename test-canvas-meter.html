@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CanvasMeter Test - All Presets</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            padding: 40px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 32px;
+            font-size: 28px;
+        }
+
+        h2 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .test-section {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border: 1px solid #1a1a1a;
+        }
+
+        .meters-grid {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .meter-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .meter-container {
+            background: #0d0d0d;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+
+        .meter-label {
+            font-size: 11px;
+            color: #888;
+            font-family: 'Monaco', 'Courier New', monospace;
+            text-transform: uppercase;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 16px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-demo {
+            background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 50%, #2e2e2e 100%);
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            color: #e0e0e0;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-demo:hover {
+            background: linear-gradient(180deg, #525252 0%, #424242 50%, #363636 100%);
+        }
+
+        .btn-demo.active {
+            background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+        }
+
+        .status {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 11px;
+            color: #0f0;
+            padding: 8px 12px;
+            background: #0a0a0a;
+            border-radius: 4px;
+            border: 1px solid #1a1a1a;
+        }
+
+        .horizontal-meters {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .horizontal-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-panel {
+            background: #0a0a0a;
+            padding: 16px;
+            border-radius: 4px;
+            border: 1px solid #1a1a1a;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 11px;
+            margin-top: 16px;
+        }
+
+        .info-panel h3 {
+            color: #888;
+            margin: 0 0 8px 0;
+            font-size: 12px;
+        }
+
+        .info-panel code {
+            color: #0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>CanvasMeter - Canvas 2D High Performance Meter</h1>
+
+    <!-- Vertical Presets -->
+    <div class="test-section">
+        <h2>[>] Vertical Presets (track, hw-io, broadcast, lufs)</h2>
+        <div class="meters-grid" id="vertical-meters"></div>
+        <div class="controls">
+            <button class="btn-demo active" onclick="toggleAnimation(this)">Animation ON</button>
+            <button class="btn-demo" onclick="simulateClip()">Simulate Clip</button>
+            <button class="btn-demo" onclick="resetMeters()">Reset</button>
+        </div>
+        <div class="status" id="status">Waiting for animation...</div>
+    </div>
+
+    <!-- Horizontal Presets -->
+    <div class="test-section">
+        <h2>[>] Horizontal Preset (compact)</h2>
+        <div class="horizontal-meters" id="horizontal-meters"></div>
+    </div>
+
+    <!-- Performance Test -->
+    <div class="test-section">
+        <h2>[>] Performance Test (128 track meters)</h2>
+        <div class="controls">
+            <button class="btn-demo" onclick="createManyMeters(128)">Create 128 Meters</button>
+            <button class="btn-demo" onclick="createManyMeters(256)">Create 256 Meters</button>
+            <button class="btn-demo" onclick="createManyMeters(512)">Create 512 Meters</button>
+            <button class="btn-demo" onclick="clearManyMeters()">Clear</button>
+        </div>
+        <div class="status" id="perf-status">Click to start performance test</div>
+        <div class="meters-grid" id="perf-meters" style="max-height: 400px; overflow-y: auto;"></div>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="test-section">
+        <h2>[>] Usage Example</h2>
+        <div class="info-panel">
+            <h3>// Create meter with preset</h3>
+            <code>const meter = new CanvasMeter(container, 'track');</code>
+            <br><br>
+            <h3>// Update values from WebSocket (all dB, pre-calculated by backend)</h3>
+            <code>meter.setValues({ peak: -12.5, rms: -18.2, clip: false });</code>
+            <br><br>
+            <h3>// Paint (called by centralized RAF loop)</h3>
+            <code>meter.paint();</code>
+            <br><br>
+            <h3>// Available presets</h3>
+            <code>track | compact | hw-io | broadcast | lufs</code>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import CanvasMeter, { CANVAS_METER_PRESETS } from './js/CanvasMeter.js';
+
+        // Make available globally for test buttons
+        window.CanvasMeter = CanvasMeter;
+        window.CANVAS_METER_PRESETS = CANVAS_METER_PRESETS;
+
+        // ===================================================================
+        // Create Vertical Meters (one per preset)
+        // ===================================================================
+        const verticalContainer = document.getElementById('vertical-meters');
+        const verticalPresets = ['track', 'hw-io', 'broadcast', 'lufs'];
+        const verticalMeters = [];
+
+        verticalPresets.forEach(presetName => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'meter-wrapper';
+
+            const meterContainer = document.createElement('div');
+            meterContainer.className = 'meter-container';
+            wrapper.appendChild(meterContainer);
+
+            const label = document.createElement('div');
+            label.className = 'meter-label';
+            label.textContent = presetName;
+            wrapper.appendChild(label);
+
+            verticalContainer.appendChild(wrapper);
+
+            const meter = new CanvasMeter(meterContainer, presetName);
+            verticalMeters.push({ meter, name: presetName });
+        });
+
+        // ===================================================================
+        // Create Horizontal Meters (compact preset variations)
+        // ===================================================================
+        const horizontalContainer = document.getElementById('horizontal-meters');
+        const horizontalMeters = [];
+
+        for (let i = 0; i < 4; i++) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'horizontal-wrapper';
+
+            const label = document.createElement('div');
+            label.className = 'meter-label';
+            label.style.width = '60px';
+            label.textContent = `Track ${i + 1}`;
+            wrapper.appendChild(label);
+
+            const meterContainer = document.createElement('div');
+            meterContainer.className = 'meter-container';
+            meterContainer.style.padding = '4px';
+            wrapper.appendChild(meterContainer);
+
+            horizontalContainer.appendChild(wrapper);
+
+            const meter = new CanvasMeter(meterContainer, 'compact');
+            horizontalMeters.push(meter);
+        }
+
+        // ===================================================================
+        // Animation Loop
+        // ===================================================================
+        let animationActive = true;
+        let frameCount = 0;
+        let lastFpsTime = performance.now();
+        let fps = 0;
+
+        function animate() {
+            if (!animationActive) {
+                requestAnimationFrame(animate);
+                return;
+            }
+
+            // Simulate varying audio levels
+            const time = Date.now() / 1000;
+
+            // Update vertical meters
+            verticalMeters.forEach(({ meter, name }, i) => {
+                const baseLevel = -40 + (i * 5);
+                const variation = Math.sin(time * (1 + i * 0.3)) * 15;
+                const randomSpike = Math.random() > 0.97 ? Math.random() * 8 : 0;
+
+                const peak = Math.min(6, baseLevel + variation + randomSpike);
+                const rms = peak - 6 - Math.random() * 4;
+                const peakHold = peak + 3;
+
+                meter.setValues({
+                    peak: peak,
+                    rms: rms,
+                    peakHold: peakHold,
+                    ppm: peak + 2,
+                    lufsM: peak - 10,
+                    clip: peak >= 0
+                });
+
+                meter.paint();
+            });
+
+            // Update horizontal meters
+            horizontalMeters.forEach((meter, i) => {
+                const baseLevel = -35 + (i * 8);
+                const variation = Math.sin(time * (1.5 + i * 0.2)) * 12;
+
+                const peak = Math.min(0, baseLevel + variation);
+                const rms = peak - 5;
+
+                meter.setValues({ peak, rms, clip: peak >= -1 });
+                meter.paint();
+            });
+
+            // Update performance meters if any
+            window.perfMeters?.forEach((meter, i) => {
+                const baseLevel = -50 + (i % 20) * 2;
+                const variation = Math.sin(time * (1 + (i % 10) * 0.1)) * 15;
+                const peak = Math.min(0, baseLevel + variation);
+
+                meter.setValues({ peak, rms: peak - 5, clip: peak >= -1 });
+                meter.paint();
+            });
+
+            // FPS counter
+            frameCount++;
+            const now = performance.now();
+            if (now - lastFpsTime >= 1000) {
+                fps = frameCount;
+                frameCount = 0;
+                lastFpsTime = now;
+                document.getElementById('status').textContent =
+                    `Animation running @ ${fps} FPS | ${verticalMeters.length + horizontalMeters.length} meters`;
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Start animation
+        requestAnimationFrame(animate);
+
+        // ===================================================================
+        // Test Controls
+        // ===================================================================
+        window.toggleAnimation = (btn) => {
+            animationActive = !animationActive;
+            btn.classList.toggle('active', animationActive);
+            btn.textContent = animationActive ? 'Animation ON' : 'Animation OFF';
+        };
+
+        window.simulateClip = () => {
+            verticalMeters.forEach(({ meter }) => {
+                meter.setValues({ peak: 3, rms: -2, clip: true });
+                meter.paint();
+            });
+            horizontalMeters.forEach(meter => {
+                meter.setValues({ peak: 0, rms: -3, clip: true });
+                meter.paint();
+            });
+        };
+
+        window.resetMeters = () => {
+            verticalMeters.forEach(({ meter }) => {
+                meter.setValues({ peak: -60, rms: -60, clip: false });
+                meter.resetPeakHold();
+                meter.paint();
+            });
+            horizontalMeters.forEach(meter => {
+                meter.setValues({ peak: -60, rms: -60, clip: false });
+                meter.paint();
+            });
+        };
+
+        // ===================================================================
+        // Performance Test
+        // ===================================================================
+        window.perfMeters = [];
+
+        window.createManyMeters = (count) => {
+            clearManyMeters();
+
+            const container = document.getElementById('perf-meters');
+            const startTime = performance.now();
+
+            for (let i = 0; i < count; i++) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'meter-wrapper';
+                wrapper.style.margin = '2px';
+
+                const meterContainer = document.createElement('div');
+                meterContainer.style.background = '#0d0d0d';
+                meterContainer.style.padding = '2px';
+                meterContainer.style.borderRadius = '2px';
+                wrapper.appendChild(meterContainer);
+
+                container.appendChild(wrapper);
+
+                const meter = new CanvasMeter(meterContainer, {
+                    preset: 'track',
+                    width: 12,
+                    height: 80,
+                    showScale: false,
+                    showNumeric: false
+                });
+
+                window.perfMeters.push(meter);
+            }
+
+            const elapsed = performance.now() - startTime;
+            document.getElementById('perf-status').textContent =
+                `Created ${count} meters in ${elapsed.toFixed(1)}ms (${(elapsed / count).toFixed(2)}ms each)`;
+        };
+
+        window.clearManyMeters = () => {
+            window.perfMeters.forEach(meter => meter.destroy());
+            window.perfMeters = [];
+            document.getElementById('perf-meters').innerHTML = '';
+            document.getElementById('perf-status').textContent = 'Cleared';
+        };
+
+        console.log('CanvasMeter test initialized');
+        console.log('Available presets:', Object.keys(CANVAS_METER_PRESETS));
+    </script>
+</body>
+</html>

@@ -119,9 +119,10 @@ class Rotary {
     this.isDragging = true;
     this.startY = e.clientY;
     this.startValue = this.config.value;
+    this.altKeyPressed = e.altKey; // Track if Alt was pressed at start
 
     const onMouseMove = (e) => this.handleDrag(e);
-    const onMouseUp = () => this.stopDrag(onMouseMove, onMouseUp);
+    const onMouseUp = (e) => this.stopDrag(onMouseMove, onMouseUp, e);
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
@@ -137,6 +138,9 @@ class Rotary {
     const valueDelta = deltaY * this.config.sensitivity;
     const newValue = this.startValue + valueDelta;
 
+    // Track alt key state during drag (can change mid-drag)
+    this.altKeyPressed = e.altKey;
+
     // Clamp and step
     const clampedValue = Math.max(this.config.min, Math.min(this.config.max, newValue));
     const steppedValue = Math.round(clampedValue / this.config.step) * this.config.step;
@@ -144,12 +148,13 @@ class Rotary {
     this.setValue(steppedValue, false); // Update visual without triggering onChange during drag
 
     // Trigger onInput during drag for real-time updates
+    // Pass altKey state to callback for global apply feature
     if (this.config.onInput) {
-      this.config.onInput(steppedValue);
+      this.config.onInput(steppedValue, { altKey: this.altKeyPressed });
     }
   }
 
-  stopDrag(onMouseMove, onMouseUp) {
+  stopDrag(onMouseMove, onMouseUp, e) {
     this.isDragging = false;
 
     document.removeEventListener('mousemove', onMouseMove);
@@ -159,8 +164,9 @@ class Rotary {
     this.knobEl.classList.remove('rotary__knob--dragging');
 
     // Trigger onChange at end of drag
+    // Pass altKey state for global apply feature
     if (this.config.onChange) {
-      this.config.onChange(this.config.value);
+      this.config.onChange(this.config.value, { altKey: e?.altKey || this.altKeyPressed });
     }
   }
 

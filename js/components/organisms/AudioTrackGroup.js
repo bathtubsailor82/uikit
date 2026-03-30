@@ -59,14 +59,19 @@ class AudioTrackGroup {
   render() {
     const container = document.createElement('div');
     container.className = this.getClassNames();
-    container.style.display = 'flex';
-    container.style.gap = `${this.config.gap}px`;
 
     if (this.config.layout === 'horizontal') {
+      // Flex row with wrap - let CSS handle distribution
+      container.style.display = 'flex';
       container.style.flexDirection = 'row';
       container.style.flexWrap = 'wrap';
+      container.style.justifyContent = 'center';
+      container.style.alignContent = 'flex-start';
+      container.style.gap = `${this.config.gap}px`;
     } else if (this.config.layout === 'vertical') {
+      container.style.display = 'flex';
       container.style.flexDirection = 'column';
+      container.style.gap = `${this.config.gap}px`;
     } else if (this.config.layout === 'grid') {
       container.style.display = 'grid';
       container.style.gridTemplateColumns = `repeat(auto-fill, minmax(60px, 1fr))`;
@@ -138,7 +143,6 @@ class AudioTrackGroup {
 
     track.destroy();
     this.tracks.delete(trackId);
-    this.meteringQueue.delete(trackId);
 
     // Stop RAF if no tracks left
     if (this.tracks.size === 0 && this.rafId) {
@@ -178,27 +182,33 @@ class AudioTrackGroup {
    * @param {Number} trackId
    * @param {Number} peak - Peak level in dB
    * @param {Number} rms - RMS level in dB
-   * @param {Boolean} recording - Recording state from backend
+   * @param {Number} trackState - Track state from backend (0=IDLE, 1=ARMED, 2=RECORDING)
    * @param {Boolean} thresholdExceeded - Threshold exceeded state from backend
+   * @param {String} gateState - Gate state from backend
+   * @param {Number} recordingDurationSeconds - Recording duration
+   * @param {Boolean} clip - Clip indicator from backend
+   * @param {Number} peakHold - Peak hold value in dB from backend
+   * @param {Number} truePeak - True peak value in dB from backend
+   * @param {Number} ppm - PPM value in dB from backend
    */
-  updateMetering(trackId, peak, rms, recording, thresholdExceeded, gateState) {
+  updateMetering(trackId, peak, rms, trackState, thresholdExceeded, gateState, recordingDurationSeconds, clip, peakHold, truePeak, ppm) {
     const track = this.tracks.get(trackId);
     if (!track) return;
 
-    // Update data directly (pass new params from backend)
-    track.updateMetering(peak, rms, recording, thresholdExceeded, gateState);
+    // Update data directly (pass all params from backend)
+    track.updateMetering(peak, rms, trackState, thresholdExceeded, gateState, recordingDurationSeconds, clip, peakHold, truePeak, ppm);
   }
 
   /**
    * Batch update metering for multiple tracks
    * More efficient than calling updateMetering() multiple times
-   * @param {Array} updates - Array of {trackId, peak, rms, recording, thresholdExceeded}
+   * @param {Array} updates - Array of {trackId, peak, rms, trackState, thresholdExceeded, gateState, recordingDurationSeconds, clip, peakHold, truePeak, ppm}
    */
   batchUpdateMetering(updates) {
-    updates.forEach(({ trackId, peak, rms, recording, thresholdExceeded, gateState }) => {
+    updates.forEach(({ trackId, peak, rms, trackState, thresholdExceeded, gateState, recordingDurationSeconds, clip, peakHold, truePeak, ppm }) => {
       const track = this.tracks.get(trackId);
       if (track) {
-        track.updateMetering(peak, rms, recording, thresholdExceeded, gateState);
+        track.updateMetering(peak, rms, trackState, thresholdExceeded, gateState, recordingDurationSeconds, clip, peakHold, truePeak, ppm);
       }
     });
   }

@@ -100,16 +100,22 @@
     max-width: 100%;
 }
 
-/* Threshold indicator triangle */
+/* CanvasMeter - fixed width, centered */
+.audio-track__meter-target .canvas-meter {
+    display: block;
+    /* Canvas has inline style for width/height, don't override */
+}
+
+/* Threshold indicator triangle - small amber arrow pointing left */
 .audio-track__threshold-indicator {
     position: absolute;
-    left: -8px;
+    right: 0;
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 3px 5px 3px 0;
-    border-color: transparent #fff transparent transparent;
-    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.4));
+    border-width: 3px 4px 3px 0;
+    border-color: transparent #f59e0b transparent transparent;
+    filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.5));
     pointer-events: none;
     z-index: 10;
     transform: translateY(-50%);

@@ -168,7 +168,13 @@ class VUMeter {
     this.animationId = null
 
     this.render()
-    this.startAnimation()
+    // CRITICAL: Do NOT start internal RAF loop for track meters
+    // Track meters use centralized RAF loop (paintAllMeters in index.html)
+    // to avoid 128 * 60fps = ~7680 paint calls/sec causing RunTask explosion
+    // Only start internal RAF for standalone meters (broadcast preset)
+    if (presetName === 'broadcast') {
+      this.startAnimation()
+    }
   }
 
   // ==========================================================================

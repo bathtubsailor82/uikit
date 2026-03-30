@@ -48,6 +48,7 @@ FILES=(
   "css/components/timeline.css"
   "css/components/meter.css"
   "css/components/matrix.css"
+  "css/components/time-picker.css"
   "css/components/atoms/button.css"
   "css/components/atoms/led.css"
   "css/components/atoms/rotary.css"
