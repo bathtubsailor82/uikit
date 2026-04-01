@@ -67,6 +67,7 @@ class AudioTrack {
       language: 'FR',
       threshold: -30,
       gain: 0,
+      pan: 0,
       monitoring: false,
       solo: false,
       trackState: 0,         // 0=IDLE, 1=ARMED, 2=RECORDING
@@ -75,6 +76,7 @@ class AudioTrack {
       onRecordToggle: null,  // Callback avec trackState (UInt32)
       onThresholdChange: null,
       onGainChange: null,
+      onPanChange: null,
       onLocationClick: null,
       onLanguageClick: null,
       ...config
@@ -86,6 +88,7 @@ class AudioTrack {
     this.recordControl = null;
     this.thresholdRotary = null;
     this.gainRotary = null;
+    this.panRotary = null;
 
     this.render();
   }
@@ -124,6 +127,9 @@ class AudioTrack {
         <!-- Button Group -->
         <div class="audio-track__buttons"></div>
 
+        <!-- Pan Rotary (isolated between buttons and THR/GAIN) -->
+        <div class="audio-track__pan"></div>
+
         <!-- Rotaries (Threshold + Gain) -->
         <div class="audio-track__rotaries"></div>
 
@@ -150,6 +156,7 @@ class AudioTrack {
     // Initialize components
     this.initMeter();
     this.initButtonGroup();
+    this.initPan();
     this.initRotaries();
     this.initRecordControl();
     this.setupEventListeners();
@@ -289,6 +296,32 @@ class AudioTrack {
     });
   }
 
+  initPan() {
+    const panContainer = this.element.querySelector('.audio-track__pan');
+    if (!panContainer) return;
+
+    // Pan Rotary - visible in ALL modes (compact, normal, large)
+    // Preparation for sends-on-faders (Epic C)
+    const rotaryContainer = document.createElement('div');
+    panContainer.appendChild(rotaryContainer);
+    this.panRotary = new Rotary(rotaryContainer, {
+      preset: 'pan',
+      value: this.config.pan,
+      onInput: (value) => {
+        this.config.pan = value;
+        if (this.config.onPanChange) {
+          this.config.onPanChange(value, { realtime: true });
+        }
+      },
+      onChange: (value) => {
+        this.config.pan = value;
+        if (this.config.onPanChange) {
+          this.config.onPanChange(value);
+        }
+      }
+    });
+  }
+
   initRotaries() {
     const rotariesContainer = this.element.querySelector('.audio-track__rotaries');
     if (!rotariesContainer) return;
@@ -333,6 +366,7 @@ class AudioTrack {
           }
         }
       });
+
     }
   }
 
@@ -489,6 +523,17 @@ class AudioTrack {
     this.updateThresholdIndicatorPosition();
   }
 
+  /**
+   * Set pan value externally (e.g. from WebSocket bus source update)
+   * @param {number} value - Pan value (-100 to +100)
+   */
+  setPan(value) {
+    this.config.pan = value;
+    if (this.panRotary) {
+      this.panRotary.setValue(value, false);
+    }
+  }
+
   destroy() {
     if (this.meter) {
       this.meter.destroy();
@@ -513,6 +558,11 @@ class AudioTrack {
     if (this.gainRotary) {
       this.gainRotary.destroy();
       this.gainRotary = null;
+    }
+
+    if (this.panRotary) {
+      this.panRotary.destroy();
+      this.panRotary = null;
     }
 
     if (this.element) {

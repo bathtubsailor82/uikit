@@ -36,6 +36,17 @@ const ROTARY_PRESETS = {
       const sign = v >= 0 ? '+' : '';
       return `${sign}${v}dB`;
     }
+  },
+  pan: {
+    label: 'PAN',
+    min: -100,
+    max: 100,
+    step: 1,
+    sensitivity: 0.5,
+    format: (v) => {
+      if (v === 0) return 'C';
+      return v < 0 ? `L${Math.abs(v)}` : `R${v}`;
+    }
   }
 };
 
