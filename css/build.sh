@@ -54,6 +54,7 @@ FILES=(
   "css/components/atoms/rotary.css"
   "css/components/atoms/record-button.css"
   "css/components/atoms/timer.css"
+  "css/components/atoms/color-picker.css"
   "css/components/molecules/button-group.css"
   "css/components/molecules/record-control.css"
   "css/components/organisms/audio-track.css"

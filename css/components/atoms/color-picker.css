@@ -1,0 +1,123 @@
+/**
+ * ColorPicker - Grille de swatches pour selection de couleur entite
+ * Composant atom UIKit pour HW Labels, Buses, Tracks
+ */
+
+/* ============================================================================
+   Container
+   ============================================================================ */
+
+.color-picker {
+    display: inline-grid;
+    gap: var(--spacing-1);
+    padding: var(--spacing-2);
+}
+
+.color-picker--compact {
+    grid-template-columns: repeat(8, 16px);
+    gap: 2px;
+}
+
+.color-picker--normal {
+    grid-template-columns: repeat(8, 20px);
+    gap: 3px;
+}
+
+.color-picker--large {
+    grid-template-columns: repeat(6, 24px);
+    gap: 4px;
+}
+
+.color-picker--disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* ============================================================================
+   Swatch
+   ============================================================================ */
+
+.color-picker__swatch {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-sm);
+    background: var(--swatch-color, var(--entity-color-default));
+    cursor: pointer;
+    padding: 0;
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.color-picker__swatch:hover {
+    transform: scale(1.15);
+    z-index: 1;
+}
+
+/* ============================================================================
+   Active / Selected
+   ============================================================================ */
+
+.color-picker__swatch--active {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
+/* Checkmark SVG via pseudo-element */
+.color-picker__swatch--active::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6.5 11.5L3 8l1-1 2.5 2.5L11 5l1 1z' fill='%23fff' stroke='%23000' stroke-width='0.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px 12px;
+    pointer-events: none;
+}
+
+/* ============================================================================
+   Focus (accessibility)
+   ============================================================================ */
+
+.color-picker__swatch:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    z-index: 2;
+}
+
+/* ============================================================================
+   None swatch (optional "no color")
+   ============================================================================ */
+
+.color-picker__swatch--none {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-border-medium);
+}
+
+.color-picker__swatch--none:hover {
+    border-color: var(--color-border-dark);
+}
+
+.color-picker__none-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 10px;
+    font-weight: bold;
+    color: var(--color-text-tertiary);
+    line-height: 1;
+}
+
+/* Active none swatch */
+.color-picker__swatch--none.color-picker__swatch--active {
+    border-color: #ffffff;
+}
+
+.color-picker__swatch--none.color-picker__swatch--active .color-picker__none-icon {
+    color: var(--color-text-primary);
+}

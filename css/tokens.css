@@ -5,6 +5,33 @@
  */
 
 :root {
+    /* === ENTITY COLORS (palette fixe 24 couleurs) === */
+    --entity-color-1:  #e54545;  /* Red */
+    --entity-color-2:  #e8725a;  /* Coral */
+    --entity-color-3:  #e59a30;  /* Orange */
+    --entity-color-4:  #c8a030;  /* Amber */
+    --entity-color-5:  #d4c840;  /* Yellow */
+    --entity-color-6:  #8cc63f;  /* Lime */
+    --entity-color-7:  #4caf50;  /* Green */
+    --entity-color-8:  #2e9e6e;  /* Emerald */
+    --entity-color-9:  #2e9e9e;  /* Teal */
+    --entity-color-10: #30b8c8;  /* Cyan */
+    --entity-color-11: #4aa4e0;  /* Sky */
+    --entity-color-12: #4a7ee0;  /* Blue */
+    --entity-color-13: #5a5ec8;  /* Indigo */
+    --entity-color-14: #8050c8;  /* Purple */
+    --entity-color-15: #a050c0;  /* Violet */
+    --entity-color-16: #c850a0;  /* Magenta */
+    --entity-color-17: #e05088;  /* Rose */
+    --entity-color-18: #e07088;  /* Pink */
+    --entity-color-19: #708090;  /* Slate */
+    --entity-color-20: #6088a8;  /* Steel */
+    --entity-color-21: #689878;  /* Sage */
+    --entity-color-22: #a89860;  /* Sand */
+    --entity-color-23: #987858;  /* Brown */
+    --entity-color-24: #c8b898;  /* Cream */
+    --entity-color-default: #444444;
+
     /* === COULEURS === */
 
     /* Couleurs principales (fixes) */
