@@ -90,6 +90,12 @@ class AudioTrack {
     this.gainRotary = null;
     this.panRotary = null;
 
+    // Dirty-check cache for updateMetering (avoid useless DOM writes at 30Hz)
+    this._lastTrackState = undefined;
+    this._lastThresholdExceeded = undefined;
+    this._lastGateState = undefined;
+    this._lastDurationSec = undefined;
+
     this.render();
   }
 
@@ -452,6 +458,7 @@ class AudioTrack {
   // ========================================================================
 
   updateMetering(peak, rms, trackState, thresholdExceeded, gateState, recordingDurationSeconds, clip, peakHold, truePeak, ppm) {
+    // Canvas meter: always update (audio values change continuously)
     if (this.meter) {
       // CanvasMeter uses setValues() with all available metrics from backend
       // All values are pre-calculated in dB by backend
@@ -465,26 +472,38 @@ class AudioTrack {
       });
     }
 
-    // Update trackState from backend (toujours, sans condition)
-    // Flux unidirectionnel: le WebSocket est la source de vérité
-    if (trackState !== undefined) {
+    // Dirty-check: skip DOM work unless backend state actually changed.
+    // Without this, 30Hz updates x N tracks saturate the main thread with
+    // useless className/textContent rewrites and starve user input handlers
+    // (pointermove on rotaries, click on buttons). See FIX-FRONTEND-BUTTON-LAG.md
+
+    // Track state (IDLE/ARMED/RECORDING) - only touches DOM on transition
+    if (trackState !== undefined && trackState !== this._lastTrackState) {
+      this._lastTrackState = trackState;
       this.config.trackState = trackState;
       this.updateRecordState();
 
-      // Toujours synchroniser RecordControl avec l'état backend
       if (this.recordControl) {
         this.recordControl.setState(this.armed, this.recording);
       }
     }
 
-    // Update LED from backend
-    if (thresholdExceeded !== undefined && this.recordControl) {
+    // Threshold LED - update only when exceeded or gateState changes
+    if (thresholdExceeded !== undefined && this.recordControl &&
+        (thresholdExceeded !== this._lastThresholdExceeded ||
+         gateState !== this._lastGateState)) {
+      this._lastThresholdExceeded = thresholdExceeded;
+      this._lastGateState = gateState;
       this.recordControl.setThresholdExceeded(thresholdExceeded, gateState);
     }
 
-    // Update timer from backend
+    // Timer - update only when integer seconds change (display is mm:ss)
     if (recordingDurationSeconds !== undefined && this.recordControl) {
-      this.recordControl.setDuration(recordingDurationSeconds);
+      const intSec = Math.floor(recordingDurationSeconds);
+      if (intSec !== this._lastDurationSec) {
+        this._lastDurationSec = intSec;
+        this.recordControl.setDuration(recordingDurationSeconds);
+      }
     }
   }
 

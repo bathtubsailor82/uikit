@@ -193,6 +193,15 @@ class Rotary {
   }
 
   setValue(value, triggerChange = true) {
+    // Early-return if value unchanged: matters for global-apply paths
+    // (Alt+drag iterates N tracks per pointermove) and 30Hz external syncs.
+    if (value === this.config.value) {
+      if (triggerChange && this.config.onChange) {
+        this.config.onChange(value);
+      }
+      return;
+    }
+
     this.config.value = value;
 
     // Update visual

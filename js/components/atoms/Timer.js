@@ -84,11 +84,13 @@ class Timer {
   // ========================================================================
 
   setState(state) {
+    if (state === this.config.state) return;
     this.config.state = state;
     this.updateVisualState();
   }
 
   setTime(seconds) {
+    if (seconds === this.config.time) return;
     this.config.time = seconds;
     if (this.element) {
       this.element.textContent = this.formatTime(seconds);

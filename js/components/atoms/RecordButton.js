@@ -98,6 +98,7 @@ class RecordButton {
   // ========================================================================
 
   setState(state) {
+    if (state === this.config.state) return;
     this.config.state = state;
     this.updateVisualState();
   }

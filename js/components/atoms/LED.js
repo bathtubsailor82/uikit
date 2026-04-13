@@ -73,16 +73,19 @@ class LED {
   // ========================================================================
 
   setState(state) {
+    if (state === this.config.state) return;
     this.config.state = state;
     this.updateVisualState();
   }
 
   setColor(color) {
+    if (color === this.config.color) return;
     this.config.color = color;
     this.updateVisualState();
   }
 
   setBlink(blink) {
+    if (blink === this.config.blink) return;
     this.config.blink = blink;
     this.updateVisualState();
   }

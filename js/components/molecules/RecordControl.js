@@ -204,6 +204,10 @@ class RecordControl {
   }
 
   setState(armed, recording) {
+    if (armed === this.config.armed && recording === this.config.recording) {
+      return;
+    }
+
     const wasRecording = this.config.recording;
 
     this.config.armed = armed;
