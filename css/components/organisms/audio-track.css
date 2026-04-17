@@ -59,7 +59,8 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 0;  /* No padding - VUMeter handles its own spacing */
+    /* Padding bas pour detacher visuellement du bandeau colore (mix section) */
+    padding: 0 0 6px 0;
     background: linear-gradient(180deg, #1e1e1e 0%, #252525 100%);
     position: relative;
     min-height: 450px;  /* Minimum, but allow flex: 1 to fill available space */
@@ -110,8 +111,16 @@
     flex-direction: column;
     gap: 3px;
     padding: 4px 6px;
-    min-height: 140px;  /* Hauteur fixe : M/S + Pan + Gain = ~140px, Enable button s'etire */
+    /* Hauteur fixe (pas min-height) pour garantir que les tracks sans send
+       ("+ Enable") aient la meme taille que celles avec sends (M/S + Pan + Gain).
+       Sans height fixe, le bouton Enable ne pousse pas la section au-dela de
+       min-height alors que le rendu reel des 3 controles est ~144px. */
+    height: 144px;
     background: linear-gradient(180deg, #252525 0%, #2a2a2a 100%);
+    /* Bandeau 2px haut et bas a la couleur du bus courant :
+       la section mix pilote ce bus, la couleur rend l'appartenance explicite. */
+    border-top: 2px solid var(--current-bus-color, transparent);
+    border-bottom: 2px solid var(--current-bus-color, transparent);
 }
 
 .audio-track__buttons {
@@ -258,7 +267,7 @@
 }
 
 .audio-track--compact .audio-track__meter {
-    padding: 0;  /* No padding */
+    padding: 0 0 6px 0;  /* Padding bas pour detacher du bandeau mix */
     min-height: 180px;  /* Reduced to fit pan rotary */
 }
 
