@@ -49,15 +49,18 @@ class RecordControl {
     const control = document.createElement('div');
     control.className = 'record-control';
 
+    // Ordre vertical : REC button -> Timer -> LEDs
+    // (les LEDs d'etat sont placees en bas de la section record
+    // selon spec AUDIOTRACK-UI.md)
     control.innerHTML = `
-      <!-- LEDs -->
-      <div class="record-control__leds"></div>
+      <!-- Record Button -->
+      <div class="record-control__button"></div>
 
       <!-- Timer -->
       <div class="record-control__timer"></div>
 
-      <!-- Record Button -->
-      <div class="record-control__button"></div>
+      <!-- LEDs (threshold exceeded / armed / recording) -->
+      <div class="record-control__leds"></div>
     `;
 
     if (this.element) {

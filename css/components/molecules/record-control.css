@@ -22,23 +22,7 @@
     display: flex;
     justify-content: center;
     gap: 5px;
-    padding: 3px;
-    background: linear-gradient(180deg, #2a2a2a 0%, #252525 100%);
-    border-bottom: 1px solid #1a1a1a;
-    position: relative;
-}
-
-.record-control__leds::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.05) 50%,
-        transparent 100%);
+    padding: 2px 0;
 }
 
 /* ============================================================================

@@ -12405,14 +12405,17 @@ tr.selected .matrix-cell.active {
     pointer-events: none;
 }
 
-/* Hover state */
-.audio-btn:hover:not(:disabled) {
+/* Hover state : visible uniquement sur boutons NON actifs.
+   Les boutons --active (toggle ON) gardent leur couleur coloree au hover,
+   le curseur pointer suffit comme feedback (evite le flash de retour a gris). */
+.audio-btn:hover:not(:disabled):not(.audio-btn--active) {
     background: linear-gradient(180deg, #525252 0%, #424242 50%, #363636 100%);
     border-color: #222;
 }
 
-/* Active (pressed) state */
-.audio-btn:active:not(:disabled) {
+/* Active (pressed - souris enfoncee) state : visible uniquement sur boutons NON toggled ON.
+   Evite de "griser" temporairement un bouton ON quand on clique pour le toggler OFF. */
+.audio-btn:active:not(:disabled):not(.audio-btn--active) {
     background: linear-gradient(180deg, #2e2e2e 0%, #3a3a3a 50%, #3a3a3a 100%);
     box-shadow:
         inset 0 2px 4px rgba(0, 0, 0, 0.5),
@@ -13177,23 +13180,7 @@ tr.selected .matrix-cell.active {
     display: flex;
     justify-content: center;
     gap: 5px;
-    padding: 3px;
-    background: linear-gradient(180deg, #2a2a2a 0%, #252525 100%);
-    border-bottom: 1px solid #1a1a1a;
-    position: relative;
-}
-
-.record-control__leds::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.05) 50%,
-        transparent 100%);
+    padding: 2px 0;
 }
 
 /* ============================================================================
@@ -13220,6 +13207,9 @@ tr.selected .matrix-cell.active {
  * Note: mini variant (40px, no VU-meter) will be added separately
  */
 
+/* Pixel font experiment abandonne - Retina 2x interpole quand meme.
+   On utilise SF Mono / Menlo (systeme macOS, net a petite taille). */
+
 /* ============================================================================
    Container - Hardware Panel Base
    ============================================================================ */
@@ -13241,19 +13231,10 @@ tr.selected .matrix-cell.active {
     position: relative;
 }
 
-/* Top highlight */
-.audio-track::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.05) 50%,
-        transparent 100%);
-    pointer-events: none;
+/* Color strip : filet colore en haut de la track (couleur du groupe) */
+.audio-track__color-strip {
+    height: 5px;
+    flex-shrink: 0;
 }
 
 /* ============================================================================
@@ -13282,22 +13263,8 @@ tr.selected .matrix-cell.active {
     flex-direction: column;
     padding: 0;  /* No padding - VUMeter handles its own spacing */
     background: linear-gradient(180deg, #1e1e1e 0%, #252525 100%);
-    border-bottom: 1px solid #1a1a1a;
     position: relative;
     min-height: 450px;  /* Minimum, but allow flex: 1 to fill available space */
-}
-
-.audio-track__meter::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.05) 50%,
-        transparent 100%);
 }
 
 .audio-track__meter-target {
@@ -13337,14 +13304,14 @@ tr.selected .matrix-cell.active {
 }
 
 /* ============================================================================
-   Controls Section
+   Control Section (M/S/*, Pan, Gain)
    ============================================================================ */
 
 .audio-track__controls {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding: 6px;
+    gap: 3px;
+    padding: 4px 6px;
     background: linear-gradient(180deg, #252525 0%, #2a2a2a 100%);
 }
 
@@ -13352,20 +13319,30 @@ tr.selected .matrix-cell.active {
     /* ButtonGroup styles in button-group.css */
 }
 
-.audio-track__pan {
+.audio-track__pan,
+.audio-track__gain {
     display: flex;
     justify-content: center;
-    padding: 3px 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 2px 0;
 }
 
-.audio-track__rotaries {
+/* ============================================================================
+   Record Section (Threshold, REC button, Timer, LEDs)
+   ============================================================================ */
+
+.audio-track__record-section {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 4px 6px;
+    background: linear-gradient(180deg, #2a2a2a 0%, #252525 100%);
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.audio-track__threshold {
     display: flex;
     justify-content: center;
-    gap: 4px;
-    padding: 4px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 2px 0;
 }
 
 .audio-track__record {
@@ -13380,32 +13357,18 @@ tr.selected .matrix-cell.active {
     display: flex;
     flex-direction: column;
     gap: 1px;
-    padding: 4px 2px 2px 2px;
+    padding: 3px 2px 2px 2px;
     background: linear-gradient(180deg, #1e1e1e 0%, #1a1a1a 100%);
     border-top: 1px solid #0d0d0d;
-    font-size: 9px;
     font-family: 'Monaco', 'Courier New', monospace;
     font-weight: 600;
-    position: relative;
-}
-
-.audio-track__footer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.05) 50%,
-        transparent 100%);
+    color: #ffffff;
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
 }
 
 .audio-track__footer-item {
-    color: #888;
     cursor: pointer;
-    transition: color 0.15s ease;
     padding: 1px 2px;
     border-radius: 2px;
     text-align: center;
@@ -13416,30 +13379,48 @@ tr.selected .matrix-cell.active {
 }
 
 .audio-track__footer-item:hover {
-    color: #bbb;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
 }
 
+/* Custom name (optionnel, visible seulement quand defini) */
+.audio-track__custom-name {
+    font-size: 9px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* Language (ORI, EN, FR, DE) */
 .audio-track__lang {
     text-transform: uppercase;
     font-size: 9px;
+    color: #bbb;
 }
 
+/* Location (P-01, P-02) */
 .audio-track__location {
     font-size: 8px;
+    color: #999;
     max-width: 100%;
 }
 
+/* Numero track : teinte de la couleur groupe, eclairci */
 .audio-track__number {
     font-size: 7px;
-    color: #555;
+    color: var(--track-color, #888);
+    filter: brightness(1.8) saturate(0.6);
+    font-weight: 500;
     border-top: 1px solid rgba(0, 0, 0, 0.3);
     padding-top: 2px;
     margin-top: 1px;
+    transition: all 0.1s ease;
 }
 
+/* Hover : fond colore, texte sombre (inversion) */
 .audio-track__number:hover {
-    color: #888;
+    background: var(--track-color, #888);
+    color: #1a1a1a;
+    filter: none;
+    border-radius: 2px;
 }
 
 /* ============================================================================
@@ -13460,33 +13441,25 @@ tr.selected .matrix-cell.active {
 .audio-track--compact .audio-track__footer {
     padding: 3px 1px 1px 1px;
     gap: 0;
-    font-size: 8px;
 }
 
-.audio-track--compact .audio-track__lang {
-    font-size: 8px;
-}
-
-.audio-track--compact .audio-track__location {
-    font-size: 7px;
-}
+/* Compact : pas d'override font-size sur lang/location,
+   herite du parent (16px test, sera ajuste apres validation font) */
 
 .audio-track--compact .audio-track__number {
     font-size: 6px;
 }
 
-.audio-track--compact .audio-track__controls {
-    padding: 4px;
-    gap: 3px;
+.audio-track--compact .audio-track__controls,
+.audio-track--compact .audio-track__record-section {
+    padding: 3px 4px;
+    gap: 2px;
 }
 
-.audio-track--compact .audio-track__pan {
-    padding: 2px 0;
-}
-
-.audio-track--compact .audio-track__rotaries {
-    /* Only threshold rotary for compact */
-    gap: 0;
+.audio-track--compact .audio-track__pan,
+.audio-track--compact .audio-track__gain,
+.audio-track--compact .audio-track__threshold {
+    padding: 1px 0;
 }
 
 /* Normal - 60px wide (default, formerly compact) */

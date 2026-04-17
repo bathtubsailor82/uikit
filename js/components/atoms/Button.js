@@ -25,7 +25,7 @@ const BUTTON_PRESETS = {
   solo: {
     type: 'latch',
     label: 'S',
-    colorActive: 'blue',
+    colorActive: 'amber',
     title: 'Solo'
   },
   phase: {
@@ -36,8 +36,8 @@ const BUTTON_PRESETS = {
   },
   mute: {
     type: 'latch',
-    label: 'μ',
-    colorActive: 'amber',
+    label: 'M',
+    colorActive: 'red',
     title: 'Mute'
   },
   record: {

@@ -96,12 +96,17 @@ class Rotary {
     // Calculate rotation angle based on value
     const rotation = this.valueToRotation(this.config.value);
 
+    // Le label est masque (div omis) quand label vide -> economie d'espace
+    const labelHtml = this.config.label
+      ? `<div class="rotary__label">${this.config.label}</div>`
+      : '';
+
     rotary.innerHTML = `
       <div class="rotary__knob">
         <div class="rotary__indicator" style="transform: translateX(-50%) rotate(${rotation}deg); transform-origin: center 12px;"></div>
       </div>
       <div class="rotary__value">${this.config.format(this.config.value)}</div>
-      <div class="rotary__label">${this.config.label}</div>
+      ${labelHtml}
     `;
 
     if (this.element) {

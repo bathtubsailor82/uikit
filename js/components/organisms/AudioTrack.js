@@ -8,17 +8,21 @@
  *   size: 'normal',        // 'compact' | 'normal' | 'large'
  *                          // Note: 'mini' (40px, no VU-meter) will be added
  *   location: 'P-01',
+ *   sublocation: 'A',      // optionnel
  *   language: 'FR',
+ *   customName: 'Speaker 1', // optionnel, prioritaire sur location/language
  *   threshold: -30,
  *   gain: 0,
- *   monitoring: false,
- *   solo: false,
+ *   pan: 0,
+ *   mute: false,           // per-bus (spec MASTER-SECTION)
+ *   solo: false,           // per-bus (spec MASTER-SECTION)
  *   trackState: 0,         // 0=IDLE, 1=ARMED, 2=RECORDING (backend enum)
- *   onMonitorToggle: (enabled) => {},
+ *   onMuteToggle: (enabled) => {},
  *   onSoloToggle: (enabled) => {},
  *   onRecordToggle: (trackState) => {},  // Callback avec trackState UInt32
  *   onThresholdChange: (value) => {},
  *   onGainChange: (value) => {},
+ *   onPanChange: (value) => {},
  *   onLocationClick: (value) => {},
  *   onLanguageClick: (value) => {}
  * })
@@ -64,14 +68,17 @@ class AudioTrack {
       trackId: 1,
       size: 'normal',        // compact | normal | large (mini will be added)
       location: 'P-01',
+      sublocation: null,     // optionnel (ex: "A", "Cabin 1")
       language: 'FR',
+      customName: null,      // optionnel (ex: "Speaker 1 FR") - prioritaire sur location/language
+      color: null,           // hex color pour le color strip (ex: "#ff5500"), null = gris neutre
       threshold: -30,
       gain: 0,
       pan: 0,
-      monitoring: false,
+      mute: false,
       solo: false,
       trackState: 0,         // 0=IDLE, 1=ARMED, 2=RECORDING
-      onMonitorToggle: null,
+      onMuteToggle: null,
       onSoloToggle: null,
       onRecordToggle: null,  // Callback avec trackState (UInt32)
       onThresholdChange: null,
@@ -114,6 +121,40 @@ class AudioTrack {
   }
 
   // ========================================================================
+  // NAMING HELPERS (customName + location/sublocation/language)
+  // ========================================================================
+
+  /**
+   * Nom d'affichage prioritaire : customName si defini et non vide,
+   * sinon fallback sur "location[/sublocation] language".
+   * Match la logique Swift Track.displayName.
+   */
+  getCustomNameDisplay() {
+    const custom = this.config.customName;
+    if (custom && custom.trim()) return this.escape(custom);
+
+    // Fallback : location[/sublocation] language
+    const sub = this.config.sublocation ? `/${this.config.sublocation}` : '';
+    return this.escape(`${this.config.location}${sub} ${this.config.language}`);
+  }
+
+  /**
+   * Ligne meta sous le nom : lang + location/sublocation.
+   * Meme si customName est defini, on affiche ces infos en petit en dessous.
+   */
+  getMetaDisplay() {
+    const sub = this.config.sublocation ? `/${this.config.sublocation}` : '';
+    return this.escape(`${this.config.language} ${this.config.location}${sub}`);
+  }
+
+  escape(str) {
+    // Escape HTML minimal pour injection innerHTML
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // ========================================================================
   // RENDERING
   // ========================================================================
 
@@ -122,31 +163,45 @@ class AudioTrack {
     track.className = this.getClassNames();
     track.dataset.trackId = this.config.trackId;
 
+    // Color strip : couleur du groupe (ou defaut neutre)
+    const stripColor = this.config.color || '#333';
+    track.style.setProperty('--track-color', stripColor);
+
     track.innerHTML = `
+      <!-- Color Strip (5px, couleur groupe) -->
+      <div class="audio-track__color-strip" style="background:${stripColor}"></div>
+
       <!-- VU Meter Section -->
       <div class="audio-track__meter">
         <div class="audio-track__meter-target"></div>
       </div>
 
-      <!-- Controls Section -->
+      <!-- Control Section (M/S, Pan, Gain) -->
       <div class="audio-track__controls">
-        <!-- Button Group -->
+        <!-- Button Group (Mute / Solo / Monitor) -->
         <div class="audio-track__buttons"></div>
 
-        <!-- Pan Rotary (isolated between buttons and THR/GAIN) -->
+        <!-- Pan Rotary -->
         <div class="audio-track__pan"></div>
 
-        <!-- Rotaries (Threshold + Gain) -->
-        <div class="audio-track__rotaries"></div>
+        <!-- Gain Rotary (si pas mode compact) -->
+        <div class="audio-track__gain"></div>
+      </div>
 
-        <!-- Record Control -->
+      <!-- Record Section (Threshold, REC button, Timer, LEDs) -->
+      <div class="audio-track__record-section">
+        <!-- Threshold Rotary (en haut de la section record) -->
+        <div class="audio-track__threshold"></div>
+
+        <!-- Record Control (REC button, Timer, LEDs en bas) -->
         <div class="audio-track__record"></div>
       </div>
 
-      <!-- Footer -->
+      <!-- Naming Section -->
       <div class="audio-track__footer">
-        <div class="audio-track__footer-item audio-track__lang">${this.config.language}</div>
-        <div class="audio-track__footer-item audio-track__location">${this.config.location}</div>
+        ${this.config.customName ? `<div class="audio-track__footer-item audio-track__custom-name">${this.escape(this.config.customName)}</div>` : ''}
+        <div class="audio-track__footer-item audio-track__lang">${this.escape(this.config.language)}</div>
+        <div class="audio-track__footer-item audio-track__location">${this.escape(this.config.location)}${this.config.sublocation ? '/' + this.escape(this.config.sublocation) : ''}</div>
         <div class="audio-track__footer-item audio-track__number">#${String(this.config.trackId).padStart(3, '0')}</div>
       </div>
     `;
@@ -295,8 +350,8 @@ class AudioTrack {
       size: this.config.size,
       buttonSize: this.config.size === 'compact' ? 'compact' : 'normal',
       states: {
-        monitor: this.config.monitoring,
-        solo: this.config.solo
+        mute: this.config.mute || false,
+        solo: this.config.solo || false
       },
       onToggle: (buttonId, active) => this.handleButtonToggle(buttonId, active)
     });
@@ -312,6 +367,7 @@ class AudioTrack {
     panContainer.appendChild(rotaryContainer);
     this.panRotary = new Rotary(rotaryContainer, {
       preset: 'pan',
+      label: '',  // Label "PAN" masque - spec AUDIOTRACK-UI MVP
       value: this.config.pan,
       onInput: (value) => {
         this.config.pan = value;
@@ -329,42 +385,49 @@ class AudioTrack {
   }
 
   initRotaries() {
-    const rotariesContainer = this.element.querySelector('.audio-track__rotaries');
-    if (!rotariesContainer) return;
-
-    // Threshold Rotary
-    const thresholdContainer = document.createElement('div');
-    rotariesContainer.appendChild(thresholdContainer);
-    this.thresholdRotary = new Rotary(thresholdContainer, {
-      preset: 'threshold',
-      value: this.config.threshold,
-      onInput: (value, options) => {
-        // Real-time update during drag (visual only, smooth)
-        this.config.threshold = value;
-        this.updateThresholdIndicatorPosition();
-        // Pass options.altKey for global threshold feature
-        if (options?.altKey && this.config.onThresholdChange) {
-          this.config.onThresholdChange(value, { altKey: true, realtime: true });
-        }
-      },
-      onChange: (value, options) => {
-        // Final update at end of drag (send to backend)
-        this.config.threshold = value;
-        this.updateThresholdIndicatorPosition();
-        if (this.config.onThresholdChange) {
+    // Threshold Rotary (dans la section record, au-dessus du REC button)
+    const thresholdContainer = this.element.querySelector('.audio-track__threshold');
+    if (thresholdContainer) {
+      this.thresholdRotary = new Rotary(thresholdContainer, {
+        preset: 'threshold',
+        label: '',  // Label "THR" masque - spec AUDIOTRACK-UI MVP
+        value: this.config.threshold,
+        onInput: (value, options) => {
+          // Real-time update during drag (visual only, smooth)
+          this.config.threshold = value;
+          this.updateThresholdIndicatorPosition();
           // Pass options.altKey for global threshold feature
-          this.config.onThresholdChange(value, { altKey: options?.altKey || false });
+          if (options?.altKey && this.config.onThresholdChange) {
+            this.config.onThresholdChange(value, { altKey: true, realtime: true });
+          }
+        },
+        onChange: (value, options) => {
+          // Final update at end of drag (send to backend)
+          this.config.threshold = value;
+          this.updateThresholdIndicatorPosition();
+          if (this.config.onThresholdChange) {
+            // Pass options.altKey for global threshold feature
+            this.config.onThresholdChange(value, { altKey: options?.altKey || false });
+          }
         }
-      }
-    });
+      });
+    }
 
-    // Gain Rotary (skip for compact size)
-    if (this.config.size !== 'compact') {
-      const gainContainer = document.createElement('div');
-      rotariesContainer.appendChild(gainContainer);
+    // Gain Rotary (dans la section control, sous le Pan)
+    // Visible dans tous les modes (compact inclus) - spec AUDIOTRACK-UI MVP
+    const gainContainer = this.element.querySelector('.audio-track__gain');
+    if (gainContainer) {
       this.gainRotary = new Rotary(gainContainer, {
         preset: 'gain',
+        label: '',  // Label "GAIN" masque - spec AUDIOTRACK-UI MVP
         value: this.config.gain,
+        onInput: (value) => {
+          // Real-time update during drag
+          this.config.gain = value;
+          if (this.config.onGainChange) {
+            this.config.onGainChange(value, { realtime: true });
+          }
+        },
         onChange: (value) => {
           this.config.gain = value;
           if (this.config.onGainChange) {
@@ -372,7 +435,6 @@ class AudioTrack {
           }
         }
       });
-
     }
   }
 
@@ -434,10 +496,10 @@ class AudioTrack {
   // ========================================================================
 
   handleButtonToggle(buttonId, active) {
-    if (buttonId === 'monitor') {
-      this.config.monitoring = active;
-      if (this.config.onMonitorToggle) {
-        this.config.onMonitorToggle(active);
+    if (buttonId === 'mute') {
+      this.config.mute = active;
+      if (this.config.onMuteToggle) {
+        this.config.onMuteToggle(active);
       }
     } else if (buttonId === 'solo') {
       this.config.solo = active;
@@ -445,6 +507,8 @@ class AudioTrack {
         this.config.onSoloToggle(active);
       }
     }
+    // Note: monitor supprime du MVP (voir spec AUDIOTRACK-UI.md).
+    // Rien n'est fait en local pour les autres buttonId (phase, etc.) - ajouter ici si besoin.
   }
 
   updateRecordState() {

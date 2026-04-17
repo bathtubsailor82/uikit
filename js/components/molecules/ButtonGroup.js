@@ -18,11 +18,12 @@
 import Button from '../atoms/Button.js';
 
 // Button sets for each track size
+// MVP : Mute + Solo (per-bus). Monitor supprime du MVP (voir spec AUDIOTRACK-UI).
 // Note: mini variant (40px, no VU-meter) will be added separately
 const BUTTON_SETS = {
-  compact: ['monitor', 'solo'],                    // 40px (formerly mini)
-  normal: ['monitor', 'solo', 'phase'],            // 60px (formerly compact)
-  large: ['monitor', 'solo', 'phase', 'mute']      // 75px (formerly normal)
+  compact: ['mute', 'solo'],                       // 40px (formerly mini)
+  normal: ['mute', 'solo', 'phase'],               // 60px (formerly compact)
+  large: ['mute', 'solo', 'phase']                 // 75px (formerly normal)
 };
 
 class ButtonGroup {
