@@ -65,12 +65,19 @@ class Rotary {
       max: 100,
       step: 1,
       sensitivity: 0.5,        // Drag sensitivity (dB per pixel)
+      size: 'sm',              // 'sm' (24px, default) | 'lg' (80px)
       format: (v) => `${v}`,   // Value formatter
       onInput: null,           // Called during drag (real-time)
       onChange: null,          // Called at end of drag
       ...preset,
       ...config
     };
+
+    // Indicator pivot Y (from indicator top-left to knob geometric center).
+    // = knobRadius - indicatorTopOffset (matches CSS).
+    // sm: knob 24px (r=12), indicator top=2px -> 10
+    // lg: knob 80px (r=40), indicator top=6px -> 34 (to be revisited when bigknob is redesigned)
+    this._knobRadius = this.config.size === 'lg' ? 34 : 10;
 
     this.element = null;
     this.knobEl = null;
@@ -92,9 +99,11 @@ class Rotary {
   render() {
     const rotary = document.createElement('div');
     rotary.className = 'rotary';
+    if (this.config.size === 'lg') rotary.classList.add('rotary--lg');
 
     // Calculate rotation angle based on value
     const rotation = this.valueToRotation(this.config.value);
+    const origin = `center ${this._knobRadius}px`;
 
     // Le label est masque (div omis) quand label vide -> economie d'espace
     const labelHtml = this.config.label
@@ -103,7 +112,7 @@ class Rotary {
 
     rotary.innerHTML = `
       <div class="rotary__knob">
-        <div class="rotary__indicator" style="transform: translateX(-50%) rotate(${rotation}deg); transform-origin: center 12px;"></div>
+        <div class="rotary__indicator" style="transform: translateX(-50%) rotate(${rotation}deg); transform-origin: ${origin};"></div>
       </div>
       <div class="rotary__value">${this.config.format(this.config.value)}</div>
       ${labelHtml}
@@ -212,7 +221,7 @@ class Rotary {
     // Update visual
     const rotation = this.valueToRotation(value);
     this.indicatorEl.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
-    this.indicatorEl.style.transformOrigin = 'center 12px';
+    this.indicatorEl.style.transformOrigin = `center ${this._knobRadius}px`;
     this.valueEl.textContent = this.config.format(value);
 
     // Trigger onChange if requested

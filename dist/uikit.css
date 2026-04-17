@@ -12811,6 +12811,62 @@ tr.selected .matrix-cell.active {
     margin-top: 1px;
 }
 
+/* ============================================================================
+   Large variant (.rotary--lg) - for master/bus sections
+   80x80 knob, premium look, readable value/label
+   ============================================================================ */
+
+.rotary--lg {
+    gap: 6px;
+}
+
+.rotary--lg .rotary__knob {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #101010;
+    background: radial-gradient(circle at 35% 35%, #5a5a5a, #1a1a1a);
+    box-shadow:
+        inset 0 -4px 10px rgba(0, 0, 0, 0.7),
+        inset 0 3px 4px rgba(255, 255, 255, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.rotary--lg .rotary__knob:hover {
+    background: radial-gradient(circle at 35% 35%, #666, #242424);
+}
+
+.rotary--lg .rotary__knob::before {
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    background: radial-gradient(circle at 30% 30%,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.04) 45%,
+        transparent 75%);
+}
+
+.rotary--lg .rotary__indicator {
+    top: 6px;
+    width: 3px;
+    height: 16px;
+    border-radius: 1.5px;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+}
+
+.rotary--lg .rotary__value {
+    font-size: 12px;
+    color: var(--color-text, #ddd);
+    margin-top: 4px;
+}
+
+.rotary--lg .rotary__label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--color-text-secondary, #888);
+    margin-top: 2px;
+}
+
 /* === css/components/atoms/record-button.css === */
 /**
  * RecordButton - Circular Record Button Styles
