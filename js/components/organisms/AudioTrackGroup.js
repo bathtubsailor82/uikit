@@ -61,11 +61,12 @@ class AudioTrackGroup {
     container.className = this.getClassNames();
 
     if (this.config.layout === 'horizontal') {
-      // Flex row with wrap - let CSS handle distribution
+      // Flex row with wrap - all tracks same height (stretch)
       container.style.display = 'flex';
       container.style.flexDirection = 'row';
       container.style.flexWrap = 'wrap';
       container.style.justifyContent = 'center';
+      container.style.alignItems = 'stretch';
       container.style.alignContent = 'flex-start';
       container.style.gap = `${this.config.gap}px`;
     } else if (this.config.layout === 'vertical') {

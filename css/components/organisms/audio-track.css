@@ -110,6 +110,7 @@
     flex-direction: column;
     gap: 3px;
     padding: 4px 6px;
+    min-height: 140px;  /* Hauteur fixe : M/S + Pan + Gain = ~140px, Enable button s'etire */
     background: linear-gradient(180deg, #252525 0%, #2a2a2a 100%);
 }
 
@@ -133,6 +134,7 @@
     flex-direction: column;
     gap: 3px;
     padding: 4px 6px;
+    min-height: 106px;  /* Hauteur fixe : Thr rotary + REC + Timer + LEDs = ~106px */
     background: linear-gradient(180deg, #2a2a2a 0%, #252525 100%);
     border-top: 1px solid rgba(0, 0, 0, 0.3);
 }
@@ -141,6 +143,30 @@
     display: flex;
     justify-content: center;
     padding: 2px 0;
+}
+
+/* Bouton "+ Enable" : affiche quand track pas source du bus courant.
+   Prend toute la hauteur de la section controls via flex: 1 */
+.audio-track__enable-bus {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    color: #666;
+    font-size: 9px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.audio-track__enable-bus:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #aaa;
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .audio-track__record {

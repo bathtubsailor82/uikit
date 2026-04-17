@@ -78,12 +78,14 @@ class AudioTrack {
       mute: false,
       solo: false,
       trackState: 0,         // 0=IDLE, 1=ARMED, 2=RECORDING
+      inBus: true,           // true = track est source du bus courant (controls visibles)
       onMuteToggle: null,
       onSoloToggle: null,
       onRecordToggle: null,  // Callback avec trackState (UInt32)
       onThresholdChange: null,
       onGainChange: null,
       onPanChange: null,
+      onEnableBus: null,     // Callback quand user clique "+ Enable" (track pas dans le bus)
       onLocationClick: null,
       onLanguageClick: null,
       ...config
@@ -176,16 +178,15 @@ class AudioTrack {
         <div class="audio-track__meter-target"></div>
       </div>
 
-      <!-- Control Section (M/S, Pan, Gain) -->
+      <!-- Control Section (M/S, Pan, Gain) ou bouton Enable si pas dans le bus -->
       <div class="audio-track__controls">
-        <!-- Button Group (Mute / Solo / Monitor) -->
-        <div class="audio-track__buttons"></div>
-
-        <!-- Pan Rotary -->
-        <div class="audio-track__pan"></div>
-
-        <!-- Gain Rotary (si pas mode compact) -->
-        <div class="audio-track__gain"></div>
+        ${this.config.inBus === false ? `
+          <button class="audio-track__enable-bus">+ Enable</button>
+        ` : `
+          <div class="audio-track__buttons"></div>
+          <div class="audio-track__pan"></div>
+          <div class="audio-track__gain"></div>
+        `}
       </div>
 
       <!-- Record Section (Threshold, REC button, Timer, LEDs) -->
@@ -216,9 +217,22 @@ class AudioTrack {
 
     // Initialize components
     this.initMeter();
-    this.initButtonGroup();
-    this.initPan();
-    this.initRotaries();
+    if (this.config.inBus !== false) {
+      // Controls per-bus (M/S/Pan/Gain) — seulement si track est source du bus
+      this.initButtonGroup();
+      this.initPan();
+      this.initGainRotary();
+    } else {
+      // Bouton "+ Enable" — track pas dans le bus courant
+      const enableBtn = this.element.querySelector('.audio-track__enable-bus');
+      if (enableBtn) {
+        enableBtn.addEventListener('click', () => {
+          if (this.config.onEnableBus) this.config.onEnableBus();
+        });
+      }
+    }
+    // Threshold + Record : toujours visibles (track-level, pas per-bus)
+    this.initThresholdRotary();
     this.initRecordControl();
     this.setupEventListeners();
   }
@@ -384,8 +398,8 @@ class AudioTrack {
     });
   }
 
-  initRotaries() {
-    // Threshold Rotary (dans la section record, au-dessus du REC button)
+  initThresholdRotary() {
+    // Threshold Rotary (track-level, toujours visible, section record)
     const thresholdContainer = this.element.querySelector('.audio-track__threshold');
     if (thresholdContainer) {
       this.thresholdRotary = new Rotary(thresholdContainer, {
@@ -393,28 +407,25 @@ class AudioTrack {
         label: '',  // Label "THR" masque - spec AUDIOTRACK-UI MVP
         value: this.config.threshold,
         onInput: (value, options) => {
-          // Real-time update during drag (visual only, smooth)
           this.config.threshold = value;
           this.updateThresholdIndicatorPosition();
-          // Pass options.altKey for global threshold feature
           if (options?.altKey && this.config.onThresholdChange) {
             this.config.onThresholdChange(value, { altKey: true, realtime: true });
           }
         },
         onChange: (value, options) => {
-          // Final update at end of drag (send to backend)
           this.config.threshold = value;
           this.updateThresholdIndicatorPosition();
           if (this.config.onThresholdChange) {
-            // Pass options.altKey for global threshold feature
             this.config.onThresholdChange(value, { altKey: options?.altKey || false });
           }
         }
       });
     }
+  }
 
-    // Gain Rotary (dans la section control, sous le Pan)
-    // Visible dans tous les modes (compact inclus) - spec AUDIOTRACK-UI MVP
+  initGainRotary() {
+    // Gain Rotary (per-bus, section control, sous le Pan)
     const gainContainer = this.element.querySelector('.audio-track__gain');
     if (gainContainer) {
       this.gainRotary = new Rotary(gainContainer, {
@@ -422,7 +433,6 @@ class AudioTrack {
         label: '',  // Label "GAIN" masque - spec AUDIOTRACK-UI MVP
         value: this.config.gain,
         onInput: (value) => {
-          // Real-time update during drag
           this.config.gain = value;
           if (this.config.onGainChange) {
             this.config.onGainChange(value, { realtime: true });
@@ -515,6 +525,36 @@ class AudioTrack {
     // Update track-level classes (derived from trackState)
     this.element.classList.toggle('audio-track--armed', this.armed);
     this.element.classList.toggle('audio-track--recording', this.recording);
+  }
+
+  /**
+   * Met a jour les valeurs per-bus (gain/pan/mute/solo) et le mode inBus.
+   * Appele par switchBus() et onEnableBus() sans re-render complet.
+   * Si inBus change, re-render la section controls (swap enable button / rotaries).
+   */
+  setBusValues(gain, pan, mute, solo, inBus) {
+    const wasInBus = this.config.inBus;
+    this.config.gain = gain;
+    this.config.pan = pan;
+    this.config.mute = mute;
+    this.config.solo = solo;
+    this.config.inBus = inBus;
+
+    if (wasInBus !== inBus) {
+      // Mode change : re-render complet necessaire (swap enable/controls)
+      this.render();
+      return;
+    }
+
+    // Update in-place si meme mode
+    if (inBus) {
+      if (this.panRotary) this.panRotary.setValue(pan);
+      if (this.gainRotary) this.gainRotary.setValue(gain);
+      if (this.buttonGroup) {
+        this.buttonGroup.setState('mute', mute);
+        this.buttonGroup.setState('solo', solo);
+      }
+    }
   }
 
   // ========================================================================
