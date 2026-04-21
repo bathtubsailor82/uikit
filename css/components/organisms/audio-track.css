@@ -75,12 +75,6 @@
     min-height: 0;  /* Chrome W3C flexbox spec - allow flex child to shrink */
 }
 
-/* Make VUMeter fill available width */
-.audio-track__meter-target .vu-meter {
-    width: 100%;
-    max-width: 100%;
-}
-
 /* CanvasMeter - fixed width, centered */
 .audio-track__meter-target .canvas-meter {
     display: block;

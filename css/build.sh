@@ -46,7 +46,6 @@ FILES=(
   "css/components/empty-state.css"
   "css/components/stepper.css"
   "css/components/timeline.css"
-  "css/components/meter.css"
   "css/components/matrix.css"
   "css/components/time-picker.css"
   "css/components/atoms/button.css"

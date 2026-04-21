@@ -290,16 +290,7 @@ class AudioTrack {
   }
 
   addThresholdIndicator() {
-    // Threshold indicator is an overlay on the meter container
-    // Works with both CanvasMeter and legacy VUMeter
-    let container = this.element.querySelector('.audio-track__meter-target');
-    if (!container) {
-      // Fallback to old selectors for backwards compatibility
-      container = this.element.querySelector('.vu-meter__scale');
-      if (!container) {
-        container = this.element.querySelector('.vu-meter');
-      }
-    }
+    const container = this.element.querySelector('.audio-track__meter-target');
     if (!container) return;
 
     // Ensure container has relative positioning for absolute threshold indicator

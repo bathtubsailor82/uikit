@@ -23,7 +23,7 @@ css/
 
 js/
 ├── dark-mode.js            # Utilitaire dark mode toggle
-├── meter.js                # VUMeter class
+├── CanvasMeter.js          # Canvas 2D meter (remplace VUMeter)
 └── components/
     ├── atoms/
     ├── molecules/
@@ -103,7 +103,7 @@ NOTE: AudioTrack callbacks reçoivent DOM element (positioning dropdowns, toolti
 NOTE: Performance matrix : transitions CSS supprimées pour 128+ cells
 NOTE: CSS custom properties = seul moyen JS contrôler pseudo-elements (::before/::after)
 NOTE: RAF centralisé dans AudioTrackGroup (~60fps pour 128+ meters)
-NOTE: VUMeter.paint() appelé depuis RAF externe (pas RAF interne par meter)
+NOTE: CanvasMeter.paint() appelé depuis RAF externe (pas RAF interne par meter)
 
 ## Utilisation dans MR3
 
