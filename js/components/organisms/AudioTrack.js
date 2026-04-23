@@ -537,12 +537,11 @@ class AudioTrack {
       return;
     }
 
-    // Update in-place si meme mode. triggerChange=false pour eviter la boucle
-    // PATCH -> broadcast -> setValue -> onChange -> PATCH (meme pattern que
-    // master-section._syncMasterControls).
+    // Update in-place si meme mode. externalSync() skippe si un rotary est
+    // en cours de drag, evitant l'ecrasement visuel par un broadcast WS.
     if (inBus) {
-      if (this.panRotary) this.panRotary.setValue(pan, false);
-      if (this.gainRotary) this.gainRotary.setValue(gain, false);
+      if (this.panRotary) this.panRotary.externalSync(pan);
+      if (this.gainRotary) this.gainRotary.externalSync(gain);
       if (this.buttonGroup) {
         this.buttonGroup.setState('mute', mute);
         this.buttonGroup.setState('solo', solo);
@@ -552,14 +551,14 @@ class AudioTrack {
 
   /**
    * Set gain value externally (e.g. from WebSocket track_updated sync).
-   * Symetrique de setThreshold/setPan. triggerChange=false pour eviter
-   * la boucle PATCH <-> WS broadcast.
+   * Symetrique de setThreshold/setPan. Drag-aware : externalSync skippe
+   * la maj si le rotary est en cours de drag actif.
    * @param {number} value - Gain value in dB
    */
   setGain(value) {
     this.config.gain = value;
     if (this.gainRotary) {
-      this.gainRotary.setValue(value, false);
+      this.gainRotary.externalSync(value);
     }
   }
 
@@ -640,14 +639,14 @@ class AudioTrack {
   }
 
   /**
-   * Set threshold value (for global threshold feature)
-   * Updates rotary, config, and visual indicator
+   * Set threshold value (for global threshold feature + WS sync)
+   * Updates rotary (drag-aware), config, and visual indicator
    * @param {number} value - Threshold in dB
    */
   setThreshold(value) {
     this.config.threshold = value;
     if (this.thresholdRotary) {
-      this.thresholdRotary.setValue(value, false); // false = don't trigger callback
+      this.thresholdRotary.externalSync(value); // skip si drag actif
     }
     this.updateThresholdIndicatorPosition();
   }
@@ -659,7 +658,7 @@ class AudioTrack {
   setPan(value) {
     this.config.pan = value;
     if (this.panRotary) {
-      this.panRotary.setValue(value, false);
+      this.panRotary.externalSync(value);
     }
   }
 

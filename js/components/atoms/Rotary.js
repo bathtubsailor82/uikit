@@ -230,6 +230,23 @@ class Rotary {
     }
   }
 
+  /**
+   * Synchronise la valeur depuis une source externe (WS broadcast, switch
+   * bus, etc.) sans ecraser la position user si le rotary est en cours de
+   * drag actif. Symetrique de setValue(value, false) mais drag-aware.
+   *
+   * Rationale : pendant un drag, les broadcasts WS qui reviennent (echo du
+   * propre PATCH de l'utilisateur, ou updates concurrentes) ne doivent pas
+   * "voler" la position visuelle en cours. Une fois le drag termine
+   * (isDragging=false), les syncs reprennent normalement.
+   *
+   * @param {number} value - Nouvelle valeur a afficher si non en drag
+   */
+  externalSync(value) {
+    if (this.isDragging) return;
+    this.setValue(value, false);
+  }
+
   getValue() {
     return this.config.value;
   }
