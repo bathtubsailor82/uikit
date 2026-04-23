@@ -537,14 +537,29 @@ class AudioTrack {
       return;
     }
 
-    // Update in-place si meme mode
+    // Update in-place si meme mode. triggerChange=false pour eviter la boucle
+    // PATCH -> broadcast -> setValue -> onChange -> PATCH (meme pattern que
+    // master-section._syncMasterControls).
     if (inBus) {
-      if (this.panRotary) this.panRotary.setValue(pan);
-      if (this.gainRotary) this.gainRotary.setValue(gain);
+      if (this.panRotary) this.panRotary.setValue(pan, false);
+      if (this.gainRotary) this.gainRotary.setValue(gain, false);
       if (this.buttonGroup) {
         this.buttonGroup.setState('mute', mute);
         this.buttonGroup.setState('solo', solo);
       }
+    }
+  }
+
+  /**
+   * Set gain value externally (e.g. from WebSocket track_updated sync).
+   * Symetrique de setThreshold/setPan. triggerChange=false pour eviter
+   * la boucle PATCH <-> WS broadcast.
+   * @param {number} value - Gain value in dB
+   */
+  setGain(value) {
+    this.config.gain = value;
+    if (this.gainRotary) {
+      this.gainRotary.setValue(value, false);
     }
   }
 
