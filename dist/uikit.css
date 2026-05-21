@@ -4597,6 +4597,12 @@ nav[aria-label="Pagination"] {
     color: var(--color-text-secondary);
 }
 
+.badge-partial {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+    border: 1px solid var(--color-warning);
+}
+
 /* Status badge (plus grand) */
 
 .status-badge {
