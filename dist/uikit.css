@@ -896,6 +896,12 @@ body.keyboard-nav *:focus {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-4);
+}
+
+/* Opt-in full-viewport height for page-level split screens (landing pages,
+   master/detail). The base .layout-split is content-height so it can be used
+   inside cards, modals and content areas without forcing a 100vh gap. */
+.layout-split-fullheight {
     min-height: 100vh;
 }
 
