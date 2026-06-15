@@ -117,3 +117,35 @@ Ordre chargement CSS (MR3 index.html):
 1. `/uikit/dist/uikit.css` (design system)
 2. `/css/app-layout.css` (layout app, peut override tokens)
 3. Autres CSS app-specific si besoin
+
+## Agent skills
+
+### Issue tracker
+
+Les issues et PRD de ce repo vivent dans GitHub Issues (`bathtubsailor82/uikit`), via la CLI `gh`. Voir `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Cinq rôles canoniques de triage, libellés par défaut (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). Voir `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Layout single-context : `CONTEXT.md` + `docs/adr/` à la racine. Voir `docs/agents/domain.md`.
+
+## Language policy (working / output axes)
+
+This repo declares two explicit language axes. `CLAUDE.md` is load-bearing —
+auto-injected every session, it reaches every skill.
+
+- **`working_language` = `fr`** — the language of live, non-persisted
+  interaction: chat replies, grill sessions, review reports shown in the
+  conversation.
+- **`output_language` = `fr`** — the language of artefacts persisted on
+  the tracker: issue/PRD titles and bodies, comments, PR descriptions, commit
+  message bodies. Inherits `working_language` unless declared distinct.
+
+These tokens stay **frozen EN** regardless of either axis, because they are
+technical identifiers and not human prose: tags/labels (`ready-for-agent`,
+`prd`, `blocked`, …), Conventional Commits prefixes (`feat:`, `fix:`, …), Ralph
+keywords (`BLOCKED:`), code identifiers, and paths. When in doubt: technical
+identifier → EN; prose for a human → the declared language.
