@@ -4,7 +4,11 @@
       "Bash(git describe:*)",
       "Bash(ls:*)",
       "Bash(xargs:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(gh auth *)",
+      "Bash(gh label *)",
+      "Bash(set -e)",
+      "Bash(gh issue *)"
     ],
     "deny": [],
     "ask": []
