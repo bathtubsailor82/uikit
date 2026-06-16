@@ -320,10 +320,12 @@
     --coe-status-error-dark:         rgba(153, 28, 28, 1);
     --coe-status-error-alpha-085:    rgba(198, 28, 28, 0.85);
     --coe-status-error-alpha-010:    rgba(198, 28, 28, 0.10);
+    --coe-status-error-alpha-020:    rgba(198, 28, 28, 0.20);
     --coe-status-warning:            rgba(185, 71, 9, 1);
     --coe-status-warning-dark:       rgba(160, 51, 9, 1);
     --coe-status-warning-alpha-085:  rgba(185, 71, 9, 0.85);
     --coe-status-warning-alpha-010:  rgba(185, 71, 9, 0.10);
+    --coe-status-warning-alpha-020:  rgba(185, 71, 9, 0.20);
 
     /* Logo flag (drapeau européen) */
     --coe-logo-blue-flag:   rgba(14, 61, 138, 1);
@@ -348,9 +350,9 @@
     /* Tints / soft backgrounds */
     --color-primary-light: var(--coe-primary-50);
     --color-success-light: var(--coe-status-success-alpha-010);
-    --color-warning-light: var(--coe-status-warning-alpha-010);
+    --color-warning-light: var(--coe-status-warning-alpha-020);
     --color-warning-bg:    var(--coe-status-warning-alpha-010);
-    --color-danger-light:  var(--coe-status-error-alpha-010);
+    --color-danger-light:  var(--coe-status-error-alpha-020);
     --color-danger-bg:     var(--coe-status-error-alpha-010);
     --color-info-light:    var(--coe-primary-alpha-010);
 
