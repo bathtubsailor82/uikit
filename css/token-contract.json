@@ -1,0 +1,49 @@
+{
+  "$comment": "SOURCE DE VÉRITÉ du contrat de tokens sémantiques. Le check build-time (scripts/check-token-contract.mjs) lit ce fichier et vérifie, pour chaque cellule de la matrice, que CHAQUE token du contrat résout (aucun var() pendant, aucun token non mappé). Doc humaine : docs/token-contract.md. Le contrat est un superset discipliné : il grandit cellule par cellule, jamais spéculativement (ADR-0001).",
+  "version": 1,
+  "scope": "color",
+  "contract": {
+    "color": [
+      "--color-primary",
+      "--color-primary-hover",
+      "--color-success",
+      "--color-success-dark",
+      "--color-warning",
+      "--color-danger",
+      "--color-info",
+      "--color-info-dark",
+      "--color-online",
+      "--color-offline",
+      "--color-primary-light",
+      "--color-success-light",
+      "--color-warning-light",
+      "--color-warning-bg",
+      "--color-danger-light",
+      "--color-danger-bg",
+      "--color-info-light",
+      "--color-bg-primary",
+      "--color-bg-secondary",
+      "--color-bg-tertiary",
+      "--color-bg-hover",
+      "--color-bg-active",
+      "--color-text-primary",
+      "--color-text-secondary",
+      "--color-text-tertiary",
+      "--color-text-disabled",
+      "--color-text-white",
+      "--color-border-light",
+      "--color-border-medium",
+      "--color-border-dark",
+      "--color-dark",
+      "--color-dark-hover"
+    ]
+  },
+  "matrix": [
+    {
+      "theme": "uikit-default",
+      "scheme": "light",
+      "selectors": [":root"],
+      "categories": ["color"]
+    }
+  ]
+}

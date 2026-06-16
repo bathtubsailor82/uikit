@@ -74,3 +74,11 @@ done
 mv "$TMP_FILE" "dist/uikit.css"
 
 echo "Done! $(wc -l < dist/uikit.css) lines generated"
+
+# Check build-time : le contrat de tokens doit résoudre entièrement.
+# Refuse de livrer un dist/ où un token du contrat est non mappé ou pendant.
+echo "Checking token contract..."
+if ! node scripts/check-token-contract.mjs; then
+  echo "✗ Build refusé : contrat de tokens incomplet (voir ci-dessus)."
+  exit 1
+fi

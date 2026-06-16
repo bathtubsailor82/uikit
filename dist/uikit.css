@@ -5,8 +5,69 @@
  * Support Light & Dark mode
  */
 
+/* ============================================================================
+ * TIER 1 — PRIMITIVES (thème uikit-default)
+ *
+ * Échelles numériques brutes, PROPRES À CE THÈME. Jamais consommées
+ * directement par un composant : elles n'existent que pour alimenter le
+ * contrat sémantique (tier 3 ci-dessous). Un autre thème (p.ex. CoE) fournira
+ * SES propres primitives — cf. docs/adr/0001-architecture-tokens-multi-theme.md.
+ *
+ * Nommage catégorie-préfixé conservé (--color-*), step ordonné clair → sombre.
+ * ========================================================================== */
 :root {
-    /* === ENTITY COLORS (palette fixe 24 couleurs) === */
+    /* Neutrals (blanc → quasi-noir) */
+    --color-white:       #ffffff;
+    --color-neutral-50:  #fafafa;
+    --color-neutral-100: #f8f8f8;
+    --color-neutral-150: #f5f5f5;
+    --color-neutral-200: #f0f0f0;
+    --color-neutral-300: #eeeeee;
+    --color-neutral-400: #dddddd;
+    --color-neutral-500: #cccccc;
+    --color-neutral-600: #999999;
+    --color-neutral-650: #6e6e73;
+    --color-neutral-700: #666666;
+    --color-neutral-800: #333333;
+    --color-neutral-850: #2d2d2f;
+    --color-neutral-900: #1d1d1f;
+
+    /* Blue (primary / info) */
+    --color-blue-50:  #f0f8ff;
+    --color-blue-100: #e8f4f8;
+    --color-blue-400: #5a90c7;
+    --color-blue-500: #4a80b7;
+    --color-blue-600: #2c7fb8;
+    --color-blue-700: #2c5aa0;
+
+    /* Green (success / online) */
+    --color-green-100: #e8f4e8;
+    --color-green-400: #7db46c;
+    --color-green-500: #30a030;
+    --color-green-700: #4a7c59;
+
+    /* Red (danger / offline) */
+    --color-red-50:  #ffe4e1;
+    --color-red-100: #fde8e8;
+    --color-red-500: #d84444;
+    --color-red-600: #d70015;
+
+    /* Amber (warning) */
+    --color-amber-50:  #fff8dc;
+    --color-amber-100: #fff4e6;
+    --color-amber-600: #cc8800;
+}
+
+/* ============================================================================
+ * PALETTE FIXE — Entity colors (HORS contrat)
+ *
+ * Palette data-viz fixe de 24 couleurs + défaut, consommée DIRECTEMENT (JS,
+ * color-picker). Délibérément exclue du contrat thémable : c'est une constante
+ * cross-thème, pas une identité de marque (même esprit que l'exclusion Audio,
+ * ADR-0001). Si un thème veut sa propre palette d'entités, ce sera un chantier
+ * séparé.
+ * ========================================================================== */
+:root {
     --entity-color-1:  #e54545;  /* Red */
     --entity-color-2:  #e8725a;  /* Coral */
     --entity-color-3:  #e59a30;  /* Orange */
@@ -32,57 +93,67 @@
     --entity-color-23: #987858;  /* Brown */
     --entity-color-24: #c8b898;  /* Cream */
     --entity-color-default: #444444;
+}
 
-    /* === COULEURS === */
+/* ============================================================================
+ * TIER 2+3 — CONTRACT (tokens sémantiques) × MAPPING uikit-default · light
+ *
+ * Le CONTRAT (tier 2) est la liste stable et agnostique de tokens sémantiques
+ * que les composants consomment — son inventaire canonique vit dans
+ * css/token-contract.json (vérifié au build) et docs/token-contract.md.
+ *
+ * Le MAPPING (tier 3) ci-dessous câble chaque token du contrat sur une
+ * primitive de uikit-default, de sorte que le rendu light actuel soit
+ * reproduit À L'IDENTIQUE. Le scheme dark reste pour l'instant en override
+ * legacy littéral plus bas ([data-theme="dark"]) — sa migration vers ce
+ * mapping est une tranche ultérieure.
+ * ========================================================================== */
+:root {
+    /* Brand / state (fixes light & dark) */
+    --color-primary:       var(--color-blue-400);
+    --color-primary-hover: var(--color-blue-500);
+    --color-success:       var(--color-green-400);
+    --color-success-dark:  var(--color-green-700);
+    --color-warning:       var(--color-amber-600);
+    --color-danger:        var(--color-red-500);
+    --color-info:          var(--color-blue-600);
+    --color-info-dark:     var(--color-blue-700);
 
-    /* Couleurs principales (fixes) */
-    --color-primary: #5a90c7;
-    --color-primary-hover: #4a80b7;
+    /* Status */
+    --color-online:  var(--color-green-500);
+    --color-offline: var(--color-red-600);
 
-    /* Couleurs état (fixes) */
-    --color-success: #7db46c;
-    --color-success-dark: #4a7c59;
-    --color-warning: #cc8800;
-    --color-danger: #d84444;
-    --color-info: #2c7fb8;
-    --color-info-dark: #2c5aa0;
+    /* Tints / soft backgrounds */
+    --color-primary-light: var(--color-blue-100);
+    --color-success-light: var(--color-green-100);
+    --color-warning-light: var(--color-amber-100);
+    --color-warning-bg:    var(--color-amber-50);
+    --color-danger-light:  var(--color-red-100);
+    --color-danger-bg:     var(--color-red-50);
+    --color-info-light:    var(--color-blue-50);
 
-    /* Couleurs status (fixes) */
-    --color-online: #30a030;
-    --color-offline: #d70015;
+    /* Surfaces / backgrounds */
+    --color-bg-primary:   var(--color-white);
+    --color-bg-secondary: var(--color-neutral-100);
+    --color-bg-tertiary:  var(--color-neutral-50);
+    --color-bg-hover:     var(--color-neutral-150);
+    --color-bg-active:    var(--color-neutral-200);
 
-    /* === LIGHT MODE (default) === */
+    /* Text */
+    --color-text-primary:   var(--color-neutral-800);
+    --color-text-secondary: var(--color-neutral-700);
+    --color-text-tertiary:  var(--color-neutral-600);
+    --color-text-disabled:  var(--color-neutral-650);
+    --color-text-white:     var(--color-white);
 
-    --color-primary-light: #e8f4f8;
-    --color-success-light: #e8f4e8;
-    --color-warning-light: #fff4e6;
-    --color-warning-bg: #fff8dc;
-    --color-danger-light: #fde8e8;
-    --color-danger-bg: #ffe4e1;
-    --color-info-light: #f0f8ff;
+    /* Borders */
+    --color-border-light:  var(--color-neutral-300);
+    --color-border-medium: var(--color-neutral-400);
+    --color-border-dark:   var(--color-neutral-500);
 
-    /* Couleurs de fond */
-    --color-bg-primary: #ffffff;
-    --color-bg-secondary: #f8f8f8;
-    --color-bg-tertiary: #fafafa;
-    --color-bg-hover: #f5f5f5;
-    --color-bg-active: #f0f0f0;
-
-    /* Couleurs de texte */
-    --color-text-primary: #333333;
-    --color-text-secondary: #666666;
-    --color-text-tertiary: #999999;
-    --color-text-disabled: #6e6e73;
-    --color-text-white: #ffffff;
-
-    /* Couleurs de bordure */
-    --color-border-light: #eee;
-    --color-border-medium: #ddd;
-    --color-border-dark: #ccc;
-
-    /* Couleurs sombres */
-    --color-dark: #1d1d1f;
-    --color-dark-hover: #2d2d2f;
+    /* Dark surfaces (composants foncés en light scheme) */
+    --color-dark:       var(--color-neutral-900);
+    --color-dark-hover: var(--color-neutral-850);
 }
 
 /* === DARK MODE === */
