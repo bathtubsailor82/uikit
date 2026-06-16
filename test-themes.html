@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test — matrice thème × scheme</title>
+    <link rel="stylesheet" href="dist/uikit.css">
+    <!-- Pilotage du scheme (toggle, persistance, hot-swap) — pas de runner, ADN no-deps. -->
+    <script src="js/dark-mode.js"></script>
+    <style>
+        /* Chrome de la page = tokens du contrat → re-thémé à chaud avec le root réel
+           (c'est voulu : on voit le système réagir). Les iframes de la matrice ont
+           chacune leur propre root et restent figées. */
+        body {
+            font-family: var(--font-family-base);
+            background: var(--color-bg-tertiary);
+            color: var(--color-text-primary);
+            margin: 0;
+            padding: 24px;
+            line-height: 1.5;
+        }
+        h1 { font-size: var(--font-size-2xl); margin: 0; flex: 1; }
+        h2 { font-size: var(--font-size-xl); margin: 0 0 4px; }
+        h3 { font-size: var(--font-size-md); margin: 16px 0 8px; }
+        .muted { color: var(--color-text-tertiary); font-size: var(--font-size-sm); margin: 0 0 12px; }
+        code { font-family: var(--font-family-mono); background: var(--color-bg-active); padding: 1px 5px; border-radius: var(--radius-sm); font-size: 0.9em; }
+
+        .bar {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 18px; margin-bottom: 20px;
+            background: var(--color-dark); color: var(--color-text-white);
+            border-radius: var(--radius-lg);
+        }
+
+        .panel {
+            margin-bottom: 20px; padding: 18px 20px;
+            border: var(--border-width) solid var(--color-border-medium);
+            border-radius: var(--radius-lg);
+            background: var(--color-bg-primary);
+        }
+
+        .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+        button.ctrl {
+            font-family: inherit; font-size: var(--font-size-base);
+            padding: 7px 14px; cursor: pointer;
+            border: var(--border-width) solid var(--color-border-medium);
+            border-radius: var(--radius-md);
+            background: var(--color-bg-secondary); color: var(--color-text-primary);
+        }
+        button.ctrl:hover { background: var(--color-bg-hover); }
+
+        dl.state { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 4px 0 0; }
+        dl.state dt { font-weight: var(--font-weight-semibold); color: var(--color-text-secondary); }
+        dl.state dd { margin: 0; font-family: var(--font-family-mono); font-size: var(--font-size-sm); }
+
+        /* Inspecteur de valeurs computed (résolution du contrat) */
+        table.inspect { width: 100%; border-collapse: collapse; font-size: var(--font-size-sm); }
+        table.inspect th, table.inspect td {
+            text-align: left; padding: 5px 10px;
+            border-bottom: var(--border-width) solid var(--color-border-light);
+            vertical-align: middle;
+        }
+        table.inspect th { color: var(--color-text-tertiary); font-weight: var(--font-weight-semibold); }
+        table.inspect td.token, table.inspect td.val { font-family: var(--font-family-mono); }
+        .sw { display: inline-block; width: 22px; height: 22px; vertical-align: middle;
+              border: var(--border-width) solid var(--color-border-medium); border-radius: var(--radius-sm); }
+        .match-ok  { color: var(--color-success); font-weight: var(--font-weight-bold); }
+        .match-ko  { color: var(--color-danger);  font-weight: var(--font-weight-bold); }
+        .match-na  { color: var(--color-text-disabled); }
+
+        /* Matrice */
+        .matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+        .cell { border: var(--border-width) solid var(--color-border-medium); border-radius: var(--radius-lg); overflow: hidden; background: var(--color-bg-primary); }
+        .cell-head {
+            display: flex; align-items: baseline; gap: 8px;
+            padding: 8px 12px; background: var(--color-bg-secondary);
+            border-bottom: var(--border-width) solid var(--color-border-medium);
+            font-size: var(--font-size-sm);
+        }
+        .cell-head strong { font-size: var(--font-size-base); }
+        .cell-head .attrs { font-family: var(--font-family-mono); color: var(--color-text-tertiary); }
+        .cell iframe { display: block; width: 100%; border: 0; }
+
+        ul.checklist { margin: 4px 0 0; padding-left: 20px; }
+        ul.checklist li { margin: 4px 0; }
+    </style>
+</head>
+<body>
+    <div class="bar">
+        <h1>Matrice thème × scheme — vérification manuelle</h1>
+        <!-- Toggle dédié : icône sun/moon posée par dark-mode.js, masqué tout seul
+             quand le thème actif ne supporte qu'un seul scheme (CoE = light-only). -->
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Basculer le scheme clair / sombre" style="color: var(--color-text-white);">
+            <span class="theme-toggle__icon" data-theme-icon aria-hidden="true"></span>
+        </button>
+    </div>
+
+    <!-- ============================================================
+         PARTIE 1 — PILOTE (root réel <html>, dark-mode.js actif)
+         Vérifie : toggle vs --supported-schemes, persistance, hot-swap,
+         résolution computed du contrat sous data-theme="coe".
+         ============================================================ -->
+    <div class="panel">
+        <h2>1 · Pilote (root réel)</h2>
+        <p class="muted">Bascule la marque à chaud sur <code>&lt;html&gt;</code> — toggle, échantillon et inspecteur réagissent sans recharger.</p>
+        <div class="controls">
+            <button class="ctrl" onclick="setBrand('')">Marque : uikit-default</button>
+            <button class="ctrl" onclick="setBrand('coe')">Marque : CoE</button>
+            <button class="ctrl" onclick="resetPref()">Effacer préférence (localStorage)</button>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h3>État courant</h3>
+        <dl class="state">
+            <dt>data-theme</dt><dd><span id="s-theme"></span></dd>
+            <dt>data-scheme (appliqué)</dt><dd><span id="s-scheme"></span></dd>
+            <dt>--supported-schemes</dt><dd><span id="s-supported"></span></dd>
+            <dt>préférence stockée</dt><dd><span id="s-pref"></span></dd>
+            <dt>toggle visible ?</dt><dd><span id="s-visible"></span></dd>
+        </dl>
+    </div>
+
+    <div class="panel">
+        <h3>Inspecteur — résolution du contrat (valeurs computed)</h3>
+        <p class="muted">Valeur réellement résolue par le navigateur pour chaque token du contrat. La colonne <em>match charte</em> n'est assertée que sous <code>data-theme="coe"</code>.</p>
+        <table class="inspect">
+            <thead>
+                <tr><th></th><th>Token du contrat</th><th>Computed (résolu)</th><th>Charte CoE</th><th>Match</th></tr>
+            </thead>
+            <tbody id="inspect-body"></tbody>
+        </table>
+    </div>
+
+    <div class="panel">
+        <h3>Échantillon vivant (re-thémé à chaud)</h3>
+        <div id="live-sample"></div>
+    </div>
+
+    <div class="panel">
+        <h3>Checklist manuelle</h3>
+        <ul class="checklist">
+            <li>uikit-default : toggle <strong>visible</strong>, bascule light↔dark (icône lune→soleil), tout l'échantillon se re-thème.</li>
+            <li>Passer sur CoE : le toggle <strong>disparaît</strong> (light-only), scheme forcé sur <code>light</code>, l'inspecteur passe au vert (match charte).</li>
+            <li>Revenir sur uikit-default : la préférence stockée (ex. <code>dark</code>) est <strong>restaurée</strong>, le toggle réapparaît.</li>
+            <li>Recharger la page : la préférence de scheme <strong>persiste</strong> (localStorage).</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================
+         PARTIE 2 — MATRICE GELÉE (une iframe par cellule disponible)
+         Chaque cellule est un VRAI root → :root[data-theme="coe"] matche.
+         Rendu statique (pas de dark-mode.js dedans) = capture fidèle figée.
+         ============================================================ -->
+    <div class="panel">
+        <h2>2 · Matrice gelée — chaque cellule disponible</h2>
+        <p class="muted">Cellules rendues côte à côte, chacune dans son propre root (iframe) avec <code>data-theme</code>/<code>data-scheme</code> figés. Case vide volontairement absente : <code>coe × dark</code> n'existe pas (charte sans dark).</p>
+        <div class="matrix" id="matrix"></div>
+    </div>
+
+    <script>
+        // ---- Échantillon représentatif de composants thémés (couleur + typo + radius) ----
+        // Réutilisé tel quel dans le pilote vivant ET dans chaque cellule de la matrice.
+        const SAMPLE = `
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                <button class="btn btn-primary">Primary</button>
+                <button class="btn btn-secondary">Secondary</button>
+                <button class="btn btn-success">Success</button>
+                <button class="btn btn-danger">Danger</button>
+                <button class="btn btn-outline-primary">Outline</button>
+                <button class="btn btn-pill btn-primary">Pill</button>
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+                <span class="badge badge-primary">Primary</span>
+                <span class="badge badge-success">Success</span>
+                <span class="badge badge-warning">Warning</span>
+                <span class="badge badge-danger">Danger</span>
+              </div>
+              <div class="alert alert-info">
+                <div class="alert-icon">&#8505;</div>
+                <div class="alert-content"><div class="alert-title">Info</div><div class="alert-message">Message d'information thémé par le contrat.</div></div>
+              </div>
+              <div class="alert alert-success">
+                <div class="alert-icon">&#10003;</div>
+                <div class="alert-content"><div class="alert-title">Succès</div><div class="alert-message">Les changements ont été enregistrés.</div></div>
+              </div>
+              <div class="card" style="max-width:360px;">
+                <div class="card-header">Carte</div>
+                <div class="card-body"><p style="margin:0;">Surface, bordure et radius proviennent du contrat sémantique.</p></div>
+                <div class="card-footer">Pied de carte</div>
+              </div>
+              <div class="form-group" style="max-width:360px;">
+                <label class="form-label">Champ de saisie</label>
+                <input type="text" class="form-input" placeholder="Tape ici…">
+                <span class="form-help">Texte d'aide secondaire.</span>
+              </div>
+              <div style="max-width:360px; display:flex; flex-direction:column; gap:8px;">
+                <div class="progress-bar"><div class="progress-fill" style="width:60%"></div><div class="progress-text">60 %</div></div>
+                <div class="progress-bar"><div class="progress-fill success" style="width:80%"></div><div class="progress-text">80 %</div></div>
+              </div>
+            </div>`;
+
+        // ---- Contrat à inspecter + valeurs attendues de la charte CoE ----
+        // Charte CoE : primitives sourcées dans css/tokens.css (bloc :root[data-theme="coe"]).
+        const CONTRACT = [
+            { token: '--color-primary',       kind: 'color', coe: 'rgb(38, 107, 172)' },
+            { token: '--color-primary-hover', kind: 'color', coe: 'rgb(27, 76, 122)' },
+            { token: '--color-success',       kind: 'color', coe: 'rgb(0, 125, 62)' },
+            { token: '--color-warning',       kind: 'color', coe: 'rgb(185, 71, 9)' },
+            { token: '--color-danger',        kind: 'color', coe: 'rgb(198, 28, 28)' },
+            { token: '--color-info',          kind: 'color', coe: 'rgb(35, 97, 157)' },
+            { token: '--color-bg-primary',    kind: 'color', coe: 'rgb(255, 255, 255)' },
+            { token: '--color-bg-secondary',  kind: 'color', coe: 'rgb(245, 246, 248)' },
+            { token: '--color-text-primary',  kind: 'color', coe: 'rgb(23, 23, 23)' },
+            { token: '--color-dark',          kind: 'color', coe: 'rgb(18, 55, 81)' },
+            { token: '--color-border-medium', kind: 'color', coe: 'rgb(212, 212, 212)' },
+            { token: '--font-family-base',    kind: 'family', coe: 'Open Sans' },
+            { token: '--font-size-lg',        kind: 'text', coe: '15px' },
+            { token: '--radius-lg',           kind: 'text', coe: '8px' },
+        ];
+
+        const root = document.documentElement;
+        const CSS_HREF = new URL('dist/uikit.css', location.href).href;
+
+        // Triplet rgb normalisé (ignore l'alpha) pour comparer hex/rgb/rgba de façon robuste.
+        function rgbKey(s) {
+            const m = (s || '').match(/\d+(\.\d+)?/g);
+            return m ? m.slice(0, 3).map(n => Math.round(parseFloat(n))).join(',') : '';
+        }
+
+        // ---- Pilote : bascule de marque sur le root réel ----
+        function setBrand(theme) {
+            if (theme) root.setAttribute('data-theme', theme);
+            else root.removeAttribute('data-theme');
+            // Le MutationObserver de dark-mode.js réconcilie le scheme tout seul ;
+            // on rafraîchit le pilote au tour suivant.
+            requestAnimationFrame(render);
+        }
+
+        function resetPref() {
+            localStorage.removeItem(UIKitTheme.STORAGE_KEY);
+            UIKitTheme.refresh();
+            requestAnimationFrame(render);
+        }
+
+        // ---- Inspecteur : reconstruit la table à chaque rendu ----
+        function renderInspector() {
+            const body = document.getElementById('inspect-body');
+            const cs = getComputedStyle(root);
+            const isCoe = root.getAttribute('data-theme') === 'coe';
+            body.textContent = '';
+
+            CONTRACT.forEach(row => {
+                const tr = document.createElement('tr');
+
+                // Pastille (couleurs uniquement) — résolue via la vraie valeur peinte.
+                const tdSw = document.createElement('td');
+                let resolved;
+                if (row.kind === 'color') {
+                    const sw = document.createElement('span');
+                    sw.className = 'sw';
+                    sw.style.background = 'var(' + row.token + ')';
+                    tdSw.appendChild(sw);
+                    resolved = getComputedStyle(sw).backgroundColor; // toujours rgb()/rgba()
+                } else {
+                    resolved = cs.getPropertyValue(row.token).trim();
+                }
+
+                const tdTok = document.createElement('td');
+                tdTok.className = 'token';
+                tdTok.textContent = row.token;
+
+                const tdVal = document.createElement('td');
+                tdVal.className = 'val';
+                tdVal.textContent = resolved;
+
+                const tdCoe = document.createElement('td');
+                tdCoe.className = 'val';
+                tdCoe.textContent = row.coe;
+
+                const tdMatch = document.createElement('td');
+                if (!isCoe) {
+                    tdMatch.className = 'match-na';
+                    tdMatch.textContent = '—';
+                } else {
+                    let ok;
+                    if (row.kind === 'color') ok = rgbKey(resolved) === rgbKey(row.coe);
+                    else if (row.kind === 'family') ok = resolved.includes(row.coe);
+                    else ok = resolved === row.coe;
+                    tdMatch.className = ok ? 'match-ok' : 'match-ko';
+                    tdMatch.textContent = ok ? '✓ OK' : '✗ écart';
+                }
+
+                tr.append(tdSw, tdTok, tdVal, tdCoe, tdMatch);
+                body.appendChild(tr);
+            });
+        }
+
+        // ---- État courant + inspecteur ----
+        function render() {
+            const cs = getComputedStyle(root);
+            document.getElementById('s-theme').textContent = root.getAttribute('data-theme') || '(uikit-default)';
+            document.getElementById('s-scheme').textContent = root.getAttribute('data-scheme') || '(non posé)';
+            document.getElementById('s-supported').textContent = (cs.getPropertyValue('--supported-schemes') || '').trim() || '(défaut light dark)';
+            document.getElementById('s-pref').textContent = localStorage.getItem(UIKitTheme.STORAGE_KEY) || '(aucune)';
+            const toggle = document.querySelector('.bar [data-theme-toggle]');
+            document.getElementById('s-visible').textContent = toggle && !toggle.hidden ? 'oui' : 'non (masqué)';
+            renderInspector();
+        }
+
+        // ---- Matrice gelée : une iframe (vrai root) par cellule disponible ----
+        const CELLS = [
+            { theme: '',    scheme: 'light', label: 'uikit-default', attrs: 'data-scheme="light"' },
+            { theme: '',    scheme: 'dark',  label: 'uikit-default', attrs: 'data-scheme="dark"' },
+            { theme: 'coe', scheme: 'light', label: 'CoE',           attrs: 'data-theme="coe" data-scheme="light"' },
+        ];
+
+        function cellDoc(cell) {
+            const themeAttr = cell.theme ? ` data-theme="${cell.theme}"` : '';
+            // Document complet : root porte le thème → :root[data-theme="coe"] matche.
+            // Pas de dark-mode.js : rendu figé fidèle à la cellule demandée.
+            return `<!DOCTYPE html><html lang="fr"${themeAttr} data-scheme="${cell.scheme}"><head><meta charset="UTF-8">`
+                + `<link rel="stylesheet" href="${CSS_HREF}">`
+                + `<style>html,body{margin:0;}body{padding:16px;background:var(--color-bg-primary);color:var(--color-text-primary);font-family:var(--font-family-base);}</style>`
+                + `</head><body>${SAMPLE}</body></html>`;
+        }
+
+        function buildMatrix() {
+            const matrix = document.getElementById('matrix');
+            CELLS.forEach(cell => {
+                const wrap = document.createElement('div');
+                wrap.className = 'cell';
+
+                const head = document.createElement('div');
+                head.className = 'cell-head';
+                const strong = document.createElement('strong');
+                strong.textContent = cell.label;
+                const attrs = document.createElement('span');
+                attrs.className = 'attrs';
+                attrs.textContent = cell.attrs;
+                head.append(strong, attrs);
+
+                const iframe = document.createElement('iframe');
+                iframe.title = cell.label + ' × ' + cell.scheme;
+                iframe.setAttribute('scrolling', 'no');
+                iframe.srcdoc = cellDoc(cell);
+                // Ajuste la hauteur au contenu une fois la cellule rendue.
+                iframe.addEventListener('load', () => {
+                    try {
+                        const h = iframe.contentDocument.body.scrollHeight;
+                        iframe.style.height = (h + 4) + 'px';
+                    } catch (e) {
+                        iframe.style.height = '640px'; // repli si contentDocument inaccessible
+                    }
+                });
+
+                wrap.append(head, iframe);
+                matrix.appendChild(wrap);
+            });
+        }
+
+        // ---- Câblage ----
+        document.getElementById('live-sample').innerHTML = SAMPLE;
+        buildMatrix();
+        window.addEventListener('themechange', () => requestAnimationFrame(render));
+        document.addEventListener('DOMContentLoaded', render);
+        render();
+    </script>
+</body>
+</html>
