@@ -96,17 +96,19 @@
 }
 
 /* ============================================================================
- * TIER 2+3 — CONTRACT (tokens sémantiques) × MAPPING uikit-default · light
+ * TIER 2+3 — CONTRACT (tokens sémantiques) × MAPPING uikit-default
  *
  * Le CONTRAT (tier 2) est la liste stable et agnostique de tokens sémantiques
  * que les composants consomment — son inventaire canonique vit dans
  * css/token-contract.json (vérifié au build) et docs/token-contract.md.
  *
- * Le MAPPING (tier 3) ci-dessous câble chaque token du contrat sur une
- * primitive de uikit-default, de sorte que le rendu light actuel soit
- * reproduit À L'IDENTIQUE. Le scheme dark reste pour l'instant en override
- * legacy littéral plus bas ([data-theme="dark"]) — sa migration vers ce
- * mapping est une tranche ultérieure.
+ * Le MAPPING (tier 3) est piloté par l'axe SCHEME (data-scheme), orthogonal à
+ * l'axe THEME (data-theme = marque). Deux cellules pour uikit-default :
+ *   · light → le :root ci-dessous, câblé sur les primitives, reproduit le rendu
+ *     actuel À L'IDENTIQUE ;
+ *   · dark  → l'override [data-scheme="dark"] plus bas (valeurs littérales pour
+ *     l'instant, rendu dark reproduit à l'identique).
+ * Les deux cellules sont couvertes par le check de complétude (build-time).
  * ========================================================================== */
 :root {
     /* Brand / state (fixes light & dark) */
@@ -156,8 +158,8 @@
     --color-dark-hover: var(--color-neutral-850);
 }
 
-/* === DARK MODE === */
-[data-theme="dark"] {
+/* === SCHEME dark · uikit-default (mapping tier 3) === */
+[data-scheme="dark"] {
     --color-primary-light: #1a3a4f;
     --color-success-light: #1f3329;
     --color-warning-light: #3d2f00;
@@ -192,7 +194,7 @@
 
 /* Auto dark mode (suit les préférences système) */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
+    :root:not([data-scheme="light"]) {
         --color-primary-light: #1a3a4f;
         --color-success-light: #1f3329;
         --color-warning-light: #3d2f00;
@@ -4879,7 +4881,7 @@ nav[aria-label="Pagination"] {
     background: rgba(0, 0, 0, 0.1);
 }
 
-[data-theme="dark"] .badge-removable .badge-remove:hover {
+[data-scheme="dark"] .badge-removable .badge-remove:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
@@ -5405,37 +5407,37 @@ nav[aria-label="Pagination"] {
 }
 
 /* Dark mode: brighter text colors for better readability */
-[data-theme="dark"] .alert-info {
+[data-scheme="dark"] .alert-info {
     color: #6ba6e8;
 }
 
-[data-theme="dark"] .alert-success {
+[data-scheme="dark"] .alert-success {
     color: #7db46c;
 }
 
-[data-theme="dark"] .alert-warning {
+[data-scheme="dark"] .alert-warning {
     color: #f0b040;
 }
 
-[data-theme="dark"] .alert-danger {
+[data-scheme="dark"] .alert-danger {
     color: #ff8080;
 }
 
 /* Auto dark mode */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .alert-info {
+    :root:not([data-scheme="light"]) .alert-info {
         color: #6ba6e8;
     }
 
-    :root:not([data-theme="light"]) .alert-success {
+    :root:not([data-scheme="light"]) .alert-success {
         color: #7db46c;
     }
 
-    :root:not([data-theme="light"]) .alert-warning {
+    :root:not([data-scheme="light"]) .alert-warning {
         color: #f0b040;
     }
 
-    :root:not([data-theme="light"]) .alert-danger {
+    :root:not([data-scheme="light"]) .alert-danger {
         color: #ff8080;
     }
 }
@@ -6441,29 +6443,29 @@ nav[aria-label="Pagination"] {
 }
 
 /* Dark mode: brighter text colors for better readability */
-[data-theme="dark"] .log-entry.info {
+[data-scheme="dark"] .log-entry.info {
     color: #6ba6e8;
 }
 
-[data-theme="dark"] .log-entry.warn {
+[data-scheme="dark"] .log-entry.warn {
     color: #f0b040;
 }
 
-[data-theme="dark"] .log-entry.error {
+[data-scheme="dark"] .log-entry.error {
     color: #ff8080;
 }
 
 /* Auto dark mode */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .log-entry.info {
+    :root:not([data-scheme="light"]) .log-entry.info {
         color: #6ba6e8;
     }
 
-    :root:not([data-theme="light"]) .log-entry.warn {
+    :root:not([data-scheme="light"]) .log-entry.warn {
         color: #f0b040;
     }
 
-    :root:not([data-theme="light"]) .log-entry.error {
+    :root:not([data-scheme="light"]) .log-entry.error {
         color: #ff8080;
     }
 }
@@ -6519,29 +6521,29 @@ nav[aria-label="Pagination"] {
 }
 
 /* Dark mode legend colors */
-[data-theme="dark"] .legend-color.info {
+[data-scheme="dark"] .legend-color.info {
     background: #6ba6e8;
 }
 
-[data-theme="dark"] .legend-color.warn {
+[data-scheme="dark"] .legend-color.warn {
     background: #f0b040;
 }
 
-[data-theme="dark"] .legend-color.error {
+[data-scheme="dark"] .legend-color.error {
     background: #ff8080;
 }
 
 /* Auto dark mode */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .legend-color.info {
+    :root:not([data-scheme="light"]) .legend-color.info {
         background: #6ba6e8;
     }
 
-    :root:not([data-theme="light"]) .legend-color.warn {
+    :root:not([data-scheme="light"]) .legend-color.warn {
         background: #f0b040;
     }
 
-    :root:not([data-theme="light"]) .legend-color.error {
+    :root:not([data-scheme="light"]) .legend-color.error {
         background: #ff8080;
     }
 }
@@ -7134,20 +7136,20 @@ nav[aria-label="Pagination"] {
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .number-input {
+[data-scheme="dark"] .number-input {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .number-input-btn {
+[data-scheme="dark"] .number-input-btn {
     background: var(--color-bg-tertiary);
 }
 
-[data-theme="dark"] .number-input-btn:hover {
+[data-scheme="dark"] .number-input-btn:hover {
     background: var(--color-bg-hover);
 }
 
-[data-theme="dark"] .number-input-unit {
+[data-scheme="dark"] .number-input-unit {
     background: var(--color-bg-tertiary);
 }
 
@@ -7462,15 +7464,15 @@ nav[aria-label="Pagination"] {
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .tag {
+[data-scheme="dark"] .tag {
     background: var(--color-bg-tertiary);
 }
 
-[data-theme="dark"] .tag-remove:hover {
+[data-scheme="dark"] .tag-remove:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
-[data-theme="dark"] .tag-input {
+[data-scheme="dark"] .tag-input {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
@@ -7840,26 +7842,26 @@ nav[aria-label="Pagination"] {
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .file-input-btn {
+[data-scheme="dark"] .file-input-btn {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .file-input-text {
+[data-scheme="dark"] .file-input-text {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .dropzone {
+[data-scheme="dark"] .dropzone {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .file-item {
+[data-scheme="dark"] .file-item {
     background: var(--color-bg-tertiary);
 }
 
-[data-theme="dark"] .file-preview {
+[data-scheme="dark"] .file-preview {
     background: var(--color-bg-tertiary);
 }
 
@@ -8391,20 +8393,20 @@ nav[aria-label="Pagination"] {
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .dropdown-menu {
+[data-scheme="dark"] .dropdown-menu {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .dropdown-item:hover {
+[data-scheme="dark"] .dropdown-item:hover {
     background: var(--color-bg-hover);
 }
 
-[data-theme="dark"] .dropdown-divider {
+[data-scheme="dark"] .dropdown-divider {
     border-color: var(--color-border-medium);
 }
 
-[data-theme="dark"] .dropdown-search input {
+[data-scheme="dark"] .dropdown-search input {
     background: var(--color-bg-tertiary);
 }
 
@@ -9380,60 +9382,60 @@ nav[aria-label="Pagination"] {
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .popover {
+[data-scheme="dark"] .popover {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover::after {
+[data-scheme="dark"] .popover::after {
     border-top-color: var(--color-bg-secondary);
 }
 
-[data-theme="dark"] .popover-bottom::after {
+[data-scheme="dark"] .popover-bottom::after {
     border-top-color: transparent;
     border-bottom-color: var(--color-bg-secondary);
 }
 
-[data-theme="dark"] .popover-left::after {
+[data-scheme="dark"] .popover-left::after {
     border-left-color: var(--color-bg-secondary);
 }
 
-[data-theme="dark"] .popover-right::after {
+[data-scheme="dark"] .popover-right::after {
     border-right-color: var(--color-bg-secondary);
 }
 
-[data-theme="dark"] .popover::before {
+[data-scheme="dark"] .popover::before {
     border-top-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover-bottom::before {
+[data-scheme="dark"] .popover-bottom::before {
     border-top-color: transparent;
     border-bottom-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover-left::before {
+[data-scheme="dark"] .popover-left::before {
     border-left-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover-right::before {
+[data-scheme="dark"] .popover-right::before {
     border-right-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover-header {
+[data-scheme="dark"] .popover-header {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover-footer {
+[data-scheme="dark"] .popover-footer {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover-menu-item:hover {
+[data-scheme="dark"] .popover-menu-item:hover {
     background: var(--color-bg-hover);
 }
 
-[data-theme="dark"] .popover-menu-divider {
+[data-scheme="dark"] .popover-menu-divider {
     background: var(--color-border-dark);
 }
 
@@ -9646,15 +9648,15 @@ nav[aria-label="Pagination"] {
 
 /* === DARK MODE ADJUSTMENTS === */
 
-[data-theme="dark"] .segmented {
+[data-scheme="dark"] .segmented {
     background: var(--color-bg-tertiary);
 }
 
-[data-theme="dark"] .segmented-item.active {
+[data-scheme="dark"] .segmented-item.active {
     background: var(--color-bg-hover);
 }
 
-[data-theme="dark"] .segmented-bordered {
+[data-scheme="dark"] .segmented-bordered {
     background: transparent;
 }
 
@@ -10278,20 +10280,20 @@ nav[aria-label="Pagination"] {
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .empty-state-icon {
+[data-scheme="dark"] .empty-state-icon {
     background: var(--color-bg-tertiary);
 }
 
-[data-theme="dark"] .empty-state-bordered {
+[data-scheme="dark"] .empty-state-bordered {
     border-color: var(--color-border-dark);
     background: var(--color-bg-secondary);
 }
 
-[data-theme="dark"] .empty-state-filled {
+[data-scheme="dark"] .empty-state-filled {
     background: var(--color-bg-tertiary);
 }
 
-[data-theme="dark"] .empty-state-illustration {
+[data-scheme="dark"] .empty-state-illustration {
     opacity: 0.5;
 }
 
@@ -10697,16 +10699,16 @@ nav[aria-label="Pagination"] {
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .stepper-indicator {
+[data-scheme="dark"] .stepper-indicator {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .stepper-step:not(:last-child)::after {
+[data-scheme="dark"] .stepper-step:not(:last-child)::after {
     background: var(--color-border-dark);
 }
 
-[data-theme="dark"] .stepper-dotted .stepper-step:not(:last-child)::after {
+[data-scheme="dark"] .stepper-dotted .stepper-step:not(:last-child)::after {
     background-image: repeating-linear-gradient(
         to right,
         var(--color-border-dark) 0,
@@ -10716,7 +10718,7 @@ nav[aria-label="Pagination"] {
     );
 }
 
-[data-theme="dark"] .stepper-dotted.stepper-vertical .stepper-step:not(:last-child)::after {
+[data-scheme="dark"] .stepper-dotted.stepper-vertical .stepper-step:not(:last-child)::after {
     background-image: repeating-linear-gradient(
         to bottom,
         var(--color-border-dark) 0,
@@ -11186,29 +11188,29 @@ nav[aria-label="Pagination"] {
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .timeline::before {
+[data-scheme="dark"] .timeline::before {
     background: var(--color-border-dark);
 }
 
-[data-theme="dark"] .timeline-dotted::before {
+[data-scheme="dark"] .timeline-dotted::before {
     border-left-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .timeline-marker {
+[data-scheme="dark"] .timeline-marker {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .timeline-marker::before {
+[data-scheme="dark"] .timeline-marker::before {
     background: var(--color-border-medium);
 }
 
-[data-theme="dark"] .timeline-content {
+[data-scheme="dark"] .timeline-content {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .timeline-connected .timeline-content::before {
+[data-scheme="dark"] .timeline-connected .timeline-content::before {
     background: var(--color-border-dark);
 }
 
@@ -11665,36 +11667,36 @@ tr.selected .matrix-cell.active {
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .matrix {
+[data-scheme="dark"] .matrix {
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .matrix-cell {
+[data-scheme="dark"] .matrix-cell {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .matrix-cell.active {
+[data-scheme="dark"] .matrix-cell.active {
     background: var(--color-success);
 }
 
-[data-theme="dark"] .matrix-cell:hover {
+[data-scheme="dark"] .matrix-cell:hover {
     background: var(--color-bg-active);
 }
 
-[data-theme="dark"] .matrix-cell.available::after {
+[data-scheme="dark"] .matrix-cell.available::after {
     color: var(--color-text-secondary);
 }
 
-[data-theme="dark"] tr.selected .matrix-cell {
+[data-scheme="dark"] tr.selected .matrix-cell {
     background: var(--color-bg-active);
 }
 
-[data-theme="dark"] .matrix-cell.col-hover {
+[data-scheme="dark"] .matrix-cell.col-hover {
     background: var(--color-bg-active);
 }
 
-[data-theme="dark"] .matrix-device-cell {
+[data-scheme="dark"] .matrix-device-cell {
     border-left-color: var(--color-border-dark);
 }
 

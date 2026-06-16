@@ -44,6 +44,12 @@
       "scheme": "light",
       "selectors": [":root"],
       "categories": ["color"]
+    },
+    {
+      "theme": "uikit-default",
+      "scheme": "dark",
+      "selectors": [":root", "[data-scheme=\"dark\"]"],
+      "categories": ["color"]
     }
   ]
 }

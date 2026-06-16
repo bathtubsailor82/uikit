@@ -1,13 +1,20 @@
 /**
  * UIKit Dark Mode Toggle
- * Gère le basculement entre light/dark mode avec persistance localStorage
+ * Gère le basculement entre light/dark mode avec persistance localStorage.
+ *
+ * Le mode est porté par l'axe SCHEME (attribut `data-scheme`), orthogonal à
+ * l'axe THEME (`data-theme` = marque). Ce toggle ne pilote que le scheme.
+ * Le composant theme-toggle dédié (icônes sun/moon, réactif aux schemes
+ * supportés du thème actif) est introduit dans une tranche ultérieure ; l'API
+ * publique (window.UIKitTheme), l'event `themechange` et les hooks
+ * `data-theme-toggle` restent inchangés ici pour ne pas casser les démos.
  */
 
 (function() {
     'use strict';
 
     const STORAGE_KEY = 'uikit-theme';
-    const THEME_ATTR = 'data-theme';
+    const SCHEME_ATTR = 'data-scheme';
 
     // Récupère le thème depuis localStorage ou détecte les préférences système
     function getInitialTheme() {
@@ -24,12 +31,12 @@
         return 'light';
     }
 
-    // Applique le thème
+    // Applique le thème (= scheme : light/dark)
     function setTheme(theme) {
         if (theme === 'dark') {
-            document.documentElement.setAttribute(THEME_ATTR, 'dark');
+            document.documentElement.setAttribute(SCHEME_ATTR, 'dark');
         } else {
-            document.documentElement.setAttribute(THEME_ATTR, 'light');
+            document.documentElement.setAttribute(SCHEME_ATTR, 'light');
         }
 
         localStorage.setItem(STORAGE_KEY, theme);
@@ -40,7 +47,7 @@
 
     // Bascule entre light et dark
     function toggleTheme() {
-        const current = document.documentElement.getAttribute(THEME_ATTR);
+        const current = document.documentElement.getAttribute(SCHEME_ATTR);
         const newTheme = current === 'dark' ? 'light' : 'dark';
         setTheme(newTheme);
         return newTheme;
@@ -48,7 +55,7 @@
 
     // Obtient le thème actuel
     function getCurrentTheme() {
-        return document.documentElement.getAttribute(THEME_ATTR) || 'light';
+        return document.documentElement.getAttribute(SCHEME_ATTR) || 'light';
     }
 
     // Initialise le thème au chargement de la page

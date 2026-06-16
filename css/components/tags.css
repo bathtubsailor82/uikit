@@ -308,15 +308,15 @@
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .tag {
+[data-scheme="dark"] .tag {
     background: var(--color-bg-tertiary);
 }
 
-[data-theme="dark"] .tag-remove:hover {
+[data-scheme="dark"] .tag-remove:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
-[data-theme="dark"] .tag-input {
+[data-scheme="dark"] .tag-input {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }

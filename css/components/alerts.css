@@ -85,37 +85,37 @@
 }
 
 /* Dark mode: brighter text colors for better readability */
-[data-theme="dark"] .alert-info {
+[data-scheme="dark"] .alert-info {
     color: #6ba6e8;
 }
 
-[data-theme="dark"] .alert-success {
+[data-scheme="dark"] .alert-success {
     color: #7db46c;
 }
 
-[data-theme="dark"] .alert-warning {
+[data-scheme="dark"] .alert-warning {
     color: #f0b040;
 }
 
-[data-theme="dark"] .alert-danger {
+[data-scheme="dark"] .alert-danger {
     color: #ff8080;
 }
 
 /* Auto dark mode */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .alert-info {
+    :root:not([data-scheme="light"]) .alert-info {
         color: #6ba6e8;
     }
 
-    :root:not([data-theme="light"]) .alert-success {
+    :root:not([data-scheme="light"]) .alert-success {
         color: #7db46c;
     }
 
-    :root:not([data-theme="light"]) .alert-warning {
+    :root:not([data-scheme="light"]) .alert-warning {
         color: #f0b040;
     }
 
-    :root:not([data-theme="light"]) .alert-danger {
+    :root:not([data-scheme="light"]) .alert-danger {
         color: #ff8080;
     }
 }

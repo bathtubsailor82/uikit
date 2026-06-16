@@ -206,14 +206,14 @@
 
 /* === DARK MODE ADJUSTMENTS === */
 
-[data-theme="dark"] .segmented {
+[data-scheme="dark"] .segmented {
     background: var(--color-bg-tertiary);
 }
 
-[data-theme="dark"] .segmented-item.active {
+[data-scheme="dark"] .segmented-item.active {
     background: var(--color-bg-hover);
 }
 
-[data-theme="dark"] .segmented-bordered {
+[data-scheme="dark"] .segmented-bordered {
     background: transparent;
 }

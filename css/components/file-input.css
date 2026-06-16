@@ -362,25 +362,25 @@
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .file-input-btn {
+[data-scheme="dark"] .file-input-btn {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .file-input-text {
+[data-scheme="dark"] .file-input-text {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .dropzone {
+[data-scheme="dark"] .dropzone {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .file-item {
+[data-scheme="dark"] .file-item {
     background: var(--color-bg-tertiary);
 }
 
-[data-theme="dark"] .file-preview {
+[data-scheme="dark"] .file-preview {
     background: var(--color-bg-tertiary);
 }

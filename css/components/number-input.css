@@ -226,19 +226,19 @@
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .number-input {
+[data-scheme="dark"] .number-input {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .number-input-btn {
+[data-scheme="dark"] .number-input-btn {
     background: var(--color-bg-tertiary);
 }
 
-[data-theme="dark"] .number-input-btn:hover {
+[data-scheme="dark"] .number-input-btn:hover {
     background: var(--color-bg-hover);
 }
 
-[data-theme="dark"] .number-input-unit {
+[data-scheme="dark"] .number-input-unit {
     background: var(--color-bg-tertiary);
 }

@@ -622,59 +622,59 @@
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .popover {
+[data-scheme="dark"] .popover {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover::after {
+[data-scheme="dark"] .popover::after {
     border-top-color: var(--color-bg-secondary);
 }
 
-[data-theme="dark"] .popover-bottom::after {
+[data-scheme="dark"] .popover-bottom::after {
     border-top-color: transparent;
     border-bottom-color: var(--color-bg-secondary);
 }
 
-[data-theme="dark"] .popover-left::after {
+[data-scheme="dark"] .popover-left::after {
     border-left-color: var(--color-bg-secondary);
 }
 
-[data-theme="dark"] .popover-right::after {
+[data-scheme="dark"] .popover-right::after {
     border-right-color: var(--color-bg-secondary);
 }
 
-[data-theme="dark"] .popover::before {
+[data-scheme="dark"] .popover::before {
     border-top-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover-bottom::before {
+[data-scheme="dark"] .popover-bottom::before {
     border-top-color: transparent;
     border-bottom-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover-left::before {
+[data-scheme="dark"] .popover-left::before {
     border-left-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover-right::before {
+[data-scheme="dark"] .popover-right::before {
     border-right-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover-header {
+[data-scheme="dark"] .popover-header {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover-footer {
+[data-scheme="dark"] .popover-footer {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .popover-menu-item:hover {
+[data-scheme="dark"] .popover-menu-item:hover {
     background: var(--color-bg-hover);
 }
 
-[data-theme="dark"] .popover-menu-divider {
+[data-scheme="dark"] .popover-menu-divider {
     background: var(--color-border-dark);
 }

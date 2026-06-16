@@ -333,19 +333,19 @@
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .dropdown-menu {
+[data-scheme="dark"] .dropdown-menu {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .dropdown-item:hover {
+[data-scheme="dark"] .dropdown-item:hover {
     background: var(--color-bg-hover);
 }
 
-[data-theme="dark"] .dropdown-divider {
+[data-scheme="dark"] .dropdown-divider {
     border-color: var(--color-border-medium);
 }
 
-[data-theme="dark"] .dropdown-search input {
+[data-scheme="dark"] .dropdown-search input {
     background: var(--color-bg-tertiary);
 }

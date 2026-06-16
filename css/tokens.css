@@ -95,17 +95,19 @@
 }
 
 /* ============================================================================
- * TIER 2+3 — CONTRACT (tokens sémantiques) × MAPPING uikit-default · light
+ * TIER 2+3 — CONTRACT (tokens sémantiques) × MAPPING uikit-default
  *
  * Le CONTRAT (tier 2) est la liste stable et agnostique de tokens sémantiques
  * que les composants consomment — son inventaire canonique vit dans
  * css/token-contract.json (vérifié au build) et docs/token-contract.md.
  *
- * Le MAPPING (tier 3) ci-dessous câble chaque token du contrat sur une
- * primitive de uikit-default, de sorte que le rendu light actuel soit
- * reproduit À L'IDENTIQUE. Le scheme dark reste pour l'instant en override
- * legacy littéral plus bas ([data-theme="dark"]) — sa migration vers ce
- * mapping est une tranche ultérieure.
+ * Le MAPPING (tier 3) est piloté par l'axe SCHEME (data-scheme), orthogonal à
+ * l'axe THEME (data-theme = marque). Deux cellules pour uikit-default :
+ *   · light → le :root ci-dessous, câblé sur les primitives, reproduit le rendu
+ *     actuel À L'IDENTIQUE ;
+ *   · dark  → l'override [data-scheme="dark"] plus bas (valeurs littérales pour
+ *     l'instant, rendu dark reproduit à l'identique).
+ * Les deux cellules sont couvertes par le check de complétude (build-time).
  * ========================================================================== */
 :root {
     /* Brand / state (fixes light & dark) */
@@ -155,8 +157,8 @@
     --color-dark-hover: var(--color-neutral-850);
 }
 
-/* === DARK MODE === */
-[data-theme="dark"] {
+/* === SCHEME dark · uikit-default (mapping tier 3) === */
+[data-scheme="dark"] {
     --color-primary-light: #1a3a4f;
     --color-success-light: #1f3329;
     --color-warning-light: #3d2f00;
@@ -191,7 +193,7 @@
 
 /* Auto dark mode (suit les préférences système) */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
+    :root:not([data-scheme="light"]) {
         --color-primary-light: #1a3a4f;
         --color-success-light: #1f3329;
         --color-warning-light: #3d2f00;

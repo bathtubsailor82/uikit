@@ -50,29 +50,29 @@
 }
 
 /* Dark mode: brighter text colors for better readability */
-[data-theme="dark"] .log-entry.info {
+[data-scheme="dark"] .log-entry.info {
     color: #6ba6e8;
 }
 
-[data-theme="dark"] .log-entry.warn {
+[data-scheme="dark"] .log-entry.warn {
     color: #f0b040;
 }
 
-[data-theme="dark"] .log-entry.error {
+[data-scheme="dark"] .log-entry.error {
     color: #ff8080;
 }
 
 /* Auto dark mode */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .log-entry.info {
+    :root:not([data-scheme="light"]) .log-entry.info {
         color: #6ba6e8;
     }
 
-    :root:not([data-theme="light"]) .log-entry.warn {
+    :root:not([data-scheme="light"]) .log-entry.warn {
         color: #f0b040;
     }
 
-    :root:not([data-theme="light"]) .log-entry.error {
+    :root:not([data-scheme="light"]) .log-entry.error {
         color: #ff8080;
     }
 }
@@ -128,29 +128,29 @@
 }
 
 /* Dark mode legend colors */
-[data-theme="dark"] .legend-color.info {
+[data-scheme="dark"] .legend-color.info {
     background: #6ba6e8;
 }
 
-[data-theme="dark"] .legend-color.warn {
+[data-scheme="dark"] .legend-color.warn {
     background: #f0b040;
 }
 
-[data-theme="dark"] .legend-color.error {
+[data-scheme="dark"] .legend-color.error {
     background: #ff8080;
 }
 
 /* Auto dark mode */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .legend-color.info {
+    :root:not([data-scheme="light"]) .legend-color.info {
         background: #6ba6e8;
     }
 
-    :root:not([data-theme="light"]) .legend-color.warn {
+    :root:not([data-scheme="light"]) .legend-color.warn {
         background: #f0b040;
     }
 
-    :root:not([data-theme="light"]) .legend-color.error {
+    :root:not([data-scheme="light"]) .legend-color.error {
         background: #ff8080;
     }
 }

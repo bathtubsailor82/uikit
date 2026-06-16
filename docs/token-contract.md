@@ -31,14 +31,19 @@ besoin démontré (les `--form-*` / `--action-*` de CoE entreront au cas par cas
 
 ## Matrice thème × scheme
 
-| Thème           | Scheme  | Statut        | Sélecteur(s) |
-| --------------- | ------- | ------------- | ------------ |
-| `uikit-default` | `light` | ✅ vérifié    | `:root`      |
-| `uikit-default` | `dark`  | ⏳ legacy¹     | —            |
+Le mode est porté par l'axe **scheme** (`data-scheme`), distinct de l'axe
+**theme** / marque (`data-theme`) — cf. [ADR-0002](adr/0002-selection-theme-scheme.md).
 
-¹ Le dark existe en override littéral (`[data-theme="dark"]`) mais n'est pas
-encore migré vers le mapping primitives → contrat ni couvert par le check
-(tranche suivante). La matrice est **creuse** par conception (ADR-0002).
+| Thème           | Scheme  | Statut     | Sélecteur(s)                    |
+| --------------- | ------- | ---------- | ------------------------------- |
+| `uikit-default` | `light` | ✅ vérifié | `:root`                         |
+| `uikit-default` | `dark`  | ✅ vérifié | `:root`, `[data-scheme="dark"]` |
+
+Le dark de `uikit-default` est appliqué via `[data-scheme="dark"]` et couvert
+par le check sur les deux cellules. Ses valeurs sont pour l'instant littérales
+(rendu reproduit à l'identique) ; leur extraction en primitives dark reste
+possible plus tard sans rework. La matrice est **creuse** par conception
+(ADR-0002) : un thème ne fournit que les schemes qu'il supporte.
 
 ## Tokens du contrat — couleur
 

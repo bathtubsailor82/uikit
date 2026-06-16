@@ -370,19 +370,19 @@
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .empty-state-icon {
+[data-scheme="dark"] .empty-state-icon {
     background: var(--color-bg-tertiary);
 }
 
-[data-theme="dark"] .empty-state-bordered {
+[data-scheme="dark"] .empty-state-bordered {
     border-color: var(--color-border-dark);
     background: var(--color-bg-secondary);
 }
 
-[data-theme="dark"] .empty-state-filled {
+[data-scheme="dark"] .empty-state-filled {
     background: var(--color-bg-tertiary);
 }
 
-[data-theme="dark"] .empty-state-illustration {
+[data-scheme="dark"] .empty-state-illustration {
     opacity: 0.5;
 }

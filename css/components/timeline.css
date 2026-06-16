@@ -457,28 +457,28 @@
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .timeline::before {
+[data-scheme="dark"] .timeline::before {
     background: var(--color-border-dark);
 }
 
-[data-theme="dark"] .timeline-dotted::before {
+[data-scheme="dark"] .timeline-dotted::before {
     border-left-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .timeline-marker {
+[data-scheme="dark"] .timeline-marker {
     background: var(--color-bg-secondary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .timeline-marker::before {
+[data-scheme="dark"] .timeline-marker::before {
     background: var(--color-border-medium);
 }
 
-[data-theme="dark"] .timeline-content {
+[data-scheme="dark"] .timeline-content {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .timeline-connected .timeline-content::before {
+[data-scheme="dark"] .timeline-connected .timeline-content::before {
     background: var(--color-border-dark);
 }

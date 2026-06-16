@@ -450,35 +450,35 @@ tr.selected .matrix-cell.active {
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .matrix {
+[data-scheme="dark"] .matrix {
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .matrix-cell {
+[data-scheme="dark"] .matrix-cell {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .matrix-cell.active {
+[data-scheme="dark"] .matrix-cell.active {
     background: var(--color-success);
 }
 
-[data-theme="dark"] .matrix-cell:hover {
+[data-scheme="dark"] .matrix-cell:hover {
     background: var(--color-bg-active);
 }
 
-[data-theme="dark"] .matrix-cell.available::after {
+[data-scheme="dark"] .matrix-cell.available::after {
     color: var(--color-text-secondary);
 }
 
-[data-theme="dark"] tr.selected .matrix-cell {
+[data-scheme="dark"] tr.selected .matrix-cell {
     background: var(--color-bg-active);
 }
 
-[data-theme="dark"] .matrix-cell.col-hover {
+[data-scheme="dark"] .matrix-cell.col-hover {
     background: var(--color-bg-active);
 }
 
-[data-theme="dark"] .matrix-device-cell {
+[data-scheme="dark"] .matrix-device-cell {
     border-left-color: var(--color-border-dark);
 }

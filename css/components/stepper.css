@@ -399,16 +399,16 @@
 
 /* === DARK MODE === */
 
-[data-theme="dark"] .stepper-indicator {
+[data-scheme="dark"] .stepper-indicator {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
 }
 
-[data-theme="dark"] .stepper-step:not(:last-child)::after {
+[data-scheme="dark"] .stepper-step:not(:last-child)::after {
     background: var(--color-border-dark);
 }
 
-[data-theme="dark"] .stepper-dotted .stepper-step:not(:last-child)::after {
+[data-scheme="dark"] .stepper-dotted .stepper-step:not(:last-child)::after {
     background-image: repeating-linear-gradient(
         to right,
         var(--color-border-dark) 0,
@@ -418,7 +418,7 @@
     );
 }
 
-[data-theme="dark"] .stepper-dotted.stepper-vertical .stepper-step:not(:last-child)::after {
+[data-scheme="dark"] .stepper-dotted.stepper-vertical .stepper-step:not(:last-child)::after {
     background-image: repeating-linear-gradient(
         to bottom,
         var(--color-border-dark) 0,
