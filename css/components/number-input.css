@@ -9,7 +9,7 @@
     display: inline-flex;
     align-items: stretch;
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     background: var(--color-bg-primary);
     overflow: hidden;
 }
@@ -86,7 +86,7 @@
 /* === SIZES === */
 
 .number-input-sm {
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
 }
 
 .number-input-sm input {
@@ -101,7 +101,7 @@
 }
 
 .number-input-lg {
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
 }
 
 .number-input-lg input {

@@ -189,14 +189,14 @@
 /* Bordered */
 .empty-state-bordered {
     border: var(--border-width) dashed var(--color-border-medium);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     background: var(--color-bg-secondary);
 }
 
 /* Filled */
 .empty-state-filled {
     background: var(--color-bg-secondary);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
 }
 
 /* Inline (minimal padding, for use in tables, lists, etc.) */

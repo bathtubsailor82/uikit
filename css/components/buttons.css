@@ -6,7 +6,7 @@
     padding: var(--spacing-3) var(--spacing-4);
     border: var(--border-width) solid var(--color-border-medium);
     background: var(--color-bg-primary);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-medium);
     color: var(--color-text-primary);
@@ -185,14 +185,14 @@
 }
 
 .btn-group .btn:first-child {
-    border-top-left-radius: var(--border-radius-md);
-    border-bottom-left-radius: var(--border-radius-md);
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
     margin-left: 0;
 }
 
 .btn-group .btn:last-child {
-    border-top-right-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
 }
 
 .btn-group .btn:hover,
@@ -214,14 +214,14 @@
 }
 
 .btn-group-vertical .btn:first-child {
-    border-top-left-radius: var(--border-radius-md);
-    border-top-right-radius: var(--border-radius-md);
+    border-top-left-radius: var(--radius-md);
+    border-top-right-radius: var(--radius-md);
     margin-top: 0;
 }
 
 .btn-group-vertical .btn:last-child {
-    border-bottom-left-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
 }
 
 .btn-group-vertical .btn:hover,
@@ -348,7 +348,7 @@
 /* === PILL VARIANT === */
 
 .btn-pill {
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
 }
 
 .btn-group .btn-pill:first-child {
@@ -375,7 +375,7 @@
     height: 32px;
     padding: 0;
     border: var(--border-width) solid transparent;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     cursor: pointer;
     transition: all var(--transition-base);
     position: relative;

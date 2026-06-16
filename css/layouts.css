@@ -14,7 +14,7 @@
     font-weight: var(--font-weight-medium);
     color: var(--color-text-white);
     padding: var(--spacing-6);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 .layout-demo-header { background: #5a90c7; }

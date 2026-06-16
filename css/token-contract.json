@@ -1,7 +1,7 @@
 {
   "$comment": "SOURCE DE VÉRITÉ du contrat de tokens sémantiques. Le check build-time (scripts/check-token-contract.mjs) lit ce fichier et vérifie, pour chaque cellule de la matrice, que CHAQUE token du contrat résout (aucun var() pendant, aucun token non mappé). Doc humaine : docs/token-contract.md. Le contrat est un superset discipliné : il grandit cellule par cellule, jamais spéculativement (ADR-0001).",
   "version": 1,
-  "scope": "color, typography",
+  "scope": "color, typography, radius",
   "contract": {
     "color": [
       "--color-primary",
@@ -47,6 +47,13 @@
       "--font-size-lg",
       "--font-size-xl",
       "--font-size-2xl"
+    ],
+    "radius": [
+      "--radius-sm",
+      "--radius-md",
+      "--radius-lg",
+      "--radius-xl",
+      "--radius-full"
     ]
   },
   "matrix": [
@@ -54,19 +61,19 @@
       "theme": "uikit-default",
       "scheme": "light",
       "selectors": [":root"],
-      "categories": ["color", "typography"]
+      "categories": ["color", "typography", "radius"]
     },
     {
       "theme": "uikit-default",
       "scheme": "dark",
       "selectors": [":root", "[data-scheme=\"dark\"]"],
-      "categories": ["color", "typography"]
+      "categories": ["color", "typography", "radius"]
     },
     {
       "theme": "coe",
       "scheme": "light",
       "selectors": [":root", ":root[data-theme=\"coe\"]"],
-      "categories": ["color", "typography"]
+      "categories": ["color", "typography", "radius"]
     }
   ]
 }

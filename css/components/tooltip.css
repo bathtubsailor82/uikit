@@ -19,7 +19,7 @@
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-base);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     white-space: nowrap;
     pointer-events: none;
     opacity: 0;
@@ -328,7 +328,7 @@
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-base);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     white-space: nowrap;
     pointer-events: none;
     opacity: 0;

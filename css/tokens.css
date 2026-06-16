@@ -409,6 +409,28 @@
     --font-size-lg:   var(--coe-type-15);
     --font-size-xl:   var(--coe-type-20);
     --font-size-2xl:  var(--coe-type-24);
+
+    /* --- TIER 1 — PRIMITIVES RADIUS CoE (échelle de la charte Figma DS CoE) ---
+     *
+     * Échelle plus généreuse que uikit-default. Valeurs fidèles à la charte
+     * (export Figma : « Radius » sm/md/lg/xl/xxl). --coe-radius-xxl est importé
+     * pour rester fidèle à l'échelle complète mais N'EST PAS au contrat (aucun
+     * composant ne le consomme — superset discipliné, ADR-0001). --- */
+    --coe-radius-sm:  2px;
+    --coe-radius-md:  4px;
+    --coe-radius-lg:  8px;
+    --coe-radius-xl:  12px;
+    --coe-radius-xxl: 16px;
+
+    /* --- TIER 2+3 — MAPPING du contrat radius sur les primitives CoE ---
+     *
+     * --radius-full (pilule) et le « no-radius » 0 sont des sentinels
+     * géométriques cross-thème : --radius-full reste hérité de :root (9999px),
+     * non remappé ici (les pilules CoE restent des pilules). --- */
+    --radius-sm: var(--coe-radius-sm);   /* 2px */
+    --radius-md: var(--coe-radius-md);   /* 4px */
+    --radius-lg: var(--coe-radius-lg);   /* 8px */
+    --radius-xl: var(--coe-radius-xl);   /* 12px */
 }
 
 :root {
@@ -482,16 +504,47 @@
     --spacing-10: 20px;
     --spacing-12: 24px;
 
-    /* === BORDURES === */
+    /* === BORDURES (épaisseurs — hors contrat, constantes cross-thème) === */
 
     --border-width: 1px;
     --border-width-thick: 2px;
     --border-width-accent: 3px;
 
-    --border-radius-sm: 2px;
-    --border-radius-md: 3px;
-    --border-radius-lg: 4px;
-    --border-radius-xl: 6px;
+    /* ========================================================================
+     * TIER 1 — PRIMITIVES RADIUS (thème uikit-default)
+     *
+     * Échelle brute PROPRE À CE THÈME, keyée par valeur px (même esprit que
+     * --type-* / --color-blue-*). Jamais consommée par un composant : elle
+     * n'alimente que le contrat radius (tier 2+3 ci-dessous). Un autre thème
+     * (CoE) fournit SES primitives radius (--coe-radius-*).
+     * Remplace les anciens --border-radius-* (renommés en contrat --radius-*).
+     * ===================================================================== */
+
+    --radius-2: 2px;
+    --radius-3: 3px;
+    --radius-4: 4px;
+    --radius-6: 6px;
+
+    /* ========================================================================
+     * TIER 2+3 — CONTRACT RADIUS × MAPPING uikit-default
+     *
+     * Échelle sémantique du contrat (token-contract.json, catégorie "radius") ;
+     * SEULS ces noms sont consommés par les composants. Le radius ne varie pas
+     * selon le SCHEME → un seul mapping en :root, hérité tel quel par la cellule
+     * dark. uikit-default reproduit le rendu radius actuel À L'IDENTIQUE
+     * (sm=2 / md=3 / lg=4 / xl=6, ex-anciens --border-radius-*).
+     *
+     * --radius-full = sentinel géométrique (pilule / fully rounded) : constante
+     * cross-thème, héritée par CoE (les pilules restent des pilules quelle que
+     * soit la marque, comme les cercles 50%). Le « no-radius » reste le littéral
+     * 0 dans les composants (non thémé, brand-neutral) → pas de token --radius-none.
+     * ===================================================================== */
+
+    --radius-sm:   var(--radius-2);   /* 2px */
+    --radius-md:   var(--radius-3);   /* 3px */
+    --radius-lg:   var(--radius-4);   /* 4px */
+    --radius-xl:   var(--radius-6);   /* 6px */
+    --radius-full: 9999px;            /* pilule / fully rounded */
 
     /* === OMBRES === */
 

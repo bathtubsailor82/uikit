@@ -27,7 +27,7 @@ besoin démontré (les `--form-*` / `--action-*` de CoE entreront au cas par cas
 
 - **Couleur** : implémentée. 32 tokens, ci-dessous.
 - **Typographie** (famille + échelle) : implémentée. 9 tokens, ci-dessous.
-- **Radius** : prévu, pas encore au contrat.
+- **Radius** : implémentée. 5 tokens, ci-dessous.
 - **Spacing** : tier réservé, hors v1.
 - **Audio** (atoms skeuomorphiques + `audio-track`) et **entity colors** : hors
   contrat, non thémables. Les composants Audio gardent leurs polices inlinées.
@@ -52,9 +52,10 @@ possible plus tard sans rework. La matrice est **creuse** par conception
 (ADR-0002) : un thème ne fournit que les schemes qu'il supporte.
 
 **CoE** (`<html data-theme="coe">`) est la première marque non-default : elle
-câble les 32 tokens couleur **et les 9 tokens typo** sur ses propres primitives
-(`--coe-*`, échelles de la charte ; typo = **Open Sans** + échelle Figma DS CoE),
-sans modifier un seul composant. CoE est **light-only** ; son
+câble les 32 tokens couleur, **les 9 tokens typo et les 5 tokens radius** sur ses
+propres primitives (`--coe-*`, échelles de la charte ; typo = **Open Sans** +
+échelle Figma DS CoE ; radius = échelle `--coe-radius-*` de la charte, plus
+généreuse), sans modifier un seul composant. CoE est **light-only** ; son
 sélecteur `:root[data-theme="coe"]` (spécificité 0,2,0) bat volontairement le
 fallback `@media (prefers-color-scheme: dark)` pour ne jamais basculer en dark
 auto. Le manifeste `--supported-schemes` et l'adaptation du toggle (case
@@ -119,6 +120,32 @@ la charte (la taille de corps, `--font-size-lg` du `<body>`, tombe sur le
 
 > Open Sans est une web font : l'app consommatrice doit la charger (`<link>` /
 > `@font-face`). Le stack de repli système assure un rendu dégradé propre.
+
+## Tokens du contrat — radius
+
+Échelle de rayons de coins. Les composants consomment ces noms (jamais les
+primitives `--radius-2/3/4/6` d'uikit-default ni `--coe-radius-*` de CoE). Le
+radius **ne varie pas selon le scheme** (un seul mapping en `:root`, hérité par
+la cellule dark). `uikit-default` reproduit le rendu radius actuel à l'identique
+(ex-`--border-radius-*`) ; `coe` remappe sur l'échelle plus généreuse de la
+charte.
+
+| Token sémantique | Rôle                            | uikit-default | coe    |
+| ---------------- | ------------------------------- | ------------- | ------ |
+| `--radius-sm`    | Petit (puces, swatches, inputs) | 2px           | 2px    |
+| `--radius-md`    | Moyen (défaut cartes/boutons)   | 3px           | 4px    |
+| `--radius-lg`    | Grand (modales, panneaux)       | 4px           | 8px    |
+| `--radius-xl`    | Très grand                      | 6px           | 12px   |
+| `--radius-full`  | Pilule / fully rounded          | 9999px        | 9999px |
+
+> `--radius-full` est un **sentinel géométrique** (pilule), constante
+> cross-thème héritée de `:root` : une pilule reste une pilule quelle que soit la
+> marque — au même titre que les cercles `border-radius: 50%`. Le « no-radius »
+> reste le littéral `0` dans les composants (square reset, non thémé) → pas de
+> token `--radius-none`. Les atoms Audio skeuomorphiques (`button`, `led`,
+> `rotary`, `record-button`, `timer`, `audio-track`) gardent leurs rayons inlinés
+> (hors contrat, ADR-0001). La charte CoE définit aussi `--coe-radius-xxl` (16px),
+> importé comme primitive mais **hors contrat** (aucun composant ne le consomme).
 
 ## Faire grandir le contrat
 

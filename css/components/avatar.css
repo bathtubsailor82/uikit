@@ -83,7 +83,7 @@
 /* === AVATAR SHAPES === */
 
 .avatar-rounded {
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 .avatar-square {
@@ -285,7 +285,7 @@
     color: var(--color-text-white);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
-    border-radius: 9px;
+    border-radius: var(--radius-full);
     border: 2px solid var(--color-bg-primary);
 }
 

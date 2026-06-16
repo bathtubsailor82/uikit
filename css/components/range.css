@@ -321,7 +321,7 @@
     background: var(--color-dark);
     color: var(--color-text-white);
     padding: var(--spacing-1) var(--spacing-2);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     font-size: var(--font-size-sm);
     font-family: var(--font-family-mono);
     white-space: nowrap;

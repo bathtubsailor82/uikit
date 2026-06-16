@@ -7,7 +7,7 @@
     padding: var(--spacing-1) var(--spacing-2);
     background: var(--color-bg-hover);
     color: var(--color-text-secondary);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     text-transform: uppercase;
@@ -78,7 +78,7 @@
     padding: var(--spacing-1) var(--spacing-3);
     background: var(--color-primary-light);
     color: var(--color-info);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     text-transform: uppercase;
@@ -160,7 +160,7 @@
     padding: 0 var(--spacing-2);
     background: var(--color-danger);
     color: var(--color-text-white);
-    border-radius: 9px;
+    border-radius: var(--radius-full);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     line-height: 1;
@@ -171,7 +171,7 @@
     min-width: 14px;
     height: 14px;
     padding: 0 var(--spacing-1);
-    border-radius: 7px;
+    border-radius: var(--radius-full);
     font-size: 8px;
 }
 
@@ -179,7 +179,7 @@
     min-width: 22px;
     height: 22px;
     padding: 0 var(--spacing-3);
-    border-radius: 11px;
+    border-radius: var(--radius-full);
     font-size: var(--font-size-sm);
 }
 
@@ -199,7 +199,7 @@
 /* === BADGE PILL (fully rounded) === */
 
 .badge-pill {
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
     padding: var(--spacing-1) var(--spacing-3);
 }
 

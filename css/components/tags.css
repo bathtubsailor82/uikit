@@ -12,7 +12,7 @@
     padding: var(--spacing-1) var(--spacing-2);
     background: var(--color-bg-hover);
     color: var(--color-text-primary);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     line-height: 1.2;
@@ -25,13 +25,13 @@
 .tag-sm {
     padding: 2px var(--spacing-1);
     font-size: var(--font-size-xs);
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
 }
 
 .tag-lg {
     padding: var(--spacing-2) var(--spacing-3);
     font-size: var(--font-size-base);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 /* === COLOR VARIANTS === */
@@ -117,7 +117,7 @@
 /* === PILL (fully rounded) === */
 
 .tag-pill {
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
     padding-left: var(--spacing-3);
     padding-right: var(--spacing-3);
 }
@@ -220,7 +220,7 @@
     padding: var(--spacing-2);
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     cursor: text;
 }
 

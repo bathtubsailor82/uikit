@@ -28,7 +28,7 @@
     padding: var(--spacing-2) var(--spacing-4);
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-base);
     color: var(--color-text-primary);
     cursor: pointer;
@@ -63,8 +63,8 @@
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-medium);
     border-left: none;
-    border-top-right-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
     font-size: var(--font-size-base);
     color: var(--color-text-tertiary);
     white-space: nowrap;
@@ -87,7 +87,7 @@
     padding: var(--spacing-8);
     background: var(--color-bg-secondary);
     border: 2px dashed var(--color-border-medium);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     text-align: center;
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -177,7 +177,7 @@
     gap: var(--spacing-3);
     padding: var(--spacing-2) var(--spacing-3);
     background: var(--color-bg-secondary);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 .file-item-icon {
@@ -188,7 +188,7 @@
     align-items: center;
     justify-content: center;
     background: var(--color-bg-hover);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     color: var(--color-text-tertiary);
     font-size: var(--font-size-lg);
 }
@@ -219,7 +219,7 @@
     padding: 0;
     background: transparent;
     border: none;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     color: var(--color-text-tertiary);
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -255,14 +255,14 @@
 .file-item-progress .progress {
     height: 4px;
     background: var(--color-bg-hover);
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
 }
 
 .file-item-progress .progress-bar {
     height: 100%;
     background: var(--color-primary);
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     transition: width var(--transition-base);
 }
 
@@ -278,7 +278,7 @@
 .file-preview {
     position: relative;
     aspect-ratio: 1;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     overflow: hidden;
     background: var(--color-bg-secondary);
 }

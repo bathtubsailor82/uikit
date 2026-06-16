@@ -32,7 +32,7 @@
     color: var(--color-text-primary);
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     transition: all var(--transition-base);
 }
 
@@ -183,13 +183,13 @@
 }
 
 .input-group .form-input:first-child {
-    border-top-left-radius: var(--border-radius-md);
-    border-bottom-left-radius: var(--border-radius-md);
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
 }
 
 .input-group .form-input:last-child {
-    border-top-right-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
 }
 
 .input-group-prepend,
@@ -206,14 +206,14 @@
 
 .input-group-prepend {
     border-right: none;
-    border-top-left-radius: var(--border-radius-md);
-    border-bottom-left-radius: var(--border-radius-md);
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
 }
 
 .input-group-append {
     border-left: none;
-    border-top-right-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
 }
 
 .input-group .form-input:not(:first-child) {
@@ -251,7 +251,7 @@
     height: 22px;
     appearance: none;
     background: var(--color-border-dark);
-    border-radius: 11px;
+    border-radius: var(--radius-full);
     cursor: pointer;
     transition: background var(--transition-base);
     margin-right: var(--spacing-3);
@@ -313,7 +313,7 @@
 .form-switch-input.form-switch-sm {
     width: 32px;
     height: 18px;
-    border-radius: 9px;
+    border-radius: var(--radius-full);
 }
 
 .form-switch-sm .form-switch-input::before,
@@ -331,7 +331,7 @@
 .form-switch-input.form-switch-lg {
     width: 50px;
     height: 28px;
-    border-radius: 14px;
+    border-radius: var(--radius-full);
 }
 
 .form-switch-lg .form-switch-input::before,
@@ -451,7 +451,7 @@
     width: 18px;
     height: 18px;
     border: var(--border-width-thick) solid var(--color-border-dark);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     margin-right: var(--spacing-3);
     transition: all var(--transition-base);
     cursor: pointer;
@@ -493,7 +493,7 @@
     border: none;
     background: var(--color-text-white);
     transform: rotate(0) scale(1);
-    border-radius: 1px;
+    border-radius: var(--radius-full);
 }
 
 .form-checkbox-input:disabled + .form-checkbox-custom {
@@ -619,7 +619,7 @@
     color: var(--color-text-tertiary);
     cursor: pointer;
     padding: var(--spacing-1);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     font-size: var(--font-size-lg);
     line-height: 1;
     transition: all var(--transition-base);
@@ -634,7 +634,7 @@
 
 .form-fieldset {
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     padding: var(--spacing-6);
     margin-bottom: var(--spacing-6);
 }

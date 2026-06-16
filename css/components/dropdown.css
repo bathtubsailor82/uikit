@@ -25,7 +25,7 @@
     padding: var(--spacing-2) 0;
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     opacity: 0;
     visibility: hidden;
@@ -312,7 +312,7 @@
     padding: var(--spacing-2) var(--spacing-3);
     background: var(--color-bg-secondary);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-base);
     color: var(--color-text-primary);
 }

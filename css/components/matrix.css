@@ -21,7 +21,7 @@
     flex-direction: column;
     background: var(--color-bg-secondary);
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     font-size: var(--font-size-sm);
     color: var(--color-text-primary);
@@ -226,7 +226,7 @@ tr.selected .matrix-row-header {
     height: 14px;
     margin-right: var(--spacing-1);
     background: var(--color-bg-active);
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     font-size: 8px;
     color: var(--color-text-tertiary);
 }
@@ -388,7 +388,7 @@ tr.selected .matrix-cell.active {
 
 .matrix-scroll::-webkit-scrollbar-thumb {
     background: var(--color-bg-active);
-    border-radius: 5px;
+    border-radius: var(--radius-full);
 }
 
 .matrix-scroll::-webkit-scrollbar-thumb:hover {

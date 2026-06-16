@@ -410,6 +410,28 @@
     --font-size-lg:   var(--coe-type-15);
     --font-size-xl:   var(--coe-type-20);
     --font-size-2xl:  var(--coe-type-24);
+
+    /* --- TIER 1 — PRIMITIVES RADIUS CoE (échelle de la charte Figma DS CoE) ---
+     *
+     * Échelle plus généreuse que uikit-default. Valeurs fidèles à la charte
+     * (export Figma : « Radius » sm/md/lg/xl/xxl). --coe-radius-xxl est importé
+     * pour rester fidèle à l'échelle complète mais N'EST PAS au contrat (aucun
+     * composant ne le consomme — superset discipliné, ADR-0001). --- */
+    --coe-radius-sm:  2px;
+    --coe-radius-md:  4px;
+    --coe-radius-lg:  8px;
+    --coe-radius-xl:  12px;
+    --coe-radius-xxl: 16px;
+
+    /* --- TIER 2+3 — MAPPING du contrat radius sur les primitives CoE ---
+     *
+     * --radius-full (pilule) et le « no-radius » 0 sont des sentinels
+     * géométriques cross-thème : --radius-full reste hérité de :root (9999px),
+     * non remappé ici (les pilules CoE restent des pilules). --- */
+    --radius-sm: var(--coe-radius-sm);   /* 2px */
+    --radius-md: var(--coe-radius-md);   /* 4px */
+    --radius-lg: var(--coe-radius-lg);   /* 8px */
+    --radius-xl: var(--coe-radius-xl);   /* 12px */
 }
 
 :root {
@@ -483,16 +505,47 @@
     --spacing-10: 20px;
     --spacing-12: 24px;
 
-    /* === BORDURES === */
+    /* === BORDURES (épaisseurs — hors contrat, constantes cross-thème) === */
 
     --border-width: 1px;
     --border-width-thick: 2px;
     --border-width-accent: 3px;
 
-    --border-radius-sm: 2px;
-    --border-radius-md: 3px;
-    --border-radius-lg: 4px;
-    --border-radius-xl: 6px;
+    /* ========================================================================
+     * TIER 1 — PRIMITIVES RADIUS (thème uikit-default)
+     *
+     * Échelle brute PROPRE À CE THÈME, keyée par valeur px (même esprit que
+     * --type-* / --color-blue-*). Jamais consommée par un composant : elle
+     * n'alimente que le contrat radius (tier 2+3 ci-dessous). Un autre thème
+     * (CoE) fournit SES primitives radius (--coe-radius-*).
+     * Remplace les anciens --border-radius-* (renommés en contrat --radius-*).
+     * ===================================================================== */
+
+    --radius-2: 2px;
+    --radius-3: 3px;
+    --radius-4: 4px;
+    --radius-6: 6px;
+
+    /* ========================================================================
+     * TIER 2+3 — CONTRACT RADIUS × MAPPING uikit-default
+     *
+     * Échelle sémantique du contrat (token-contract.json, catégorie "radius") ;
+     * SEULS ces noms sont consommés par les composants. Le radius ne varie pas
+     * selon le SCHEME → un seul mapping en :root, hérité tel quel par la cellule
+     * dark. uikit-default reproduit le rendu radius actuel À L'IDENTIQUE
+     * (sm=2 / md=3 / lg=4 / xl=6, ex-anciens --border-radius-*).
+     *
+     * --radius-full = sentinel géométrique (pilule / fully rounded) : constante
+     * cross-thème, héritée par CoE (les pilules restent des pilules quelle que
+     * soit la marque, comme les cercles 50%). Le « no-radius » reste le littéral
+     * 0 dans les composants (non thémé, brand-neutral) → pas de token --radius-none.
+     * ===================================================================== */
+
+    --radius-sm:   var(--radius-2);   /* 2px */
+    --radius-md:   var(--radius-3);   /* 3px */
+    --radius-lg:   var(--radius-4);   /* 4px */
+    --radius-xl:   var(--radius-6);   /* 6px */
+    --radius-full: 9999px;            /* pilule / fully rounded */
 
     /* === OMBRES === */
 
@@ -612,7 +665,7 @@ textarea {
 a:focus-visible {
     outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
     outline-offset: var(--focus-ring-offset);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
 }
 
 /* Form controls */
@@ -676,7 +729,7 @@ a:focus-visible {
     color: var(--color-text-white);
     padding: var(--spacing-3) var(--spacing-4);
     text-decoration: none;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     z-index: var(--z-modal);
     font-weight: var(--font-weight-medium);
 }
@@ -998,10 +1051,10 @@ body.keyboard-nav *:focus {
 .border-l { border-left: var(--border-width) solid var(--color-border-medium); }
 .border-r { border-right: var(--border-width) solid var(--color-border-medium); }
 
-.rounded-sm { border-radius: var(--border-radius-sm); }
-.rounded { border-radius: var(--border-radius-md); }
-.rounded-lg { border-radius: var(--border-radius-lg); }
-.rounded-xl { border-radius: var(--border-radius-xl); }
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-xl { border-radius: var(--radius-xl); }
 
 /* === TEXT === */
 
@@ -1073,7 +1126,7 @@ body.keyboard-nav *:focus {
     font-weight: var(--font-weight-medium);
     color: var(--color-text-white);
     padding: var(--spacing-6);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 .layout-demo-header { background: #5a90c7; }
@@ -1382,7 +1435,7 @@ body.keyboard-nav *:focus {
     padding: var(--spacing-3) var(--spacing-4);
     border: var(--border-width) solid var(--color-border-medium);
     background: var(--color-bg-primary);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-medium);
     color: var(--color-text-primary);
@@ -1561,14 +1614,14 @@ body.keyboard-nav *:focus {
 }
 
 .btn-group .btn:first-child {
-    border-top-left-radius: var(--border-radius-md);
-    border-bottom-left-radius: var(--border-radius-md);
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
     margin-left: 0;
 }
 
 .btn-group .btn:last-child {
-    border-top-right-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
 }
 
 .btn-group .btn:hover,
@@ -1590,14 +1643,14 @@ body.keyboard-nav *:focus {
 }
 
 .btn-group-vertical .btn:first-child {
-    border-top-left-radius: var(--border-radius-md);
-    border-top-right-radius: var(--border-radius-md);
+    border-top-left-radius: var(--radius-md);
+    border-top-right-radius: var(--radius-md);
     margin-top: 0;
 }
 
 .btn-group-vertical .btn:last-child {
-    border-bottom-left-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
 }
 
 .btn-group-vertical .btn:hover,
@@ -1724,7 +1777,7 @@ body.keyboard-nav *:focus {
 /* === PILL VARIANT === */
 
 .btn-pill {
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
 }
 
 .btn-group .btn-pill:first-child {
@@ -1751,7 +1804,7 @@ body.keyboard-nav *:focus {
     height: 32px;
     padding: 0;
     border: var(--border-width) solid transparent;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     cursor: pointer;
     transition: all var(--transition-base);
     position: relative;
@@ -1909,7 +1962,7 @@ body.keyboard-nav *:focus {
     color: var(--color-text-primary);
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     transition: all var(--transition-base);
 }
 
@@ -2060,13 +2113,13 @@ body.keyboard-nav *:focus {
 }
 
 .input-group .form-input:first-child {
-    border-top-left-radius: var(--border-radius-md);
-    border-bottom-left-radius: var(--border-radius-md);
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
 }
 
 .input-group .form-input:last-child {
-    border-top-right-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
 }
 
 .input-group-prepend,
@@ -2083,14 +2136,14 @@ body.keyboard-nav *:focus {
 
 .input-group-prepend {
     border-right: none;
-    border-top-left-radius: var(--border-radius-md);
-    border-bottom-left-radius: var(--border-radius-md);
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
 }
 
 .input-group-append {
     border-left: none;
-    border-top-right-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
 }
 
 .input-group .form-input:not(:first-child) {
@@ -2128,7 +2181,7 @@ body.keyboard-nav *:focus {
     height: 22px;
     appearance: none;
     background: var(--color-border-dark);
-    border-radius: 11px;
+    border-radius: var(--radius-full);
     cursor: pointer;
     transition: background var(--transition-base);
     margin-right: var(--spacing-3);
@@ -2190,7 +2243,7 @@ body.keyboard-nav *:focus {
 .form-switch-input.form-switch-sm {
     width: 32px;
     height: 18px;
-    border-radius: 9px;
+    border-radius: var(--radius-full);
 }
 
 .form-switch-sm .form-switch-input::before,
@@ -2208,7 +2261,7 @@ body.keyboard-nav *:focus {
 .form-switch-input.form-switch-lg {
     width: 50px;
     height: 28px;
-    border-radius: 14px;
+    border-radius: var(--radius-full);
 }
 
 .form-switch-lg .form-switch-input::before,
@@ -2328,7 +2381,7 @@ body.keyboard-nav *:focus {
     width: 18px;
     height: 18px;
     border: var(--border-width-thick) solid var(--color-border-dark);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     margin-right: var(--spacing-3);
     transition: all var(--transition-base);
     cursor: pointer;
@@ -2370,7 +2423,7 @@ body.keyboard-nav *:focus {
     border: none;
     background: var(--color-text-white);
     transform: rotate(0) scale(1);
-    border-radius: 1px;
+    border-radius: var(--radius-full);
 }
 
 .form-checkbox-input:disabled + .form-checkbox-custom {
@@ -2496,7 +2549,7 @@ body.keyboard-nav *:focus {
     color: var(--color-text-tertiary);
     cursor: pointer;
     padding: var(--spacing-1);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     font-size: var(--font-size-lg);
     line-height: 1;
     transition: all var(--transition-base);
@@ -2511,7 +2564,7 @@ body.keyboard-nav *:focus {
 
 .form-fieldset {
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     padding: var(--spacing-6);
     margin-bottom: var(--spacing-6);
 }
@@ -3779,7 +3832,7 @@ body.keyboard-nav *:focus {
 .breadcrumb-bg {
     background: var(--color-bg-secondary);
     padding: var(--spacing-3) var(--spacing-6);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 /* === BREADCRUMB WITH ICONS === */
@@ -3832,7 +3885,7 @@ body.keyboard-nav *:focus {
     color: var(--color-text-secondary);
     cursor: pointer;
     padding: var(--spacing-1);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     transition: all var(--transition-base);
 }
 
@@ -3847,13 +3900,13 @@ body.keyboard-nav *:focus {
 .breadcrumb-outlined {
     border: var(--border-width) solid var(--color-border-light);
     padding: var(--spacing-3) var(--spacing-6);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 /* Style pills */
 .breadcrumb-pills .breadcrumb-item a {
     padding: var(--spacing-2) var(--spacing-3);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     transition: all var(--transition-base);
 }
 
@@ -3866,7 +3919,7 @@ body.keyboard-nav *:focus {
     background: var(--color-primary-light);
     color: var(--color-primary);
     padding: var(--spacing-2) var(--spacing-3);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 /* === RESPONSIVE === */
@@ -3908,7 +3961,7 @@ body.keyboard-nav *:focus {
 .breadcrumb-item a:focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: var(--focus-ring-offset);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
 }
 
 /* === BREADCRUMB NAVIGATION WRAPPER === */
@@ -3950,7 +4003,7 @@ nav[aria-label="Breadcrumb"] {
     color: var(--color-text-primary);
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     text-decoration: none;
     cursor: pointer;
     transition: all var(--transition-base);
@@ -4000,7 +4053,7 @@ nav[aria-label="Breadcrumb"] {
 
 /* Rounded (fully rounded) */
 .pagination-rounded .pagination-link {
-    border-radius: var(--border-radius-full);
+    border-radius: var(--radius-full);
 }
 
 /* Pills */
@@ -4124,7 +4177,7 @@ nav[aria-label="Breadcrumb"] {
     padding: var(--spacing-2) var(--spacing-3);
     font-size: var(--font-size-sm);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     text-align: center;
 }
 
@@ -4151,7 +4204,7 @@ nav[aria-label="Breadcrumb"] {
     padding: var(--spacing-2) var(--spacing-4);
     font-size: var(--font-size-sm);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     background: var(--color-bg-primary);
     color: var(--color-text-primary);
     cursor: pointer;
@@ -4191,14 +4244,14 @@ nav[aria-label="Breadcrumb"] {
 }
 
 .pagination-compact .pagination-link:first-child {
-    border-top-left-radius: var(--border-radius-md);
-    border-bottom-left-radius: var(--border-radius-md);
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
     margin-left: 0;
 }
 
 .pagination-compact .pagination-link:last-child {
-    border-top-right-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
 }
 
 .pagination-compact .pagination-link:hover,
@@ -4459,7 +4512,7 @@ nav[aria-label="Pagination"] {
         margin-bottom: var(--spacing-6);
         background: var(--color-bg-primary);
         border: var(--border-width) solid var(--color-border-light);
-        border-radius: var(--border-radius-md);
+        border-radius: var(--radius-md);
         padding: var(--spacing-4);
     }
 
@@ -4540,7 +4593,7 @@ nav[aria-label="Pagination"] {
 .card {
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     padding: var(--spacing-6);
 }
 
@@ -4568,7 +4621,7 @@ nav[aria-label="Pagination"] {
 .stat-card {
     background: var(--color-bg-primary);
     padding: var(--spacing-4);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     border: var(--border-width) solid var(--color-border-light);
 }
 
@@ -4669,7 +4722,7 @@ nav[aria-label="Pagination"] {
     justify-content: space-between;
     padding: var(--spacing-2) var(--spacing-4);
     background: var(--color-bg-tertiary);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-base);
 }
 
@@ -4694,7 +4747,7 @@ nav[aria-label="Pagination"] {
     flex-direction: column;
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     overflow: hidden;
 }
 
@@ -4811,7 +4864,7 @@ nav[aria-label="Pagination"] {
 .list-item-icon {
     width: 40px;
     height: 40px;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     background: var(--color-bg-tertiary);
     display: flex;
     align-items: center;
@@ -4887,7 +4940,7 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-1) var(--spacing-2);
     background: var(--color-bg-hover);
     color: var(--color-text-secondary);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     text-transform: uppercase;
@@ -4958,7 +5011,7 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-1) var(--spacing-3);
     background: var(--color-primary-light);
     color: var(--color-info);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     text-transform: uppercase;
@@ -5040,7 +5093,7 @@ nav[aria-label="Pagination"] {
     padding: 0 var(--spacing-2);
     background: var(--color-danger);
     color: var(--color-text-white);
-    border-radius: 9px;
+    border-radius: var(--radius-full);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     line-height: 1;
@@ -5051,7 +5104,7 @@ nav[aria-label="Pagination"] {
     min-width: 14px;
     height: 14px;
     padding: 0 var(--spacing-1);
-    border-radius: 7px;
+    border-radius: var(--radius-full);
     font-size: 8px;
 }
 
@@ -5059,7 +5112,7 @@ nav[aria-label="Pagination"] {
     min-width: 22px;
     height: 22px;
     padding: 0 var(--spacing-3);
-    border-radius: 11px;
+    border-radius: var(--radius-full);
     font-size: var(--font-size-sm);
 }
 
@@ -5079,7 +5132,7 @@ nav[aria-label="Pagination"] {
 /* === BADGE PILL (fully rounded) === */
 
 .badge-pill {
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
     padding: var(--spacing-1) var(--spacing-3);
 }
 
@@ -5243,7 +5296,7 @@ nav[aria-label="Pagination"] {
 /* === AVATAR SHAPES === */
 
 .avatar-rounded {
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 .avatar-square {
@@ -5445,7 +5498,7 @@ nav[aria-label="Pagination"] {
     color: var(--color-text-white);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
-    border-radius: 9px;
+    border-radius: var(--radius-full);
     border: 2px solid var(--color-bg-primary);
 }
 
@@ -5575,7 +5628,7 @@ nav[aria-label="Pagination"] {
 
 .alert {
     padding: var(--spacing-6);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     border: var(--border-width) solid;
     margin-bottom: var(--spacing-6);
     font-size: var(--font-size-md);
@@ -5762,7 +5815,7 @@ nav[aria-label="Pagination"] {
     top: 70px;
     right: 20px;
     padding: var(--spacing-4) var(--spacing-6);
-    border-radius: var(--border-radius-xl);
+    border-radius: var(--radius-xl);
     color: var(--color-text-white);
     font-weight: var(--font-weight-medium);
     z-index: var(--z-notification);
@@ -5824,7 +5877,7 @@ nav[aria-label="Pagination"] {
 
 .modal {
     background: var(--color-bg-primary);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     max-width: 600px;
     width: 100%;
@@ -5993,7 +6046,7 @@ nav[aria-label="Pagination"] {
     max-width: 100%;
     width: 100%;
     margin: auto auto 0 auto;
-    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     transform: translateY(100%);
 }
 
@@ -6035,7 +6088,7 @@ nav[aria-label="Pagination"] {
     margin-top: var(--spacing-2);
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
     min-width: 200px;
     z-index: var(--z-dropdown);
@@ -6104,7 +6157,7 @@ nav[aria-label="Pagination"] {
     background: var(--color-dark);
     color: var(--color-text-white);
     padding: var(--spacing-2) var(--spacing-4);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
     white-space: nowrap;
     opacity: 0;
@@ -6310,7 +6363,7 @@ nav[aria-label="Pagination"] {
     );
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s infinite;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 @keyframes skeleton-loading {
@@ -6322,7 +6375,7 @@ nav[aria-label="Pagination"] {
 .skeleton-text {
     height: 12px;
     margin-bottom: var(--spacing-2);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     background: linear-gradient(
         90deg,
         var(--color-bg-hover) 25%,
@@ -6336,7 +6389,7 @@ nav[aria-label="Pagination"] {
 .skeleton-text-lg {
     height: 16px;
     margin-bottom: var(--spacing-3);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     background: linear-gradient(
         90deg,
         var(--color-bg-hover) 25%,
@@ -6351,7 +6404,7 @@ nav[aria-label="Pagination"] {
     height: 24px;
     width: 60%;
     margin-bottom: var(--spacing-6);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     background: linear-gradient(
         90deg,
         var(--color-bg-hover) 25%,
@@ -6407,7 +6460,7 @@ nav[aria-label="Pagination"] {
 .skeleton-rect {
     width: 100%;
     height: 100px;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     background: linear-gradient(
         90deg,
         var(--color-bg-hover) 25%,
@@ -6438,7 +6491,7 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-6);
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 .skeleton-card .skeleton-title {
@@ -6526,7 +6579,7 @@ nav[aria-label="Pagination"] {
     width: 100%;
     height: 14px;
     background: var(--color-border-light);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     overflow: hidden;
     margin: var(--spacing-3) 0;
     position: relative;
@@ -6557,7 +6610,7 @@ nav[aria-label="Pagination"] {
 .progress-fill {
     height: 100%;
     background: linear-gradient(to bottom, #6ba1d8, var(--color-primary));
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     transition: width var(--transition-slow);
 }
 
@@ -6616,13 +6669,13 @@ nav[aria-label="Pagination"] {
 .storage-bar {
     height: 6px;
     background: var(--color-border-light);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     overflow: hidden;
 }
 
 .storage-fill {
     height: 100%;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     transition: width var(--transition-slow);
 }
 
@@ -6648,7 +6701,7 @@ nav[aria-label="Pagination"] {
     overflow-y: auto;
     background: var(--color-bg-tertiary);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
 }
 
 /* When logs-container follows logs-legend, adjust borders */
@@ -6663,7 +6716,7 @@ nav[aria-label="Pagination"] {
     font-size: var(--font-size-base);
     margin-bottom: var(--spacing-2);
     padding: var(--spacing-1) var(--spacing-3);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -6736,8 +6789,8 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-3) var(--spacing-6);
     background: var(--color-bg-hover);
     border: var(--border-width) solid var(--color-border-medium);
-    border-top-left-radius: var(--border-radius-lg);
-    border-top-right-radius: var(--border-radius-lg);
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
     border-bottom: none;
     font-size: var(--font-size-base);
 }
@@ -6752,7 +6805,7 @@ nav[aria-label="Pagination"] {
 .legend-color {
     width: 12px;
     height: 12px;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     border: var(--border-width) solid var(--color-border-medium);
 }
 
@@ -7120,7 +7173,7 @@ nav[aria-label="Pagination"] {
     background: var(--color-dark);
     color: var(--color-text-white);
     padding: var(--spacing-1) var(--spacing-2);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     font-size: var(--font-size-sm);
     font-family: var(--font-family-mono);
     white-space: nowrap;
@@ -7167,7 +7220,7 @@ nav[aria-label="Pagination"] {
     display: inline-flex;
     align-items: stretch;
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     background: var(--color-bg-primary);
     overflow: hidden;
 }
@@ -7244,7 +7297,7 @@ nav[aria-label="Pagination"] {
 /* === SIZES === */
 
 .number-input-sm {
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
 }
 
 .number-input-sm input {
@@ -7259,7 +7312,7 @@ nav[aria-label="Pagination"] {
 }
 
 .number-input-lg {
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
 }
 
 .number-input-lg input {
@@ -7416,7 +7469,7 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-1) var(--spacing-2);
     background: var(--color-bg-hover);
     color: var(--color-text-primary);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     line-height: 1.2;
@@ -7429,13 +7482,13 @@ nav[aria-label="Pagination"] {
 .tag-sm {
     padding: 2px var(--spacing-1);
     font-size: var(--font-size-xs);
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
 }
 
 .tag-lg {
     padding: var(--spacing-2) var(--spacing-3);
     font-size: var(--font-size-base);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 /* === COLOR VARIANTS === */
@@ -7521,7 +7574,7 @@ nav[aria-label="Pagination"] {
 /* === PILL (fully rounded) === */
 
 .tag-pill {
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
     padding-left: var(--spacing-3);
     padding-right: var(--spacing-3);
 }
@@ -7624,7 +7677,7 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-2);
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     cursor: text;
 }
 
@@ -7756,7 +7809,7 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-2) var(--spacing-4);
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-base);
     color: var(--color-text-primary);
     cursor: pointer;
@@ -7791,8 +7844,8 @@ nav[aria-label="Pagination"] {
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-medium);
     border-left: none;
-    border-top-right-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
     font-size: var(--font-size-base);
     color: var(--color-text-tertiary);
     white-space: nowrap;
@@ -7815,7 +7868,7 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-8);
     background: var(--color-bg-secondary);
     border: 2px dashed var(--color-border-medium);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     text-align: center;
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -7905,7 +7958,7 @@ nav[aria-label="Pagination"] {
     gap: var(--spacing-3);
     padding: var(--spacing-2) var(--spacing-3);
     background: var(--color-bg-secondary);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 .file-item-icon {
@@ -7916,7 +7969,7 @@ nav[aria-label="Pagination"] {
     align-items: center;
     justify-content: center;
     background: var(--color-bg-hover);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     color: var(--color-text-tertiary);
     font-size: var(--font-size-lg);
 }
@@ -7947,7 +8000,7 @@ nav[aria-label="Pagination"] {
     padding: 0;
     background: transparent;
     border: none;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     color: var(--color-text-tertiary);
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -7983,14 +8036,14 @@ nav[aria-label="Pagination"] {
 .file-item-progress .progress {
     height: 4px;
     background: var(--color-bg-hover);
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
 }
 
 .file-item-progress .progress-bar {
     height: 100%;
     background: var(--color-primary);
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     transition: width var(--transition-base);
 }
 
@@ -8006,7 +8059,7 @@ nav[aria-label="Pagination"] {
 .file-preview {
     position: relative;
     aspect-ratio: 1;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     overflow: hidden;
     background: var(--color-bg-secondary);
 }
@@ -8123,7 +8176,7 @@ nav[aria-label="Pagination"] {
 
 .accordion {
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     overflow: hidden;
 }
 
@@ -8333,7 +8386,7 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-2) 0;
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     opacity: 0;
     visibility: hidden;
@@ -8620,7 +8673,7 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-2) var(--spacing-3);
     background: var(--color-bg-secondary);
     border: var(--border-width) solid var(--color-border-medium);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-base);
     color: var(--color-text-primary);
 }
@@ -8680,7 +8733,7 @@ nav[aria-label="Pagination"] {
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-base);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     white-space: nowrap;
     pointer-events: none;
     opacity: 0;
@@ -8989,7 +9042,7 @@ nav[aria-label="Pagination"] {
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-base);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     white-space: nowrap;
     pointer-events: none;
     opacity: 0;
@@ -9026,7 +9079,7 @@ nav[aria-label="Pagination"] {
     max-width: 320px;
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     opacity: 0;
     visibility: hidden;
@@ -9253,7 +9306,7 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-3) var(--spacing-4);
     border-bottom: var(--border-width) solid var(--color-border-light);
     background: var(--color-bg-secondary);
-    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .popover-title {
@@ -9273,7 +9326,7 @@ nav[aria-label="Pagination"] {
     margin: calc(-1 * var(--spacing-1)) calc(-1 * var(--spacing-2));
     background: transparent;
     border: none;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     color: var(--color-text-tertiary);
     cursor: pointer;
     transition: background var(--transition-fast), color var(--transition-fast);
@@ -9313,7 +9366,7 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-3) var(--spacing-4);
     border-top: var(--border-width) solid var(--color-border-light);
     background: var(--color-bg-secondary);
-    border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
 
 /* === SIZES === */
@@ -9447,7 +9500,7 @@ nav[aria-label="Pagination"] {
 .popover-rich-image {
     width: 100%;
     height: auto;
-    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .popover-rich-content {
@@ -9697,7 +9750,7 @@ nav[aria-label="Pagination"] {
     display: inline-flex;
     padding: var(--spacing-1);
     background: var(--color-bg-secondary);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     gap: var(--spacing-1);
     position: relative;
 }
@@ -9707,7 +9760,7 @@ nav[aria-label="Pagination"] {
     padding: var(--spacing-2) var(--spacing-4);
     background: transparent;
     border: none;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-medium);
     color: var(--color-text-secondary);
@@ -9751,13 +9804,13 @@ nav[aria-label="Pagination"] {
 .segmented-lg {
     padding: var(--spacing-2);
     gap: var(--spacing-2);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
 }
 
 .segmented-lg .segmented-item {
     padding: var(--spacing-3) var(--spacing-6);
     font-size: var(--font-size-md);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 /* === BLOCK (full width) === */
@@ -9823,13 +9876,13 @@ nav[aria-label="Pagination"] {
 }
 
 .segmented-bordered .segmented-item:first-child {
-    border-top-left-radius: var(--border-radius-md);
-    border-bottom-left-radius: var(--border-radius-md);
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
 }
 
 .segmented-bordered .segmented-item:last-child {
-    border-top-right-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
 }
 
 .segmented-bordered .segmented-item.active {
@@ -9840,11 +9893,11 @@ nav[aria-label="Pagination"] {
 /* === PILL VARIANT === */
 
 .segmented-pill {
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
 }
 
 .segmented-pill .segmented-item {
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
 }
 
 /* === VERTICAL VARIANT === */
@@ -9860,14 +9913,14 @@ nav[aria-label="Pagination"] {
 
 .segmented-vertical.segmented-bordered .segmented-item:first-child {
     border-radius: 0;
-    border-top-left-radius: var(--border-radius-md);
-    border-top-right-radius: var(--border-radius-md);
+    border-top-left-radius: var(--radius-md);
+    border-top-right-radius: var(--radius-md);
 }
 
 .segmented-vertical.segmented-bordered .segmented-item:last-child {
     border-radius: 0;
-    border-bottom-left-radius: var(--border-radius-md);
-    border-bottom-right-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
 }
 
 /* === ANIMATED SLIDER (optional JS enhancement) === */
@@ -9882,7 +9935,7 @@ nav[aria-label="Pagination"] {
     left: var(--spacing-1);
     height: calc(100% - var(--spacing-1) * 2);
     background: var(--color-bg-primary);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     box-shadow: var(--shadow-sm);
     transition: transform var(--transition-base), width var(--transition-base);
     z-index: 0;
@@ -9934,7 +9987,7 @@ nav[aria-label="Pagination"] {
     height: var(--touch-target-min, 44px);
     padding: 0;
     border: var(--border-width) solid transparent;
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     background: transparent;
     color: inherit;
     cursor: pointer;
@@ -10405,14 +10458,14 @@ nav[aria-label="Pagination"] {
 /* Bordered */
 .empty-state-bordered {
     border: var(--border-width) dashed var(--color-border-medium);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     background: var(--color-bg-secondary);
 }
 
 /* Filled */
 .empty-state-filled {
     background: var(--color-bg-secondary);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
 }
 
 /* Inline (minimal padding, for use in tables, lists, etc.) */
@@ -11120,7 +11173,7 @@ nav[aria-label="Pagination"] {
 .timeline-content {
     background: var(--color-bg-secondary);
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     padding: var(--spacing-4);
 }
 
@@ -11544,7 +11597,7 @@ nav[aria-label="Pagination"] {
     flex-direction: column;
     background: var(--color-bg-secondary);
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     font-size: var(--font-size-sm);
     color: var(--color-text-primary);
@@ -11749,7 +11802,7 @@ tr.selected .matrix-row-header {
     height: 14px;
     margin-right: var(--spacing-1);
     background: var(--color-bg-active);
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     font-size: 8px;
     color: var(--color-text-tertiary);
 }
@@ -11911,7 +11964,7 @@ tr.selected .matrix-cell.active {
 
 .matrix-scroll::-webkit-scrollbar-thumb {
     background: var(--color-bg-active);
-    border-radius: 5px;
+    border-radius: var(--radius-full);
 }
 
 .matrix-scroll::-webkit-scrollbar-thumb:hover {
@@ -12018,7 +12071,7 @@ tr.selected .matrix-cell.active {
     gap: var(--spacing-1);
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border);
-    border-radius: var(--border-radius);
+    border-radius: var(--radius-md);
     padding: var(--spacing-2);
 }
 
@@ -12049,7 +12102,7 @@ tr.selected .matrix-cell.active {
 .time-input:focus {
     outline: none;
     background: var(--color-bg-secondary);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
 }
 
 .time-separator {
@@ -12071,7 +12124,7 @@ tr.selected .matrix-cell.active {
     font-size: var(--font-size-xs);
     background: var(--color-bg-tertiary);
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     color: var(--color-text-secondary);
     cursor: pointer;
     transition: all 0.15s ease;
@@ -12822,7 +12875,7 @@ tr.selected .matrix-cell.active {
     width: 100%;
     aspect-ratio: 1;
     border: 2px solid transparent;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     background: var(--swatch-color, var(--entity-color-default));
     cursor: pointer;
     padding: 0;

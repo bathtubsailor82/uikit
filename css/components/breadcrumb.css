@@ -92,7 +92,7 @@
 .breadcrumb-bg {
     background: var(--color-bg-secondary);
     padding: var(--spacing-3) var(--spacing-6);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 /* === BREADCRUMB WITH ICONS === */
@@ -145,7 +145,7 @@
     color: var(--color-text-secondary);
     cursor: pointer;
     padding: var(--spacing-1);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     transition: all var(--transition-base);
 }
 
@@ -160,13 +160,13 @@
 .breadcrumb-outlined {
     border: var(--border-width) solid var(--color-border-light);
     padding: var(--spacing-3) var(--spacing-6);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 /* Style pills */
 .breadcrumb-pills .breadcrumb-item a {
     padding: var(--spacing-2) var(--spacing-3);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     transition: all var(--transition-base);
 }
 
@@ -179,7 +179,7 @@
     background: var(--color-primary-light);
     color: var(--color-primary);
     padding: var(--spacing-2) var(--spacing-3);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
 }
 
 /* === RESPONSIVE === */
@@ -221,7 +221,7 @@
 .breadcrumb-item a:focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: var(--focus-ring-offset);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
 }
 
 /* === BREADCRUMB NAVIGATION WRAPPER === */

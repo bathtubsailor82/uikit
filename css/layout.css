@@ -139,10 +139,10 @@
 .border-l { border-left: var(--border-width) solid var(--color-border-medium); }
 .border-r { border-right: var(--border-width) solid var(--color-border-medium); }
 
-.rounded-sm { border-radius: var(--border-radius-sm); }
-.rounded { border-radius: var(--border-radius-md); }
-.rounded-lg { border-radius: var(--border-radius-lg); }
-.rounded-xl { border-radius: var(--border-radius-xl); }
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-xl { border-radius: var(--radius-xl); }
 
 /* === TEXT === */
 

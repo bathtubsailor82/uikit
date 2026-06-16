@@ -18,7 +18,7 @@
     max-width: 320px;
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     opacity: 0;
     visibility: hidden;
@@ -245,7 +245,7 @@
     padding: var(--spacing-3) var(--spacing-4);
     border-bottom: var(--border-width) solid var(--color-border-light);
     background: var(--color-bg-secondary);
-    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .popover-title {
@@ -265,7 +265,7 @@
     margin: calc(-1 * var(--spacing-1)) calc(-1 * var(--spacing-2));
     background: transparent;
     border: none;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     color: var(--color-text-tertiary);
     cursor: pointer;
     transition: background var(--transition-fast), color var(--transition-fast);
@@ -305,7 +305,7 @@
     padding: var(--spacing-3) var(--spacing-4);
     border-top: var(--border-width) solid var(--color-border-light);
     background: var(--color-bg-secondary);
-    border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
 
 /* === SIZES === */
@@ -439,7 +439,7 @@
 .popover-rich-image {
     width: 100%;
     height: auto;
-    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .popover-rich-content {

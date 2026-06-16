@@ -7,7 +7,7 @@
     top: 70px;
     right: 20px;
     padding: var(--spacing-4) var(--spacing-6);
-    border-radius: var(--border-radius-xl);
+    border-radius: var(--radius-xl);
     color: var(--color-text-white);
     font-weight: var(--font-weight-medium);
     z-index: var(--z-notification);

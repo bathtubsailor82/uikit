@@ -6,7 +6,7 @@
     width: 100%;
     height: 14px;
     background: var(--color-border-light);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     overflow: hidden;
     margin: var(--spacing-3) 0;
     position: relative;
@@ -37,7 +37,7 @@
 .progress-fill {
     height: 100%;
     background: linear-gradient(to bottom, #6ba1d8, var(--color-primary));
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     transition: width var(--transition-slow);
 }
 
@@ -96,13 +96,13 @@
 .storage-bar {
     height: 6px;
     background: var(--color-border-light);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     overflow: hidden;
 }
 
 .storage-fill {
     height: 100%;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
     transition: width var(--transition-slow);
 }
 

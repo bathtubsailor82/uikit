@@ -23,7 +23,7 @@
     height: var(--touch-target-min, 44px);
     padding: 0;
     border: var(--border-width) solid transparent;
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     background: transparent;
     color: inherit;
     cursor: pointer;

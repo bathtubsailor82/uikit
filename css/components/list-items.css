@@ -9,7 +9,7 @@
     flex-direction: column;
     background: var(--color-bg-primary);
     border: var(--border-width) solid var(--color-border-light);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--radius-lg);
     overflow: hidden;
 }
 
@@ -126,7 +126,7 @@
 .list-item-icon {
     width: 40px;
     height: 40px;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--radius-md);
     background: var(--color-bg-tertiary);
     display: flex;
     align-items: center;
