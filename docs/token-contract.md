@@ -20,7 +20,7 @@ Architecture en 3 tiers (voir `css/tokens.css`) :
    `uikit-default · light` reproduit le rendu actuel à l'identique.
 
 Le contrat est un **superset discipliné** : il grandit cellule par cellule, sur
-besoin démontré (les `--form-*` / `--action-*` de CoE entreront au cas par cas),
+besoin démontré (les `--form-*` / `--action-*` de Europa-1 entreront au cas par cas),
 **jamais** spéculativement.
 
 ## Portée actuelle
@@ -43,7 +43,7 @@ Le mode est porté par l'axe **scheme** (`data-scheme`), distinct de l'axe
 | --------------- | ------- | ---------- | ------------------------------------- |
 | `uikit-default` | `light` | ✅ vérifié | `:root`                               |
 | `uikit-default` | `dark`  | ✅ vérifié | `:root`, `[data-scheme="dark"]`       |
-| `coe`           | `light` | ✅ vérifié | `:root`, `:root[data-theme="coe"]`    |
+| `europa-1`           | `light` | ✅ vérifié | `:root`, `:root[data-theme="europa-1"]`    |
 
 Le dark de `uikit-default` est appliqué via `[data-scheme="dark"]` et couvert
 par le check sur les deux cellules. Ses valeurs sont pour l'instant littérales
@@ -51,15 +51,15 @@ par le check sur les deux cellules. Ses valeurs sont pour l'instant littérales
 possible plus tard sans rework. La matrice est **creuse** par conception
 (ADR-0002) : un thème ne fournit que les schemes qu'il supporte.
 
-**CoE** (`<html data-theme="coe">`) est la première marque non-default : elle
+**Europa-1** (`<html data-theme="europa-1">`) est la première marque non-default : elle
 câble les 32 tokens couleur, **les 9 tokens typo et les 5 tokens radius** sur ses
-propres primitives (`--coe-*`, échelles de la charte ; typo = **Open Sans** +
-échelle Figma DS CoE ; radius = échelle `--coe-radius-*` de la charte, plus
-généreuse), sans modifier un seul composant. CoE est **light-only** ; son
-sélecteur `:root[data-theme="coe"]` (spécificité 0,2,0) bat volontairement le
+propres primitives (`--europa1-*`, échelles de la charte ; typo = **Open Sans** +
+échelle Figma DS Europa-1 ; radius = échelle `--europa1-radius-*` de la charte, plus
+généreuse), sans modifier un seul composant. Europa-1 est **light-only** ; son
+sélecteur `:root[data-theme="europa-1"]` (spécificité 0,2,0) bat volontairement le
 fallback `@media (prefers-color-scheme: dark)` pour ne jamais basculer en dark
 auto. Le manifeste `--supported-schemes` et l'adaptation du toggle (case
-`coe × dark` absente, non silencieuse) relèvent d'une tranche dédiée.
+`europa-1 × dark` absente, non silencieuse) relèvent d'une tranche dédiée.
 
 ## Tokens du contrat — couleur
 
@@ -102,11 +102,11 @@ auto. Le manifeste `--supported-schemes` et l'adaptation du toggle (case
 
 Famille + échelle de tailles. Les composants consomment ces noms (jamais les
 primitives `--font-sans` / `--font-mono` / `--type-*`). `uikit-default` reproduit
-la typo actuelle à l'identique ; `coe` les remappe sur Open Sans + l'échelle de
+la typo actuelle à l'identique ; `europa-1` les remappe sur Open Sans + l'échelle de
 la charte (la taille de corps, `--font-size-lg` du `<body>`, tombe sur le
-`paragraph-body` CoE = 15px).
+`paragraph-body` Europa-1 = 15px).
 
-| Token sémantique     | Rôle                          | uikit-default | coe  |
+| Token sémantique     | Rôle                          | uikit-default | europa-1  |
 | -------------------- | ----------------------------- | ------------- | ---- |
 | `--font-family-base` | Police de base (texte courant) | system-ui     | Open Sans |
 | `--font-family-mono` | Police monospace (technique)   | SF Mono       | *(hérité système)* |
@@ -124,13 +124,13 @@ la charte (la taille de corps, `--font-size-lg` du `<body>`, tombe sur le
 ## Tokens du contrat — radius
 
 Échelle de rayons de coins. Les composants consomment ces noms (jamais les
-primitives `--radius-2/3/4/6` d'uikit-default ni `--coe-radius-*` de CoE). Le
+primitives `--radius-2/3/4/6` d'uikit-default ni `--europa1-radius-*` de Europa-1). Le
 radius **ne varie pas selon le scheme** (un seul mapping en `:root`, hérité par
 la cellule dark). `uikit-default` reproduit le rendu radius actuel à l'identique
-(ex-`--border-radius-*`) ; `coe` remappe sur l'échelle plus généreuse de la
+(ex-`--border-radius-*`) ; `europa-1` remappe sur l'échelle plus généreuse de la
 charte.
 
-| Token sémantique | Rôle                            | uikit-default | coe    |
+| Token sémantique | Rôle                            | uikit-default | europa-1    |
 | ---------------- | ------------------------------- | ------------- | ------ |
 | `--radius-sm`    | Petit (puces, swatches, inputs) | 2px           | 2px    |
 | `--radius-md`    | Moyen (défaut cartes/boutons)   | 3px           | 4px    |
@@ -144,7 +144,7 @@ charte.
 > reste le littéral `0` dans les composants (square reset, non thémé) → pas de
 > token `--radius-none`. Les atoms Audio skeuomorphiques (`button`, `led`,
 > `rotary`, `record-button`, `timer`, `audio-track`) gardent leurs rayons inlinés
-> (hors contrat, ADR-0001). La charte CoE définit aussi `--coe-radius-xxl` (16px),
+> (hors contrat, ADR-0001). La charte Europa-1 définit aussi `--europa1-radius-xxl` (16px),
 > importé comme primitive mais **hors contrat** (aucun composant ne le consomme).
 
 ## Faire grandir le contrat

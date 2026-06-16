@@ -70,9 +70,9 @@
       "categories": ["color", "typography", "radius"]
     },
     {
-      "theme": "coe",
+      "theme": "europa-1",
       "scheme": "light",
-      "selectors": [":root", ":root[data-theme=\"coe\"]"],
+      "selectors": [":root", ":root[data-theme=\"europa-1\"]"],
       "categories": ["color", "typography", "radius"]
     }
   ]

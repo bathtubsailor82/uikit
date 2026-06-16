@@ -52,3 +52,13 @@ catégorie-préfixé existant** (`--color-*`, `--space-*`, `--radius-*`,
 - CoE est déjà structuré ainsi (échelles `neutral-50…900`, tier sémantique
   `--form-*`/`--action-*`) → son mapping dans le contrat est naturel.
 - Sélection thème/scheme : voir ADR-0002.
+
+## Renommage (addendum 2026-06-16)
+
+Le thème portant cette charte est désormais identifié **`europa-1`**
+(`data-theme="europa-1"`, primitives `--europa1-*`) — renommé depuis `coe` pour
+ne pas exposer le nom de la marque dans le CSS livré (`dist/uikit.css`). Les
+**valeurs sont inchangées** : elles restent dérivées de la charte du Conseil de
+l'Europe (export Figma DS), conservée ici comme **provenance**. Le scrub ne
+porte que sur les identifiants + les commentaires du CSS livré ; ADR et mémoire
+gardent la traçabilité.

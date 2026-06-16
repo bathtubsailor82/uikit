@@ -9,7 +9,7 @@
  *   · 2 schemes supportés → visible, bascule entre eux ;
  *   · 1 seul → masqué ([hidden]) et scheme FORCÉ sur le seul supporté.
  * AUCUN fallback silencieux, AUCUN dark auto-généré : sur un thème light-only
- * (CoE) le toggle disparaît plutôt que de basculer vers une case indéfinie.
+ * (Europa-1) le toggle disparaît plutôt que de basculer vers une case indéfinie.
  *
  * La préférence utilisateur (light/dark) persiste en localStorage et reste
  * intacte même quand un thème la force temporairement : revenir sur un thème
@@ -59,7 +59,7 @@
     }
 
     // Scheme EFFECTIF = préférence bornée aux schemes supportés par le thème
-    // actif. Préférence non supportée (ex. dark sur CoE) → on force le premier
+    // actif. Préférence non supportée (ex. dark sur Europa-1) → on force le premier
     // scheme supporté SANS écraser la préférence stockée.
     function effectiveScheme(supported, preference) {
         return supported.includes(preference) ? preference : supported[0];

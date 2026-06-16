@@ -9,7 +9,7 @@
  *
  * Échelles numériques brutes, PROPRES À CE THÈME. Jamais consommées
  * directement par un composant : elles n'existent que pour alimenter le
- * contrat sémantique (tier 3 ci-dessous). Un autre thème (p.ex. CoE) fournira
+ * contrat sémantique (tier 3 ci-dessous). Un autre thème (p.ex. Europa-1) fournira
  * SES propres primitives — cf. docs/adr/0001-architecture-tokens-multi-theme.md.
  *
  * Nommage catégorie-préfixé conservé (--color-*), step ordonné clair → sombre.
@@ -102,7 +102,7 @@
  * theme-toggle (js/dark-mode.js) LIT cette propriété sur le thème actif et
  * s'adapte : deux schemes → toggle visible ; un seul → toggle masqué et scheme
  * forcé sur le seul supporté. AUCUN fallback silencieux, AUCUN dark auto-généré
- * (ADR-0002). « Inventer » un scheme plus tard (ex. CoE dark) = ajouter le bloc
+ * (ADR-0002). « Inventer » un scheme plus tard (ex. Europa-1 dark) = ajouter le bloc
  * de mapping ET ce scheme ici → le toggle réapparaît, zéro refonte.
  *
  * Lue par getComputedStyle() : ce n'est PAS un token du contrat (pas consommée
@@ -242,197 +242,197 @@
 }
 
 /* ============================================================================
- * THÈME CoE (Conseil de l'Europe) — COULEUR seule · scheme light only
+ * THÈME Europa-1 — COULEUR seule · scheme light only
  *
  * Deuxième marque, première validation réelle de l'architecture (PRD #1) : elle
  * résout le MÊME contrat (tier 2) en câblant SES propres primitives, sans
- * toucher au markup d'un seul composant. Valeurs fidèles à la charte DS CoE
+ * toucher au markup d'un seul composant. Valeurs fidèles à la charte DS Europa-1
  * (export Figma vérifié vs API REST — cf. VariablesDesignUIkit_Figma.css).
  *
- * Sélecteur `:root[data-theme="coe"]` (spécificité 0,2,0) : choisi pour battre
+ * Sélecteur `:root[data-theme="europa-1"]` (spécificité 0,2,0) : choisi pour battre
  * `:root:not([data-scheme="light"])` du fallback @media (prefers-color-scheme)
- * ci-dessus — CoE est light-only et ne doit JAMAIS être happé par le dark auto.
+ * ci-dessus — Europa-1 est light-only et ne doit JAMAIS être happé par le dark auto.
  * Le manifeste --supported-schemes (light-only) est déclaré en tête du bloc
  * ci-dessous ; ICI, couleur uniquement (typo / radius = tranches séparées).
  *
  * Aucune nouvelle entrée de contrat n'a été nécessaire (superset discipliné,
- * ADR-0001) : les 32 tokens couleur existants suffisent à habiller CoE.
+ * ADR-0001) : les 32 tokens couleur existants suffisent à habiller Europa-1.
  * ========================================================================== */
-:root[data-theme="coe"] {
-    /* --- MANIFESTE — CoE est light-only (charte sans dark). Le toggle se
-     *     masque et force `light` sous data-theme="coe" (ADR-0002). --- */
+:root[data-theme="europa-1"] {
+    /* --- MANIFESTE — Europa-1 est light-only (charte sans dark). Le toggle se
+     *     masque et force `light` sous data-theme="europa-1" (ADR-0002). --- */
     --supported-schemes: light;
 
-    /* --- TIER 1 — PRIMITIVES CoE (échelles de la charte, propres au thème) --- */
+    /* --- TIER 1 — PRIMITIVES Europa-1 (échelles de la charte, propres au thème) --- */
 
     /* Neutrals (blanc → noir) */
-    --coe-neutral-white: rgba(255, 255, 255, 1);
-    --coe-neutral-50:    rgba(250, 250, 250, 1);
-    --coe-neutral-100:   rgba(245, 245, 245, 1);
-    --coe-neutral-200:   rgba(229, 229, 229, 1);
-    --coe-neutral-300:   rgba(212, 212, 212, 1);
-    --coe-neutral-400:   rgba(163, 163, 163, 1);
-    --coe-neutral-500:   rgba(115, 115, 115, 1);
-    --coe-neutral-600:   rgba(82, 82, 82, 1);
-    --coe-neutral-700:   rgba(64, 64, 64, 1);
-    --coe-neutral-800:   rgba(38, 38, 38, 1);
-    --coe-neutral-900:   rgba(23, 23, 23, 1);
-    --coe-neutral-black: rgba(0, 0, 0, 1);
+    --europa1-neutral-white: rgba(255, 255, 255, 1);
+    --europa1-neutral-50:    rgba(250, 250, 250, 1);
+    --europa1-neutral-100:   rgba(245, 245, 245, 1);
+    --europa1-neutral-200:   rgba(229, 229, 229, 1);
+    --europa1-neutral-300:   rgba(212, 212, 212, 1);
+    --europa1-neutral-400:   rgba(163, 163, 163, 1);
+    --europa1-neutral-500:   rgba(115, 115, 115, 1);
+    --europa1-neutral-600:   rgba(82, 82, 82, 1);
+    --europa1-neutral-700:   rgba(64, 64, 64, 1);
+    --europa1-neutral-800:   rgba(38, 38, 38, 1);
+    --europa1-neutral-900:   rgba(23, 23, 23, 1);
+    --europa1-neutral-black: rgba(0, 0, 0, 1);
 
-    /* Neutral-blue (gris bleutés — signature des surfaces CoE) */
-    --coe-neutral-blue-50:  rgba(250, 251, 254, 1);
-    --coe-neutral-blue-100: rgba(245, 246, 248, 1);
-    --coe-neutral-blue-200: rgba(229, 232, 233, 1);
-    --coe-neutral-blue-300: rgba(207, 214, 216, 1);
-    --coe-neutral-blue-400: rgba(156, 167, 171, 1);
-    --coe-neutral-blue-500: rgba(113, 127, 132, 1);
-    --coe-neutral-blue-600: rgba(77, 86, 89, 1);
+    /* Neutral-blue (gris bleutés — signature des surfaces Europa-1) */
+    --europa1-neutral-blue-50:  rgba(250, 251, 254, 1);
+    --europa1-neutral-blue-100: rgba(245, 246, 248, 1);
+    --europa1-neutral-blue-200: rgba(229, 232, 233, 1);
+    --europa1-neutral-blue-300: rgba(207, 214, 216, 1);
+    --europa1-neutral-blue-400: rgba(156, 167, 171, 1);
+    --europa1-neutral-blue-500: rgba(113, 127, 132, 1);
+    --europa1-neutral-blue-600: rgba(77, 86, 89, 1);
 
-    /* Primary (bleu institutionnel CoE) */
-    --coe-primary-50:        rgba(233, 240, 247, 1);
-    --coe-primary-100:       rgba(188, 209, 229, 1);
-    --coe-primary-200:       rgba(155, 187, 217, 1);
-    --coe-primary-300:       rgba(110, 156, 199, 1);
-    --coe-primary-400:       rgba(81, 137, 189, 1);
-    --coe-primary-primary:   rgba(38, 107, 172, 1);
-    --coe-primary-600:       rgba(35, 97, 157, 1);
-    --coe-primary-700:       rgba(27, 76, 122, 1);
-    --coe-primary-800:       rgba(21, 59, 95, 1);
-    --coe-primary-900:       rgba(16, 45, 72, 1);
-    --coe-primary-alpha-085: rgba(38, 107, 172, 0.85);
-    --coe-primary-alpha-010: rgba(38, 107, 172, 0.10);
-    --coe-primary-alpha-005: rgba(38, 107, 172, 0.05);
+    /* Primary (bleu institutionnel Europa-1) */
+    --europa1-primary-50:        rgba(233, 240, 247, 1);
+    --europa1-primary-100:       rgba(188, 209, 229, 1);
+    --europa1-primary-200:       rgba(155, 187, 217, 1);
+    --europa1-primary-300:       rgba(110, 156, 199, 1);
+    --europa1-primary-400:       rgba(81, 137, 189, 1);
+    --europa1-primary-primary:   rgba(38, 107, 172, 1);
+    --europa1-primary-600:       rgba(35, 97, 157, 1);
+    --europa1-primary-700:       rgba(27, 76, 122, 1);
+    --europa1-primary-800:       rgba(21, 59, 95, 1);
+    --europa1-primary-900:       rgba(16, 45, 72, 1);
+    --europa1-primary-alpha-085: rgba(38, 107, 172, 0.85);
+    --europa1-primary-alpha-010: rgba(38, 107, 172, 0.10);
+    --europa1-primary-alpha-005: rgba(38, 107, 172, 0.05);
 
     /* Palette (officielle / accent / tertiaire) */
-    --coe-palette-coe-official:        rgba(18, 55, 81, 1);
-    --coe-palette-accent:              rgba(254, 193, 65, 1);
-    --coe-palette-tertiary:            rgba(107, 50, 153, 1);
-    --coe-palette-tertiary-dark:       rgba(107, 50, 105, 1);
-    --coe-palette-tertiary-alpha-085:  rgba(107, 50, 153, 0.85);
-    --coe-palette-tertiary-alpha-010:  rgba(107, 50, 153, 0.10);
+    --europa1-palette-official:        rgba(18, 55, 81, 1);
+    --europa1-palette-accent:              rgba(254, 193, 65, 1);
+    --europa1-palette-tertiary:            rgba(107, 50, 153, 1);
+    --europa1-palette-tertiary-dark:       rgba(107, 50, 105, 1);
+    --europa1-palette-tertiary-alpha-085:  rgba(107, 50, 153, 0.85);
+    --europa1-palette-tertiary-alpha-010:  rgba(107, 50, 153, 0.10);
 
     /* Status (succès / erreur / avertissement + variantes) */
-    --coe-status-success:            rgba(0, 125, 62, 1);
-    --coe-status-success-dark:       rgba(0, 80, 62, 1);
-    --coe-status-success-alpha-085:  rgba(0, 125, 62, 0.85);
-    --coe-status-success-alpha-010:  rgba(0, 125, 62, 0.10);
-    --coe-status-error:              rgba(198, 28, 28, 1);
-    --coe-status-error-dark:         rgba(153, 28, 28, 1);
-    --coe-status-error-alpha-085:    rgba(198, 28, 28, 0.85);
-    --coe-status-error-alpha-010:    rgba(198, 28, 28, 0.10);
-    --coe-status-error-alpha-020:    rgba(198, 28, 28, 0.20);
-    --coe-status-warning:            rgba(185, 71, 9, 1);
-    --coe-status-warning-dark:       rgba(160, 51, 9, 1);
-    --coe-status-warning-alpha-085:  rgba(185, 71, 9, 0.85);
-    --coe-status-warning-alpha-010:  rgba(185, 71, 9, 0.10);
-    --coe-status-warning-alpha-020:  rgba(185, 71, 9, 0.20);
+    --europa1-status-success:            rgba(0, 125, 62, 1);
+    --europa1-status-success-dark:       rgba(0, 80, 62, 1);
+    --europa1-status-success-alpha-085:  rgba(0, 125, 62, 0.85);
+    --europa1-status-success-alpha-010:  rgba(0, 125, 62, 0.10);
+    --europa1-status-error:              rgba(198, 28, 28, 1);
+    --europa1-status-error-dark:         rgba(153, 28, 28, 1);
+    --europa1-status-error-alpha-085:    rgba(198, 28, 28, 0.85);
+    --europa1-status-error-alpha-010:    rgba(198, 28, 28, 0.10);
+    --europa1-status-error-alpha-020:    rgba(198, 28, 28, 0.20);
+    --europa1-status-warning:            rgba(185, 71, 9, 1);
+    --europa1-status-warning-dark:       rgba(160, 51, 9, 1);
+    --europa1-status-warning-alpha-085:  rgba(185, 71, 9, 0.85);
+    --europa1-status-warning-alpha-010:  rgba(185, 71, 9, 0.10);
+    --europa1-status-warning-alpha-020:  rgba(185, 71, 9, 0.20);
 
     /* Logo flag (drapeau européen) */
-    --coe-logo-blue-flag:   rgba(14, 61, 138, 1);
-    --coe-logo-yellow-flag: rgba(254, 204, 0, 1);
+    --europa1-logo-blue-flag:   rgba(14, 61, 138, 1);
+    --europa1-logo-yellow-flag: rgba(254, 204, 0, 1);
 
-    /* --- TIER 2+3 — MAPPING du contrat couleur sur les primitives CoE --- */
+    /* --- TIER 2+3 — MAPPING du contrat couleur sur les primitives Europa-1 --- */
 
     /* Brand / state */
-    --color-primary:       var(--coe-primary-primary);
-    --color-primary-hover: var(--coe-primary-700);
-    --color-success:       var(--coe-status-success);
-    --color-success-dark:  var(--coe-status-success-dark);
-    --color-warning:       var(--coe-status-warning);
-    --color-danger:        var(--coe-status-error);
-    --color-info:          var(--coe-primary-600);
-    --color-info-dark:     var(--coe-primary-700);
+    --color-primary:       var(--europa1-primary-primary);
+    --color-primary-hover: var(--europa1-primary-700);
+    --color-success:       var(--europa1-status-success);
+    --color-success-dark:  var(--europa1-status-success-dark);
+    --color-warning:       var(--europa1-status-warning);
+    --color-danger:        var(--europa1-status-error);
+    --color-info:          var(--europa1-primary-600);
+    --color-info-dark:     var(--europa1-primary-700);
 
     /* Status */
-    --color-online:  var(--coe-status-success);
-    --color-offline: var(--coe-status-error);
+    --color-online:  var(--europa1-status-success);
+    --color-offline: var(--europa1-status-error);
 
     /* Tints / soft backgrounds */
-    --color-primary-light: var(--coe-primary-50);
-    --color-success-light: var(--coe-status-success-alpha-010);
-    --color-warning-light: var(--coe-status-warning-alpha-020);
-    --color-warning-bg:    var(--coe-status-warning-alpha-010);
-    --color-danger-light:  var(--coe-status-error-alpha-020);
-    --color-danger-bg:     var(--coe-status-error-alpha-010);
-    --color-info-light:    var(--coe-primary-alpha-010);
+    --color-primary-light: var(--europa1-primary-50);
+    --color-success-light: var(--europa1-status-success-alpha-010);
+    --color-warning-light: var(--europa1-status-warning-alpha-020);
+    --color-warning-bg:    var(--europa1-status-warning-alpha-010);
+    --color-danger-light:  var(--europa1-status-error-alpha-020);
+    --color-danger-bg:     var(--europa1-status-error-alpha-010);
+    --color-info-light:    var(--europa1-primary-alpha-010);
 
     /* Surfaces / backgrounds */
-    --color-bg-primary:   var(--coe-neutral-white);
-    --color-bg-secondary: var(--coe-neutral-blue-100);
-    --color-bg-tertiary:  var(--coe-neutral-blue-50);
-    --color-bg-hover:     var(--coe-neutral-blue-200);
-    --color-bg-active:    var(--coe-neutral-blue-300);
+    --color-bg-primary:   var(--europa1-neutral-white);
+    --color-bg-secondary: var(--europa1-neutral-blue-100);
+    --color-bg-tertiary:  var(--europa1-neutral-blue-50);
+    --color-bg-hover:     var(--europa1-neutral-blue-200);
+    --color-bg-active:    var(--europa1-neutral-blue-300);
 
     /* Text */
-    --color-text-primary:   var(--coe-neutral-900);
-    --color-text-secondary: var(--coe-neutral-800);
-    --color-text-tertiary:  var(--coe-neutral-600);
-    --color-text-disabled:  var(--coe-neutral-400);
-    --color-text-white:     var(--coe-neutral-white);
+    --color-text-primary:   var(--europa1-neutral-900);
+    --color-text-secondary: var(--europa1-neutral-800);
+    --color-text-tertiary:  var(--europa1-neutral-600);
+    --color-text-disabled:  var(--europa1-neutral-400);
+    --color-text-white:     var(--europa1-neutral-white);
 
     /* Borders */
-    --color-border-light:  var(--coe-neutral-200);
-    --color-border-medium: var(--coe-neutral-300);
-    --color-border-dark:   var(--coe-neutral-400);
+    --color-border-light:  var(--europa1-neutral-200);
+    --color-border-medium: var(--europa1-neutral-300);
+    --color-border-dark:   var(--europa1-neutral-400);
 
-    /* Dark surfaces (composants foncés en light scheme → navy CoE) */
-    --color-dark:       var(--coe-palette-coe-official);
-    --color-dark-hover: var(--coe-primary-800);
+    /* Dark surfaces (composants foncés en light scheme → navy Europa-1) */
+    --color-dark:       var(--europa1-palette-official);
+    --color-dark-hover: var(--europa1-primary-800);
 
-    /* --- TIER 1 — PRIMITIVES TYPO CoE (Open Sans + échelle de la charte) ---
+    /* --- TIER 1 — PRIMITIVES TYPO Europa-1 (Open Sans + échelle de la charte) ---
      *
-     * Famille charte = Open Sans (export Figma DS CoE : « Text styles (font
+     * Famille charte = Open Sans (export Figma DS Europa-1 : « Text styles (font
      * Open Sans) »). Open Sans est une WEB FONT : l'app consommatrice doit la
      * charger (ex. <link> Google Fonts ou @font-face) — uikit ne bundle aucune
      * fonte (ADN no-deps). Le stack de repli système garantit un rendu dégradé
      * propre tant que la fonte n'est pas chargée. Échelle = valeurs px de la
      * charte. Mono : aucune fonte mono dans la charte → --font-family-mono reste
      * hérité de :root (stack système), non remappé ici. --- */
-    --coe-font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --europa1-font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-    --coe-type-12: 12px;  /* charte : paragraph-xs */
-    --coe-type-13: 13px;  /* charte : paragraph-small */
-    --coe-type-15: 15px;  /* charte : paragraph-body */
-    --coe-type-20: 20px;  /* charte : headings-h4 */
-    --coe-type-24: 24px;  /* charte : headings-h3 */
+    --europa1-type-12: 12px;  /* charte : paragraph-xs */
+    --europa1-type-13: 13px;  /* charte : paragraph-small */
+    --europa1-type-15: 15px;  /* charte : paragraph-body */
+    --europa1-type-20: 20px;  /* charte : headings-h4 */
+    --europa1-type-24: 24px;  /* charte : headings-h3 */
 
-    /* --- TIER 2+3 — MAPPING du contrat typo sur les primitives CoE ---
+    /* --- TIER 2+3 — MAPPING du contrat typo sur les primitives Europa-1 ---
      *
      * Seuls la famille base + l'échelle de tailles sont remappées ; le mono, les
      * poids et les line-heights restent hérités de :root (constantes cross-thème,
      * hors contrat). Échelle ancrée sur la charte : le corps de texte (--font-
-     * size-lg, défaut du <body>) tombe sur le paragraph-body CoE (15px). --- */
-    --font-family-base: var(--coe-font-sans);
+     * size-lg, défaut du <body>) tombe sur le paragraph-body Europa-1 (15px). --- */
+    --font-family-base: var(--europa1-font-sans);
 
-    --font-size-xs:   var(--coe-type-12);
-    --font-size-sm:   var(--coe-type-13);
-    --font-size-base: var(--coe-type-13);
-    --font-size-md:   var(--coe-type-15);
-    --font-size-lg:   var(--coe-type-15);
-    --font-size-xl:   var(--coe-type-20);
-    --font-size-2xl:  var(--coe-type-24);
+    --font-size-xs:   var(--europa1-type-12);
+    --font-size-sm:   var(--europa1-type-13);
+    --font-size-base: var(--europa1-type-13);
+    --font-size-md:   var(--europa1-type-15);
+    --font-size-lg:   var(--europa1-type-15);
+    --font-size-xl:   var(--europa1-type-20);
+    --font-size-2xl:  var(--europa1-type-24);
 
-    /* --- TIER 1 — PRIMITIVES RADIUS CoE (échelle de la charte Figma DS CoE) ---
+    /* --- TIER 1 — PRIMITIVES RADIUS Europa-1 (échelle de la charte Figma DS Europa-1) ---
      *
      * Échelle plus généreuse que uikit-default. Valeurs fidèles à la charte
-     * (export Figma : « Radius » sm/md/lg/xl/xxl). --coe-radius-xxl est importé
+     * (export Figma : « Radius » sm/md/lg/xl/xxl). --europa1-radius-xxl est importé
      * pour rester fidèle à l'échelle complète mais N'EST PAS au contrat (aucun
      * composant ne le consomme — superset discipliné, ADR-0001). --- */
-    --coe-radius-sm:  2px;
-    --coe-radius-md:  4px;
-    --coe-radius-lg:  8px;
-    --coe-radius-xl:  12px;
-    --coe-radius-xxl: 16px;
+    --europa1-radius-sm:  2px;
+    --europa1-radius-md:  4px;
+    --europa1-radius-lg:  8px;
+    --europa1-radius-xl:  12px;
+    --europa1-radius-xxl: 16px;
 
-    /* --- TIER 2+3 — MAPPING du contrat radius sur les primitives CoE ---
+    /* --- TIER 2+3 — MAPPING du contrat radius sur les primitives Europa-1 ---
      *
      * --radius-full (pilule) et le « no-radius » 0 sont des sentinels
      * géométriques cross-thème : --radius-full reste hérité de :root (9999px),
-     * non remappé ici (les pilules CoE restent des pilules). --- */
-    --radius-sm: var(--coe-radius-sm);   /* 2px */
-    --radius-md: var(--coe-radius-md);   /* 4px */
-    --radius-lg: var(--coe-radius-lg);   /* 8px */
-    --radius-xl: var(--coe-radius-xl);   /* 12px */
+     * non remappé ici (les pilules Europa-1 restent des pilules). --- */
+    --radius-sm: var(--europa1-radius-sm);   /* 2px */
+    --radius-md: var(--europa1-radius-md);   /* 4px */
+    --radius-lg: var(--europa1-radius-lg);   /* 8px */
+    --radius-xl: var(--europa1-radius-xl);   /* 12px */
 }
 
 :root {
@@ -443,7 +443,7 @@
      * Échelles brutes PROPRES À CE THÈME, jamais consommées par un composant :
      * elles n'alimentent que le contrat typo (tier 2+3 ci-dessous). Familles =
      * stacks système ; tailles = échelle px keyée par valeur (même esprit que
-     * --color-blue-400). Un autre thème (CoE) fournit SES primitives typo
+     * --color-blue-400). Un autre thème (Europa-1) fournit SES primitives typo
      * — cf. docs/adr/0001-architecture-tokens-multi-theme.md.
      * ===================================================================== */
 
@@ -466,7 +466,7 @@
      * Famille + échelle = tokens sémantiques du contrat (token-contract.json,
      * catégorie "typography") ; SEULS ces noms sont consommés par les composants
      * (206 font-size déjà var-ready). La typo ne varie pas selon le SCHEME → un
-     * seul mapping en :root, hérité tel quel par les cellules dark & coe (sauf
+     * seul mapping en :root, hérité tel quel par les cellules dark & europa-1 (sauf
      * override de thème). uikit-default reproduit la typo actuelle À L'IDENTIQUE.
      * ===================================================================== */
 
@@ -518,7 +518,7 @@
      * Échelle brute PROPRE À CE THÈME, keyée par valeur px (même esprit que
      * --type-* / --color-blue-*). Jamais consommée par un composant : elle
      * n'alimente que le contrat radius (tier 2+3 ci-dessous). Un autre thème
-     * (CoE) fournit SES primitives radius (--coe-radius-*).
+     * (Europa-1) fournit SES primitives radius (--europa1-radius-*).
      * Remplace les anciens --border-radius-* (renommés en contrat --radius-*).
      * ===================================================================== */
 
@@ -537,7 +537,7 @@
      * (sm=2 / md=3 / lg=4 / xl=6, ex-anciens --border-radius-*).
      *
      * --radius-full = sentinel géométrique (pilule / fully rounded) : constante
-     * cross-thème, héritée par CoE (les pilules restent des pilules quelle que
+     * cross-thème, héritée par Europa-1 (les pilules restent des pilules quelle que
      * soit la marque, comme les cercles 50%). Le « no-radius » reste le littéral
      * 0 dans les composants (non thémé, brand-neutral) → pas de token --radius-none.
      * ===================================================================== */

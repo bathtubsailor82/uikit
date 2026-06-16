@@ -8,7 +8,7 @@ glossaire, pas une spec : aucun détail d'implémentation ici (ça vit dans
 ## Language
 
 **Theme** (axe *marque*) :
-L'identité visuelle nommée qui fournit un jeu complet de valeurs de design — p.ex. `uikit-default`, `coe`. Sélectionne *quelles* valeurs.
+L'identité visuelle nommée qui fournit un jeu complet de valeurs de design — p.ex. `uikit-default`, `europa-1`. Sélectionne *quelles* valeurs.
 _Avoid_: scheme, mode, skin
 
 **Scheme** (axe *mode*) :
@@ -28,7 +28,7 @@ L'ensemble figé des tokens sémantiques — l'API entre les thèmes et les comp
 _Avoid_: theme, palette
 
 **Matrix** (matrice thème × scheme) :
-L'ensemble des combinaisons (thème × scheme) disponibles. Elle est *creuse* : un thème peut ne fournir qu'un sous-ensemble des schemes (p.ex. CoE = clair seulement).
+L'ensemble des combinaisons (thème × scheme) disponibles. Elle est *creuse* : un thème peut ne fournir qu'un sous-ensemble des schemes (p.ex. Europa-1 = clair seulement).
 _Avoid_: grid
 
 ## Relationships

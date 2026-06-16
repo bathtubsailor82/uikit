@@ -89,7 +89,7 @@
     <div class="bar">
         <h1>Matrice thème × scheme — vérification manuelle</h1>
         <!-- Toggle dédié : icône sun/moon posée par dark-mode.js, masqué tout seul
-             quand le thème actif ne supporte qu'un seul scheme (CoE = light-only). -->
+             quand le thème actif ne supporte qu'un seul scheme (Europa-1 = light-only). -->
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Basculer le scheme clair / sombre" style="color: var(--color-text-white);">
             <span class="theme-toggle__icon" data-theme-icon aria-hidden="true"></span>
         </button>
@@ -98,14 +98,14 @@
     <!-- ============================================================
          PARTIE 1 — PILOTE (root réel <html>, dark-mode.js actif)
          Vérifie : toggle vs --supported-schemes, persistance, hot-swap,
-         résolution computed du contrat sous data-theme="coe".
+         résolution computed du contrat sous data-theme="europa-1".
          ============================================================ -->
     <div class="panel">
         <h2>1 · Pilote (root réel)</h2>
         <p class="muted">Bascule la marque à chaud sur <code>&lt;html&gt;</code> — toggle, échantillon et inspecteur réagissent sans recharger.</p>
         <div class="controls">
             <button class="ctrl" onclick="setBrand('')">Marque : uikit-default</button>
-            <button class="ctrl" onclick="setBrand('coe')">Marque : CoE</button>
+            <button class="ctrl" onclick="setBrand('europa-1')">Marque : Europa-1</button>
             <button class="ctrl" onclick="resetPref()">Effacer préférence (localStorage)</button>
         </div>
     </div>
@@ -123,10 +123,10 @@
 
     <div class="panel">
         <h3>Inspecteur — résolution du contrat (valeurs computed)</h3>
-        <p class="muted">Valeur réellement résolue par le navigateur pour chaque token du contrat. La colonne <em>match charte</em> n'est assertée que sous <code>data-theme="coe"</code>.</p>
+        <p class="muted">Valeur réellement résolue par le navigateur pour chaque token du contrat. La colonne <em>match charte</em> n'est assertée que sous <code>data-theme="europa-1"</code>.</p>
         <table class="inspect">
             <thead>
-                <tr><th></th><th>Token du contrat</th><th>Computed (résolu)</th><th>Charte CoE</th><th>Match</th></tr>
+                <tr><th></th><th>Token du contrat</th><th>Computed (résolu)</th><th>Charte Europa-1</th><th>Match</th></tr>
             </thead>
             <tbody id="inspect-body"></tbody>
         </table>
@@ -141,7 +141,7 @@
         <h3>Checklist manuelle</h3>
         <ul class="checklist">
             <li>uikit-default : toggle <strong>visible</strong>, bascule light↔dark (icône lune→soleil), tout l'échantillon se re-thème.</li>
-            <li>Passer sur CoE : le toggle <strong>disparaît</strong> (light-only), scheme forcé sur <code>light</code>, l'inspecteur passe au vert (match charte).</li>
+            <li>Passer sur Europa-1 : le toggle <strong>disparaît</strong> (light-only), scheme forcé sur <code>light</code>, l'inspecteur passe au vert (match charte).</li>
             <li>Revenir sur uikit-default : la préférence stockée (ex. <code>dark</code>) est <strong>restaurée</strong>, le toggle réapparaît.</li>
             <li>Recharger la page : la préférence de scheme <strong>persiste</strong> (localStorage).</li>
         </ul>
@@ -149,12 +149,12 @@
 
     <!-- ============================================================
          PARTIE 2 — MATRICE GELÉE (une iframe par cellule disponible)
-         Chaque cellule est un VRAI root → :root[data-theme="coe"] matche.
+         Chaque cellule est un VRAI root → :root[data-theme="europa-1"] matche.
          Rendu statique (pas de dark-mode.js dedans) = capture fidèle figée.
          ============================================================ -->
     <div class="panel">
         <h2>2 · Matrice gelée — chaque cellule disponible</h2>
-        <p class="muted">Cellules rendues côte à côte, chacune dans son propre root (iframe) avec <code>data-theme</code>/<code>data-scheme</code> figés. Case vide volontairement absente : <code>coe × dark</code> n'existe pas (charte sans dark).</p>
+        <p class="muted">Cellules rendues côte à côte, chacune dans son propre root (iframe) avec <code>data-theme</code>/<code>data-scheme</code> figés. Case vide volontairement absente : <code>europa-1 × dark</code> n'existe pas (charte sans dark).</p>
         <div class="matrix" id="matrix"></div>
     </div>
 
@@ -201,23 +201,23 @@
               </div>
             </div>`;
 
-        // ---- Contrat à inspecter + valeurs attendues de la charte CoE ----
-        // Charte CoE : primitives sourcées dans css/tokens.css (bloc :root[data-theme="coe"]).
+        // ---- Contrat à inspecter + valeurs attendues de la charte Europa-1 ----
+        // Charte Europa-1 : primitives sourcées dans css/tokens.css (bloc :root[data-theme="europa-1"]).
         const CONTRACT = [
-            { token: '--color-primary',       kind: 'color', coe: 'rgb(38, 107, 172)' },
-            { token: '--color-primary-hover', kind: 'color', coe: 'rgb(27, 76, 122)' },
-            { token: '--color-success',       kind: 'color', coe: 'rgb(0, 125, 62)' },
-            { token: '--color-warning',       kind: 'color', coe: 'rgb(185, 71, 9)' },
-            { token: '--color-danger',        kind: 'color', coe: 'rgb(198, 28, 28)' },
-            { token: '--color-info',          kind: 'color', coe: 'rgb(35, 97, 157)' },
-            { token: '--color-bg-primary',    kind: 'color', coe: 'rgb(255, 255, 255)' },
-            { token: '--color-bg-secondary',  kind: 'color', coe: 'rgb(245, 246, 248)' },
-            { token: '--color-text-primary',  kind: 'color', coe: 'rgb(23, 23, 23)' },
-            { token: '--color-dark',          kind: 'color', coe: 'rgb(18, 55, 81)' },
-            { token: '--color-border-medium', kind: 'color', coe: 'rgb(212, 212, 212)' },
-            { token: '--font-family-base',    kind: 'family', coe: 'Open Sans' },
-            { token: '--font-size-lg',        kind: 'text', coe: '15px' },
-            { token: '--radius-lg',           kind: 'text', coe: '8px' },
+            { token: '--color-primary',       kind: 'color', europa1: 'rgb(38, 107, 172)' },
+            { token: '--color-primary-hover', kind: 'color', europa1: 'rgb(27, 76, 122)' },
+            { token: '--color-success',       kind: 'color', europa1: 'rgb(0, 125, 62)' },
+            { token: '--color-warning',       kind: 'color', europa1: 'rgb(185, 71, 9)' },
+            { token: '--color-danger',        kind: 'color', europa1: 'rgb(198, 28, 28)' },
+            { token: '--color-info',          kind: 'color', europa1: 'rgb(35, 97, 157)' },
+            { token: '--color-bg-primary',    kind: 'color', europa1: 'rgb(255, 255, 255)' },
+            { token: '--color-bg-secondary',  kind: 'color', europa1: 'rgb(245, 246, 248)' },
+            { token: '--color-text-primary',  kind: 'color', europa1: 'rgb(23, 23, 23)' },
+            { token: '--color-dark',          kind: 'color', europa1: 'rgb(18, 55, 81)' },
+            { token: '--color-border-medium', kind: 'color', europa1: 'rgb(212, 212, 212)' },
+            { token: '--font-family-base',    kind: 'family', europa1: 'Open Sans' },
+            { token: '--font-size-lg',        kind: 'text', europa1: '15px' },
+            { token: '--radius-lg',           kind: 'text', europa1: '8px' },
         ];
 
         const root = document.documentElement;
@@ -248,7 +248,7 @@
         function renderInspector() {
             const body = document.getElementById('inspect-body');
             const cs = getComputedStyle(root);
-            const isCoe = root.getAttribute('data-theme') === 'coe';
+            const isEuropa1 = root.getAttribute('data-theme') === 'europa-1';
             body.textContent = '';
 
             CONTRACT.forEach(row => {
@@ -275,24 +275,24 @@
                 tdVal.className = 'val';
                 tdVal.textContent = resolved;
 
-                const tdCoe = document.createElement('td');
-                tdCoe.className = 'val';
-                tdCoe.textContent = row.coe;
+                const tdEuropa1 = document.createElement('td');
+                tdEuropa1.className = 'val';
+                tdEuropa1.textContent = row.europa1;
 
                 const tdMatch = document.createElement('td');
-                if (!isCoe) {
+                if (!isEuropa1) {
                     tdMatch.className = 'match-na';
                     tdMatch.textContent = '—';
                 } else {
                     let ok;
-                    if (row.kind === 'color') ok = rgbKey(resolved) === rgbKey(row.coe);
-                    else if (row.kind === 'family') ok = resolved.includes(row.coe);
-                    else ok = resolved === row.coe;
+                    if (row.kind === 'color') ok = rgbKey(resolved) === rgbKey(row.europa1);
+                    else if (row.kind === 'family') ok = resolved.includes(row.europa1);
+                    else ok = resolved === row.europa1;
                     tdMatch.className = ok ? 'match-ok' : 'match-ko';
                     tdMatch.textContent = ok ? '✓ OK' : '✗ écart';
                 }
 
-                tr.append(tdSw, tdTok, tdVal, tdCoe, tdMatch);
+                tr.append(tdSw, tdTok, tdVal, tdEuropa1, tdMatch);
                 body.appendChild(tr);
             });
         }
@@ -313,12 +313,12 @@
         const CELLS = [
             { theme: '',    scheme: 'light', label: 'uikit-default', attrs: 'data-scheme="light"' },
             { theme: '',    scheme: 'dark',  label: 'uikit-default', attrs: 'data-scheme="dark"' },
-            { theme: 'coe', scheme: 'light', label: 'CoE',           attrs: 'data-theme="coe" data-scheme="light"' },
+            { theme: 'europa-1', scheme: 'light', label: 'Europa-1',           attrs: 'data-theme="europa-1" data-scheme="light"' },
         ];
 
         function cellDoc(cell) {
             const themeAttr = cell.theme ? ` data-theme="${cell.theme}"` : '';
-            // Document complet : root porte le thème → :root[data-theme="coe"] matche.
+            // Document complet : root porte le thème → :root[data-theme="europa-1"] matche.
             // Pas de dark-mode.js : rendu figé fidèle à la cellule demandée.
             return `<!DOCTYPE html><html lang="fr"${themeAttr} data-scheme="${cell.scheme}"><head><meta charset="UTF-8">`
                 + `<link rel="stylesheet" href="${CSS_HREF}">`
