@@ -222,6 +222,139 @@
     }
 }
 
+/* ============================================================================
+ * THÈME CoE (Conseil de l'Europe) — COULEUR seule · scheme light only
+ *
+ * Deuxième marque, première validation réelle de l'architecture (PRD #1) : elle
+ * résout le MÊME contrat (tier 2) en câblant SES propres primitives, sans
+ * toucher au markup d'un seul composant. Valeurs fidèles à la charte DS CoE
+ * (export Figma vérifié vs API REST — cf. VariablesDesignUIkit_Figma.css).
+ *
+ * Sélecteur `:root[data-theme="coe"]` (spécificité 0,2,0) : choisi pour battre
+ * `:root:not([data-scheme="light"])` du fallback @media (prefers-color-scheme)
+ * ci-dessus — CoE est light-only et ne doit JAMAIS être happé par le dark auto.
+ * Le manifeste --supported-schemes et l'adaptation du toggle sont une tranche
+ * dédiée ; ICI, couleur uniquement (typo / radius = tranches séparées).
+ *
+ * Aucune nouvelle entrée de contrat n'a été nécessaire (superset discipliné,
+ * ADR-0001) : les 32 tokens couleur existants suffisent à habiller CoE.
+ * ========================================================================== */
+:root[data-theme="coe"] {
+    /* --- TIER 1 — PRIMITIVES CoE (échelles de la charte, propres au thème) --- */
+
+    /* Neutrals (blanc → noir) */
+    --coe-neutral-white: rgba(255, 255, 255, 1);
+    --coe-neutral-50:    rgba(250, 250, 250, 1);
+    --coe-neutral-100:   rgba(245, 245, 245, 1);
+    --coe-neutral-200:   rgba(229, 229, 229, 1);
+    --coe-neutral-300:   rgba(212, 212, 212, 1);
+    --coe-neutral-400:   rgba(163, 163, 163, 1);
+    --coe-neutral-500:   rgba(115, 115, 115, 1);
+    --coe-neutral-600:   rgba(82, 82, 82, 1);
+    --coe-neutral-700:   rgba(64, 64, 64, 1);
+    --coe-neutral-800:   rgba(38, 38, 38, 1);
+    --coe-neutral-900:   rgba(23, 23, 23, 1);
+    --coe-neutral-black: rgba(0, 0, 0, 1);
+
+    /* Neutral-blue (gris bleutés — signature des surfaces CoE) */
+    --coe-neutral-blue-50:  rgba(250, 251, 254, 1);
+    --coe-neutral-blue-100: rgba(245, 246, 248, 1);
+    --coe-neutral-blue-200: rgba(229, 232, 233, 1);
+    --coe-neutral-blue-300: rgba(207, 214, 216, 1);
+    --coe-neutral-blue-400: rgba(156, 167, 171, 1);
+    --coe-neutral-blue-500: rgba(113, 127, 132, 1);
+    --coe-neutral-blue-600: rgba(77, 86, 89, 1);
+
+    /* Primary (bleu institutionnel CoE) */
+    --coe-primary-50:        rgba(233, 240, 247, 1);
+    --coe-primary-100:       rgba(188, 209, 229, 1);
+    --coe-primary-200:       rgba(155, 187, 217, 1);
+    --coe-primary-300:       rgba(110, 156, 199, 1);
+    --coe-primary-400:       rgba(81, 137, 189, 1);
+    --coe-primary-primary:   rgba(38, 107, 172, 1);
+    --coe-primary-600:       rgba(35, 97, 157, 1);
+    --coe-primary-700:       rgba(27, 76, 122, 1);
+    --coe-primary-800:       rgba(21, 59, 95, 1);
+    --coe-primary-900:       rgba(16, 45, 72, 1);
+    --coe-primary-alpha-085: rgba(38, 107, 172, 0.85);
+    --coe-primary-alpha-010: rgba(38, 107, 172, 0.10);
+    --coe-primary-alpha-005: rgba(38, 107, 172, 0.05);
+
+    /* Palette (officielle / accent / tertiaire) */
+    --coe-palette-coe-official:        rgba(18, 55, 81, 1);
+    --coe-palette-accent:              rgba(254, 193, 65, 1);
+    --coe-palette-tertiary:            rgba(107, 50, 153, 1);
+    --coe-palette-tertiary-dark:       rgba(107, 50, 105, 1);
+    --coe-palette-tertiary-alpha-085:  rgba(107, 50, 153, 0.85);
+    --coe-palette-tertiary-alpha-010:  rgba(107, 50, 153, 0.10);
+
+    /* Status (succès / erreur / avertissement + variantes) */
+    --coe-status-success:            rgba(0, 125, 62, 1);
+    --coe-status-success-dark:       rgba(0, 80, 62, 1);
+    --coe-status-success-alpha-085:  rgba(0, 125, 62, 0.85);
+    --coe-status-success-alpha-010:  rgba(0, 125, 62, 0.10);
+    --coe-status-error:              rgba(198, 28, 28, 1);
+    --coe-status-error-dark:         rgba(153, 28, 28, 1);
+    --coe-status-error-alpha-085:    rgba(198, 28, 28, 0.85);
+    --coe-status-error-alpha-010:    rgba(198, 28, 28, 0.10);
+    --coe-status-warning:            rgba(185, 71, 9, 1);
+    --coe-status-warning-dark:       rgba(160, 51, 9, 1);
+    --coe-status-warning-alpha-085:  rgba(185, 71, 9, 0.85);
+    --coe-status-warning-alpha-010:  rgba(185, 71, 9, 0.10);
+
+    /* Logo flag (drapeau européen) */
+    --coe-logo-blue-flag:   rgba(14, 61, 138, 1);
+    --coe-logo-yellow-flag: rgba(254, 204, 0, 1);
+
+    /* --- TIER 2+3 — MAPPING du contrat couleur sur les primitives CoE --- */
+
+    /* Brand / state */
+    --color-primary:       var(--coe-primary-primary);
+    --color-primary-hover: var(--coe-primary-700);
+    --color-success:       var(--coe-status-success);
+    --color-success-dark:  var(--coe-status-success-dark);
+    --color-warning:       var(--coe-status-warning);
+    --color-danger:        var(--coe-status-error);
+    --color-info:          var(--coe-primary-600);
+    --color-info-dark:     var(--coe-primary-700);
+
+    /* Status */
+    --color-online:  var(--coe-status-success);
+    --color-offline: var(--coe-status-error);
+
+    /* Tints / soft backgrounds */
+    --color-primary-light: var(--coe-primary-50);
+    --color-success-light: var(--coe-status-success-alpha-010);
+    --color-warning-light: var(--coe-status-warning-alpha-010);
+    --color-warning-bg:    var(--coe-status-warning-alpha-010);
+    --color-danger-light:  var(--coe-status-error-alpha-010);
+    --color-danger-bg:     var(--coe-status-error-alpha-010);
+    --color-info-light:    var(--coe-primary-alpha-010);
+
+    /* Surfaces / backgrounds */
+    --color-bg-primary:   var(--coe-neutral-white);
+    --color-bg-secondary: var(--coe-neutral-blue-100);
+    --color-bg-tertiary:  var(--coe-neutral-blue-50);
+    --color-bg-hover:     var(--coe-neutral-blue-200);
+    --color-bg-active:    var(--coe-neutral-blue-300);
+
+    /* Text */
+    --color-text-primary:   var(--coe-neutral-900);
+    --color-text-secondary: var(--coe-neutral-800);
+    --color-text-tertiary:  var(--coe-neutral-600);
+    --color-text-disabled:  var(--coe-neutral-400);
+    --color-text-white:     var(--coe-neutral-white);
+
+    /* Borders */
+    --color-border-light:  var(--coe-neutral-200);
+    --color-border-medium: var(--coe-neutral-300);
+    --color-border-dark:   var(--coe-neutral-400);
+
+    /* Dark surfaces (composants foncés en light scheme → navy CoE) */
+    --color-dark:       var(--coe-palette-coe-official);
+    --color-dark-hover: var(--coe-primary-800);
+}
+
 :root {
 
     /* === TYPOGRAPHIE === */

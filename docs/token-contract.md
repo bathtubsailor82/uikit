@@ -34,16 +34,25 @@ besoin démontré (les `--form-*` / `--action-*` de CoE entreront au cas par cas
 Le mode est porté par l'axe **scheme** (`data-scheme`), distinct de l'axe
 **theme** / marque (`data-theme`) — cf. [ADR-0002](adr/0002-selection-theme-scheme.md).
 
-| Thème           | Scheme  | Statut     | Sélecteur(s)                    |
-| --------------- | ------- | ---------- | ------------------------------- |
-| `uikit-default` | `light` | ✅ vérifié | `:root`                         |
-| `uikit-default` | `dark`  | ✅ vérifié | `:root`, `[data-scheme="dark"]` |
+| Thème           | Scheme  | Statut     | Sélecteur(s)                          |
+| --------------- | ------- | ---------- | ------------------------------------- |
+| `uikit-default` | `light` | ✅ vérifié | `:root`                               |
+| `uikit-default` | `dark`  | ✅ vérifié | `:root`, `[data-scheme="dark"]`       |
+| `coe`           | `light` | ✅ vérifié | `:root`, `:root[data-theme="coe"]`    |
 
 Le dark de `uikit-default` est appliqué via `[data-scheme="dark"]` et couvert
 par le check sur les deux cellules. Ses valeurs sont pour l'instant littérales
 (rendu reproduit à l'identique) ; leur extraction en primitives dark reste
 possible plus tard sans rework. La matrice est **creuse** par conception
 (ADR-0002) : un thème ne fournit que les schemes qu'il supporte.
+
+**CoE** (`<html data-theme="coe">`) est la première marque non-default : elle
+câble les 32 tokens couleur sur ses propres primitives (`--coe-*`, échelles de
+la charte), sans modifier un seul composant. CoE est **light-only** ; son
+sélecteur `:root[data-theme="coe"]` (spécificité 0,2,0) bat volontairement le
+fallback `@media (prefers-color-scheme: dark)` pour ne jamais basculer en dark
+auto. Le manifeste `--supported-schemes` et l'adaptation du toggle (case
+`coe × dark` absente, non silencieuse) relèvent d'une tranche dédiée.
 
 ## Tokens du contrat — couleur
 

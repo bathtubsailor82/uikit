@@ -50,6 +50,12 @@
       "scheme": "dark",
       "selectors": [":root", "[data-scheme=\"dark\"]"],
       "categories": ["color"]
+    },
+    {
+      "theme": "coe",
+      "scheme": "light",
+      "selectors": [":root", ":root[data-theme=\"coe\"]"],
+      "categories": ["color"]
     }
   ]
 }
