@@ -42,6 +42,7 @@ FILES=(
   "css/components/tooltip.css"
   "css/components/popover.css"
   "css/components/segmented.css"
+  "css/components/theme-toggle.css"
   "css/components/divider.css"
   "css/components/empty-state.css"
   "css/components/stepper.css"

@@ -95,6 +95,25 @@
 }
 
 /* ============================================================================
+ * MANIFESTE — schemes supportés par thème (matrice creuse)
+ *
+ * Chaque thème déclare, via la custom property `--supported-schemes`, la liste
+ * des schemes qu'il sait habiller (séparés par des espaces). Le composant
+ * theme-toggle (js/dark-mode.js) LIT cette propriété sur le thème actif et
+ * s'adapte : deux schemes → toggle visible ; un seul → toggle masqué et scheme
+ * forcé sur le seul supporté. AUCUN fallback silencieux, AUCUN dark auto-généré
+ * (ADR-0002). « Inventer » un scheme plus tard (ex. CoE dark) = ajouter le bloc
+ * de mapping ET ce scheme ici → le toggle réapparaît, zéro refonte.
+ *
+ * Lue par getComputedStyle() : ce n'est PAS un token du contrat (pas consommée
+ * par les composants, absente de token-contract.json) mais un manifeste de
+ * sélection, orthogonal au contrat de couleur.
+ * ========================================================================== */
+:root {
+    --supported-schemes: light dark;  /* uikit-default : light + dark */
+}
+
+/* ============================================================================
  * TIER 2+3 — CONTRACT (tokens sémantiques) × MAPPING uikit-default
  *
  * Le CONTRAT (tier 2) est la liste stable et agnostique de tokens sémantiques
@@ -233,13 +252,17 @@
  * Sélecteur `:root[data-theme="coe"]` (spécificité 0,2,0) : choisi pour battre
  * `:root:not([data-scheme="light"])` du fallback @media (prefers-color-scheme)
  * ci-dessus — CoE est light-only et ne doit JAMAIS être happé par le dark auto.
- * Le manifeste --supported-schemes et l'adaptation du toggle sont une tranche
- * dédiée ; ICI, couleur uniquement (typo / radius = tranches séparées).
+ * Le manifeste --supported-schemes (light-only) est déclaré en tête du bloc
+ * ci-dessous ; ICI, couleur uniquement (typo / radius = tranches séparées).
  *
  * Aucune nouvelle entrée de contrat n'a été nécessaire (superset discipliné,
  * ADR-0001) : les 32 tokens couleur existants suffisent à habiller CoE.
  * ========================================================================== */
 :root[data-theme="coe"] {
+    /* --- MANIFESTE — CoE est light-only (charte sans dark). Le toggle se
+     *     masque et force `light` sous data-theme="coe" (ADR-0002). --- */
+    --supported-schemes: light;
+
     /* --- TIER 1 — PRIMITIVES CoE (échelles de la charte, propres au thème) --- */
 
     /* Neutrals (blanc → noir) */

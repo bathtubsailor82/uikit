@@ -1,0 +1,56 @@
+/* ================================================
+   Theme Toggle Component — bascule de scheme (light/dark)
+   ================================================
+
+   Composant dédié remplaçant l'emoji hardcodé : un bouton portant une icône
+   mask sun/moon (cf. .icon-sun / .icon-moon dans icons.css). Le pilotage est
+   dans js/dark-mode.js, qui lit `--supported-schemes` du thème actif et :
+     · masque le toggle quand un seul scheme est supporté (attribut [hidden]) ;
+     · échange l'icône (lune en clair → on propose le sombre ; soleil en sombre
+       → on propose le clair) à chaud, sur clic comme sur changement de marque.
+
+   Le toggle se déclare :
+     <button class="theme-toggle" data-theme-toggle aria-label="Basculer le thème">
+       <span class="theme-toggle__icon" data-theme-icon aria-hidden="true"></span>
+     </button>
+*/
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch-target-min, 44px);
+    height: var(--touch-target-min, 44px);
+    padding: 0;
+    border: var(--border-width) solid transparent;
+    border-radius: var(--border-radius-lg);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.theme-toggle:hover {
+    background: rgba(127, 127, 127, 0.15);
+}
+
+.theme-toggle:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+/* Masqué quand le thème actif ne supporte qu'un seul scheme. La règle est
+   nécessaire : `.theme-toggle { display: inline-flex }` battrait le
+   `[hidden] { display: none }` de l'UA sans ce sélecteur plus spécifique. */
+.theme-toggle[hidden] {
+    display: none;
+}
+
+/* Réceptacle de l'icône mask. La taille vit ici pour que le markup reste
+   minimal ; .icon-sun / .icon-moon (posées par le JS) fournissent le masque. */
+.theme-toggle__icon,
+.theme-toggle [data-theme-icon] {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+}

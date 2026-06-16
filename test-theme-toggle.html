@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test — theme-toggle & --supported-schemes</title>
+    <link rel="stylesheet" href="dist/uikit.css">
+    <script src="js/dark-mode.js"></script>
+    <style>
+        body { font-family: var(--font-family-base); background: var(--color-bg-primary); color: var(--color-text-primary); padding: 24px; }
+        .bar { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--color-dark); color: var(--color-text-white); border-radius: var(--border-radius-lg); }
+        .bar h1 { font-size: var(--font-size-xl); margin: 0; flex: 1; }
+        .panel { margin-top: 20px; padding: 16px; border: var(--border-width) solid var(--color-border-medium); border-radius: var(--border-radius-lg); background: var(--color-bg-secondary); }
+        .swatches { display: flex; gap: 8px; margin-top: 12px; }
+        .swatch { width: 64px; height: 48px; border-radius: var(--border-radius-md); border: var(--border-width) solid var(--color-border-medium); }
+        code { font-family: var(--font-family-mono); background: var(--color-bg-active); padding: 1px 4px; border-radius: var(--border-radius-sm); }
+        button.ctrl { font-family: inherit; padding: 6px 12px; border: var(--border-width) solid var(--color-border-medium); border-radius: var(--border-radius-md); background: var(--color-bg-primary); color: var(--color-text-primary); cursor: pointer; }
+        dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; }
+        dt { font-weight: var(--font-weight-semibold); }
+        dd { margin: 0; }
+    </style>
+</head>
+<body>
+    <div class="bar">
+        <h1>theme-toggle — test manuel</h1>
+        <!-- Toggle dédié : icône sun/moon posée par le JS, masqué tout seul
+             quand le thème actif ne supporte qu'un scheme. -->
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Basculer le thème clair / sombre" style="color: white;">
+            <span class="theme-toggle__icon" data-theme-icon aria-hidden="true"></span>
+        </button>
+    </div>
+
+    <div class="panel">
+        <h2>Marque (axe <code>data-theme</code>)</h2>
+        <p>Basculer la marque à chaud — le toggle doit réagir sans recharger.</p>
+        <button class="ctrl" onclick="setTheme('')">uikit-default (light + dark)</button>
+        <button class="ctrl" onclick="setTheme('coe')">CoE (light only → toggle masqué)</button>
+    </div>
+
+    <div class="panel">
+        <h2>État courant</h2>
+        <dl>
+            <dt>data-theme</dt><dd><span id="s-theme"></span></dd>
+            <dt>data-scheme (appliqué)</dt><dd><span id="s-scheme"></span></dd>
+            <dt>--supported-schemes</dt><dd><span id="s-supported"></span></dd>
+            <dt>préférence stockée (localStorage)</dt><dd><span id="s-pref"></span></dd>
+            <dt>toggle visible ?</dt><dd><span id="s-visible"></span></dd>
+        </dl>
+        <div class="swatches">
+            <div class="swatch" style="background: var(--color-primary)" title="--color-primary"></div>
+            <div class="swatch" style="background: var(--color-bg-secondary)" title="--color-bg-secondary"></div>
+            <div class="swatch" style="background: var(--color-success)" title="--color-success"></div>
+            <div class="swatch" style="background: var(--color-danger)" title="--color-danger"></div>
+            <div class="swatch" style="background: var(--color-dark)" title="--color-dark"></div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>Checklist</h2>
+        <ul>
+            <li>uikit-default : toggle visible, bascule light↔dark, icône lune→soleil.</li>
+            <li>Basculer sur CoE : le toggle <strong>disparaît</strong> (light-only), scheme forcé sur <code>light</code>, swatches passent au bleu institutionnel.</li>
+            <li>Revenir sur uikit-default : si la préférence stockée était <code>dark</code>, elle est <strong>restaurée</strong> (toggle réapparaît en dark).</li>
+            <li>Recharger la page : la préférence de scheme persiste.</li>
+        </ul>
+    </div>
+
+    <script>
+        function setTheme(theme) {
+            if (theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+            // Le MutationObserver de dark-mode.js réconcilie tout seul ;
+            // on rafraîchit juste le panneau de debug.
+            requestAnimationFrame(render);
+        }
+
+        function render() {
+            const root = document.documentElement;
+            const cs = getComputedStyle(root);
+            document.getElementById('s-theme').textContent = root.getAttribute('data-theme') || '(uikit-default)';
+            document.getElementById('s-scheme').textContent = root.getAttribute('data-scheme');
+            document.getElementById('s-supported').textContent = (cs.getPropertyValue('--supported-schemes') || '').trim();
+            document.getElementById('s-pref').textContent = localStorage.getItem(UIKitTheme.STORAGE_KEY) || '(aucune)';
+            const toggle = document.querySelector('[data-theme-toggle]');
+            document.getElementById('s-visible').textContent = toggle && !toggle.hidden ? 'oui' : 'non (masqué)';
+        }
+
+        window.addEventListener('themechange', () => requestAnimationFrame(render));
+        document.addEventListener('DOMContentLoaded', render);
+    </script>
+</body>
+</html>

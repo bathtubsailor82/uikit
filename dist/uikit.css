@@ -96,6 +96,25 @@
 }
 
 /* ============================================================================
+ * MANIFESTE — schemes supportés par thème (matrice creuse)
+ *
+ * Chaque thème déclare, via la custom property `--supported-schemes`, la liste
+ * des schemes qu'il sait habiller (séparés par des espaces). Le composant
+ * theme-toggle (js/dark-mode.js) LIT cette propriété sur le thème actif et
+ * s'adapte : deux schemes → toggle visible ; un seul → toggle masqué et scheme
+ * forcé sur le seul supporté. AUCUN fallback silencieux, AUCUN dark auto-généré
+ * (ADR-0002). « Inventer » un scheme plus tard (ex. CoE dark) = ajouter le bloc
+ * de mapping ET ce scheme ici → le toggle réapparaît, zéro refonte.
+ *
+ * Lue par getComputedStyle() : ce n'est PAS un token du contrat (pas consommée
+ * par les composants, absente de token-contract.json) mais un manifeste de
+ * sélection, orthogonal au contrat de couleur.
+ * ========================================================================== */
+:root {
+    --supported-schemes: light dark;  /* uikit-default : light + dark */
+}
+
+/* ============================================================================
  * TIER 2+3 — CONTRACT (tokens sémantiques) × MAPPING uikit-default
  *
  * Le CONTRAT (tier 2) est la liste stable et agnostique de tokens sémantiques
@@ -234,13 +253,17 @@
  * Sélecteur `:root[data-theme="coe"]` (spécificité 0,2,0) : choisi pour battre
  * `:root:not([data-scheme="light"])` du fallback @media (prefers-color-scheme)
  * ci-dessus — CoE est light-only et ne doit JAMAIS être happé par le dark auto.
- * Le manifeste --supported-schemes et l'adaptation du toggle sont une tranche
- * dédiée ; ICI, couleur uniquement (typo / radius = tranches séparées).
+ * Le manifeste --supported-schemes (light-only) est déclaré en tête du bloc
+ * ci-dessous ; ICI, couleur uniquement (typo / radius = tranches séparées).
  *
  * Aucune nouvelle entrée de contrat n'a été nécessaire (superset discipliné,
  * ADR-0001) : les 32 tokens couleur existants suffisent à habiller CoE.
  * ========================================================================== */
 :root[data-theme="coe"] {
+    /* --- MANIFESTE — CoE est light-only (charte sans dark). Le toggle se
+     *     masque et force `light` sous data-theme="coe" (ADR-0002). --- */
+    --supported-schemes: light;
+
     /* --- TIER 1 — PRIMITIVES CoE (échelles de la charte, propres au thème) --- */
 
     /* Neutrals (blanc → noir) */
@@ -3008,6 +3031,32 @@ body.keyboard-nav *:focus {
 .icon-success {
     background-color: currentColor;
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpolyline points='9 12 12 15 16 10'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
+
+/* === THEME ICONS (scheme toggle sun/moon) === */
+
+.icon-sun {
+    background-color: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Cline x1='12' y1='1' x2='12' y2='3'/%3E%3Cline x1='12' y1='21' x2='12' y2='23'/%3E%3Cline x1='4.22' y1='4.22' x2='5.64' y2='5.64'/%3E%3Cline x1='18.36' y1='18.36' x2='19.78' y2='19.78'/%3E%3Cline x1='1' y1='12' x2='3' y2='12'/%3E%3Cline x1='21' y1='12' x2='23' y2='12'/%3E%3Cline x1='4.22' y1='19.78' x2='5.64' y2='18.36'/%3E%3Cline x1='18.36' y1='5.64' x2='19.78' y2='4.22'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Cline x1='12' y1='1' x2='12' y2='3'/%3E%3Cline x1='12' y1='21' x2='12' y2='23'/%3E%3Cline x1='4.22' y1='4.22' x2='5.64' y2='5.64'/%3E%3Cline x1='18.36' y1='18.36' x2='19.78' y2='19.78'/%3E%3Cline x1='1' y1='12' x2='3' y2='12'/%3E%3Cline x1='21' y1='12' x2='23' y2='12'/%3E%3Cline x1='4.22' y1='19.78' x2='5.64' y2='18.36'/%3E%3Cline x1='18.36' y1='5.64' x2='19.78' y2='4.22'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
+
+.icon-moon {
+    background-color: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/%3E%3C/svg%3E");
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
     -webkit-mask-position: center;
@@ -9791,6 +9840,64 @@ nav[aria-label="Pagination"] {
 
 [data-scheme="dark"] .segmented-bordered {
     background: transparent;
+}
+
+/* === css/components/theme-toggle.css === */
+/* ================================================
+   Theme Toggle Component — bascule de scheme (light/dark)
+   ================================================
+
+   Composant dédié remplaçant l'emoji hardcodé : un bouton portant une icône
+   mask sun/moon (cf. .icon-sun / .icon-moon dans icons.css). Le pilotage est
+   dans js/dark-mode.js, qui lit `--supported-schemes` du thème actif et :
+     · masque le toggle quand un seul scheme est supporté (attribut [hidden]) ;
+     · échange l'icône (lune en clair → on propose le sombre ; soleil en sombre
+       → on propose le clair) à chaud, sur clic comme sur changement de marque.
+
+   Le toggle se déclare :
+     <button class="theme-toggle" data-theme-toggle aria-label="Basculer le thème">
+       <span class="theme-toggle__icon" data-theme-icon aria-hidden="true"></span>
+     </button>
+*/
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch-target-min, 44px);
+    height: var(--touch-target-min, 44px);
+    padding: 0;
+    border: var(--border-width) solid transparent;
+    border-radius: var(--border-radius-lg);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.theme-toggle:hover {
+    background: rgba(127, 127, 127, 0.15);
+}
+
+.theme-toggle:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+/* Masqué quand le thème actif ne supporte qu'un seul scheme. La règle est
+   nécessaire : `.theme-toggle { display: inline-flex }` battrait le
+   `[hidden] { display: none }` de l'UA sans ce sélecteur plus spécifique. */
+.theme-toggle[hidden] {
+    display: none;
+}
+
+/* Réceptacle de l'icône mask. La taille vit ici pour que le markup reste
+   minimal ; .icon-sun / .icon-moon (posées par le JS) fournissent le masque. */
+.theme-toggle__icon,
+.theme-toggle [data-theme-icon] {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
 }
 
 /* === css/components/divider.css === */

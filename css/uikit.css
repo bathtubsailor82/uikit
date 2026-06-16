@@ -54,6 +54,7 @@
 @import "components/tooltip.css";
 @import "components/popover.css";
 @import "components/segmented.css";
+@import "components/theme-toggle.css";
 
 /* === LAYOUT HELPERS === */
 @import "components/divider.css";

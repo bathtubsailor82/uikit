@@ -102,8 +102,8 @@
     <!-- Header -->
     <div class="header">
         <h1>UIKit Documentation</h1>
-        <button class="btn" data-theme-toggle style="background: rgba(255,255,255,0.1); border: none; color: white;">
-            <span data-theme-icon>🌙</span>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Basculer le thème clair / sombre" style="color: white;">
+            <span class="theme-toggle__icon" data-theme-icon aria-hidden="true"></span>
         </button>
     </div>
 
@@ -1752,8 +1752,10 @@
 &lt;script src="js/dark-mode.js"&gt;&lt;/script&gt;
 
 &lt;!-- 3. Ajouter un toggle (optionnel) --&gt;
-&lt;button data-theme-toggle&gt;
-    &lt;span data-theme-icon&gt;🌙&lt;/span&gt;
+&lt;!-- L'icône sun/moon est posée par le JS ; le toggle se masque tout seul
+     sur un thème light-only (ex. data-theme="coe") via --supported-schemes --&gt;
+&lt;button class="theme-toggle" data-theme-toggle aria-label="Basculer le thème"&gt;
+    &lt;span class="theme-toggle__icon" data-theme-icon aria-hidden="true"&gt;&lt;/span&gt;
 &lt;/button&gt;
         </div>
 
