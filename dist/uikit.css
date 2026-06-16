@@ -377,24 +377,90 @@
     /* Dark surfaces (composants foncés en light scheme → navy CoE) */
     --color-dark:       var(--coe-palette-coe-official);
     --color-dark-hover: var(--coe-primary-800);
+
+    /* --- TIER 1 — PRIMITIVES TYPO CoE (Open Sans + échelle de la charte) ---
+     *
+     * Famille charte = Open Sans (export Figma DS CoE : « Text styles (font
+     * Open Sans) »). Open Sans est une WEB FONT : l'app consommatrice doit la
+     * charger (ex. <link> Google Fonts ou @font-face) — uikit ne bundle aucune
+     * fonte (ADN no-deps). Le stack de repli système garantit un rendu dégradé
+     * propre tant que la fonte n'est pas chargée. Échelle = valeurs px de la
+     * charte. Mono : aucune fonte mono dans la charte → --font-family-mono reste
+     * hérité de :root (stack système), non remappé ici. --- */
+    --coe-font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    --coe-type-12: 12px;  /* charte : paragraph-xs */
+    --coe-type-13: 13px;  /* charte : paragraph-small */
+    --coe-type-15: 15px;  /* charte : paragraph-body */
+    --coe-type-20: 20px;  /* charte : headings-h4 */
+    --coe-type-24: 24px;  /* charte : headings-h3 */
+
+    /* --- TIER 2+3 — MAPPING du contrat typo sur les primitives CoE ---
+     *
+     * Seuls la famille base + l'échelle de tailles sont remappées ; le mono, les
+     * poids et les line-heights restent hérités de :root (constantes cross-thème,
+     * hors contrat). Échelle ancrée sur la charte : le corps de texte (--font-
+     * size-lg, défaut du <body>) tombe sur le paragraph-body CoE (15px). --- */
+    --font-family-base: var(--coe-font-sans);
+
+    --font-size-xs:   var(--coe-type-12);
+    --font-size-sm:   var(--coe-type-13);
+    --font-size-base: var(--coe-type-13);
+    --font-size-md:   var(--coe-type-15);
+    --font-size-lg:   var(--coe-type-15);
+    --font-size-xl:   var(--coe-type-20);
+    --font-size-2xl:  var(--coe-type-24);
 }
 
 :root {
 
-    /* === TYPOGRAPHIE === */
+    /* ========================================================================
+     * TIER 1 — PRIMITIVES TYPO (thème uikit-default)
+     *
+     * Échelles brutes PROPRES À CE THÈME, jamais consommées par un composant :
+     * elles n'alimentent que le contrat typo (tier 2+3 ci-dessous). Familles =
+     * stacks système ; tailles = échelle px keyée par valeur (même esprit que
+     * --color-blue-400). Un autre thème (CoE) fournit SES primitives typo
+     * — cf. docs/adr/0001-architecture-tokens-multi-theme.md.
+     * ===================================================================== */
 
-    /* Famille de polices */
-    --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Consolas', monospace;
+    /* Familles (stacks système uikit-default) */
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Consolas', monospace;
 
-    /* Tailles de police */
-    --font-size-xs: 9px;
-    --font-size-sm: 10px;
-    --font-size-base: 11px;
-    --font-size-md: 12px;
-    --font-size-lg: 13px;
-    --font-size-xl: 16px;
-    --font-size-2xl: 18px;
+    /* Échelle de tailles (px) */
+    --type-9:  9px;
+    --type-10: 10px;
+    --type-11: 11px;
+    --type-12: 12px;
+    --type-13: 13px;
+    --type-16: 16px;
+    --type-18: 18px;
+
+    /* ========================================================================
+     * TIER 2+3 — CONTRACT TYPO × MAPPING uikit-default
+     *
+     * Famille + échelle = tokens sémantiques du contrat (token-contract.json,
+     * catégorie "typography") ; SEULS ces noms sont consommés par les composants
+     * (206 font-size déjà var-ready). La typo ne varie pas selon le SCHEME → un
+     * seul mapping en :root, hérité tel quel par les cellules dark & coe (sauf
+     * override de thème). uikit-default reproduit la typo actuelle À L'IDENTIQUE.
+     * ===================================================================== */
+
+    /* Familles */
+    --font-family-base: var(--font-sans);
+    --font-family-mono: var(--font-mono);
+
+    /* Échelle */
+    --font-size-xs:   var(--type-9);
+    --font-size-sm:   var(--type-10);
+    --font-size-base: var(--type-11);
+    --font-size-md:   var(--type-12);
+    --font-size-lg:   var(--type-13);
+    --font-size-xl:   var(--type-16);
+    --font-size-2xl:  var(--type-18);
+
+    /* === TYPOGRAPHIE — hors contrat (constantes cross-thème) === */
 
     /* Poids de police */
     --font-weight-normal: 400;

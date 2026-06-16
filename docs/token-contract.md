@@ -10,10 +10,12 @@ Le **contrat** est l'API stable entre les thèmes et les composants. Un composan
 
 Architecture en 3 tiers (voir `css/tokens.css`) :
 
-1. **Primitives** — échelles numériques brutes, propres à chaque thème
-   (`--color-neutral-*`, `--color-blue-*`, …). Jamais consommées directement.
+1. **Primitives** — échelles brutes, propres à chaque thème (`--color-neutral-*`,
+   `--color-blue-*`, familles `--font-sans` / `--font-mono`, tailles `--type-*`,
+   …). Jamais consommées directement.
 2. **Contract** — les tokens sémantiques listés ci-dessous. Noms catégorie-préfixés
-   stables (`--color-*`). C'est ce que les composants utilisent.
+   stables (`--color-*`, `--font-family-*`, `--font-size-*`). C'est ce que les
+   composants utilisent.
 3. **Mapping** (thème × scheme) — câble chaque token du contrat sur une primitive.
    `uikit-default · light` reproduit le rendu actuel à l'identique.
 
@@ -23,11 +25,14 @@ besoin démontré (les `--form-*` / `--action-*` de CoE entreront au cas par cas
 
 ## Portée actuelle
 
-- **Couleur** : implémentée (cette tranche). 32 tokens, ci-dessous.
-- **Typographie** (famille + échelle), **radius** : prévus, pas encore au contrat.
+- **Couleur** : implémentée. 32 tokens, ci-dessous.
+- **Typographie** (famille + échelle) : implémentée. 9 tokens, ci-dessous.
+- **Radius** : prévu, pas encore au contrat.
 - **Spacing** : tier réservé, hors v1.
 - **Audio** (atoms skeuomorphiques + `audio-track`) et **entity colors** : hors
-  contrat, non thémables.
+  contrat, non thémables. Les composants Audio gardent leurs polices inlinées.
+- Hors contrat aussi (constantes cross-thème, non thémées) : `--font-weight-*`,
+  `--line-height-*`.
 
 ## Matrice thème × scheme
 
@@ -47,8 +52,9 @@ possible plus tard sans rework. La matrice est **creuse** par conception
 (ADR-0002) : un thème ne fournit que les schemes qu'il supporte.
 
 **CoE** (`<html data-theme="coe">`) est la première marque non-default : elle
-câble les 32 tokens couleur sur ses propres primitives (`--coe-*`, échelles de
-la charte), sans modifier un seul composant. CoE est **light-only** ; son
+câble les 32 tokens couleur **et les 9 tokens typo** sur ses propres primitives
+(`--coe-*`, échelles de la charte ; typo = **Open Sans** + échelle Figma DS CoE),
+sans modifier un seul composant. CoE est **light-only** ; son
 sélecteur `:root[data-theme="coe"]` (spécificité 0,2,0) bat volontairement le
 fallback `@media (prefers-color-scheme: dark)` pour ne jamais basculer en dark
 auto. Le manifeste `--supported-schemes` et l'adaptation du toggle (case
@@ -90,6 +96,29 @@ auto. Le manifeste `--supported-schemes` et l'adaptation du toggle (case
 | `--color-border-dark`    | Bordure marquée                         |
 | `--color-dark`           | Surface foncée (composants sombres)     |
 | `--color-dark-hover`     | Surface foncée, état survol             |
+
+## Tokens du contrat — typographie
+
+Famille + échelle de tailles. Les composants consomment ces noms (jamais les
+primitives `--font-sans` / `--font-mono` / `--type-*`). `uikit-default` reproduit
+la typo actuelle à l'identique ; `coe` les remappe sur Open Sans + l'échelle de
+la charte (la taille de corps, `--font-size-lg` du `<body>`, tombe sur le
+`paragraph-body` CoE = 15px).
+
+| Token sémantique     | Rôle                          | uikit-default | coe  |
+| -------------------- | ----------------------------- | ------------- | ---- |
+| `--font-family-base` | Police de base (texte courant) | system-ui     | Open Sans |
+| `--font-family-mono` | Police monospace (technique)   | SF Mono       | *(hérité système)* |
+| `--font-size-xs`     | Micro (labels, badges)         | 9px           | 12px |
+| `--font-size-sm`     | Petit (captions)               | 10px          | 13px |
+| `--font-size-base`   | Base                           | 11px          | 13px |
+| `--font-size-md`     | Moyen                          | 12px          | 15px |
+| `--font-size-lg`     | Corps (défaut `<body>`)        | 13px          | 15px |
+| `--font-size-xl`     | Sous-titre                     | 16px          | 20px |
+| `--font-size-2xl`    | Titre                          | 18px          | 24px |
+
+> Open Sans est une web font : l'app consommatrice doit la charger (`<link>` /
+> `@font-face`). Le stack de repli système assure un rendu dégradé propre.
 
 ## Faire grandir le contrat
 
