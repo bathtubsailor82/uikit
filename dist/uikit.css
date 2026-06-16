@@ -383,12 +383,13 @@
     /* --- TIER 1 — PRIMITIVES TYPO Europa-1 (Open Sans + échelle de la charte) ---
      *
      * Famille charte = Open Sans (export Figma DS Europa-1 : « Text styles (font
-     * Open Sans) »). Open Sans est une WEB FONT : l'app consommatrice doit la
-     * charger (ex. <link> Google Fonts ou @font-face) — uikit ne bundle aucune
-     * fonte (ADN no-deps). Le stack de repli système garantit un rendu dégradé
-     * propre tant que la fonte n'est pas chargée. Échelle = valeurs px de la
-     * charte. Mono : aucune fonte mono dans la charte → --font-family-mono reste
-     * hérité de :root (stack système), non remappé ici. --- */
+     * Open Sans) »). Open Sans est une WEB FONT : uikit fournit un bundle
+     * self-host OPT-IN — `dist/europa1-fonts.css` (woff2 dans fonts/open-sans/,
+     * RGPD-safe) — que l'app europa-1 charge EN PLUS de dist/uikit.css. Non
+     * chargé → repli propre sur le stack système ci-dessous (dist/uikit.css
+     * reste sans dépendance). Échelle = valeurs px de la charte. Mono : aucune
+     * fonte mono dans la charte → --font-family-mono reste hérité de :root
+     * (stack système), non remappé ici. --- */
     --europa1-font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
     --europa1-type-12: 12px;  /* charte : paragraph-xs */

@@ -76,6 +76,11 @@ mv "$TMP_FILE" "dist/uikit.css"
 
 echo "Done! $(wc -l < dist/uikit.css) lines generated"
 
+# Bundle de fonte OPT-IN du thème europa-1 (Open Sans self-host, hors concat) :
+# fichier séparé que seules les apps europa-1 chargent en plus de uikit.css.
+cp css/europa1-fonts.css dist/europa1-fonts.css
+echo "Copied dist/europa1-fonts.css (Open Sans opt-in)"
+
 # Check build-time : le contrat de tokens doit résoudre entièrement.
 # Refuse de livrer un dist/ où un token du contrat est non mappé ou pendant.
 echo "Checking token contract..."

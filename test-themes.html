@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test — matrice thème × scheme</title>
     <link rel="stylesheet" href="dist/uikit.css">
+    <link rel="stylesheet" href="dist/europa1-fonts.css">
     <!-- Pilotage du scheme (toggle, persistance, hot-swap) — pas de runner, ADN no-deps. -->
     <script src="js/dark-mode.js"></script>
     <style>
@@ -222,6 +223,7 @@
 
         const root = document.documentElement;
         const CSS_HREF = new URL('dist/uikit.css', location.href).href;
+        const FONTS_HREF = new URL('dist/europa1-fonts.css', location.href).href;
 
         // Triplet rgb normalisé (ignore l'alpha) pour comparer hex/rgb/rgba de façon robuste.
         function rgbKey(s) {
@@ -322,6 +324,7 @@
             // Pas de dark-mode.js : rendu figé fidèle à la cellule demandée.
             return `<!DOCTYPE html><html lang="fr"${themeAttr} data-scheme="${cell.scheme}"><head><meta charset="UTF-8">`
                 + `<link rel="stylesheet" href="${CSS_HREF}">`
+                + `<link rel="stylesheet" href="${FONTS_HREF}">`
                 + `<style>html,body{margin:0;}body{padding:16px;background:var(--color-bg-primary);color:var(--color-text-primary);font-family:var(--font-family-base);}</style>`
                 + `</head><body>${SAMPLE}</body></html>`;
         }
