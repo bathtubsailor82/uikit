@@ -5,6 +5,18 @@
  * Support Light & Dark mode
  */
 
+/* === FONT SELF-HOST — Inconsolata (mono), self-hosted variable TTF ===
+ * La pile --font-mono nomme 'Inconsolata' comme repli mono cross-plateforme ;
+ * ce @font-face la self-host (chemin relatif au CSS inliné dans dist/uikit.css). */
+@font-face {
+    font-family: 'Inconsolata';
+    src: url('../fonts/Inconsolata-VariableFont_wdth_wght.ttf') format('truetype-variations');
+    font-weight: 200 900;
+    font-stretch: 50% 200%;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* ============================================================================
  * TIER 1 — PRIMITIVES (thème uikit-default)
  *
@@ -243,26 +255,28 @@
 }
 
 /* ============================================================================
- * THÈME Europa-1 — COULEUR seule · scheme light only
+ * THÈME Europa-1 — COULEUR seule · schemes light + dark
  *
  * Deuxième marque, première validation réelle de l'architecture (PRD #1) : elle
  * résout le MÊME contrat (tier 2) en câblant SES propres primitives, sans
  * toucher au markup d'un seul composant. Valeurs fidèles à la charte DS Europa-1
  * (export Figma vérifié vs API REST — cf. VariablesDesignUIkit_Figma.css).
  *
- * Sélecteur `:root[data-theme="europa-1"]` (spécificité 0,2,0) : choisi pour battre
- * `:root:not([data-scheme="light"])` du fallback @media (prefers-color-scheme)
- * ci-dessus — Europa-1 est light-only et ne doit JAMAIS être happé par le dark auto.
- * Le manifeste --supported-schemes (light-only) est déclaré en tête du bloc
- * ci-dessous ; ICI, couleur uniquement (typo / radius = tranches séparées).
+ * Sélecteur `:root[data-theme="europa-1"]` (spécificité 0,2,0) : la cellule light.
+ * La cellule dark vit dans son propre bloc `[data-theme="europa-1"][data-scheme="dark"]`
+ * (0,3,0) plus bas, qui bat à la fois cette cellule light ET le dark auto
+ * uikit-default du @media (prefers-color-scheme). Le manifeste --supported-schemes
+ * (light dark) est déclaré en tête du bloc ci-dessous ; ICI, couleur light
+ * uniquement (typo / radius = tranches séparées, partagées par les deux schemes).
  *
  * Aucune nouvelle entrée de contrat n'a été nécessaire (superset discipliné,
  * ADR-0001) : les 32 tokens couleur existants suffisent à habiller Europa-1.
  * ========================================================================== */
 :root[data-theme="europa-1"] {
-    /* --- MANIFESTE — Europa-1 est light-only (charte sans dark). Le toggle se
-     *     masque et force `light` sous data-theme="europa-1" (ADR-0002). --- */
-    --supported-schemes: light;
+    /* --- MANIFESTE — Europa-1 supporte light + dark. Le scheme toggle
+     *     (js/dark-mode.js) réapparaît automatiquement via ce manifeste ;
+     *     la cellule dark vit dans son propre bloc plus bas. --- */
+    --supported-schemes: light dark;
 
     /* --- TIER 1 — PRIMITIVES Europa-1 (échelles de la charte, propres au thème) --- */
 
@@ -435,6 +449,53 @@
     --radius-md: var(--europa1-radius-md);   /* 4px */
     --radius-lg: var(--europa1-radius-lg);   /* 8px */
     --radius-xl: var(--europa1-radius-xl);   /* 12px */
+}
+
+/* ============================================================================
+ * THÈME Europa-1 — SCHEME dark (mapping tier 3)
+ *
+ * Décline Europa-1 en sombre : SEULES les surfaces / textes / bordures / tints
+ * sont réinversées (esprit charte, neutres navy-tintés signature Europa-1). Les
+ * couleurs de marque (primary, status…) restent fixes — même discipline que la
+ * cellule dark de uikit-default. Typo & radius hérités de la cellule light
+ * Europa-1 (partagés par les deux schemes).
+ *
+ * Sélecteur `:root[data-theme="europa-1"][data-scheme="dark"]` (spécificité
+ * 0,3,0) : bat la cellule light Europa-1 (0,2,0) ET le dark auto uikit-default
+ * du @media (prefers-color-scheme) (0,2,0).
+ * ========================================================================== */
+:root[data-theme="europa-1"][data-scheme="dark"] {
+    /* Tints / soft backgrounds (sombres, navy / charte) */
+    --color-primary-light: rgba(16, 45, 72, 1);    /* primary-900 */
+    --color-success-light: rgba(11, 43, 30, 1);
+    --color-warning-light: rgba(58, 33, 5, 1);
+    --color-warning-bg:    rgba(43, 25, 4, 1);
+    --color-danger-light:  rgba(58, 18, 18, 1);
+    --color-danger-bg:     rgba(43, 14, 14, 1);
+    --color-info-light:    rgba(16, 45, 72, 1);
+
+    /* Surfaces / backgrounds (navy-black, signature Europa-1) */
+    --color-bg-primary:   rgba(15, 22, 31, 1);
+    --color-bg-secondary: rgba(22, 31, 42, 1);
+    --color-bg-tertiary:  rgba(18, 26, 36, 1);
+    --color-bg-hover:     rgba(33, 45, 60, 1);
+    --color-bg-active:    rgba(44, 59, 77, 1);
+
+    /* Text */
+    --color-text-primary:   var(--europa1-neutral-50);
+    --color-text-secondary: var(--europa1-neutral-300);
+    --color-text-tertiary:  var(--europa1-neutral-400);
+    --color-text-disabled:  var(--europa1-neutral-500);
+    --color-text-white:     var(--europa1-neutral-white);
+
+    /* Borders */
+    --color-border-light:  rgba(28, 39, 53, 1);
+    --color-border-medium: rgba(40, 54, 70, 1);
+    --color-border-dark:   rgba(58, 76, 96, 1);
+
+    /* Dark surfaces (composants foncés → near-black en scheme dark) */
+    --color-dark:       rgba(8, 13, 20, 1);
+    --color-dark-hover: rgba(15, 22, 31, 1);
 }
 
 :root {

@@ -74,6 +74,12 @@
       "scheme": "light",
       "selectors": [":root", ":root[data-theme=\"europa-1\"]"],
       "categories": ["color", "typography", "radius"]
+    },
+    {
+      "theme": "europa-1",
+      "scheme": "dark",
+      "selectors": [":root", ":root[data-theme=\"europa-1\"]", ":root[data-theme=\"europa-1\"][data-scheme=\"dark\"]"],
+      "categories": ["color", "typography", "radius"]
     }
   ]
 }
