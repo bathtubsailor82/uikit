@@ -160,8 +160,11 @@
     background: var(--color-bg-hover);
 }
 
-/* Intersection device row x vbar : la case du bouton 1:1 */
-.matrix-1to1-cell {
+/* Intersection device row x vbar : la case du bouton 1:1.
+   Selecteur qualifie .matrix-device-row th... : necessaire pour battre la
+   specificite de ".matrix-device-row th { left: 0 }" (sinon la case colle
+   a left:0 et chevauche le corner label au scroll horizontal). */
+.matrix-device-row th.matrix-1to1-cell {
     position: sticky;
     left: var(--matrix-header-width);
     z-index: 3;
