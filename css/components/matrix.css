@@ -256,30 +256,14 @@ tr.selected .matrix-row-header {
     background: var(--color-bg-hover);
 }
 
-/* Available cell (can be activated) */
-.matrix-cell.available::after {
-    content: "+";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 14px;
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-tertiary);
-    opacity: 0;
-    /* Transition removed for performance with large matrices */
-}
-
-.matrix-cell.available:hover::after {
-    opacity: 1;
-}
-
-/* Active cell (routed) - checkmark by default */
-.matrix-cell.active {
-    background: var(--color-success);
-}
-
-.matrix-cell.active::after {
+/* PERF CRITIQUE (matrices 256x256 = 65k cellules) : le ::after est TOUJOURS
+   present avec un content fixe, et les etats (hover/active/disabled) ne
+   modifient QUE des proprietes paint-only (opacity, color). Creer ou detruire
+   la boite du pseudo-element (content conditionnel, display:none) force un
+   relayout COMPLET de la table (~38 ms mesures a 256x256) a CHAQUE clic et
+   CHAQUE cellule survolee — et `contain` est sans effet sur les cellules de
+   table (spec CSS). Ne jamais reintroduire de content/display conditionnel. */
+.matrix-cell::after {
     content: "\2713";
     position: absolute;
     top: 50%;
@@ -288,6 +272,23 @@ tr.selected .matrix-row-header {
     font-size: 14px;
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-white);
+    opacity: 0;
+    /* Transition removed for performance with large matrices */
+}
+
+/* Available cell : apercu fantome du checkmark au survol */
+.matrix-cell.available:hover::after {
+    color: var(--color-text-tertiary);
+    opacity: 1;
+}
+
+/* Active cell (routed) - checkmark */
+.matrix-cell.active {
+    background: var(--color-success);
+}
+
+.matrix-cell.active::after {
+    opacity: 1;
 }
 
 /* Disabled cell */
@@ -298,7 +299,7 @@ tr.selected .matrix-row-header {
 }
 
 .matrix-cell.disabled::after {
-    display: none;
+    opacity: 0;
 }
 
 /* === CELL STATES BY ROW/COL SELECTION === */
@@ -467,7 +468,7 @@ tr.selected .matrix-cell.active {
     background: var(--color-bg-active);
 }
 
-[data-theme="dark"] .matrix-cell.available::after {
+[data-theme="dark"] .matrix-cell.available:hover::after {
     color: var(--color-text-secondary);
 }
 
