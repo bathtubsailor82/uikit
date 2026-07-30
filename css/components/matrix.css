@@ -174,17 +174,20 @@
     background: var(--color-bg-hover);
 }
 
+/* Remplit TOUTE la case de l'intersection (carre complet) : absolute+inset
+   dans la cellule sticky (height:100% n'est pas fiable dans une table-cell) */
 .matrix-1to1-btn {
-    display: block;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     border-radius: 0;
     background: var(--color-bg-active);
     color: var(--color-text-primary);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-bold);
-    line-height: var(--matrix-device-row-height);
     cursor: pointer;
 }
 
