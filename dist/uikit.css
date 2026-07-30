@@ -11150,6 +11150,7 @@ nav[aria-label="Pagination"] {
     --matrix-header-width: 140px;
     --matrix-col-header-height: 120px;
     --matrix-device-row-height: 24px;
+    --matrix-vbar-width: 24px;
 }
 
 /* === CONTAINER === */
@@ -11272,6 +11273,59 @@ nav[aria-label="Pagination"] {
 
 .matrix-device-cell:first-of-type {
     border-left: none;
+}
+
+/* === VBAR (barre verticale, pendant de la device row) === */
+
+/* Cellule de la colonne vbar dans les lignes du body : sticky a droite des
+   row headers, meme fond que la device row */
+.matrix-vbar {
+    position: sticky;
+    left: var(--matrix-header-width);
+    z-index: 1;
+    min-width: var(--matrix-vbar-width);
+    max-width: var(--matrix-vbar-width);
+    padding: 0;
+    background: var(--color-bg-hover);
+}
+
+/* Tete de la colonne vbar (rangee des col headers) */
+.matrix-vbar-head {
+    left: var(--matrix-header-width);
+    min-width: var(--matrix-vbar-width);
+    max-width: var(--matrix-vbar-width);
+    padding: 0;
+    background: var(--color-bg-hover);
+}
+
+/* Intersection device row x vbar : la case du bouton 1:1 */
+.matrix-1to1-cell {
+    position: sticky;
+    left: var(--matrix-header-width);
+    z-index: 3;
+    min-width: var(--matrix-vbar-width);
+    max-width: var(--matrix-vbar-width);
+    padding: 0;
+    background: var(--color-bg-hover);
+}
+
+.matrix-1to1-btn {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+    background: var(--color-bg-active);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--matrix-device-row-height);
+    cursor: pointer;
+}
+
+.matrix-1to1-btn:hover {
+    background: var(--color-primary);
+    color: var(--color-text-white);
 }
 
 /* === ROW HEADERS === */
