@@ -224,6 +224,31 @@ tr.selected .matrix-row-header {
     color: var(--color-text-white);
 }
 
+/* === TRACK NUMBER PREFIX === */
+
+/* Prefixe numerique des en-tetes de piste. Plusieurs pistes partagent le meme
+   nom (une salle porte 4 langues) : le numero est le seul discriminant au
+   patch. Vaut pour les lignes (grille inputs) et les colonnes (grille sends). */
+.matrix-track-num {
+    color: var(--color-text-tertiary);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Largeur fixe en ligne uniquement : aligne les separateurs sur une colonne.
+   Sans objet en ecriture verticale, ou la largeur est l'axe transverse. */
+.matrix-row-header .matrix-track-num {
+    display: inline-block;
+    min-width: 2.4em;
+}
+
+/* Etats selectionne / surligne : le gris tertiaire ne passe pas sur le fond
+   d'accentuation, le prefixe reprend la couleur de l'en-tete. */
+.matrix-row-header.selected .matrix-track-num,
+tr.selected .matrix-row-header .matrix-track-num,
+.matrix-col-header.highlight .matrix-track-num {
+    color: inherit;
+}
+
 /* === ROW GROUPS (hierarchical) === */
 
 .matrix-row-group {
