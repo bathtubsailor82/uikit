@@ -370,20 +370,27 @@ class AudioTrack {
     // Preparation for sends-on-faders (Epic C)
     const rotaryContainer = document.createElement('div');
     panContainer.appendChild(rotaryContainer);
+    // Unites : l'API publique de AudioTrack (config.pan, onPanChange,
+    // setBusValues, setPan) parle la meme langue que le backend, -1.0 a +1.0.
+    // Le preset 'pan' du Rotary, lui, travaille en pourcents (-100 a +100).
+    // La conversion vit donc ici, aux deux frontieres du composant — sans quoi
+    // un pan serveur de -1.0 s'affichait "L1" (1 % a gauche) et un drag
+    // envoyait 17 la ou le backend attend 0.17. Meme conversion que
+    // bus-ui.js pour les rotaries du panneau bus.
     this.panRotary = new Rotary(rotaryContainer, {
       preset: 'pan',
       label: '',  // Label "PAN" masque - spec AUDIOTRACK-UI MVP
-      value: this.config.pan,
-      onInput: (value) => {
-        this.config.pan = value;
+      value: AudioTrack._panToPercent(this.config.pan),
+      onInput: (percent) => {
+        this.config.pan = AudioTrack._percentToPan(percent);
         if (this.config.onPanChange) {
-          this.config.onPanChange(value, { realtime: true });
+          this.config.onPanChange(this.config.pan, { realtime: true });
         }
       },
-      onChange: (value) => {
-        this.config.pan = value;
+      onChange: (percent) => {
+        this.config.pan = AudioTrack._percentToPan(percent);
         if (this.config.onPanChange) {
-          this.config.onPanChange(value);
+          this.config.onPanChange(this.config.pan);
         }
       }
     });
@@ -540,7 +547,7 @@ class AudioTrack {
     // Update in-place si meme mode. externalSync() skippe si un rotary est
     // en cours de drag, evitant l'ecrasement visuel par un broadcast WS.
     if (inBus) {
-      if (this.panRotary) this.panRotary.externalSync(pan);
+      if (this.panRotary) this.panRotary.externalSync(AudioTrack._panToPercent(pan));
       if (this.gainRotary) this.gainRotary.externalSync(gain);
       if (this.buttonGroup) {
         this.buttonGroup.setState('mute', mute);
@@ -653,13 +660,26 @@ class AudioTrack {
 
   /**
    * Set pan value externally (e.g. from WebSocket bus source update)
-   * @param {number} value - Pan value (-100 to +100)
+   * @param {number} value - Pan value (-1.0 L .. 0.0 C .. +1.0 R), unite backend
    */
   setPan(value) {
     this.config.pan = value;
     if (this.panRotary) {
-      this.panRotary.externalSync(value);
+      this.panRotary.externalSync(AudioTrack._panToPercent(value));
     }
+  }
+
+  /**
+   * Conversions entre l'unite backend du pan (-1.0 a +1.0) et l'unite du
+   * Rotary preset 'pan' (-100 a +100, pas de 1).
+   * @private
+   */
+  static _panToPercent(pan) {
+    return Math.round((pan ?? 0) * 100);
+  }
+
+  static _percentToPan(percent) {
+    return (percent ?? 0) / 100;
   }
 
   destroy() {
