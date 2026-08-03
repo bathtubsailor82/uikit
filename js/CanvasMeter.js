@@ -362,69 +362,13 @@ class CanvasMeter {
       this._meterH = this._meterHeight * dpr;
     }
 
-    // Color thresholds (positions in pixels for gradient)
-    this._computeGradient();
+    // Invalidate memoised bar gradient (geometry and/or config just changed)
+    this._gradientCache = null;
 
     // Scale tick positions
     if (this.config.showScale) {
       this._computeScaleTicks();
     }
-  }
-
-  /**
-   * Compute gradient for meter bar
-   * @private
-   */
-  _computeGradient() {
-    const { meterType, colors, orientation } = this.config;
-    const ctx = this.ctx;
-    const dpr = this._dpr;
-
-    let gradient;
-    if (orientation === 'vertical') {
-      // Bottom to top gradient
-      gradient = ctx.createLinearGradient(0, this._meterH, 0, 0);
-    } else {
-      // Left to right gradient
-      gradient = ctx.createLinearGradient(0, 0, this._meterW, 0);
-    }
-
-    if (meterType === 'ppm') {
-      // PPM gradient: -42 to +12
-      const lowEnd = this._dbToPercent(-12);
-      const normalEnd = this._dbToPercent(0);
-      const highEnd = this._dbToPercent(6);
-
-      gradient.addColorStop(0, colors.low);
-      gradient.addColorStop(lowEnd, colors.low);
-      gradient.addColorStop(lowEnd, colors.normal);
-      gradient.addColorStop(normalEnd, colors.normal);
-      gradient.addColorStop(normalEnd, colors.high);
-      gradient.addColorStop(highEnd, colors.high);
-      gradient.addColorStop(highEnd, colors.peak);
-      gradient.addColorStop(1, colors.peak);
-    } else {
-      // Peak gradient: -60 to 0
-      const safeEnd = this._dbToPercent(-20);
-      const nominalEnd = this._dbToPercent(-6);
-      const cautionEnd = this._dbToPercent(-3);
-      const warningEnd = this._dbToPercent(0);
-
-      gradient.addColorStop(0, colors.safe);
-      gradient.addColorStop(Math.min(safeEnd, 1), colors.safe);
-      gradient.addColorStop(Math.min(safeEnd, 1), colors.nominal);
-      gradient.addColorStop(Math.min(nominalEnd, 1), colors.nominal);
-      gradient.addColorStop(Math.min(nominalEnd, 1), colors.caution);
-      gradient.addColorStop(Math.min(cautionEnd, 1), colors.caution);
-      gradient.addColorStop(Math.min(cautionEnd, 1), colors.warning);
-      gradient.addColorStop(Math.min(warningEnd, 1), colors.warning);
-      if (warningEnd < 1) {
-        gradient.addColorStop(Math.min(warningEnd + 0.001, 1), colors.clip);
-        gradient.addColorStop(1, colors.clip);
-      }
-    }
-
-    this._gradient = gradient;
   }
 
   /**
@@ -541,6 +485,7 @@ class CanvasMeter {
     }
     this.canvas = null;
     this.ctx = null;
+    this._gradientCache = null;
   }
 
   // ==========================================================================
@@ -651,10 +596,7 @@ class CanvasMeter {
         const peakHeight = barHeight * peakPercent;
         const peakY = barStartY + (barHeight - peakHeight);
 
-        const gradient = ctx.createLinearGradient(0, barStartY + barHeight, 0, barStartY);
-        this._applyGradientStops(gradient);
-
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = this._getBarGradient(0, barStartY + barHeight, 0, barStartY);
         ctx.fillRect(0, peakY, peakWidth, peakHeight);
       }
 
@@ -674,9 +616,7 @@ class CanvasMeter {
         const holdY = barStartY + barHeight - (barHeight * holdPercent);
 
         // Use gradient color at hold position for consistent look
-        const holdGradient = ctx.createLinearGradient(0, barStartY + barHeight, 0, barStartY);
-        this._applyGradientStops(holdGradient);
-        ctx.fillStyle = holdGradient;
+        ctx.fillStyle = this._getBarGradient(0, barStartY + barHeight, 0, barStartY);
         ctx.fillRect(0, Math.round(holdY) - 0.5, peakWidth, 1);
       }
     } else {
@@ -686,10 +626,7 @@ class CanvasMeter {
         const peakHeight = barHeight * peakPercent;
         const peakY = barStartY + (barHeight - peakHeight);
 
-        const gradient = ctx.createLinearGradient(0, barStartY + barHeight, 0, barStartY);
-        this._applyGradientStops(gradient);
-
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = this._getBarGradient(0, barStartY + barHeight, 0, barStartY);
         ctx.fillRect(0, peakY, meterW, peakHeight);
       }
 
@@ -699,9 +636,7 @@ class CanvasMeter {
         const holdY = barStartY + barHeight - (barHeight * holdPercent);
 
         // Use gradient color at hold position
-        const holdGradient = ctx.createLinearGradient(0, barStartY + barHeight, 0, barStartY);
-        this._applyGradientStops(holdGradient);
-        ctx.fillStyle = holdGradient;
+        ctx.fillStyle = this._getBarGradient(0, barStartY + barHeight, 0, barStartY);
         ctx.fillRect(0, Math.round(holdY) - 0.5, meterW, 1);
       }
     }
@@ -733,10 +668,7 @@ class CanvasMeter {
         const peakPercent = this._dbToPercent(displayDB);
         const peakWidth = barWidth * peakPercent;
 
-        const gradient = ctx.createLinearGradient(0, 0, barWidth, 0);
-        this._applyGradientStops(gradient);
-
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = this._getBarGradient(0, 0, barWidth, 0);
         ctx.fillRect(0, 0, peakWidth, peakHeight);
       }
 
@@ -754,10 +686,7 @@ class CanvasMeter {
         const peakPercent = this._dbToPercent(displayDB);
         const peakWidth = barWidth * peakPercent;
 
-        const gradient = ctx.createLinearGradient(0, 0, barWidth, 0);
-        this._applyGradientStops(gradient);
-
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = this._getBarGradient(0, 0, barWidth, 0);
         ctx.fillRect(0, 0, peakWidth, meterH);
       }
     }
@@ -897,6 +826,34 @@ class CanvasMeter {
       ctx.textBaseline = 'middle';
       ctx.fillText(text, this._meterWidth + 4, this._meterHeight / 2);
     }
+  }
+
+  /**
+   * Get the bar gradient, memoised on bar geometry.
+   *
+   * Les arrets de couleur ne dependent que de la config (meterType, colors,
+   * minDB/maxDB) et jamais des valeurs audio courantes : a geometrie egale, un
+   * meme CanvasGradient sert la barre et le trait de peak hold, frame apres
+   * frame. Le cache est invalide par _cacheComputedValues() (constructeur et
+   * setConfig), seuls chemins ou config et geometrie changent.
+   *
+   * La cle porte sur la geometrie de BARRE, jamais sur la hauteur totale du
+   * meter : les coordonnees passees ici sont exactement celles d'avant la
+   * memoisation, donc les seuils de couleur ne bougent pas d'un pixel.
+   *
+   * @private
+   */
+  _getBarGradient(x0, y0, x1, y1) {
+    const cached = this._gradientCache;
+    if (cached && cached.x0 === x0 && cached.y0 === y0 && cached.x1 === x1 && cached.y1 === y1) {
+      return cached.gradient;
+    }
+
+    const gradient = this.ctx.createLinearGradient(x0, y0, x1, y1);
+    this._applyGradientStops(gradient);
+    this._gradientCache = { x0, y0, x1, y1, gradient };
+
+    return gradient;
   }
 
   /**
