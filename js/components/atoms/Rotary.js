@@ -11,9 +11,24 @@
  *   max: 6,
  *   step: 1,
  *   sensitivity: 0.3,
+ *   reconcileTimeout: 500,    // ms d'autorite locale apres le geste
  *   onInput: (value) => {},   // Called during drag (real-time)
  *   onChange: (value) => {}   // Called at end of drag
  * })
+ *
+ * CONTRAT DES COMMANDES TEMPS REEL (issue #43)
+ * --------------------------------------------
+ * Le Rotary est la source de verite de sa propre valeur pendant et apres un
+ * geste utilisateur ; le serveur ne la reprend qu'une fois l'echo revenu (ou
+ * apres expiration). Les appelants ne rejouent pas cette logique : ils
+ * poussent l'entrant via externalSync(), qui rend false quand le rotary garde
+ * l'autorite — a charge de l'appelant de ne pas toucher aux autres faces du
+ * widget (indicateur, etat interne) dans ce cas.
+ *
+ *   startDrag  -> beginLocalEdit()          (autorite pendant le geste)
+ *   stopDrag   -> endLocalEdit(valeur)      (autorite jusqu'a l'echo, ~500 ms)
+ *   ecriture programmee -> commitLocalValue(valeur)
+ *   entrant serveur     -> externalSync(valeur) : bool applique
  */
 
 // Rotary Presets
@@ -65,6 +80,7 @@ class Rotary {
       max: 100,
       step: 1,
       sensitivity: 0.5,        // Drag sensitivity (dB per pixel)
+      reconcileTimeout: 500,   // ms : duree d'autorite locale apres une ecriture
       size: 'sm',              // 'sm' (24px, default) | 'lg' (80px)
       format: (v) => `${v}`,   // Value formatter
       onInput: null,           // Called during drag (real-time)
@@ -87,6 +103,13 @@ class Rotary {
     this.isDragging = false;
     this.startY = 0;
     this.startValue = 0;
+
+    // Autorite locale : vraie pendant un geste (isDragging ou _localEdit pour
+    // une edition programmee), puis jusqu'a _pendingDeadline apres la derniere
+    // valeur ecrite localement (_pendingValue).
+    this._localEdit = false;
+    this._pendingValue = null;
+    this._pendingDeadline = 0;
 
     this.render();
     this.setupEventListeners();
@@ -146,6 +169,8 @@ class Rotary {
     this.startValue = this.config.value;
     this.altKeyPressed = e.altKey; // Track if Alt was pressed at start
 
+    this.beginLocalEdit();
+
     const onMouseMove = (e) => this.handleDrag(e);
     const onMouseUp = (e) => this.stopDrag(onMouseMove, onMouseUp, e);
 
@@ -187,6 +212,10 @@ class Rotary {
 
     // Remove dragging visual feedback
     this.knobEl.classList.remove('rotary__knob--dragging');
+
+    // Arme la reconciliation AVANT onChange : la valeur relachee est celle que
+    // l'appelant s'apprete a envoyer, c'est donc l'echo a attendre.
+    this.endLocalEdit(this.config.value);
 
     // Trigger onChange at end of drag
     // Pass altKey state for global apply feature
@@ -230,25 +259,126 @@ class Rotary {
     }
   }
 
-  /**
-   * Synchronise la valeur depuis une source externe (WS broadcast, switch
-   * bus, etc.) sans ecraser la position user si le rotary est en cours de
-   * drag actif. Symetrique de setValue(value, false) mais drag-aware.
-   *
-   * Rationale : pendant un drag, les broadcasts WS qui reviennent (echo du
-   * propre PATCH de l'utilisateur, ou updates concurrentes) ne doivent pas
-   * "voler" la position visuelle en cours. Une fois le drag termine
-   * (isDragging=false), les syncs reprennent normalement.
-   *
-   * @param {number} value - Nouvelle valeur a afficher si non en drag
-   */
-  externalSync(value) {
-    if (this.isDragging) return;
-    this.setValue(value, false);
-  }
-
   getValue() {
     return this.config.value;
+  }
+
+  // ========================================================================
+  // AUTORITE LOCALE & RECONCILIATION SERVEUR
+  // ========================================================================
+
+  /**
+   * Ouvre un geste local : le rotary devient seul maitre de sa valeur.
+   * Appele automatiquement par startDrag ; public pour les gestes pilotes
+   * de l'exterieur (clavier, molette, futurs faders).
+   */
+  beginLocalEdit() {
+    this._localEdit = true;
+    this._clearPending();
+  }
+
+  /**
+   * Ferme le geste local et arme la fenetre de reconciliation : jusqu'a
+   * expiration, seule la valeur envoyee (ou une valeur equivalente au pas
+   * pres) est acceptee de l'exterieur. Sans cette fenetre, un PATCH plus
+   * ancien encore en vol — il en part 30 a 60 par seconde pendant un drag —
+   * revient apres le relachement et rappelle la commande en arriere.
+   *
+   * @param {number} [sentValue] - Valeur envoyee au serveur (defaut: valeur courante)
+   */
+  endLocalEdit(sentValue) {
+    this._localEdit = false;
+    this._armPending(sentValue === undefined ? this.config.value : sentValue);
+  }
+
+  /**
+   * Ecriture locale hors geste (apply global Alt+drag, preset, raccourci) :
+   * s'applique sans passer par la garde puisqu'elle vient de l'utilisateur,
+   * et arme la meme fenetre de reconciliation qu'un relachement de drag.
+   *
+   * @param {number} value - Valeur a appliquer
+   */
+  commitLocalValue(value) {
+    this.setValue(value, false);
+    this._armPending(value);
+  }
+
+  /**
+   * Pousse une valeur venue du serveur (broadcast WS, switch de bus, refetch).
+   * L'entrant est ignore tant que le rotary garde l'autorite locale.
+   *
+   * @param {number} value - Valeur entrante
+   * @returns {boolean} true si appliquee, false si l'autorite locale l'emporte.
+   *   L'appelant DOIT propager ce false aux autres faces du widget (indicateur,
+   *   etat interne) : sinon le composant affiche la valeur de l'utilisateur et
+   *   memorise celle du serveur.
+   */
+  externalSync(value) {
+    if (!this._acceptsExternal(value)) return false;
+    this.setValue(value, false);
+    return true;
+  }
+
+  /**
+   * true si le rotary tient encore la main sur sa valeur (geste en cours ou
+   * fenetre de reconciliation non expiree).
+   */
+  hasLocalAuthority() {
+    return this.isDragging || this._localEdit || this._pendingValue !== null;
+  }
+
+  /**
+   * Abandonne l'autorite locale. A appeler quand le widget change de sujet
+   * (switch de bus : le meme rotary edite desormais une autre grandeur) —
+   * l'echo attendu ne concerne plus ce qu'il affiche.
+   */
+  resetLocalAuthority() {
+    this._localEdit = false;
+    this._clearPending();
+  }
+
+  _acceptsExternal(value) {
+    // Pendant le geste : aucune face du widget ne bouge.
+    if (this.isDragging || this._localEdit) return false;
+
+    // Hors fenetre de reconciliation : le serveur fait autorite.
+    if (this._pendingValue === null) return true;
+
+    if (this._now() >= this._pendingDeadline) {
+      // Expiration : l'echo attendu n'est jamais venu, on refait confiance
+      // au serveur plutot que de figer l'affichage indefiniment.
+      this._clearPending();
+      return true;
+    }
+
+    // La fenetre reste armee meme apres l'echo attendu : les PATCH partent sur
+    // plusieurs connexions HTTP et peuvent revenir dans le desordre, un echo
+    // intermediaire arrivant apres le bon. La regle 6 du contrat (numero de
+    // sequence par commande) remplacera cette heuristique temporelle.
+    return Math.abs(value - this._pendingValue) <= this._echoTolerance();
+  }
+
+  _echoTolerance() {
+    // Les valeurs sont quantifiees au pas ; une demi-marche absorbe les
+    // arrondis de conversion d'unite (ex: pan -1.0..+1.0 <-> -100..+100).
+    return Math.max(Math.abs(this.config.step) / 2, 1e-6);
+  }
+
+  _armPending(value) {
+    this._pendingValue = value;
+    this._pendingDeadline = this._now() + this.config.reconcileTimeout;
+  }
+
+  _clearPending() {
+    this._pendingValue = null;
+    this._pendingDeadline = 0;
+  }
+
+  _now() {
+    // Horloge monotone : Date.now() saute avec la resynchro NTP du poste.
+    return (typeof performance !== 'undefined' && performance.now)
+      ? performance.now()
+      : Date.now();
   }
 
   // ========================================================================

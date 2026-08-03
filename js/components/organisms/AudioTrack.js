@@ -215,6 +215,14 @@ class AudioTrack {
 
     this.element = track;
 
+    // Les rotaries pointaient sur le DOM qu'on vient de remplacer : ils sont
+    // recrees ci-dessous, ou n'existent pas dans ce mode (hors bus). Garder
+    // une instance orpheline lui laisserait porter une autorite locale sur un
+    // widget invisible.
+    this.panRotary = null;
+    this.gainRotary = null;
+    this.thresholdRotary = null;
+
     // Initialize components
     this.initMeter();
     if (this.config.inBus !== false) {
@@ -529,44 +537,52 @@ class AudioTrack {
    * Met a jour les valeurs per-bus (gain/pan/mute/solo) et le mode inBus.
    * Appele par switchBus() et onEnableBus() sans re-render complet.
    * Si inBus change, re-render la section controls (swap enable button / rotaries).
+   *
+   * @param {Object} [options]
+   * @param {boolean} [options.rebind=false] - true quand les rotaries changent
+   *   de sujet (switch de bus) : l'autorite locale acquise sur l'ancien bus
+   *   n'a plus lieu d'etre, l'echo attendu ne concerne plus ce qu'ils editent.
    */
-  setBusValues(gain, pan, mute, solo, inBus) {
+  setBusValues(gain, pan, mute, solo, inBus, options = {}) {
     const wasInBus = this.config.inBus;
-    this.config.gain = gain;
-    this.config.pan = pan;
     this.config.mute = mute;
     this.config.solo = solo;
     this.config.inBus = inBus;
 
+    if (options.rebind) {
+      if (this.panRotary) this.panRotary.resetLocalAuthority();
+      if (this.gainRotary) this.gainRotary.resetLocalAuthority();
+    }
+
     if (wasInBus !== inBus) {
       // Mode change : re-render complet necessaire (swap enable/controls)
+      this.config.gain = gain;
+      this.config.pan = pan;
       this.render();
       return;
     }
 
-    // Update in-place si meme mode. externalSync() skippe si un rotary est
-    // en cours de drag, evitant l'ecrasement visuel par un broadcast WS.
-    if (inBus) {
-      if (this.panRotary) this.panRotary.externalSync(AudioTrack._panToPercent(pan));
-      if (this.gainRotary) this.gainRotary.externalSync(gain);
-      if (this.buttonGroup) {
-        this.buttonGroup.setState('mute', mute);
-        this.buttonGroup.setState('solo', solo);
-      }
+    // Update in-place si meme mode. externalSync() rend false quand le rotary
+    // garde l'autorite locale (geste en cours, ou echo pas encore revenu) :
+    // l'etat interne ne bouge pas non plus dans ce cas — cf. contrat #43.
+    this.setPan(pan);
+    this.setGain(gain);
+
+    if (inBus && this.buttonGroup) {
+      this.buttonGroup.setState('mute', mute);
+      this.buttonGroup.setState('solo', solo);
     }
   }
 
   /**
-   * Set gain value externally (e.g. from WebSocket track_updated sync).
-   * Symetrique de setThreshold/setPan. Drag-aware : externalSync skippe
-   * la maj si le rotary est en cours de drag actif.
+   * Set gain value externally (e.g. from WebSocket bus source sync).
+   * Soumis a l'autorite locale du rotary : si le rotary refuse l'entrant,
+   * config.gain n'est pas ecrit non plus.
    * @param {number} value - Gain value in dB
    */
   setGain(value) {
+    if (this.gainRotary && !this.gainRotary.externalSync(value)) return;
     this.config.gain = value;
-    if (this.gainRotary) {
-      this.gainRotary.externalSync(value);
-    }
   }
 
   // ========================================================================
@@ -646,27 +662,40 @@ class AudioTrack {
   }
 
   /**
-   * Set threshold value (for global threshold feature + WS sync)
-   * Updates rotary (drag-aware), config, and visual indicator
+   * Set threshold value (global threshold feature + WS sync).
+   *
+   * Le widget a trois faces — le bouton du rotary, l'indicateur sur le meter,
+   * et config.threshold — qui doivent bouger ensemble ou pas du tout. La
+   * decision appartient au rotary : tant qu'il garde l'autorite locale, rien
+   * ne bouge, sinon le bouton suit le doigt pendant que l'indicateur saute a
+   * la valeur de l'echo (issue #43).
+   *
    * @param {number} value - Threshold in dB
+   * @param {Object} [options]
+   * @param {boolean} [options.local=false] - true : ecriture locale (apply
+   *   global Alt+drag), appliquee sans garde et protegee de l'echo ;
+   *   false : valeur entrante serveur, soumise a l'autorite locale.
    */
-  setThreshold(value) {
-    this.config.threshold = value;
+  setThreshold(value, options = {}) {
     if (this.thresholdRotary) {
-      this.thresholdRotary.externalSync(value); // skip si drag actif
+      if (options.local) {
+        this.thresholdRotary.commitLocalValue(value);
+      } else if (!this.thresholdRotary.externalSync(value)) {
+        return;
+      }
     }
+    this.config.threshold = value;
     this.updateThresholdIndicatorPosition();
   }
 
   /**
-   * Set pan value externally (e.g. from WebSocket bus source update)
+   * Set pan value externally (e.g. from WebSocket bus source update).
+   * Soumis a l'autorite locale du rotary, comme setGain/setThreshold.
    * @param {number} value - Pan value (-1.0 L .. 0.0 C .. +1.0 R), unite backend
    */
   setPan(value) {
+    if (this.panRotary && !this.panRotary.externalSync(AudioTrack._panToPercent(value))) return;
     this.config.pan = value;
-    if (this.panRotary) {
-      this.panRotary.externalSync(AudioTrack._panToPercent(value));
-    }
   }
 
   /**
