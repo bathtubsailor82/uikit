@@ -11875,6 +11875,8 @@ tr.selected .matrix-cell.active {
 }
 
 /* Red (Record) */
+/* Meme correctif que .led--recording (issue #41) : le halo pulse par opacity
+   sur ::after ; l'element ne garde que ses ombres statiques. */
 .audio-btn--active.audio-btn--red {
     background: radial-gradient(ellipse at center, #ff5555 0%, #d43f3f 50%, #b82e2e 100%);
     border-color: #8a1f1f;
@@ -11882,29 +11884,25 @@ tr.selected .matrix-cell.active {
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.3),
         inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-        0 0 12px rgba(212, 63, 63, 0.8),
-        0 0 20px rgba(212, 63, 63, 0.4),
         0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.audio-btn--active.audio-btn--red::after {
+    content: '';
+    position: absolute;
+    inset: -1px;  /* remonte au border-box, origine des ombres de l'element */
+    border-radius: 3px;
+    box-shadow:
+        0 0 16px rgba(212, 63, 63, 1),
+        0 0 28px rgba(212, 63, 63, 0.6);
+    pointer-events: none;
+    will-change: opacity;
     animation: pulse-btn 1.5s ease-in-out infinite;
 }
 
 @keyframes pulse-btn {
-    0%, 100% {
-        box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.3),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-            0 0 12px rgba(212, 63, 63, 0.8),
-            0 0 20px rgba(212, 63, 63, 0.4),
-            0 2px 3px rgba(0, 0, 0, 0.3);
-    }
-    50% {
-        box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.3),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-            0 0 16px rgba(212, 63, 63, 1),
-            0 0 28px rgba(212, 63, 63, 0.6),
-            0 2px 3px rgba(0, 0, 0, 0.3);
-    }
+    0%, 100% { opacity: 0.72; }
+    50%      { opacity: 1; }
 }
 
 /* Green (generic active) */
@@ -12038,36 +12036,39 @@ tr.selected .matrix-cell.active {
    Recording State (Red with Pulse)
    ============================================================================ */
 
+/* Le halo exterieur vit sur ::after et ne bouge JAMAIS ; seule son opacity
+   est animee. Animer box-shadow forcerait un repaint par frame avec
+   rasterisation du flou — a 256 pistes en enregistrement, la page tombe a
+   4,5 fps (voir issue #41). Les ombres inset restent sur l'element : elles
+   sont statiques et ne debordent pas. */
 .led--recording {
     background: radial-gradient(circle at 30% 30%, #ff6b6b, #d43f3f);
     border-color: #a62929;
     box-shadow:
         inset 0 1px 2px rgba(255, 255, 255, 0.3),
-        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
-        0 0 10px rgba(212, 63, 63, 0.8),
-        0 0 16px rgba(212, 63, 63, 0.4);
-    animation: pulse-led 1.5s ease-in-out infinite;
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .led--recording::before {
     opacity: 1;
 }
 
+.led--recording::after {
+    content: '';
+    position: absolute;
+    inset: -1px;  /* remonte au border-box, origine des ombres de l'element */
+    border-radius: 50%;
+    box-shadow:
+        0 0 14px rgba(212, 63, 63, 1),
+        0 0 24px rgba(212, 63, 63, 0.6);
+    pointer-events: none;
+    will-change: opacity;
+    animation: pulse-led 1.5s ease-in-out infinite;
+}
+
 @keyframes pulse-led {
-    0%, 100% {
-        box-shadow:
-            inset 0 1px 2px rgba(255, 255, 255, 0.3),
-            inset 0 -1px 2px rgba(0, 0, 0, 0.3),
-            0 0 10px rgba(212, 63, 63, 0.8),
-            0 0 16px rgba(212, 63, 63, 0.4);
-    }
-    50% {
-        box-shadow:
-            inset 0 1px 2px rgba(255, 255, 255, 0.3),
-            inset 0 -1px 2px rgba(0, 0, 0, 0.3),
-            0 0 14px rgba(212, 63, 63, 1),
-            0 0 24px rgba(212, 63, 63, 0.6);
-    }
+    0%, 100% { opacity: 0.72; }
+    50%      { opacity: 1; }
 }
 
 /* ============================================================================
@@ -12311,6 +12312,9 @@ tr.selected .matrix-cell.active {
     left: 2px;
     right: 2px;
     bottom: 2px;
+    /* Le dot est positionne (ancrage du halo ::after) : sans ce z-index il
+       passerait devant ce reflet, qui le recouvre aujourd'hui. */
+    z-index: 1;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%,
         rgba(255, 255, 255, 0.08) 0%,
@@ -12323,6 +12327,7 @@ tr.selected .matrix-cell.active {
    ============================================================================ */
 
 .record-button__dot {
+    position: relative;  /* ancre le halo ::after de l'etat recording */
     width: 11px;
     height: 11px;
     border-radius: 50%;
@@ -12383,32 +12388,32 @@ tr.selected .matrix-cell.active {
         0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
+/* Meme correctif que .led--recording : halo fixe sur ::after, seule l'opacity
+   est animee (issue #41). Les ombres inset, statiques, restent sur le dot. */
 .record-button--recording .record-button__dot {
     background: radial-gradient(circle at 35% 35%, #ff5555, #d43f3f);
     border-color: #8a1f1f;
     box-shadow:
         inset 0 1px 2px rgba(255, 255, 255, 0.3),
-        inset 0 -1px 2px rgba(0, 0, 0, 0.4),
-        0 0 12px rgba(212, 63, 63, 1),
-        0 0 20px rgba(212, 63, 63, 0.6);
+        inset 0 -1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.record-button--recording .record-button__dot::after {
+    content: '';
+    position: absolute;
+    inset: -1px;  /* remonte au border-box, origine des ombres du dot */
+    border-radius: 50%;
+    box-shadow:
+        0 0 16px rgba(212, 63, 63, 1),
+        0 0 28px rgba(212, 63, 63, 0.8);
+    pointer-events: none;
+    will-change: opacity;
     animation: pulse-recording-dot 1.5s ease-in-out infinite;
 }
 
 @keyframes pulse-recording-dot {
-    0%, 100% {
-        box-shadow:
-            inset 0 1px 2px rgba(255, 255, 255, 0.3),
-            inset 0 -1px 2px rgba(0, 0, 0, 0.4),
-            0 0 12px rgba(212, 63, 63, 1),
-            0 0 20px rgba(212, 63, 63, 0.6);
-    }
-    50% {
-        box-shadow:
-            inset 0 1px 2px rgba(255, 255, 255, 0.3),
-            inset 0 -1px 2px rgba(0, 0, 0, 0.4),
-            0 0 16px rgba(212, 63, 63, 1),
-            0 0 28px rgba(212, 63, 63, 0.8);
-    }
+    0%, 100% { opacity: 0.75; }
+    50%      { opacity: 1; }
 }
 
 /* === css/components/atoms/timer.css === */
