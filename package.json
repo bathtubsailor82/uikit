@@ -2,6 +2,7 @@
   "name": "uikit",
   "version": "1.10.3",
   "description": "Design system réutilisable style Apple/macOS",
+  "type": "module",
   "main": "dist/uikit.css",
   "scripts": {
     "build": "./css/build.sh",

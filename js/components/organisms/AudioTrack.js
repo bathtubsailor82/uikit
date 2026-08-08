@@ -11,6 +11,7 @@
  *   sublocation: 'A',      // optionnel
  *   language: 'FR',
  *   customName: 'Speaker 1', // optionnel, prioritaire sur location/language
+ *   secondaryRecordingEnabled: false, // second fichier ecrit en parallele
  *   threshold: -30,
  *   gain: 0,
  *   pan: 0,
@@ -61,6 +62,13 @@ const METER_CONFIG_BY_MODE = {
   }
 };
 
+// Marqueur d'enregistrement secondaire : la piste ecrit un second fichier.
+// C'est une propriete de configuration, pas un etat de transport — d'ou un
+// marqueur discret sur la ligne du numero, la seule du pied qui ne soit pas
+// editable au clic (donc la seule qui ne bouge jamais sous le doigt).
+const SECONDARY_REC_CLASS = 'audio-track--secondary-rec';
+const SECONDARY_REC_TITLE = 'Secondary recording enabled';
+
 class AudioTrack {
   constructor(container, config = {}) {
     this.container = container;
@@ -71,6 +79,7 @@ class AudioTrack {
       sublocation: null,     // optionnel (ex: "A", "Cabin 1")
       language: 'FR',
       customName: null,      // optionnel (ex: "Speaker 1 FR") - prioritaire sur location/language
+      secondaryRecordingEnabled: false,  // second fichier ecrit en parallele
       color: null,           // hex color pour le color strip (ex: "#ff5500"), null = gris neutre
       threshold: -30,
       gain: 0,
@@ -127,17 +136,39 @@ class AudioTrack {
   // ========================================================================
 
   /**
+   * Les lignes du pied de tranche, derivees des champs d'identite.
+   *
+   * **Statique et pure** : ni `this`, ni DOM, ni echappement — c'est elle qui
+   * se verifie sous `node --test`, la pose dans le document restant a
+   * `applyTrackFields`. Les chaines rendues sont brutes, l'echappement se fait
+   * a l'ecriture (`textContent`, ou `escape()` au premier rendu).
+   *
+   * @param {Object} config - au moins {location, sublocation, language, customName}
+   * @returns {{customName: string|null, lang: string, location: string}}
+   *   `customName` vaut `null` quand il n'y en a pas : la ligne n'existe alors
+   *   pas dans le pied, elle n'y figure pas vide.
+   */
+  static namingView({ location, sublocation, language, customName } = {}) {
+    const custom = typeof customName === 'string' && customName.trim() ? customName : null;
+    const sub = sublocation ? `/${sublocation}` : '';
+    return {
+      customName: custom,
+      lang: language ?? '',
+      location: `${location ?? ''}${sub}`
+    };
+  }
+
+  /**
    * Nom d'affichage prioritaire : customName si defini et non vide,
    * sinon fallback sur "location[/sublocation] language".
    * Match la logique Swift Track.displayName.
    */
   getCustomNameDisplay() {
-    const custom = this.config.customName;
-    if (custom && custom.trim()) return this.escape(custom);
+    const view = AudioTrack.namingView(this.config);
+    if (view.customName !== null) return this.escape(view.customName);
 
     // Fallback : location[/sublocation] language
-    const sub = this.config.sublocation ? `/${this.config.sublocation}` : '';
-    return this.escape(`${this.config.location}${sub} ${this.config.language}`);
+    return this.escape(`${view.location} ${view.lang}`);
   }
 
   /**
@@ -145,8 +176,8 @@ class AudioTrack {
    * Meme si customName est defini, on affiche ces infos en petit en dessous.
    */
   getMetaDisplay() {
-    const sub = this.config.sublocation ? `/${this.config.sublocation}` : '';
-    return this.escape(`${this.config.language} ${this.config.location}${sub}`);
+    const view = AudioTrack.namingView(this.config);
+    return this.escape(`${view.lang} ${view.location}`);
   }
 
   escape(str) {
@@ -168,6 +199,10 @@ class AudioTrack {
     // Color strip : couleur du groupe (ou defaut neutre)
     const stripColor = this.config.color || '#333';
     track.style.setProperty('--track-color', stripColor);
+
+    // Le pied se derive du meme calcul que la mise a jour partielle : deux
+    // chemins d'ecriture, une seule regle d'affichage.
+    const naming = AudioTrack.namingView(this.config);
 
     track.innerHTML = `
       <!-- Color Strip (5px, couleur groupe) -->
@@ -200,10 +235,10 @@ class AudioTrack {
 
       <!-- Naming Section -->
       <div class="audio-track__footer">
-        ${this.config.customName ? `<div class="audio-track__footer-item audio-track__custom-name">${this.escape(this.config.customName)}</div>` : ''}
-        <div class="audio-track__footer-item audio-track__lang">${this.escape(this.config.language)}</div>
-        <div class="audio-track__footer-item audio-track__location">${this.escape(this.config.location)}${this.config.sublocation ? '/' + this.escape(this.config.sublocation) : ''}</div>
-        <div class="audio-track__footer-item audio-track__number">#${String(this.config.trackId).padStart(3, '0')}</div>
+        ${naming.customName !== null ? `<div class="audio-track__footer-item audio-track__custom-name">${this.escape(naming.customName)}</div>` : ''}
+        <div class="audio-track__footer-item audio-track__lang">${this.escape(naming.lang)}</div>
+        <div class="audio-track__footer-item audio-track__location">${this.escape(naming.location)}</div>
+        <div class="audio-track__footer-item audio-track__number"${this.config.secondaryRecordingEnabled ? ` title="${SECONDARY_REC_TITLE}"` : ''}>#${String(this.config.trackId).padStart(3, '0')}</div>
       </div>
     `;
 
@@ -256,6 +291,9 @@ class AudioTrack {
     // State modifiers (derived from trackState)
     if (this.armed) classes.push('audio-track--armed');
     if (this.recording) classes.push('audio-track--recording');
+
+    // Enregistrement secondaire : marqueur permanent, pas un etat de transport
+    if (this.config.secondaryRecordingEnabled) classes.push(SECONDARY_REC_CLASS);
 
     return classes.join(' ');
   }
@@ -645,20 +683,113 @@ class AudioTrack {
     }
   }
 
-  updateLocation(location) {
-    this.config.location = location;
-    const locationEl = this.element.querySelector('.audio-track__location');
-    if (locationEl) {
-      locationEl.textContent = location;
+  /**
+   * Applique les champs d'identite d'une piste **sans reconstruire la tranche**.
+   *
+   * `render()` remplace l'element et recree les rotaries : appele sur l'echo
+   * d'un autre poste, il detruirait sous le doigt le widget qui porte
+   * l'autorite locale (contrat #43). D'ou l'ecriture chirurgicale — quelques
+   * `textContent`, une classe, et rien d'autre. Aucun rotary, aucun meter,
+   * aucun bouton n'est touche.
+   *
+   * Une cle absente de `fields` ne change rien ; une cle a `null` efface —
+   * c'est ce que le backend diffuse pour un effacement (`NSNull` cote Swift,
+   * cf. `TrackRoutes.swift`), et `null` n'est pas `undefined`.
+   *
+   * Rien n'est ecrit dans le document quand rien ne change : le metering
+   * republie la piste entiere a 30-60 Hz par `TrackManager.updateTrack`, donc
+   * l'echo arrive en boucle et le filtre en tete est ce qui l'empeche de
+   * couter quoi que ce soit.
+   *
+   * @param {Object} fields - sous-ensemble de `AudioTrack.SYNCED_FIELDS`
+   * @returns {string[]} les champs reellement appliques (vide si aucun)
+   */
+  applyTrackFields(fields = {}) {
+    const changed = AudioTrack.changedTrackFields(this.config, fields);
+    const keys = Object.keys(changed);
+    if (keys.length === 0) return keys;
+
+    Object.assign(this.config, changed);
+
+    if (keys.some(key => key !== 'secondaryRecordingEnabled')) this.paintNaming();
+    if ('secondaryRecordingEnabled' in changed) this.paintSecondaryRecording();
+
+    return keys;
+  }
+
+  /** Les champs d'identite qu'une tranche rend, et qu'`applyTrackFields` lit. */
+  static get SYNCED_FIELDS() {
+    return ['location', 'sublocation', 'language', 'customName', 'secondaryRecordingEnabled'];
+  }
+
+  /**
+   * Le sous-ensemble de `fields` qui change vraiment quelque chose.
+   *
+   * Statique et pure : c'est le filtre anti-echo, et il se verifie sans DOM.
+   * Une cle hors de `SYNCED_FIELDS` est ignoree — la tranche ne rend que ce
+   * qu'elle sait rendre, et `TrackManager` lui passe la piste entiere.
+   *
+   * @param {Object} config - config courante de la tranche
+   * @param {Object} fields - champs entrants
+   * @returns {Object} les changements, `{}` si l'entrant ne dit rien de neuf
+   */
+  static changedTrackFields(config = {}, fields = {}) {
+    const changed = {};
+    for (const key of AudioTrack.SYNCED_FIELDS) {
+      if (fields[key] === undefined) continue;
+      const value = key === 'secondaryRecordingEnabled' ? !!fields[key] : fields[key];
+      if (value === config[key]) continue;
+      changed[key] = value;
     }
+    return changed;
+  }
+
+  /** Ecrit les lignes du pied. Cree ou retire la ligne de nom personnalise. */
+  paintNaming() {
+    const footer = this.element?.querySelector('.audio-track__footer');
+    if (!footer) return;
+
+    const view = AudioTrack.namingView(this.config);
+
+    const langEl = footer.querySelector('.audio-track__lang');
+    if (langEl) langEl.textContent = view.lang;
+
+    const locationEl = footer.querySelector('.audio-track__location');
+    if (locationEl) locationEl.textContent = view.location;
+
+    let customEl = footer.querySelector('.audio-track__custom-name');
+    if (view.customName === null) {
+      if (customEl) customEl.remove();
+      return;
+    }
+    if (!customEl) {
+      customEl = document.createElement('div');
+      customEl.className = 'audio-track__footer-item audio-track__custom-name';
+      footer.insertBefore(customEl, footer.firstChild);
+    }
+    customEl.textContent = view.customName;
+  }
+
+  /** Pose ou retire le marqueur d'enregistrement secondaire. */
+  paintSecondaryRecording() {
+    if (!this.element) return;
+    const on = this.config.secondaryRecordingEnabled === true;
+    this.element.classList.toggle(SECONDARY_REC_CLASS, on);
+
+    const numberEl = this.element.querySelector('.audio-track__number');
+    if (!numberEl) return;
+    if (on) numberEl.title = SECONDARY_REC_TITLE;
+    else numberEl.removeAttribute('title');
+  }
+
+  updateLocation(location) {
+    // Passe par le chemin partiel : la ligne porte `location[/sublocation]`,
+    // et l'ecrire a la main y perdait la sous-localisation.
+    this.applyTrackFields({ location });
   }
 
   updateLanguage(language) {
-    this.config.language = language;
-    const langEl = this.element.querySelector('.audio-track__lang');
-    if (langEl) {
-      langEl.textContent = language;
-    }
+    this.applyTrackFields({ language });
   }
 
   /**

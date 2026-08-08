@@ -242,6 +242,16 @@
     transition: all 0.1s ease;
 }
 
+/* Enregistrement secondaire arme : la piste ecrit un second fichier. Marqueur
+   pose sur la ligne du numero — la seule du pied qui ne s'edite pas au clic,
+   donc la seule qui ne bouge jamais sous le doigt. */
+.audio-track--secondary-rec .audio-track__number::after {
+    content: '\00D72';  /* ×2 */
+    margin-left: 3px;
+    color: #e0b040;
+    font-weight: 700;
+}
+
 /* Hover : fond colore, texte sombre (inversion) */
 .audio-track__number:hover {
     background: var(--track-color, #888);
