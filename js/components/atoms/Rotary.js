@@ -29,6 +29,12 @@
  *   stopDrag   -> endLocalEdit(valeur)      (autorite jusqu'a l'echo, ~500 ms)
  *   ecriture programmee -> commitLocalValue(valeur)
  *   entrant serveur     -> externalSync(valeur) : bool applique
+ *   destruction         -> destroy() : retire aussi les ecouteurs de document
+ *
+ * Corollaire du dernier point : detruire un rotary interrompt le geste en
+ * cours. C'est voulu — un widget detruit ne doit plus emettre — mais cela
+ * n'est tenable que si l'appelant ne detruit pas ses rotaries a chaque
+ * broadcast (issue #92).
  */
 
 // Rotary Presets
@@ -104,6 +110,12 @@ class Rotary {
     this.startY = 0;
     this.startValue = 0;
 
+    // Ecouteurs de drag : poses sur `document` (le doigt sort du bouton), donc
+    // hors de portee d'un simple `element.remove()`. Gardes ici pour que
+    // destroy() puisse les retirer.
+    this._onDragMove = null;
+    this._onDragEnd = null;
+
     // Autorite locale : vraie pendant un geste (isDragging ou _localEdit pour
     // une edition programmee), puis jusqu'a _pendingDeadline apres la derniere
     // valeur ecrite localement (_pendingValue).
@@ -171,11 +183,12 @@ class Rotary {
 
     this.beginLocalEdit();
 
-    const onMouseMove = (e) => this.handleDrag(e);
-    const onMouseUp = (e) => this.stopDrag(onMouseMove, onMouseUp, e);
+    this._releaseDragListeners();
+    this._onDragMove = (ev) => this.handleDrag(ev);
+    this._onDragEnd = (ev) => this.stopDrag(ev);
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', this._onDragMove);
+    document.addEventListener('mouseup', this._onDragEnd);
 
     // Add dragging visual feedback
     this.knobEl.classList.add('rotary__knob--dragging');
@@ -204,11 +217,10 @@ class Rotary {
     }
   }
 
-  stopDrag(onMouseMove, onMouseUp, e) {
+  stopDrag(e) {
     this.isDragging = false;
 
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
+    this._releaseDragListeners();
 
     // Remove dragging visual feedback
     this.knobEl.classList.remove('rotary__knob--dragging');
@@ -385,11 +397,30 @@ class Rotary {
   // PUBLIC API
   // ========================================================================
 
+  /**
+   * Retire le widget et **tout** ce qu'il a pose ailleurs.
+   *
+   * Les ecouteurs de drag vivent sur `document` : les oublier laissait un
+   * rotary detruit continuer a suivre la souris et a appeler ses callbacks —
+   * un zombie qui emettait des PATCH pour un bouton qui n'existait plus.
+   * `stopDrag` n'etant plus atteignable, la fenetre de reconciliation n'est
+   * pas armee : le widget est detruit, il n'y a plus rien a reconcilier.
+   */
   destroy() {
+    this.isDragging = false;
+    this._releaseDragListeners();
+
     if (this.element) {
       this.element.remove();
       this.element = null;
     }
+  }
+
+  _releaseDragListeners() {
+    if (this._onDragMove) document.removeEventListener('mousemove', this._onDragMove);
+    if (this._onDragEnd) document.removeEventListener('mouseup', this._onDragEnd);
+    this._onDragMove = null;
+    this._onDragEnd = null;
   }
 }
 
