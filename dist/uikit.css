@@ -12905,6 +12905,17 @@ tr.selected .matrix-cell.active {
     background: rgba(255, 255, 255, 0.08);
 }
 
+/* Une ligne du pied peut exister sans etre affichee : la ligne de nom
+   personnalise est rendue en permanence et se masque quand il n'y a pas de nom,
+   ce qui evite a `paintNaming` de creer un noeud (donc de dependre du DOM, cf.
+   AudioTrack.js). La regle est ecrite ici plutot que laissee a la feuille par
+   defaut du navigateur : une declaration `display` posee un jour sur
+   `.audio-track__footer-item` la battrait sans bruit, et la ligne vide
+   reprendrait son interligne. */
+.audio-track__footer-item[hidden] {
+    display: none;
+}
+
 /* Custom name (optionnel, visible seulement quand defini) */
 .audio-track__custom-name {
     font-size: 9px;

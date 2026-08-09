@@ -235,7 +235,7 @@ class AudioTrack {
 
       <!-- Naming Section -->
       <div class="audio-track__footer">
-        ${naming.customName !== null ? `<div class="audio-track__footer-item audio-track__custom-name">${this.escape(naming.customName)}</div>` : ''}
+        <div class="audio-track__footer-item audio-track__custom-name"${naming.customName === null ? ' hidden' : ''}>${this.escape(naming.customName ?? '')}</div>
         <div class="audio-track__footer-item audio-track__lang">${this.escape(naming.lang)}</div>
         <div class="audio-track__footer-item audio-track__location">${this.escape(naming.location)}</div>
         <div class="audio-track__footer-item audio-track__number"${this.config.secondaryRecordingEnabled ? ` title="${SECONDARY_REC_TITLE}"` : ''}>#${String(this.config.trackId).padStart(3, '0')}</div>
@@ -744,7 +744,17 @@ class AudioTrack {
     return changed;
   }
 
-  /** Ecrit les lignes du pied. Cree ou retire la ligne de nom personnalise. */
+  /**
+   * Ecrit les lignes du pied.
+   *
+   * **N'ecrit que dans des noeuds qui existent deja** — pas de `document`, pas
+   * de creation, pas de retrait. C'est ce qui la rend verifiable sous
+   * `node --test` (issue #132) : un peintre qui appellerait
+   * `document.createElement` exigerait un DOM simule pour etre exerce, et ne
+   * serait donc couvert par rien. La ligne de nom personnalise vit en
+   * permanence dans le pied ; c'est son attribut `hidden` qui varie, pas son
+   * existence — et `render()` pose exactement le meme etat de depart.
+   */
   paintNaming() {
     const footer = this.element?.querySelector('.audio-track__footer');
     if (!footer) return;
@@ -757,17 +767,12 @@ class AudioTrack {
     const locationEl = footer.querySelector('.audio-track__location');
     if (locationEl) locationEl.textContent = view.location;
 
-    let customEl = footer.querySelector('.audio-track__custom-name');
-    if (view.customName === null) {
-      if (customEl) customEl.remove();
-      return;
-    }
-    if (!customEl) {
-      customEl = document.createElement('div');
-      customEl.className = 'audio-track__footer-item audio-track__custom-name';
-      footer.insertBefore(customEl, footer.firstChild);
-    }
-    customEl.textContent = view.customName;
+    const customEl = footer.querySelector('.audio-track__custom-name');
+    if (!customEl) return;
+    // Un nom absent n'est pas une ligne vide : `[hidden]` la sort du flux, donc
+    // le pied ne garde ni interligne ni cible de survol pour rien.
+    customEl.textContent = view.customName ?? '';
+    customEl.hidden = view.customName === null;
   }
 
   /** Pose ou retire le marqueur d'enregistrement secondaire. */
