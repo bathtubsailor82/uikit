@@ -209,6 +209,17 @@
     background: rgba(255, 255, 255, 0.08);
 }
 
+/* Une ligne du pied peut exister sans etre affichee : la ligne de nom
+   personnalise est rendue en permanence et se masque quand il n'y a pas de nom,
+   ce qui evite a `paintNaming` de creer un noeud (donc de dependre du DOM, cf.
+   AudioTrack.js). La regle est ecrite ici plutot que laissee a la feuille par
+   defaut du navigateur : une declaration `display` posee un jour sur
+   `.audio-track__footer-item` la battrait sans bruit, et la ligne vide
+   reprendrait son interligne. */
+.audio-track__footer-item[hidden] {
+    display: none;
+}
+
 /* Custom name (optionnel, visible seulement quand defini) */
 .audio-track__custom-name {
     font-size: 9px;
@@ -240,6 +251,16 @@
     padding-top: 2px;
     margin-top: 1px;
     transition: all 0.1s ease;
+}
+
+/* Enregistrement secondaire arme : la piste ecrit un second fichier. Marqueur
+   pose sur la ligne du numero — la seule du pied qui ne s'edite pas au clic,
+   donc la seule qui ne bouge jamais sous le doigt. */
+.audio-track--secondary-rec .audio-track__number::after {
+    content: '\00D72';  /* ×2 */
+    margin-left: 3px;
+    color: #e0b040;
+    font-weight: 700;
 }
 
 /* Hover : fond colore, texte sombre (inversion) */

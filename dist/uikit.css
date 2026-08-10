@@ -11685,6 +11685,7 @@ nav[aria-label="Pagination"] {
     --matrix-header-width: 140px;
     --matrix-col-header-height: 120px;
     --matrix-device-row-height: 24px;
+    --matrix-vbar-width: 24px;
 }
 
 /* === CONTAINER === */
@@ -11809,6 +11810,65 @@ nav[aria-label="Pagination"] {
     border-left: none;
 }
 
+/* === VBAR (barre verticale, pendant de la device row) === */
+
+/* Cellule de la colonne vbar dans les lignes du body : sticky a droite des
+   row headers, meme fond que la device row */
+.matrix-vbar {
+    position: sticky;
+    left: var(--matrix-header-width);
+    z-index: 1;
+    min-width: var(--matrix-vbar-width);
+    max-width: var(--matrix-vbar-width);
+    padding: 0;
+    background: var(--color-bg-hover);
+}
+
+/* Tete de la colonne vbar (rangee des col headers) */
+.matrix-vbar-head {
+    left: var(--matrix-header-width);
+    min-width: var(--matrix-vbar-width);
+    max-width: var(--matrix-vbar-width);
+    padding: 0;
+    background: var(--color-bg-hover);
+}
+
+/* Intersection device row x vbar : la case du bouton 1:1.
+   Selecteur qualifie .matrix-device-row th... : necessaire pour battre la
+   specificite de ".matrix-device-row th { left: 0 }" (sinon la case colle
+   a left:0 et chevauche le corner label au scroll horizontal). */
+.matrix-device-row th.matrix-1to1-cell {
+    position: sticky;
+    left: var(--matrix-header-width);
+    z-index: 3;
+    min-width: var(--matrix-vbar-width);
+    max-width: var(--matrix-vbar-width);
+    padding: 0;
+    background: var(--color-bg-hover);
+}
+
+/* Remplit TOUTE la case de l'intersection (carre complet) : absolute+inset
+   dans la cellule sticky (height:100% n'est pas fiable dans une table-cell) */
+.matrix-1to1-btn {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 0;
+    background: var(--color-bg-active);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+}
+
+.matrix-1to1-btn:hover {
+    background: var(--color-primary);
+    color: var(--color-text-white);
+}
+
 /* === ROW HEADERS === */
 
 .matrix-row-header {
@@ -11835,6 +11895,31 @@ nav[aria-label="Pagination"] {
 tr.selected .matrix-row-header {
     background: var(--color-info);
     color: var(--color-text-white);
+}
+
+/* === TRACK NUMBER PREFIX === */
+
+/* Prefixe numerique des en-tetes de piste. Plusieurs pistes partagent le meme
+   nom (une salle porte 4 langues) : le numero est le seul discriminant au
+   patch. Vaut pour les lignes (grille inputs) et les colonnes (grille sends). */
+.matrix-track-num {
+    color: var(--color-text-tertiary);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Largeur fixe en ligne uniquement : aligne les separateurs sur une colonne.
+   Sans objet en ecriture verticale, ou la largeur est l'axe transverse. */
+.matrix-row-header .matrix-track-num {
+    display: inline-block;
+    min-width: 2.4em;
+}
+
+/* Etats selectionne / surligne : le gris tertiaire ne passe pas sur le fond
+   d'accentuation, le prefixe reprend la couleur de l'en-tete. */
+.matrix-row-header.selected .matrix-track-num,
+tr.selected .matrix-row-header .matrix-track-num,
+.matrix-col-header.highlight .matrix-track-num {
+    color: inherit;
 }
 
 /* === ROW GROUPS (hierarchical) === */
@@ -11929,30 +12014,14 @@ tr.selected .matrix-row-header {
     background: var(--color-bg-hover);
 }
 
-/* Available cell (can be activated) */
-.matrix-cell.available::after {
-    content: "+";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 14px;
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-tertiary);
-    opacity: 0;
-    /* Transition removed for performance with large matrices */
-}
-
-.matrix-cell.available:hover::after {
-    opacity: 1;
-}
-
-/* Active cell (routed) - checkmark by default */
-.matrix-cell.active {
-    background: var(--color-success);
-}
-
-.matrix-cell.active::after {
+/* PERF CRITIQUE (matrices 256x256 = 65k cellules) : le ::after est TOUJOURS
+   present avec un content fixe, et les etats (hover/active/disabled) ne
+   modifient QUE des proprietes paint-only (opacity, color). Creer ou detruire
+   la boite du pseudo-element (content conditionnel, display:none) force un
+   relayout COMPLET de la table (~38 ms mesures a 256x256) a CHAQUE clic et
+   CHAQUE cellule survolee — et `contain` est sans effet sur les cellules de
+   table (spec CSS). Ne jamais reintroduire de content/display conditionnel. */
+.matrix-cell::after {
     content: "\2713";
     position: absolute;
     top: 50%;
@@ -11961,6 +12030,23 @@ tr.selected .matrix-row-header {
     font-size: 14px;
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-white);
+    opacity: 0;
+    /* Transition removed for performance with large matrices */
+}
+
+/* Available cell : apercu fantome du checkmark au survol */
+.matrix-cell.available:hover::after {
+    color: var(--color-text-tertiary);
+    opacity: 1;
+}
+
+/* Active cell (routed) - checkmark */
+.matrix-cell.active {
+    background: var(--color-success);
+}
+
+.matrix-cell.active::after {
+    opacity: 1;
 }
 
 /* Disabled cell */
@@ -11971,7 +12057,7 @@ tr.selected .matrix-row-header {
 }
 
 .matrix-cell.disabled::after {
-    display: none;
+    opacity: 0;
 }
 
 /* === CELL STATES BY ROW/COL SELECTION === */
@@ -12140,7 +12226,7 @@ tr.selected .matrix-cell.active {
     background: var(--color-bg-active);
 }
 
-[data-scheme="dark"] .matrix-cell.available::after {
+[data-scheme="dark"] .matrix-cell.available:hover::after {
     color: var(--color-text-secondary);
 }
 
@@ -12349,6 +12435,8 @@ tr.selected .matrix-cell.active {
 }
 
 /* Red (Record) */
+/* Meme correctif que .led--recording (issue #41) : le halo pulse par opacity
+   sur ::after ; l'element ne garde que ses ombres statiques. */
 .audio-btn--active.audio-btn--red {
     background: radial-gradient(ellipse at center, #ff5555 0%, #d43f3f 50%, #b82e2e 100%);
     border-color: #8a1f1f;
@@ -12356,29 +12444,25 @@ tr.selected .matrix-cell.active {
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.3),
         inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-        0 0 12px rgba(212, 63, 63, 0.8),
-        0 0 20px rgba(212, 63, 63, 0.4),
         0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.audio-btn--active.audio-btn--red::after {
+    content: '';
+    position: absolute;
+    inset: -1px;  /* remonte au border-box, origine des ombres de l'element */
+    border-radius: 3px;
+    box-shadow:
+        0 0 16px rgba(212, 63, 63, 1),
+        0 0 28px rgba(212, 63, 63, 0.6);
+    pointer-events: none;
+    will-change: opacity;
     animation: pulse-btn 1.5s ease-in-out infinite;
 }
 
 @keyframes pulse-btn {
-    0%, 100% {
-        box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.3),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-            0 0 12px rgba(212, 63, 63, 0.8),
-            0 0 20px rgba(212, 63, 63, 0.4),
-            0 2px 3px rgba(0, 0, 0, 0.3);
-    }
-    50% {
-        box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.3),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-            0 0 16px rgba(212, 63, 63, 1),
-            0 0 28px rgba(212, 63, 63, 0.6),
-            0 2px 3px rgba(0, 0, 0, 0.3);
-    }
+    0%, 100% { opacity: 0.72; }
+    50%      { opacity: 1; }
 }
 
 /* Green (generic active) */
@@ -12512,36 +12596,39 @@ tr.selected .matrix-cell.active {
    Recording State (Red with Pulse)
    ============================================================================ */
 
+/* Le halo exterieur vit sur ::after et ne bouge JAMAIS ; seule son opacity
+   est animee. Animer box-shadow forcerait un repaint par frame avec
+   rasterisation du flou — a 256 pistes en enregistrement, la page tombe a
+   4,5 fps (voir issue #41). Les ombres inset restent sur l'element : elles
+   sont statiques et ne debordent pas. */
 .led--recording {
     background: radial-gradient(circle at 30% 30%, #ff6b6b, #d43f3f);
     border-color: #a62929;
     box-shadow:
         inset 0 1px 2px rgba(255, 255, 255, 0.3),
-        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
-        0 0 10px rgba(212, 63, 63, 0.8),
-        0 0 16px rgba(212, 63, 63, 0.4);
-    animation: pulse-led 1.5s ease-in-out infinite;
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .led--recording::before {
     opacity: 1;
 }
 
+.led--recording::after {
+    content: '';
+    position: absolute;
+    inset: -1px;  /* remonte au border-box, origine des ombres de l'element */
+    border-radius: 50%;
+    box-shadow:
+        0 0 14px rgba(212, 63, 63, 1),
+        0 0 24px rgba(212, 63, 63, 0.6);
+    pointer-events: none;
+    will-change: opacity;
+    animation: pulse-led 1.5s ease-in-out infinite;
+}
+
 @keyframes pulse-led {
-    0%, 100% {
-        box-shadow:
-            inset 0 1px 2px rgba(255, 255, 255, 0.3),
-            inset 0 -1px 2px rgba(0, 0, 0, 0.3),
-            0 0 10px rgba(212, 63, 63, 0.8),
-            0 0 16px rgba(212, 63, 63, 0.4);
-    }
-    50% {
-        box-shadow:
-            inset 0 1px 2px rgba(255, 255, 255, 0.3),
-            inset 0 -1px 2px rgba(0, 0, 0, 0.3),
-            0 0 14px rgba(212, 63, 63, 1),
-            0 0 24px rgba(212, 63, 63, 0.6);
-    }
+    0%, 100% { opacity: 0.72; }
+    50%      { opacity: 1; }
 }
 
 /* ============================================================================
@@ -12785,6 +12872,9 @@ tr.selected .matrix-cell.active {
     left: 2px;
     right: 2px;
     bottom: 2px;
+    /* Le dot est positionne (ancrage du halo ::after) : sans ce z-index il
+       passerait devant ce reflet, qui le recouvre aujourd'hui. */
+    z-index: 1;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%,
         rgba(255, 255, 255, 0.08) 0%,
@@ -12797,6 +12887,7 @@ tr.selected .matrix-cell.active {
    ============================================================================ */
 
 .record-button__dot {
+    position: relative;  /* ancre le halo ::after de l'etat recording */
     width: 11px;
     height: 11px;
     border-radius: 50%;
@@ -12857,32 +12948,32 @@ tr.selected .matrix-cell.active {
         0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
+/* Meme correctif que .led--recording : halo fixe sur ::after, seule l'opacity
+   est animee (issue #41). Les ombres inset, statiques, restent sur le dot. */
 .record-button--recording .record-button__dot {
     background: radial-gradient(circle at 35% 35%, #ff5555, #d43f3f);
     border-color: #8a1f1f;
     box-shadow:
         inset 0 1px 2px rgba(255, 255, 255, 0.3),
-        inset 0 -1px 2px rgba(0, 0, 0, 0.4),
-        0 0 12px rgba(212, 63, 63, 1),
-        0 0 20px rgba(212, 63, 63, 0.6);
+        inset 0 -1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.record-button--recording .record-button__dot::after {
+    content: '';
+    position: absolute;
+    inset: -1px;  /* remonte au border-box, origine des ombres du dot */
+    border-radius: 50%;
+    box-shadow:
+        0 0 16px rgba(212, 63, 63, 1),
+        0 0 28px rgba(212, 63, 63, 0.8);
+    pointer-events: none;
+    will-change: opacity;
     animation: pulse-recording-dot 1.5s ease-in-out infinite;
 }
 
 @keyframes pulse-recording-dot {
-    0%, 100% {
-        box-shadow:
-            inset 0 1px 2px rgba(255, 255, 255, 0.3),
-            inset 0 -1px 2px rgba(0, 0, 0, 0.4),
-            0 0 12px rgba(212, 63, 63, 1),
-            0 0 20px rgba(212, 63, 63, 0.6);
-    }
-    50% {
-        box-shadow:
-            inset 0 1px 2px rgba(255, 255, 255, 0.3),
-            inset 0 -1px 2px rgba(0, 0, 0, 0.4),
-            0 0 16px rgba(212, 63, 63, 1),
-            0 0 28px rgba(212, 63, 63, 0.8);
-    }
+    0%, 100% { opacity: 0.75; }
+    50%      { opacity: 1; }
 }
 
 /* === css/components/atoms/timer.css === */
@@ -13349,6 +13440,17 @@ tr.selected .matrix-cell.active {
     background: rgba(255, 255, 255, 0.08);
 }
 
+/* Une ligne du pied peut exister sans etre affichee : la ligne de nom
+   personnalise est rendue en permanence et se masque quand il n'y a pas de nom,
+   ce qui evite a `paintNaming` de creer un noeud (donc de dependre du DOM, cf.
+   AudioTrack.js). La regle est ecrite ici plutot que laissee a la feuille par
+   defaut du navigateur : une declaration `display` posee un jour sur
+   `.audio-track__footer-item` la battrait sans bruit, et la ligne vide
+   reprendrait son interligne. */
+.audio-track__footer-item[hidden] {
+    display: none;
+}
+
 /* Custom name (optionnel, visible seulement quand defini) */
 .audio-track__custom-name {
     font-size: 9px;
@@ -13380,6 +13482,16 @@ tr.selected .matrix-cell.active {
     padding-top: 2px;
     margin-top: 1px;
     transition: all 0.1s ease;
+}
+
+/* Enregistrement secondaire arme : la piste ecrit un second fichier. Marqueur
+   pose sur la ligne du numero — la seule du pied qui ne s'edite pas au clic,
+   donc la seule qui ne bouge jamais sous le doigt. */
+.audio-track--secondary-rec .audio-track__number::after {
+    content: '\00D72';  /* ×2 */
+    margin-left: 3px;
+    color: #e0b040;
+    font-weight: 700;
 }
 
 /* Hover : fond colore, texte sombre (inversion) */

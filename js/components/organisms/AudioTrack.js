@@ -11,6 +11,7 @@
  *   sublocation: 'A',      // optionnel
  *   language: 'FR',
  *   customName: 'Speaker 1', // optionnel, prioritaire sur location/language
+ *   secondaryRecordingEnabled: false, // second fichier ecrit en parallele
  *   threshold: -30,
  *   gain: 0,
  *   pan: 0,
@@ -61,6 +62,13 @@ const METER_CONFIG_BY_MODE = {
   }
 };
 
+// Marqueur d'enregistrement secondaire : la piste ecrit un second fichier.
+// C'est une propriete de configuration, pas un etat de transport — d'ou un
+// marqueur discret sur la ligne du numero, la seule du pied qui ne soit pas
+// editable au clic (donc la seule qui ne bouge jamais sous le doigt).
+const SECONDARY_REC_CLASS = 'audio-track--secondary-rec';
+const SECONDARY_REC_TITLE = 'Secondary recording enabled';
+
 class AudioTrack {
   constructor(container, config = {}) {
     this.container = container;
@@ -71,6 +79,7 @@ class AudioTrack {
       sublocation: null,     // optionnel (ex: "A", "Cabin 1")
       language: 'FR',
       customName: null,      // optionnel (ex: "Speaker 1 FR") - prioritaire sur location/language
+      secondaryRecordingEnabled: false,  // second fichier ecrit en parallele
       color: null,           // hex color pour le color strip (ex: "#ff5500"), null = gris neutre
       threshold: -30,
       gain: 0,
@@ -127,17 +136,39 @@ class AudioTrack {
   // ========================================================================
 
   /**
+   * Les lignes du pied de tranche, derivees des champs d'identite.
+   *
+   * **Statique et pure** : ni `this`, ni DOM, ni echappement — c'est elle qui
+   * se verifie sous `node --test`, la pose dans le document restant a
+   * `applyTrackFields`. Les chaines rendues sont brutes, l'echappement se fait
+   * a l'ecriture (`textContent`, ou `escape()` au premier rendu).
+   *
+   * @param {Object} config - au moins {location, sublocation, language, customName}
+   * @returns {{customName: string|null, lang: string, location: string}}
+   *   `customName` vaut `null` quand il n'y en a pas : la ligne n'existe alors
+   *   pas dans le pied, elle n'y figure pas vide.
+   */
+  static namingView({ location, sublocation, language, customName } = {}) {
+    const custom = typeof customName === 'string' && customName.trim() ? customName : null;
+    const sub = sublocation ? `/${sublocation}` : '';
+    return {
+      customName: custom,
+      lang: language ?? '',
+      location: `${location ?? ''}${sub}`
+    };
+  }
+
+  /**
    * Nom d'affichage prioritaire : customName si defini et non vide,
    * sinon fallback sur "location[/sublocation] language".
    * Match la logique Swift Track.displayName.
    */
   getCustomNameDisplay() {
-    const custom = this.config.customName;
-    if (custom && custom.trim()) return this.escape(custom);
+    const view = AudioTrack.namingView(this.config);
+    if (view.customName !== null) return this.escape(view.customName);
 
     // Fallback : location[/sublocation] language
-    const sub = this.config.sublocation ? `/${this.config.sublocation}` : '';
-    return this.escape(`${this.config.location}${sub} ${this.config.language}`);
+    return this.escape(`${view.location} ${view.lang}`);
   }
 
   /**
@@ -145,8 +176,8 @@ class AudioTrack {
    * Meme si customName est defini, on affiche ces infos en petit en dessous.
    */
   getMetaDisplay() {
-    const sub = this.config.sublocation ? `/${this.config.sublocation}` : '';
-    return this.escape(`${this.config.language} ${this.config.location}${sub}`);
+    const view = AudioTrack.namingView(this.config);
+    return this.escape(`${view.lang} ${view.location}`);
   }
 
   escape(str) {
@@ -168,6 +199,10 @@ class AudioTrack {
     // Color strip : couleur du groupe (ou defaut neutre)
     const stripColor = this.config.color || '#333';
     track.style.setProperty('--track-color', stripColor);
+
+    // Le pied se derive du meme calcul que la mise a jour partielle : deux
+    // chemins d'ecriture, une seule regle d'affichage.
+    const naming = AudioTrack.namingView(this.config);
 
     track.innerHTML = `
       <!-- Color Strip (5px, couleur groupe) -->
@@ -200,10 +235,10 @@ class AudioTrack {
 
       <!-- Naming Section -->
       <div class="audio-track__footer">
-        ${this.config.customName ? `<div class="audio-track__footer-item audio-track__custom-name">${this.escape(this.config.customName)}</div>` : ''}
-        <div class="audio-track__footer-item audio-track__lang">${this.escape(this.config.language)}</div>
-        <div class="audio-track__footer-item audio-track__location">${this.escape(this.config.location)}${this.config.sublocation ? '/' + this.escape(this.config.sublocation) : ''}</div>
-        <div class="audio-track__footer-item audio-track__number">#${String(this.config.trackId).padStart(3, '0')}</div>
+        <div class="audio-track__footer-item audio-track__custom-name"${naming.customName === null ? ' hidden' : ''}>${this.escape(naming.customName ?? '')}</div>
+        <div class="audio-track__footer-item audio-track__lang">${this.escape(naming.lang)}</div>
+        <div class="audio-track__footer-item audio-track__location">${this.escape(naming.location)}</div>
+        <div class="audio-track__footer-item audio-track__number"${this.config.secondaryRecordingEnabled ? ` title="${SECONDARY_REC_TITLE}"` : ''}>#${String(this.config.trackId).padStart(3, '0')}</div>
       </div>
     `;
 
@@ -214,6 +249,14 @@ class AudioTrack {
     }
 
     this.element = track;
+
+    // Les rotaries pointaient sur le DOM qu'on vient de remplacer : ils sont
+    // recrees ci-dessous, ou n'existent pas dans ce mode (hors bus). Garder
+    // une instance orpheline lui laisserait porter une autorite locale sur un
+    // widget invisible.
+    this.panRotary = null;
+    this.gainRotary = null;
+    this.thresholdRotary = null;
 
     // Initialize components
     this.initMeter();
@@ -248,6 +291,9 @@ class AudioTrack {
     // State modifiers (derived from trackState)
     if (this.armed) classes.push('audio-track--armed');
     if (this.recording) classes.push('audio-track--recording');
+
+    // Enregistrement secondaire : marqueur permanent, pas un etat de transport
+    if (this.config.secondaryRecordingEnabled) classes.push(SECONDARY_REC_CLASS);
 
     return classes.join(' ');
   }
@@ -370,20 +416,27 @@ class AudioTrack {
     // Preparation for sends-on-faders (Epic C)
     const rotaryContainer = document.createElement('div');
     panContainer.appendChild(rotaryContainer);
+    // Unites : l'API publique de AudioTrack (config.pan, onPanChange,
+    // setBusValues, setPan) parle la meme langue que le backend, -1.0 a +1.0.
+    // Le preset 'pan' du Rotary, lui, travaille en pourcents (-100 a +100).
+    // La conversion vit donc ici, aux deux frontieres du composant — sans quoi
+    // un pan serveur de -1.0 s'affichait "L1" (1 % a gauche) et un drag
+    // envoyait 17 la ou le backend attend 0.17. Meme conversion que
+    // bus-ui.js pour les rotaries du panneau bus.
     this.panRotary = new Rotary(rotaryContainer, {
       preset: 'pan',
       label: '',  // Label "PAN" masque - spec AUDIOTRACK-UI MVP
-      value: this.config.pan,
-      onInput: (value) => {
-        this.config.pan = value;
+      value: AudioTrack._panToPercent(this.config.pan),
+      onInput: (percent) => {
+        this.config.pan = AudioTrack._percentToPan(percent);
         if (this.config.onPanChange) {
-          this.config.onPanChange(value, { realtime: true });
+          this.config.onPanChange(this.config.pan, { realtime: true });
         }
       },
-      onChange: (value) => {
-        this.config.pan = value;
+      onChange: (percent) => {
+        this.config.pan = AudioTrack._percentToPan(percent);
         if (this.config.onPanChange) {
-          this.config.onPanChange(value);
+          this.config.onPanChange(this.config.pan);
         }
       }
     });
@@ -522,44 +575,52 @@ class AudioTrack {
    * Met a jour les valeurs per-bus (gain/pan/mute/solo) et le mode inBus.
    * Appele par switchBus() et onEnableBus() sans re-render complet.
    * Si inBus change, re-render la section controls (swap enable button / rotaries).
+   *
+   * @param {Object} [options]
+   * @param {boolean} [options.rebind=false] - true quand les rotaries changent
+   *   de sujet (switch de bus) : l'autorite locale acquise sur l'ancien bus
+   *   n'a plus lieu d'etre, l'echo attendu ne concerne plus ce qu'ils editent.
    */
-  setBusValues(gain, pan, mute, solo, inBus) {
+  setBusValues(gain, pan, mute, solo, inBus, options = {}) {
     const wasInBus = this.config.inBus;
-    this.config.gain = gain;
-    this.config.pan = pan;
     this.config.mute = mute;
     this.config.solo = solo;
     this.config.inBus = inBus;
 
+    if (options.rebind) {
+      if (this.panRotary) this.panRotary.resetLocalAuthority();
+      if (this.gainRotary) this.gainRotary.resetLocalAuthority();
+    }
+
     if (wasInBus !== inBus) {
       // Mode change : re-render complet necessaire (swap enable/controls)
+      this.config.gain = gain;
+      this.config.pan = pan;
       this.render();
       return;
     }
 
-    // Update in-place si meme mode. externalSync() skippe si un rotary est
-    // en cours de drag, evitant l'ecrasement visuel par un broadcast WS.
-    if (inBus) {
-      if (this.panRotary) this.panRotary.externalSync(pan);
-      if (this.gainRotary) this.gainRotary.externalSync(gain);
-      if (this.buttonGroup) {
-        this.buttonGroup.setState('mute', mute);
-        this.buttonGroup.setState('solo', solo);
-      }
+    // Update in-place si meme mode. externalSync() rend false quand le rotary
+    // garde l'autorite locale (geste en cours, ou echo pas encore revenu) :
+    // l'etat interne ne bouge pas non plus dans ce cas — cf. contrat #43.
+    this.setPan(pan);
+    this.setGain(gain);
+
+    if (inBus && this.buttonGroup) {
+      this.buttonGroup.setState('mute', mute);
+      this.buttonGroup.setState('solo', solo);
     }
   }
 
   /**
-   * Set gain value externally (e.g. from WebSocket track_updated sync).
-   * Symetrique de setThreshold/setPan. Drag-aware : externalSync skippe
-   * la maj si le rotary est en cours de drag actif.
+   * Set gain value externally (e.g. from WebSocket bus source sync).
+   * Soumis a l'autorite locale du rotary : si le rotary refuse l'entrant,
+   * config.gain n'est pas ecrit non plus.
    * @param {number} value - Gain value in dB
    */
   setGain(value) {
+    if (this.gainRotary && !this.gainRotary.externalSync(value)) return;
     this.config.gain = value;
-    if (this.gainRotary) {
-      this.gainRotary.externalSync(value);
-    }
   }
 
   // ========================================================================
@@ -622,44 +683,168 @@ class AudioTrack {
     }
   }
 
-  updateLocation(location) {
-    this.config.location = location;
-    const locationEl = this.element.querySelector('.audio-track__location');
-    if (locationEl) {
-      locationEl.textContent = location;
-    }
+  /**
+   * Applique les champs d'identite d'une piste **sans reconstruire la tranche**.
+   *
+   * `render()` remplace l'element et recree les rotaries : appele sur l'echo
+   * d'un autre poste, il detruirait sous le doigt le widget qui porte
+   * l'autorite locale (contrat #43). D'ou l'ecriture chirurgicale — quelques
+   * `textContent`, une classe, et rien d'autre. Aucun rotary, aucun meter,
+   * aucun bouton n'est touche.
+   *
+   * Une cle absente de `fields` ne change rien ; une cle a `null` efface —
+   * c'est ce que le backend diffuse pour un effacement (`NSNull` cote Swift,
+   * cf. `TrackRoutes.swift`), et `null` n'est pas `undefined`.
+   *
+   * Rien n'est ecrit dans le document quand rien ne change : le metering
+   * republie la piste entiere a 30-60 Hz par `TrackManager.updateTrack`, donc
+   * l'echo arrive en boucle et le filtre en tete est ce qui l'empeche de
+   * couter quoi que ce soit.
+   *
+   * @param {Object} fields - sous-ensemble de `AudioTrack.SYNCED_FIELDS`
+   * @returns {string[]} les champs reellement appliques (vide si aucun)
+   */
+  applyTrackFields(fields = {}) {
+    const changed = AudioTrack.changedTrackFields(this.config, fields);
+    const keys = Object.keys(changed);
+    if (keys.length === 0) return keys;
+
+    Object.assign(this.config, changed);
+
+    if (keys.some(key => key !== 'secondaryRecordingEnabled')) this.paintNaming();
+    if ('secondaryRecordingEnabled' in changed) this.paintSecondaryRecording();
+
+    return keys;
   }
 
-  updateLanguage(language) {
-    this.config.language = language;
-    const langEl = this.element.querySelector('.audio-track__lang');
-    if (langEl) {
-      langEl.textContent = language;
-    }
+  /** Les champs d'identite qu'une tranche rend, et qu'`applyTrackFields` lit. */
+  static get SYNCED_FIELDS() {
+    return ['location', 'sublocation', 'language', 'customName', 'secondaryRecordingEnabled'];
   }
 
   /**
-   * Set threshold value (for global threshold feature + WS sync)
-   * Updates rotary (drag-aware), config, and visual indicator
-   * @param {number} value - Threshold in dB
+   * Le sous-ensemble de `fields` qui change vraiment quelque chose.
+   *
+   * Statique et pure : c'est le filtre anti-echo, et il se verifie sans DOM.
+   * Une cle hors de `SYNCED_FIELDS` est ignoree — la tranche ne rend que ce
+   * qu'elle sait rendre, et `TrackManager` lui passe la piste entiere.
+   *
+   * @param {Object} config - config courante de la tranche
+   * @param {Object} fields - champs entrants
+   * @returns {Object} les changements, `{}` si l'entrant ne dit rien de neuf
    */
-  setThreshold(value) {
-    this.config.threshold = value;
-    if (this.thresholdRotary) {
-      this.thresholdRotary.externalSync(value); // skip si drag actif
+  static changedTrackFields(config = {}, fields = {}) {
+    const changed = {};
+    for (const key of AudioTrack.SYNCED_FIELDS) {
+      if (fields[key] === undefined) continue;
+      const value = key === 'secondaryRecordingEnabled' ? !!fields[key] : fields[key];
+      if (value === config[key]) continue;
+      changed[key] = value;
     }
+    return changed;
+  }
+
+  /**
+   * Ecrit les lignes du pied.
+   *
+   * **N'ecrit que dans des noeuds qui existent deja** — pas de `document`, pas
+   * de creation, pas de retrait. C'est ce qui la rend verifiable sous
+   * `node --test` (issue #132) : un peintre qui appellerait
+   * `document.createElement` exigerait un DOM simule pour etre exerce, et ne
+   * serait donc couvert par rien. La ligne de nom personnalise vit en
+   * permanence dans le pied ; c'est son attribut `hidden` qui varie, pas son
+   * existence — et `render()` pose exactement le meme etat de depart.
+   */
+  paintNaming() {
+    const footer = this.element?.querySelector('.audio-track__footer');
+    if (!footer) return;
+
+    const view = AudioTrack.namingView(this.config);
+
+    const langEl = footer.querySelector('.audio-track__lang');
+    if (langEl) langEl.textContent = view.lang;
+
+    const locationEl = footer.querySelector('.audio-track__location');
+    if (locationEl) locationEl.textContent = view.location;
+
+    const customEl = footer.querySelector('.audio-track__custom-name');
+    if (!customEl) return;
+    // Un nom absent n'est pas une ligne vide : `[hidden]` la sort du flux, donc
+    // le pied ne garde ni interligne ni cible de survol pour rien.
+    customEl.textContent = view.customName ?? '';
+    customEl.hidden = view.customName === null;
+  }
+
+  /** Pose ou retire le marqueur d'enregistrement secondaire. */
+  paintSecondaryRecording() {
+    if (!this.element) return;
+    const on = this.config.secondaryRecordingEnabled === true;
+    this.element.classList.toggle(SECONDARY_REC_CLASS, on);
+
+    const numberEl = this.element.querySelector('.audio-track__number');
+    if (!numberEl) return;
+    if (on) numberEl.title = SECONDARY_REC_TITLE;
+    else numberEl.removeAttribute('title');
+  }
+
+  updateLocation(location) {
+    // Passe par le chemin partiel : la ligne porte `location[/sublocation]`,
+    // et l'ecrire a la main y perdait la sous-localisation.
+    this.applyTrackFields({ location });
+  }
+
+  updateLanguage(language) {
+    this.applyTrackFields({ language });
+  }
+
+  /**
+   * Set threshold value (global threshold feature + WS sync).
+   *
+   * Le widget a trois faces — le bouton du rotary, l'indicateur sur le meter,
+   * et config.threshold — qui doivent bouger ensemble ou pas du tout. La
+   * decision appartient au rotary : tant qu'il garde l'autorite locale, rien
+   * ne bouge, sinon le bouton suit le doigt pendant que l'indicateur saute a
+   * la valeur de l'echo (issue #43).
+   *
+   * @param {number} value - Threshold in dB
+   * @param {Object} [options]
+   * @param {boolean} [options.local=false] - true : ecriture locale (apply
+   *   global Alt+drag), appliquee sans garde et protegee de l'echo ;
+   *   false : valeur entrante serveur, soumise a l'autorite locale.
+   */
+  setThreshold(value, options = {}) {
+    if (this.thresholdRotary) {
+      if (options.local) {
+        this.thresholdRotary.commitLocalValue(value);
+      } else if (!this.thresholdRotary.externalSync(value)) {
+        return;
+      }
+    }
+    this.config.threshold = value;
     this.updateThresholdIndicatorPosition();
   }
 
   /**
-   * Set pan value externally (e.g. from WebSocket bus source update)
-   * @param {number} value - Pan value (-100 to +100)
+   * Set pan value externally (e.g. from WebSocket bus source update).
+   * Soumis a l'autorite locale du rotary, comme setGain/setThreshold.
+   * @param {number} value - Pan value (-1.0 L .. 0.0 C .. +1.0 R), unite backend
    */
   setPan(value) {
+    if (this.panRotary && !this.panRotary.externalSync(AudioTrack._panToPercent(value))) return;
     this.config.pan = value;
-    if (this.panRotary) {
-      this.panRotary.externalSync(value);
-    }
+  }
+
+  /**
+   * Conversions entre l'unite backend du pan (-1.0 a +1.0) et l'unite du
+   * Rotary preset 'pan' (-100 a +100, pas de 1).
+   * @private
+   */
+  static _panToPercent(pan) {
+    return Math.round((pan ?? 0) * 100);
+  }
+
+  static _percentToPan(percent) {
+    return (percent ?? 0) / 100;
   }
 
   destroy() {
