@@ -455,13 +455,24 @@ class CanvasMeter {
 
   /**
    * Change config at runtime
+   *
+   * Une palette partielle est un override, pas un remplacement : chaque clef de
+   * `colors` est optionnelle, et celles qui ne sont pas citees restent en place.
+   *
+   * La fusion se fait donc **avant** le spread, jamais apres. Fusionner ensuite
+   * arrive trop tard : `{ ...this.config, ...newConfig }` a deja remplace
+   * `config.colors` par l'objet partiel, et la fusion ne fusionne plus que ce
+   * partiel avec lui-meme. Les couleurs non citees valaient alors `undefined`,
+   * et la peinture suivante mourait sur `addColorStop(undefined)` (issue #42).
+   *
    * @param {Object} newConfig - Partial config to update
    */
   setConfig(newConfig) {
-    this.config = { ...this.config, ...newConfig };
-    if (newConfig.colors) {
-      this.config.colors = { ...this.config.colors, ...newConfig.colors };
-    }
+    const colors = newConfig.colors
+      ? { ...this.config.colors, ...newConfig.colors }
+      : this.config.colors;
+
+    this.config = { ...this.config, ...newConfig, colors };
     this._createCanvas();
     this.ctx = this.canvas.getContext('2d');
     this._cacheComputedValues();
