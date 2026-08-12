@@ -7,8 +7,8 @@
  *   trackId: 1,
  *   size: 'normal',        // 'compact' | 'normal' | 'large'
  *                          // Note: 'mini' (40px, no VU-meter) will be added
- *   location: 'P-01',
- *   sublocation: 'A',      // optionnel
+ *   location: 'P',         // code du site
+ *   sublocation: '01',     // code de la salle, optionnel
  *   language: 'FR',
  *   customName: 'Speaker 1', // optionnel, prioritaire sur location/language
  *   secondaryRecordingEnabled: false, // second fichier ecrit en parallele
@@ -75,8 +75,8 @@ class AudioTrack {
     this.config = {
       trackId: 1,
       size: 'normal',        // compact | normal | large (mini will be added)
-      location: 'P-01',
-      sublocation: null,     // optionnel (ex: "A", "Cabin 1")
+      location: 'P',         // code du site (premier niveau du lieu)
+      sublocation: null,     // code de la salle (second niveau), optionnel
       language: 'FR',
       customName: null,      // optionnel (ex: "Speaker 1 FR") - prioritaire sur location/language
       secondaryRecordingEnabled: false,  // second fichier ecrit en parallele
@@ -132,7 +132,7 @@ class AudioTrack {
   }
 
   // ========================================================================
-  // NAMING HELPERS (customName + location/sublocation/language)
+  // NAMING HELPERS (customName + lieu + langue)
   // ========================================================================
 
   /**
@@ -143,36 +143,43 @@ class AudioTrack {
    * `applyTrackFields`. Les chaines rendues sont brutes, l'echappement se fait
    * a l'ecriture (`textContent`, ou `escape()` au premier rendu).
    *
+   * Le lieu est un **couple** — le code du site et celui de la salle — et sa
+   * forme contractee `P-01` se **calcule** ici (issue #164). Le navigateur ne
+   * la fabriquait pas seulement pour l'afficher, il la renvoyait au serveur
+   * comme une seule chaine opaque : rien, cote serveur, ne pouvait alors la
+   * valider ni la relire. Il ne reste ici que l'affichage.
+   *
    * @param {Object} config - au moins {location, sublocation, language, customName}
    * @returns {{customName: string|null, lang: string, location: string}}
-   *   `customName` vaut `null` quand il n'y en a pas : la ligne n'existe alors
-   *   pas dans le pied, elle n'y figure pas vide.
+   *   `location` porte la contraction. `customName` vaut `null` quand il n'y
+   *   en a pas : la ligne n'existe alors pas dans le pied, elle n'y figure pas
+   *   vide.
    */
   static namingView({ location, sublocation, language, customName } = {}) {
     const custom = typeof customName === 'string' && customName.trim() ? customName : null;
-    const sub = sublocation ? `/${sublocation}` : '';
+    const room = sublocation ? `-${sublocation}` : '';
     return {
       customName: custom,
       lang: language ?? '',
-      location: `${location ?? ''}${sub}`
+      location: `${location ?? ''}${room}`
     };
   }
 
   /**
    * Nom d'affichage prioritaire : customName si defini et non vide,
-   * sinon fallback sur "location[/sublocation] language".
+   * sinon fallback sur "lieu langue" — le lieu etant la contraction.
    * Match la logique Swift Track.displayName.
    */
   getCustomNameDisplay() {
     const view = AudioTrack.namingView(this.config);
     if (view.customName !== null) return this.escape(view.customName);
 
-    // Fallback : location[/sublocation] language
+    // Fallback : lieu langue
     return this.escape(`${view.location} ${view.lang}`);
   }
 
   /**
-   * Ligne meta sous le nom : lang + location/sublocation.
+   * Ligne meta sous le nom : lang + lieu contracte.
    * Meme si customName est defini, on affiche ces infos en petit en dessous.
    */
   getMetaDisplay() {
@@ -539,7 +546,12 @@ class AudioTrack {
     if (locationEl) {
       locationEl.addEventListener('click', (e) => {
         if (this.config.onLocationClick) {
-          this.config.onLocationClick(this.config.location, e.currentTarget);
+          // La **contraction**, pas le seul code de site : c'est ce que la
+          // ligne affiche, donc ce que le menu doit reconnaitre pour marquer
+          // le lieu courant comme selectionne (issue #164).
+          this.config.onLocationClick(
+            AudioTrack.namingView(this.config).location, e.currentTarget
+          );
         }
       });
     }
@@ -787,10 +799,15 @@ class AudioTrack {
     else numberEl.removeAttribute('title');
   }
 
-  updateLocation(location) {
-    // Passe par le chemin partiel : la ligne porte `location[/sublocation]`,
-    // et l'ecrire a la main y perdait la sous-localisation.
-    this.applyTrackFields({ location });
+  updateLocation(location, sublocation) {
+    // Passe par le chemin partiel : la ligne porte la **contraction** du
+    // couple, et l'ecrire a la main y perdait la salle.
+    //
+    // La salle ne s'ecrit que si l'appelant en donne une : `undefined` veut
+    // dire « je ne parle que du site », et `null` « efface la salle ».
+    this.applyTrackFields(
+      sublocation === undefined ? { location } : { location, sublocation }
+    );
   }
 
   updateLanguage(language) {
