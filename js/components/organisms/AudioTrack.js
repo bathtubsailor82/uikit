@@ -9,6 +9,7 @@
  *                          // Note: 'mini' (40px, no VU-meter) will be added
  *   location: 'P',         // code du site
  *   sublocation: '01',     // code de la salle, optionnel
+ *   locationLabel: 'P-01', // le couple deja ecrit par l'hote — ce qui s'affiche
  *   language: 'FR',
  *   customName: 'Speaker 1', // optionnel, prioritaire sur location/language
  *   secondaryRecordingEnabled: false, // second fichier ecrit en parallele
@@ -77,6 +78,7 @@ class AudioTrack {
       size: 'normal',        // compact | normal | large (mini will be added)
       location: 'P',         // code du site (premier niveau du lieu)
       sublocation: null,     // code de la salle (second niveau), optionnel
+      locationLabel: null,   // le couple deja ecrit par l'hote — ce qui s'affiche
       language: 'FR',
       customName: null,      // optionnel (ex: "Speaker 1 FR") - prioritaire sur location/language
       secondaryRecordingEnabled: false,  // second fichier ecrit en parallele
@@ -143,25 +145,30 @@ class AudioTrack {
    * `applyTrackFields`. Les chaines rendues sont brutes, l'echappement se fait
    * a l'ecriture (`textContent`, ou `escape()` au premier rendu).
    *
-   * Le lieu est un **couple** — le code du site et celui de la salle — et sa
-   * forme contractee `P-01` se **calcule** ici (issue #164). Le navigateur ne
-   * la fabriquait pas seulement pour l'afficher, il la renvoyait au serveur
-   * comme une seule chaine opaque : rien, cote serveur, ne pouvait alors la
-   * valider ni la relire. Il ne reste ici que l'affichage.
+   * **La tranche ne joint plus le couple elle-meme.** Elle l'a fait de #164 a
+   * #175, et c'etait une seconde ecriture de la regle : l'hote en tient une, et
+   * un separateur grave ici la contredisait des que l'installation en declarait
+   * un autre. Une tranche n'a pas a savoir ce qu'est un lieu — elle recoit le
+   * libelle deja ecrit, `locationLabel`, et l'affiche.
    *
-   * @param {Object} config - au moins {location, sublocation, language, customName}
+   * `location` et `sublocation` restent dans la config parce que l'hote s'en
+   * sert (identite du couple, menu de saisie) ; ils ne servent plus a
+   * l'affichage. Sans `locationLabel`, la vue rend le site **seul** — jamais un
+   * separateur invente.
+   *
+   * @param {Object} config - au moins {locationLabel, language, customName}
    * @returns {{customName: string|null, lang: string, location: string}}
-   *   `location` porte la contraction. `customName` vaut `null` quand il n'y
-   *   en a pas : la ligne n'existe alors pas dans le pied, elle n'y figure pas
-   *   vide.
+   *   `location` porte le libelle a afficher. `customName` vaut `null` quand il
+   *   n'y en a pas : la ligne n'existe alors pas dans le pied, elle n'y figure
+   *   pas vide.
    */
-  static namingView({ location, sublocation, language, customName } = {}) {
+  static namingView({ location, locationLabel, language, customName } = {}) {
     const custom = typeof customName === 'string' && customName.trim() ? customName : null;
-    const room = sublocation ? `-${sublocation}` : '';
+    const label = typeof locationLabel === 'string' ? locationLabel : null;
     return {
       customName: custom,
       lang: language ?? '',
-      location: `${location ?? ''}${room}`
+      location: label ?? (location ?? '')
     };
   }
 
@@ -731,7 +738,10 @@ class AudioTrack {
 
   /** Les champs d'identite qu'une tranche rend, et qu'`applyTrackFields` lit. */
   static get SYNCED_FIELDS() {
-    return ['location', 'sublocation', 'language', 'customName', 'secondaryRecordingEnabled'];
+    return [
+      'location', 'sublocation', 'locationLabel',
+      'language', 'customName', 'secondaryRecordingEnabled'
+    ];
   }
 
   /**
@@ -799,15 +809,18 @@ class AudioTrack {
     else numberEl.removeAttribute('title');
   }
 
-  updateLocation(location, sublocation) {
-    // Passe par le chemin partiel : la ligne porte la **contraction** du
-    // couple, et l'ecrire a la main y perdait la salle.
+  updateLocation(location, sublocation, locationLabel) {
+    // Passe par le chemin partiel : la ligne porte le **libelle** du couple, et
+    // l'ecrire a la main y perdait la salle.
     //
-    // La salle ne s'ecrit que si l'appelant en donne une : `undefined` veut
-    // dire « je ne parle que du site », et `null` « efface la salle ».
-    this.applyTrackFields(
-      sublocation === undefined ? { location } : { location, sublocation }
-    );
+    // La salle et le libelle ne s'ecrivent que si l'appelant les donne :
+    // `undefined` veut dire « je ne parle que du site », et `null` « efface ».
+    // La tranche ne fabrique pas le libelle a partir des codes — elle ne connait
+    // pas la convention de l'installation (issue #175).
+    const fields = { location };
+    if (sublocation !== undefined) fields.sublocation = sublocation;
+    if (locationLabel !== undefined) fields.locationLabel = locationLabel;
+    this.applyTrackFields(fields);
   }
 
   updateLanguage(language) {
