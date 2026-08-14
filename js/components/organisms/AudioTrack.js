@@ -70,6 +70,11 @@ const METER_CONFIG_BY_MODE = {
 const SECONDARY_REC_CLASS = 'audio-track--secondary-rec';
 const SECONDARY_REC_TITLE = 'Secondary recording enabled';
 
+// Le filet d'une tranche a qui personne n'a donne de couleur : un gris qui ne
+// pretend rien. Il vit ici parce que deux chemins l'ecrivent — `render()` au
+// premier rendu, `setColor()` ensuite — et que deux litteraux divergeraient.
+const DEFAULT_STRIP_COLOR = '#333';
+
 class AudioTrack {
   constructor(container, config = {}) {
     this.container = container;
@@ -211,7 +216,7 @@ class AudioTrack {
     track.dataset.trackId = this.config.trackId;
 
     // Color strip : couleur du groupe (ou defaut neutre)
-    const stripColor = this.config.color || '#333';
+    const stripColor = this.config.color || DEFAULT_STRIP_COLOR;
     track.style.setProperty('--track-color', stripColor);
 
     // Le pied se derive du meme calcul que la mise a jour partielle : deux
@@ -795,6 +800,40 @@ class AudioTrack {
     // le pied ne garde ni interligne ni cible de survol pour rien.
     customEl.textContent = view.customName ?? '';
     customEl.hidden = view.customName === null;
+  }
+
+  /**
+   * Pose la couleur du filet — **sans reconstruire la tranche**.
+   *
+   * La couleur suit la grappe qui tient la piste, et la grappe change des que
+   * l'ecran change d'axe de rangement. Passer par `render()` recreerait les
+   * rotaries, donc detruirait sous le doigt l'autorite locale d'un geste en
+   * cours (contrat #43) — pour un changement qui ne pese que deux ecritures.
+   *
+   * Deux ecritures, aucune creation ni retrait : la propriete personnalisee,
+   * que le pied lit pour teinter le numero, et le fond du filet. Sans couleur,
+   * le gris neutre — jamais une chaine vide, qui laisserait un filet
+   * transparent.
+   *
+   * La couleur passe aussi par `config`, et pas seulement par le document : un
+   * `render()` ulterieur — changement de bus, par exemple — repose alors la
+   * meme, au lieu de revenir au gris.
+   *
+   * Ce que l'appelant donne fait autorite : la tranche ne derive rien. C'est ce
+   * qui laisse la couleur de grappe n'etre qu'un **defaut surchargeable**, le
+   * jour ou le moteur portera une couleur propre a la piste.
+   *
+   * @param {string|null} color - hex (ex: `#4a7ee0`), ou `null` pour le neutre
+   */
+  setColor(color) {
+    this.config.color = color || null;
+    if (!this.element) return;
+
+    const stripColor = this.config.color || DEFAULT_STRIP_COLOR;
+    this.element.style.setProperty('--track-color', stripColor);
+
+    const strip = this.element.querySelector('.audio-track__color-strip');
+    if (strip) strip.style.background = stripColor;
   }
 
   /** Pose ou retire le marqueur d'enregistrement secondaire. */
