@@ -118,6 +118,7 @@
         <div class="tracks-grid" id="tracks-container"></div>
         <div class="controls">
             <button class="btn-demo" onclick="toggleMetering()">Toggle Metering</button>
+            <button class="btn-demo" onclick="toggleCondensed()">Condenser / rendre les tranches</button>
             <button class="btn-demo" onclick="resetAll()">Reset All</button>
         </div>
     </div>
@@ -235,6 +236,25 @@
         window.toggleMetering = () => {
             meteringActive = !meteringActive;
             log(`Metering ${meteringActive ? 'STARTED' : 'STOPPED'}`);
+        };
+
+        // La bascule de taille, sans re-rendu : c'est la seule preuve de
+        // `setSize()` que ce depot sache rejouer (uikit n'a pas de runner JS).
+        // Un aller-retour doit rendre la tranche a l'identique — meme hauteur,
+        // un seul canvas, le triangle de seuil de retour, les rotaries intacts.
+        let condensed = false;
+        window.toggleCondensed = () => {
+            condensed = !condensed;
+            trackInstances.forEach((track, i) => {
+                track.setSize(condensed ? 'condensed' : sizes[i]);
+            });
+            const probe = trackInstances.map(t => {
+                const el = t.element;
+                return `${Math.round(el.getBoundingClientRect().height)}px/` +
+                       `${el.querySelectorAll('canvas').length}canvas/` +
+                       `${el.querySelectorAll('[class*="rotary"]').length}rotary`;
+            }).join('  ');
+            log(`setSize → ${condensed ? 'condensed' : 'tailles de depart'} : ${probe}`);
         };
 
         window.resetAll = () => {

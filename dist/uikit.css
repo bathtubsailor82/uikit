@@ -13232,8 +13232,7 @@ tr.selected .matrix-cell.active {
 /**
  * AudioTrack - Professional Audio Console Track Strip
  * Hardware-inspired design with 3D depth
- * Width: 60px (normal), adapts for compact/normal/large
- * Note: mini variant (40px, no VU-meter) will be added separately
+ * Width: 60px (normal), adapts for condensed/compact/normal/large
  */
 
 /* Pixel font experiment abandonne - Retina 2x interpole quand meme.
@@ -13505,6 +13504,43 @@ tr.selected .matrix-cell.active {
 /* ============================================================================
    Size Variants
    ============================================================================ */
+
+/* Condensed - 6px wide : le peak-metre seul, sur toute la hauteur.
+   Une grappe repliee condense ses tranches au lieu de les masquer : il reste le
+   niveau, l'ecretage et la couleur de la grappe, et rien d'autre.
+
+   Le pied, les controles et la section d'enregistrement sont masques **en CSS**,
+   jamais retires : leurs noeuds restent dans le document, les rotaries gardent
+   leur instance, et revenir a `compact` ne recree rien (contrat #43).
+
+   Le triangle de seuil est la seule exception, et il est cite ici pour le cas ou
+   la tranche naitrait deja condensee : a la bascule, c'est le canvas qui
+   l'efface en se refaisant, et `setSize()` le repose au retour. */
+.audio-track--condensed {
+    /* 4 px de metre entre les deux bordures de 1 px : `box-sizing: border-box`
+       est global, donc la largeur les comprend. */
+    width: 6px;
+    /* La hauteur ne se declare PAS ici : `setSize()` la pose en style en ligne,
+       relevee sur la tranche avant condensation, pour que les deux etats se
+       calent au pixel. `min-height: 0` lui laisse la main. */
+    min-height: 0;
+}
+
+.audio-track--condensed .audio-track__footer,
+.audio-track--condensed .audio-track__controls,
+.audio-track--condensed .audio-track__record-section,
+.audio-track--condensed .audio-track__threshold-indicator {
+    display: none;
+}
+
+/* Le metre remplit la tranche : hauteur utile = hauteur de contenu moins le
+   filet de couleur. Pas de reserve en pied — il n'y a plus de bandeau mix dont
+   se detacher. */
+.audio-track--condensed .audio-track__meter {
+    padding: 0;
+    min-height: 0;
+    flex: 1 1 auto;
+}
 
 /* Compact - 40px wide (formerly mini) */
 .audio-track--compact {

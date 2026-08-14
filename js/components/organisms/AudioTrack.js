@@ -5,8 +5,7 @@
  * @example
  * const track = new AudioTrack(container, {
  *   trackId: 1,
- *   size: 'normal',        // 'compact' | 'normal' | 'large'
- *                          // Note: 'mini' (40px, no VU-meter) will be added
+ *   size: 'normal',        // 'condensed' | 'compact' | 'normal' | 'large'
  *   location: 'P',         // code du site
  *   sublocation: '01',     // code de la salle, optionnel
  *   locationLabel: 'P-01', // le couple deja ecrit par l'hote — ce qui s'affiche
@@ -38,7 +37,29 @@ import CanvasMeter from '../../CanvasMeter.js';
 // Mapping mode -> CanvasMeter preset/config
 // See CANVAS-METER.md and TRACK-UI-MVP.md section 3
 // Track width 40px: meter 24px + ticks 4px = 28px canvas (labels overlay on meter, Reaper style)
+//
+// Chaque entree redit **tous** les drapeaux que `condensed` eteint :
+// `setConfig()` fusionne, il ne re-resout pas le preset, donc un drapeau eteint
+// par une bascule vers `condensed` resterait eteint au retour.
 const METER_CONFIG_BY_MODE = {
+  condensed: {
+    // Tranche de 6 px : 4 px de metre entre les deux bordures. Il ne reste que
+    // la barre — ni echelle, ni chiffre, ni RMS, ni maintien de crete.
+    // `showClipIndicator` est le seul drapeau qui revient : 4x4 px en tete de
+    // barre, aucune largeur, et il porte l'ecretage — la seule anomalie qu'une
+    // grappe rangee doive encore crier.
+    preset: 'track',
+    override: {
+      width: 4,
+      showScale: false,
+      showScaleLabels: false,
+      showNumeric: false,
+      showNumericTop: false,
+      showRMS: false,
+      showPeakHold: false,
+      showClipIndicator: true
+    }
+  },
   compact: {
     // Compact 40px track: 28px canvas (24px meter + 4px ticks), labels overlay
     preset: 'track',
@@ -55,13 +76,18 @@ const METER_CONFIG_BY_MODE = {
   },
   normal: {
     preset: 'track',
-    override: { width: 24, showScaleLabels: true, showNumeric: false, showNumericTop: true, showPeakHold: true }
+    override: { width: 24, showScale: true, showScaleLabels: true, showNumeric: false, showNumericTop: true, showRMS: true, showPeakHold: true }
   },
   large: {
     preset: 'track',
-    override: { width: 32, showScaleLabels: true, showNumeric: true, showNumericTop: true, showPeakHold: true }
+    override: { width: 32, showScale: true, showScaleLabels: true, showNumeric: true, showNumericTop: true, showRMS: true, showPeakHold: true }
   }
 };
+
+// Les classes de taille que `setSize()` retire avant de poser la nouvelle.
+// `normal` n'y figure pas : c'est le defaut, et il se dit par l'absence de
+// classe (cf. `getClassNames()`).
+const SIZE_CLASSES = ['audio-track--condensed', 'audio-track--compact', 'audio-track--large'];
 
 // Marqueur d'enregistrement secondaire : la piste ecrit un second fichier.
 // C'est une propriete de configuration, pas un etat de transport — d'ou un
@@ -80,7 +106,7 @@ class AudioTrack {
     this.container = container;
     this.config = {
       trackId: 1,
-      size: 'normal',        // compact | normal | large (mini will be added)
+      size: 'normal',        // condensed | compact | normal | large
       location: 'P',         // code du site (premier niveau du lieu)
       sublocation: null,     // code de la salle (second niveau), optionnel
       locationLabel: null,   // le couple deja ecrit par l'hote — ce qui s'affiche
@@ -120,6 +146,14 @@ class AudioTrack {
     this._lastThresholdExceeded = undefined;
     this._lastGateState = undefined;
     this._lastDurationSec = undefined;
+
+    // Geometrie de reference de `setSize()`, relevee une seule fois : sans elle
+    // un aller-retour de taille derive (voir `setSize`). `undefined` dit
+    // « pas encore relevee », et `__pendingSize` une bascule qui attend le
+    // metre.
+    this.__baseMeterHeight = undefined;
+    this.__baseStripHeight = undefined;
+    this.__pendingSize = null;
 
     this.render();
   }
@@ -218,6 +252,16 @@ class AudioTrack {
     // Color strip : couleur du groupe (ou defaut neutre)
     const stripColor = this.config.color || DEFAULT_STRIP_COLOR;
     track.style.setProperty('--track-color', stripColor);
+
+    // Une tranche condensee reprend sa hauteur ici. `render()` remplace
+    // l'element, donc jette le style en ligne que `setSize()` avait pose — et
+    // le CSS de `condensed` ne declare aucune hauteur, deliberement. Sans cette
+    // reprise, la tranche re-rendue (bascule de bus, cf. `setBusValues`)
+    // s'ecrase a zero : `initMeter` mesure alors un conteneur nul, abandonne, et
+    // la piste repliee perd la seule chose qu'elle montrait — son niveau.
+    if (this.config.size === 'condensed' && this.__baseStripHeight) {
+      track.style.height = `${this.__baseStripHeight}px`;
+    }
 
     // Le pied se derive du meme calcul que la mise a jour partielle : deux
     // chemins d'ecriture, une seule regle d'affichage.
@@ -345,6 +389,14 @@ class AudioTrack {
 
         // Add threshold indicator (overlay, separate from meter)
         this.addThresholdIndicator();
+
+        // Une bascule de taille arrivee avant ce RAF s'est mise en attente :
+        // la geometrie de reference peut maintenant se relever.
+        if (this.__pendingSize) {
+          const pending = this.__pendingSize;
+          this.__pendingSize = null;
+          this.setSize(pending);
+        }
       } else {
         console.warn('AudioTrack: Meter init skipped - zero dimensions', {
           height: availableHeight,
@@ -834,6 +886,86 @@ class AudioTrack {
 
     const strip = this.element.querySelector('.audio-track__color-strip');
     if (strip) strip.style.background = stripColor;
+  }
+
+  /**
+   * Change la taille de la tranche — **sans la reconstruire**.
+   *
+   * Trois ecritures et pas une de plus : la classe de taille, la hauteur, la
+   * config du metre. Jamais `render()`, donc jamais un rotary detruit sous le
+   * doigt (contrat #43) — en `condensed` ils sont masques par le CSS, leurs
+   * noeuds restent dans le document, et revenir ne recree rien.
+   *
+   * La geometrie de reference se releve **une fois**, a la premiere bascule,
+   * tant que la tranche porte encore sa taille de depart : la hauteur de son
+   * metre et la hauteur de la tranche entiere. Tout le reste s'y cale.
+   *
+   * PIEGE : on ne peut pas remesurer le conteneur du metre a chaque bascule.
+   * Une fois le canvas pose, c'est LUI qui donne sa hauteur au conteneur, et
+   * `_createCanvas()` y ajoute la reserve de `showNumericTop` — chaque
+   * aller-retour gonflait alors la tranche d'autant (mesure sur prototype :
+   * 393, 407, 421...). D'ou une hauteur posee en style en ligne et un
+   * `clientHeight` qui, sur cette hauteur-la, est deterministe.
+   *
+   * En `condensed` le metre **remplit** la tranche, il ne reprend pas la
+   * hauteur du metre compact : la consequence assumee est que l'echelle en dB
+   * n'est plus celle d'une grappe ouverte voisine. Fermee, on lit « il y a du
+   * signal », pas « combien ».
+   *
+   * Aucun 14 n'est grave ici : la reserve que `showNumericTop` prend en tete du
+   * canvas est une interface interne de `CanvasMeter`, et le seul endroit qui
+   * en a besoin la relit sur l'instance (`_numericTopHeight`, cf.
+   * `updateThresholdIndicatorPosition`). Une variante qui voudrait caler les
+   * deux echelles fera pareil.
+   *
+   * `condensed` se rejoint par cette methode, **jamais a la construction** :
+   * c'est la tranche ouverte qui porte la geometrie de reference, et une
+   * tranche nee condensee n'en a aucune a relever.
+   *
+   * @param {'condensed'|'compact'|'normal'|'large'} size
+   */
+  setSize(size) {
+    const el = this.element;
+    if (!el) return;
+
+    // Le metre naît dans un RAF (garde de layout Chrome). Une bascule qui
+    // arrive avant lui — un hote qui rend un ecran deja replie, par exemple —
+    // ne peut rien relever : elle attend ce RAF plutot que de condenser une
+    // tranche dont la geometrie de reference serait alors prise **condensee**,
+    // donc fausse pour toujours.
+    if (!this.meter) {
+      this.__pendingSize = size;
+      return;
+    }
+
+    if (this.__baseMeterHeight === undefined) {
+      this.__baseMeterHeight = this.meter.config.height;
+      this.__baseStripHeight = Math.round(el.getBoundingClientRect().height);
+    }
+
+    SIZE_CLASSES.forEach(cls => el.classList.remove(cls));
+    if (size !== 'normal') el.classList.add(`audio-track--${size}`);
+    this.config.size = size;
+
+    // La tranche condensee prend la hauteur qu'elle avait : sinon une grappe
+    // fermee et une grappe ouverte ne commencent ni ne finissent au meme
+    // endroit, et la mise en page saute a chaque bascule.
+    el.style.height = (size === 'condensed' && this.__baseStripHeight)
+      ? `${this.__baseStripHeight}px`
+      : '';
+
+    const colorStrip = el.querySelector('.audio-track__color-strip');
+    const fullHeight = el.clientHeight - (colorStrip?.offsetHeight ?? 0);
+    const mode = METER_CONFIG_BY_MODE[size] || METER_CONFIG_BY_MODE.normal;
+
+    this.meter.setConfig(size === 'condensed'
+      ? { ...mode.override, height: fullHeight }
+      : { ...mode.override, height: this.__baseMeterHeight });
+
+    // PIEGE : `setConfig()` appelle `_createCanvas()`, qui fait
+    // `container.innerHTML = ''`. Le triangle de seuil vit dans ce meme
+    // conteneur — il vient d'etre efface, il faut le reposer.
+    if (size !== 'condensed') this.addThresholdIndicator();
   }
 
   /** Pose ou retire le marqueur d'enregistrement secondaire. */
