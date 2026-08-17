@@ -119,6 +119,7 @@
         <div class="controls">
             <button class="btn-demo" onclick="toggleMetering()">Toggle Metering</button>
             <button class="btn-demo" onclick="toggleCondensed()">Condenser / rendre les tranches</button>
+            <button class="btn-demo" onclick="probeBornHidden()">Naitre masquee, puis paraitre</button>
             <button class="btn-demo" onclick="resetAll()">Reset All</button>
         </div>
     </div>
@@ -255,6 +256,35 @@
                        `${el.querySelectorAll('[class*="rotary"]').length}rotary`;
             }).join('  ');
             log(`setSize → ${condensed ? 'condensed' : 'tailles de depart'} : ${probe}`);
+        };
+
+        // La tranche nee masquee : l'autre preuve que ce depot sache rejouer.
+        // Une grappe repliee au chargement, ou un ecran derriere un onglet,
+        // donnent un conteneur de hauteur nulle — la tranche n'a alors pas de
+        // quoi mesurer son metre, et doit le poser des qu'elle paraît. Sans
+        // ca, deplier ne montrait rien et il fallait recharger la page.
+        window.probeBornHidden = async () => {
+            const stage = document.createElement('div');
+            stage.style.display = 'none';
+            document.body.appendChild(stage);
+
+            const track = new AudioTrack(stage, { trackId: 999, size: 'compact', location: 'HID' });
+            const frames = n => new Promise(done => {
+                const step = () => (--n <= 0 ? done() : requestAnimationFrame(step));
+                requestAnimationFrame(step);
+            });
+
+            await frames(3);
+            const masquee = stage.querySelectorAll('canvas').length;
+
+            stage.style.display = '';
+            await frames(3);
+            const parue = stage.querySelectorAll('canvas').length;
+
+            track.destroy();
+            stage.remove();
+            log(`nee masquee → ${masquee} canvas ; paraît → ${parue} canvas ` +
+                `(attendu 0 puis 1)`);
         };
 
         window.resetAll = () => {

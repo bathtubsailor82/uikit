@@ -155,6 +155,10 @@ class AudioTrack {
     this.__baseStripHeight = undefined;
     this.__pendingSize = null;
 
+    // L'attente de geometrie d'une tranche nee masquee (voir `initMeter`).
+    // `null` dit « rien en attente », jamais « pas de metre ».
+    this.__meterWatch = null;
+
     this.render();
   }
 
@@ -365,45 +369,96 @@ class AudioTrack {
     const meterTarget = this.element.querySelector('.audio-track__meter-target');
     if (!meterTarget) return;
 
+    // Un rendu precedent peut avoir laisse une attente sur le conteneur qu'on
+    // vient de remplacer : elle poserait un metre dans un noeud orphelin.
+    this._stopAwaitingMeterGeometry();
+
     // RAF guard - ensure layout complete before measuring (Chrome flexbox timing)
     requestAnimationFrame(() => {
-      const availableHeight = meterTarget.offsetHeight;
-      const availableWidth = meterTarget.offsetWidth;
-
-      // Guard against zero dimensions (Chrome flexbox race condition)
-      if (availableHeight > 0 && availableWidth > 0) {
-        // Get meter config based on track size mode
-        const meterConfig = METER_CONFIG_BY_MODE[this.config.size] || METER_CONFIG_BY_MODE.normal;
-
-        // Build config object with preset and overrides
-        const config = {
-          preset: meterConfig.preset,
-          ...meterConfig.override,
-          // Override height to match available space
-          height: availableHeight,
-          context: 'track'
-        };
-
-        // Create CanvasMeter instance
-        this.meter = new CanvasMeter(meterTarget, config);
-
-        // Add threshold indicator (overlay, separate from meter)
-        this.addThresholdIndicator();
-
-        // Une bascule de taille arrivee avant ce RAF s'est mise en attente :
-        // la geometrie de reference peut maintenant se relever.
-        if (this.__pendingSize) {
-          const pending = this.__pendingSize;
-          this.__pendingSize = null;
-          this.setSize(pending);
-        }
-      } else {
-        console.warn('AudioTrack: Meter init skipped - zero dimensions', {
-          height: availableHeight,
-          width: availableWidth
-        });
-      }
+      if (!this._buildMeter(meterTarget)) this._awaitMeterGeometry(meterTarget);
     });
+  }
+
+  /**
+   * Pose le metre, si le conteneur a de quoi le mesurer.
+   *
+   * `false` ne dit pas « rate » mais « pas maintenant » : c'est l'appelant qui
+   * decide d'attendre. Le metre prend la hauteur disponible, donc une mesure
+   * nulle donnerait un canvas nul — invisible, et definitif.
+   *
+   * @returns {boolean} vrai si le metre est desormais en place
+   * @private
+   */
+  _buildMeter(meterTarget) {
+    const availableHeight = meterTarget.offsetHeight;
+    const availableWidth = meterTarget.offsetWidth;
+    if (availableHeight <= 0 || availableWidth <= 0) return false;
+
+    // Get meter config based on track size mode
+    const meterConfig = METER_CONFIG_BY_MODE[this.config.size] || METER_CONFIG_BY_MODE.normal;
+
+    // Create CanvasMeter instance
+    this.meter = new CanvasMeter(meterTarget, {
+      preset: meterConfig.preset,
+      ...meterConfig.override,
+      // Override height to match available space
+      height: availableHeight,
+      context: 'track'
+    });
+
+    // Add threshold indicator (overlay, separate from meter)
+    this.addThresholdIndicator();
+
+    // Une bascule de taille arrivee avant ce RAF s'est mise en attente :
+    // la geometrie de reference peut maintenant se relever.
+    if (this.__pendingSize) {
+      const pending = this.__pendingSize;
+      this.__pendingSize = null;
+      this.setSize(pending);
+    }
+
+    return true;
+  }
+
+  /**
+   * Attend que le conteneur ait une geometrie, et pose le metre a ce moment-la.
+   *
+   * **Une tranche naît regulierement sans geometrie** : sa grappe est repliee au
+   * chargement (`display: none` sur le corps de la section), ou son ecran est
+   * derriere un onglet. `offsetHeight` vaut alors 0 — et la version qui
+   * abandonnait sur un avertissement laissait la tranche **sans metre pour
+   * toujours** : deplier la grappe ne construisait rien, et il fallait recharger
+   * la page pour voir un niveau. Ce n'etait pas une peinture qui manquait, il
+   * n'y avait pas de canvas a peindre.
+   *
+   * L'observateur se retire des qu'il a servi : une tranche ne naît qu'une fois,
+   * et ce qui suit — le repli, la bascule de taille — passe par `setSize()`.
+   *
+   * @private
+   */
+  _awaitMeterGeometry(meterTarget) {
+    if (typeof ResizeObserver === 'undefined') {
+      console.warn('AudioTrack: meter skipped - zero dimensions, no ResizeObserver');
+      return;
+    }
+
+    this.__meterWatch = new ResizeObserver(() => {
+      if (meterTarget.offsetHeight <= 0 || meterTarget.offsetWidth <= 0) return;
+
+      // Se retirer AVANT de construire : le canvas se pose dans le conteneur
+      // observe, donc le redimensionne — s'observer soi-meme en train d'ecrire
+      // relancerait la boucle que le navigateur signale.
+      this._stopAwaitingMeterGeometry();
+      this._buildMeter(meterTarget);
+    });
+    this.__meterWatch.observe(meterTarget);
+  }
+
+  /** Retire l'attente de geometrie, s'il y en a une. @private */
+  _stopAwaitingMeterGeometry() {
+    if (!this.__meterWatch) return;
+    this.__meterWatch.disconnect();
+    this.__meterWatch = null;
   }
 
   addThresholdIndicator() {
@@ -1069,6 +1124,10 @@ class AudioTrack {
   }
 
   destroy() {
+    // Avant le metre : une attente survivante rouvrirait un metre sur une
+    // tranche qu'on vient de defaire.
+    this._stopAwaitingMeterGeometry();
+
     if (this.meter) {
       this.meter.destroy();
       this.meter = null;
