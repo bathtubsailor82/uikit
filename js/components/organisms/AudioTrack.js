@@ -896,6 +896,10 @@ class AudioTrack {
    * doigt (contrat #43) — en `condensed` ils sont masques par le CSS, leurs
    * noeuds restent dans le document, et revenir ne recree rien.
    *
+   * Elle est **idempotente**, et son hote en depend : redire la taille en place
+   * ne coute rien, parce qu'elle est redite a chaque rangement pour chaque
+   * tranche (voir la garde en tete du corps).
+   *
    * La geometrie de reference se releve **une fois**, a la premiere bascule,
    * tant que la tranche porte encore sa taille de depart : la hauteur de son
    * metre et la hauteur de la tranche entiere. Tout le reste s'y cale.
@@ -927,6 +931,22 @@ class AudioTrack {
   setSize(size) {
     const el = this.element;
     if (!el) return;
+
+    // Une taille deja posee ne se repose pas, et ce n'est pas une economie de
+    // detail : la suite lit `clientHeight` — donc force un calcul de mise en
+    // page — et refait le canvas du metre. L'hote redit sa taille a **chaque**
+    // tranche a chaque rangement (cf. `paintSection` cote MR3), et sur l'axe
+    // de l'etat un rangement part a chaque transition : 256 calculs de mise en
+    // page forces pour 256 tranches qui n'ont pas change de taille.
+    //
+    // La bascule en attente s'efface avec, sinon elle arriverait apres coup :
+    // une tranche condensee avant que son metre n'existe, puis depliee dans le
+    // meme souffle, verrait le `condensed` en attente se poser au RAF — sur une
+    // section desormais ouverte.
+    if (this.config.size === size) {
+      this.__pendingSize = null;
+      return;
+    }
 
     // Le metre naît dans un RAF (garde de layout Chrome). Une bascule qui
     // arrive avant lui — un hote qui rend un ecran deja replie, par exemple —
